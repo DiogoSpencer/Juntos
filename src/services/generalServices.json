@@ -1,0 +1,14 @@
+{
+  "path":{
+    "webPage": "/",
+    "register": "/register",
+    "profile": "/profile/",
+    "forgotPassword": "/resetPassword",
+    "backOffice": "/backOffice"
+  },
+  "storage":{
+    "languageCode": "code",
+    "token": "token"
+
+}
+}

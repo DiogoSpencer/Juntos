@@ -1,0 +1,18 @@
+[
+  {
+    "username":"eu",
+    "email":"a",
+    "password":"abc"
+  },
+  {
+    "username":"tu",
+    "email":"b",
+    "password":"abcd"
+  },
+  {
+    "username":"nos",
+    "email":"c",
+    "password":"cba"
+  }
+
+]
