@@ -21,9 +21,9 @@ axios.interceptors.response.use(function (response:AxiosResponse){
     return Promise.reject(error)
 })
 
-export async function register(user:User){
+export async function register(user:User, form : FormData){
     try {
-        return await axios.post(`http://localhost:8080/rest/user`, user)
+        return await axios.post(`https://juntos-313719.ew.r.appspot.com/rest/user`, user)
     }
     catch (error){
         throw error.response

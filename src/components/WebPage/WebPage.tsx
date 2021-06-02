@@ -40,23 +40,33 @@ function WebPage(Props: FullLanguageRouterProps) {
     const registerButton = () => {
         Props.history.push("/register/")
     }
+    const profileButton = () => {
+        Props.history.push("/profile/")
+    }
 
 
     return (
         <div className="webPage-wrapper">
-            <Button onClick={clickMe} disabled={timeout}>
-                Click me!
-            </Button>
-            <Button onClick={clickYou}>
-                Click you!
-            </Button>
+
             <Button onClick={loginButton}>
                 Login
             </Button>
             <Button onClick={registerButton}>
                 Register
             </Button>
-            <p>
+            <Button onClick={profileButton}>
+                Profile
+            </Button>
+
+        </div>
+    );
+}
+
+/*
+<Button onClick={clickMe} disabled={timeout}>
+                Click me!
+            </Button>
+<p>
                 Lista de users
             </p>
             <Table>
@@ -77,8 +87,7 @@ function WebPage(Props: FullLanguageRouterProps) {
                     ))}
                 </TableBody>
             </Table>
-        </div>
-    );
-}
+
+ */
 
 export default connect(languageToProps)(withRouter(WebPage))

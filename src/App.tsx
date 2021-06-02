@@ -40,7 +40,7 @@ function App(Props: FullRouteProps) {
               <Route exact path="/" render={()=> <WebPage/>}/>
               <Route exact path="/register/" render={()=> <Registration/>}/>
               <Route exact path="/login/" render={()=> <Login/>}/>
-              <Route exact path="/profile/:userId" render={()=> <Profile/>}/>
+              <Route exact path="/profile/" render={()=> <Profile/>}/>
           </Switch>
           <Footer/>
       </React.Fragment>

@@ -1,11 +1,11 @@
-import React, {ChangeEventHandler, FormEventHandler} from "react";
+import React, {ChangeEventHandler, FormEventHandler, useEffect} from "react";
 import "./Registration.css";
 import {FullLanguageRouterProps, languageToProps} from "../../store/store";
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
 import {useState} from "react";
 
-import {register} from "../../services/http";
+import {getUser, register} from "../../services/http";
 import {Button, Col, Form, InputGroup } from "react-bootstrap";
 import { User } from "../../services/httptypes";
 interface Validity{
@@ -27,6 +27,7 @@ interface Validity{
 function Registration(Props: FullLanguageRouterProps) {
     const [validated, setValidated] = useState<Validity>();
     const [formSubmitValid, setformSubmitValid] =useState<boolean>(false)
+    const data = new FormData()
     const [profile, setProfile] = useState<User>({
             username: '',
             email: '',
@@ -37,27 +38,33 @@ function Registration(Props: FullLanguageRouterProps) {
             stateAccount:''
         }
     )
+    const changePic = (event: any) => {
+        data.append('file', event.target.files[0])
+    }
 
     const handleSubmit = (event : any) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
+        if (!formSubmitValid) {
             event.preventDefault();
             event.stopPropagation();
         }
-        register(profile).then( response => {
+        register(profile, data).then( response => {
+            alert("register")
             Props.history.push("/")
         },
             error => {
             if(error.statusCode === 409)
                 alert("Email already has an account")
             });
+
+        Props.history.push("/")
     };
 
-    const checkFormValid = () => {
+    useEffect(() => {
         if(validated?.phoneNumberValid && validated?.usernameValid && validated?.firstNameValid && validated?.lastNameValid
-        && validated?.passwordValid && validated?.cPasswordValid && validated?.emailValid)
+            && validated?.passwordValid && validated?.cPasswordValid && validated?.emailValid)
             setformSubmitValid(true)
-    }
+    }, [validated])
+
 
     const changeInputHandler = (event : any) => {
         const input = event.currentTarget;
@@ -70,7 +77,7 @@ function Registration(Props: FullLanguageRouterProps) {
                     setValidated({...validated, usernameValid : false, usernameError : 'Must have 6 characters'})//Props
                 else
                     setValidated(({...validated, usernameValid : true}))
-                    checkFormValid();
+
 
             break;
             case "formPasswordId":
@@ -82,14 +89,12 @@ function Registration(Props: FullLanguageRouterProps) {
                             ' case letter,one lower case letter, and one digit.'})
                 else
                 setValidated(({...validated, passwordValid : true}))
-                checkFormValid();
                 break;
             case "formConfirmPassword":
                 if(value !== profile.password)
                     setValidated({...validated, cPasswordValid : false, cPasswordError : 'Passwords dont match!'})//Props
                 else
                     setValidated(({...validated, cPasswordValid : true}))
-                checkFormValid();
                 break;
 
             case "formPhoneNumber":
@@ -98,28 +103,24 @@ function Registration(Props: FullLanguageRouterProps) {
                     setValidated({...validated, phoneNumberValid : false, phoneNumberError : 'Phone number must have 9 digits'})//Props
                 else
                 setValidated(({...validated, phoneNumberValid : true}))
-                checkFormValid();
                 break;
             case "formFirstName":
                 if(value.length == 0)
                     setValidated({...validated, firstNameValid : false, firstNameError : 'First name is required!'})//Props
                 else
                     setValidated({...validated, firstNameValid : true})
-                checkFormValid();
                 break;
             case "formLastName":
                 if(value.length == 0)
                     setValidated({...validated, lastNameValid : false, lastNameError : 'Last name is required!'})//Props
                 else
                     setValidated(({...validated, lastNameValid : true}))
-                checkFormValid();
                 break;
             case "formEmail":
                 if(value.length == 0)
                     setValidated({...validated, emailValid : false, emailError : 'Email is required!'})//Props
                 else
                     setValidated({...validated, emailValid : true})
-                checkFormValid();
                 break;
         }
 
@@ -197,6 +198,11 @@ function Registration(Props: FullLanguageRouterProps) {
                     <option>Private</option>
                 </Form.Control>
             </Form.Group>
+            <Form>
+                <Form.Group>
+                    <Form.File id="insertPhoto" label="Insert your photo" onChange={(event: any) => changePic(event)} />
+                </Form.Group>
+            </Form>
             <Button variant="light" style={{ 'padding': ' 1vh 3vw', 'backgroundColor': 'rgba(233, 231, 231, 0.6)' }}
                     disabled={!formSubmitValid} type="submit"
                     onClick={(event: any) => handleSubmit(event)} >Submit</Button>
