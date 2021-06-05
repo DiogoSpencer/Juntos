@@ -39,7 +39,7 @@ function Profile(Props: FullRouteProps) {
     )
 
     const userId: string = Props.match.params.userId
-    const [user, setUser] = useState<User | undefined>()
+    //const [user, setUser] = useState<User | undefined>()
     useEffect(() => {
 
         if(Props.isLogged) {
@@ -52,7 +52,7 @@ function Profile(Props: FullRouteProps) {
                 }
             )
         }
-    }, [Props.isLogged])
+    }, [Props.isLogged, userId])
 
     const changePic = (event: any) => {
         data.append('file', event.target.files[0])
@@ -110,7 +110,7 @@ function Profile(Props: FullRouteProps) {
 
             case "formPhoneNumber":
                 setProfile({...profile, phoneNumber: value})
-                if (value.length != 9)
+                if (value.length !== 9)
                     setValidated({
                         ...validated,
                         phoneNumberValid: false,
@@ -120,19 +120,19 @@ function Profile(Props: FullRouteProps) {
                     setValidated(({...validated, phoneNumberValid: true}))
                 break;
             case "formFirstName":
-                if (value.length == 0)
+                if (value.length === 0)
                     setValidated({...validated, firstNameValid: false, firstNameError: 'First name is required!'})//Props
                 else
                     setValidated({...validated, firstNameValid: true})
                 break;
             case "formLastName":
-                if (value.length == 0)
+                if (value.length === 0)
                     setValidated({...validated, lastNameValid: false, lastNameError: 'Last name is required!'})//Props
                 else
                     setValidated(({...validated, lastNameValid: true}))
                 break;
             case "formEmail":
-                if (value.length == 0)
+                if (value.length === 0)
                     setValidated({...validated, emailValid: false, emailError: 'Email is required!'})//Props
                 else
                     setValidated({...validated, emailValid: true})

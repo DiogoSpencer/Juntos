@@ -3,6 +3,8 @@ import STORE from "../store/store";
 import {resetToken} from "../store/session/actions";
 import {User} from "./httptypes";
 
+const url = "https://juntos-313719.ew.r.appspot.com"
+
 axios.interceptors.request.use(function (c: AxiosRequestConfig){
     let token = STORE.getState().session.token
     if(token)
@@ -23,7 +25,7 @@ axios.interceptors.response.use(function (response:AxiosResponse){
 
 export async function register(user:User, form : FormData){
     try {
-        return await axios.post(`https://juntos-313719.ew.r.appspot.com/rest/user`, user)
+        return await axios.post(`${url}/rest/user`, user)
     }
     catch (error){
         throw error.response
@@ -31,7 +33,7 @@ export async function register(user:User, form : FormData){
 }
 export async function login(username:string, password:string){
     try {
-        return await axios.put(`http://localhost:8080/rest/user`, {'username':username, 'password':password})
+        return await axios.put(`${url}/rest/user`, {'username':username, 'password':password})
     }
     catch (error){
         throw error.response
@@ -41,14 +43,14 @@ export async function login(username:string, password:string){
 
 export async function getUser(username:string) {
     try {
-        return await axios.get(`http://localhost:8080/rest/user/${username}`)
+        return await axios.get(`${url}/rest/user/${username}`)
     } catch (error) {
         throw error.response
     }
 }
 export async function deleteUser(username:string) {
     try {
-        return await axios.delete(`http://localhost:8080/rest/user/${username}`)
+        return await axios.delete(`${url}/rest/user/${username}`)
     } catch (error) {
         throw error.response
     }

@@ -1,11 +1,11 @@
-import React, {ChangeEventHandler, FormEventHandler, useEffect} from "react";
+import {useEffect} from "react";
 import "./Registration.css";
 import {FullLanguageRouterProps, languageToProps} from "../../store/store";
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
 import {useState} from "react";
 
-import {getUser, register} from "../../services/http";
+import {register} from "../../services/http";
 import {Button, Col, Form, InputGroup } from "react-bootstrap";
 import { User } from "../../services/httptypes";
 interface Validity{
@@ -99,25 +99,25 @@ function Registration(Props: FullLanguageRouterProps) {
 
             case "formPhoneNumber":
                 setProfile({...profile, phoneNumber : value})
-                if(value.length != 9)
+                if(value.length !== 9)
                     setValidated({...validated, phoneNumberValid : false, phoneNumberError : 'Phone number must have 9 digits'})//Props
                 else
                 setValidated(({...validated, phoneNumberValid : true}))
                 break;
             case "formFirstName":
-                if(value.length == 0)
+                if(value.length === 0)
                     setValidated({...validated, firstNameValid : false, firstNameError : 'First name is required!'})//Props
                 else
                     setValidated({...validated, firstNameValid : true})
                 break;
             case "formLastName":
-                if(value.length == 0)
+                if(value.length === 0)
                     setValidated({...validated, lastNameValid : false, lastNameError : 'Last name is required!'})//Props
                 else
                     setValidated(({...validated, lastNameValid : true}))
                 break;
             case "formEmail":
-                if(value.length == 0)
+                if(value.length === 0)
                     setValidated({...validated, emailValid : false, emailError : 'Email is required!'})//Props
                 else
                     setValidated({...validated, emailValid : true})

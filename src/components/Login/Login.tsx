@@ -1,4 +1,3 @@
-import React, {ChangeEventHandler, FormEventHandler} from "react";
 import "./Login.css";
 import {FullLanguageRouterProps, languageToProps} from "../../store/store";
 import {connect} from "react-redux";
@@ -6,7 +5,7 @@ import {withRouter} from "react-router";
 import {useState} from "react";
 
 import {login} from "../../services/http";
-import {Button, Col, Form, InputGroup } from "react-bootstrap";
+import {Button, Form, InputGroup } from "react-bootstrap";
 import { User } from "../../services/httptypes";
 interface Validity{
     emailValid ?: boolean,
@@ -38,7 +37,6 @@ function Registration(Props: FullLanguageRouterProps) {
         }
     )
 
-
     const handleSubmit = (event : any) => {
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
@@ -66,7 +64,7 @@ function Registration(Props: FullLanguageRouterProps) {
         switch (id) {
             case "formEmail":
                 setProfile({...profile, username : value})
-                if(value.length == 0)
+                if(value.length === 0)
                     setValidated({...validated, emailValid : false, emailError : 'Insert email!'})//Props
                 else
                     setValidated(({...validated, emailValid : true}))
@@ -75,7 +73,7 @@ function Registration(Props: FullLanguageRouterProps) {
                 break;
             case "formPasswordId":
                 setProfile({...profile, password : value})
-                if(value.length == 0)
+                if(value.length === 0)
                     setValidated({...validated, passwordValid : false, passwordError : 'Insert password!'})
                 else
                     setValidated(({...validated, passwordValid : true}))
