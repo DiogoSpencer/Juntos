@@ -1,5 +1,4 @@
 import { Fragment } from "react";
-import Footer from "../layout/Footer";
 import Agradecimentos from "./Agradecimentos";
 import AppHome from "./AppHome";
 import HeroisHome from "./HeroisHome";
@@ -14,7 +13,6 @@ const Home = () => {
       <Stats/>
       <HeroisHome/>
       <Agradecimentos/>
-      <Footer/>
     </Fragment>
   );
 };

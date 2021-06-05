@@ -11,6 +11,7 @@ import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
 import Layout from "./components/layout/Layout";
 import NotFound from "./components/NotFound/NotFound";
+import FAQ from "./components/FAQ/FAQ";
 
 function App(Props: FullRouteProps) {
   useEffect(() => {
@@ -64,6 +65,7 @@ function App(Props: FullRouteProps) {
           <Redirect to="/home" />
         </Route>
         <Route exact path="/home" render={() => <Home />} />
+        <Route exact path="/faq" render={() => <FAQ/>} />
         <Route exact path="/register/" render={() => <Registration />} />
         <Route exact path="/login/" render={() => <Login />} />
         <Route exact path="/profile/" render={() => <Profile />} />
