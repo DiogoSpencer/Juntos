@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
 import "./Profile.css";
-import {dispatchToProps, FullRouteProps, stateToProps} from "../../store/store";
+import {mapDispatchToProps, FullRouteProps, mapStateToProps} from "../../store/store";
 import {getUser, register} from "../../services/http";
 import {User} from "../../services/httptypes";
 import {Button, Col, Row, Form, InputGroup} from "react-bootstrap";
@@ -226,6 +226,6 @@ function Profile(Props: FullRouteProps) {
         );
 }
 
-export default connect(stateToProps, dispatchToProps)(withRouter(Profile))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Profile))
 
 ;

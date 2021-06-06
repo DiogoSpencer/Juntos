@@ -3,11 +3,11 @@ import {connect} from "react-redux";
 import {withRouter} from "react-router";
 import "./WebPage.css";
 import {
-    dispatchToProps,
+    mapDispatchToProps,
     FullLanguageRouterProps,
     FullRouteProps,
     languageToProps,
-    stateToProps
+    mapStateToProps
 } from "../../store/store";
 import {User} from "../../services/httptypes";
 import {Button, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";

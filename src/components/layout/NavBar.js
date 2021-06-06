@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { stateToProps } from "../../store/store";
+import { mapStateToProps } from "../../store/store";
 import { connect } from "react-redux";
 
 const NavBar = (props) => {
@@ -45,4 +45,4 @@ const NavBar = (props) => {
   );
 };
 
-export default connect(stateToProps)(NavBar);
+export default connect(mapStateToProps)(NavBar);

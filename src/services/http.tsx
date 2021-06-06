@@ -31,26 +31,27 @@ export async function register(user:User, form : FormData){
         throw error.response
     }
 }
-export async function login(username:string, password:string){
+
+export async function login(email:string, password:string){
     try {
-        return await axios.put(`${url}/rest/user`, {'username':username, 'password':password})
+        return await axios.put(`${url}/rest/user`, {'email':email, 'password':password})
     }
     catch (error){
         throw error.response
     }
 }
 
-
-export async function getUser(username:string) {
+export async function getUser(email:string) {
     try {
-        return await axios.get(`${url}/rest/user/${username}`)
+        return await axios.get(`${url}/rest/user/${email}`)
     } catch (error) {
         throw error.response
     }
 }
-export async function deleteUser(username:string) {
+
+export async function deleteUser(email:string) {
     try {
-        return await axios.delete(`${url}/rest/user/${username}`)
+        return await axios.delete(`${url}/rest/user/${email}`)
     } catch (error) {
         throw error.response
     }

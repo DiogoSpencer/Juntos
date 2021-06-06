@@ -12,7 +12,7 @@ const REDUCERS = combineReducers({
 const STORE = createStore(REDUCERS)
 export default STORE
 
-export function stateToProps(state: any){
+export function mapStateToProps(state: any){
     return{
         isLogged:state.session.isLogged,
         token:state.session.token,
@@ -22,7 +22,7 @@ export function stateToProps(state: any){
     }
 }
 
-export function dispatchToProps(dispatch: any){
+export function mapDispatchToProps(dispatch: any){
     return {
         logout: () => dispatch({type: LOGOUT}),
         login: (newSession: SessionState) => dispatch({type: LOGIN, data: newSession}),
@@ -36,7 +36,7 @@ export function languageToProps(state:any){
         language:state.language
     }
 }
-export type FullProps = ReturnType<typeof stateToProps> & ReturnType<typeof dispatchToProps>
+export type FullProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 export type FullRouteProps = FullProps & RouteComponentProps<any>
 export type FullLanguageProps = ReturnType<typeof languageToProps>
 export type FullLanguageRouterProps = FullLanguageProps & RouteComponentProps<any>

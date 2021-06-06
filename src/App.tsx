@@ -1,13 +1,13 @@
-import { Fragment, useEffect } from "react";
+import { useEffect } from "react";
 import { connect } from "react-redux";
-import { dispatchToProps, FullRouteProps, stateToProps } from "./store/store";
+import { mapDispatchToProps, FullRouteProps, mapStateToProps } from "./store/store";
 import { Route, Switch, withRouter, Redirect, useLocation } from "react-router-dom";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 import gS from "./services/generalServices.json";
 import jwt_decode from "jwt-decode";
-import { getUser } from "./services/http";
-import Login from "./components/Login/Login";
+//import { getUser } from "./services/http";
+import Login from "./components/Login/LoginJS";
 import Registration from "./components/Registration/Registration";
 import Layout from "./components/layout/Layout";
 import NotFound from "./components/NotFound/NotFound";
@@ -15,26 +15,27 @@ import FAQ from "./components/FAQ/FAQ";
 
 function App(Props: FullRouteProps) {
   useEffect(() => {
-    let language = localStorage.getItem(gS.storage.languageCode);
+    const language = localStorage.getItem(gS.storage.languageCode);
     if (language !== null)
       Props.changeLanguage(require(`./assets/languages/${language}.json`));
-    let token = localStorage.getItem(gS.storage.token);
+    const token = localStorage.getItem(gS.storage.token);
     if (token !== null) {
-      let parsed_token: any = jwt_decode(token);
-      getUser(parsed_token.username).then(
+      const parsed_token: any = jwt_decode(token);
+      /*getUser(parsed_token.email).then(
         (response) => {
           Props.login({
             token: token as string,
             isLogged: true,
             role: parsed_token.role,
             user: parsed_token.username,
+            //buscar foto url
           });
         },
         (error) => {
           Props.logout();
           localStorage.removeItem(gS.storage.token);
         }
-      );
+      );*/
     }
   }, []);
 
@@ -75,4 +76,4 @@ function App(Props: FullRouteProps) {
   );
 }
 
-export default connect(stateToProps, dispatchToProps)(withRouter(App));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));

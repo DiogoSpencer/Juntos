@@ -1,8 +1,7 @@
-import React, {useEffect} from 'react';
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
 import "./Header.css";
-import {dispatchToProps, FullRouteProps, stateToProps} from "../../store/store";
+import {mapDispatchToProps, FullRouteProps, mapStateToProps} from "../../store/store";
 import gS from "./../../services/generalServices.json"
 
 function Header(Props: FullRouteProps) {
@@ -46,6 +45,6 @@ function Header(Props: FullRouteProps) {
     );
 }
 
-export default connect(stateToProps, dispatchToProps)(withRouter(Header))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header))
 
 ;
