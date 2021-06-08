@@ -13,3 +13,6 @@ const Heroi = (props) => {
 };
 
 export default Heroi;
+//perguntar como vamos obter esta info
+//se calhar operaçao do datastore por isso nao precisamos de receber props -> fazer o pedido a partir
+//daqui

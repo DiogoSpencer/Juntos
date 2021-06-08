@@ -1,13 +1,15 @@
 //import classes from './slideshow.module.css'
 
+import { Link } from "react-router-dom"
+
 const HeroiCard = (props) => {
     return (
-        <div id={props.id}>
+        <Link to={props.link}>
             <img src={props.img} alt={props.alt}/>
             <p>
                 {props.text}
             </p>
-        </div>
+        </Link>
     )
 }
 
