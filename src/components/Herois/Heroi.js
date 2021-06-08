@@ -1,13 +1,12 @@
-const Heroi = () => {
+import { Fragment } from "react";
+
+const Heroi = (props) => {
   return (
     <Fragment>
-      <h1>Titulo</h1>
+      <h1>{props.title}</h1>
       <div>
-        <p>Descricao acto do heroi e do heroi</p>
-        <img src="" alt="foto-heroi" />
-      </div>
-      <div>
-          <h3>Outros Heróis</h3>
+        <p>{props.text}</p>
+        <img src={props.img} alt={props.alt} />
       </div>
     </Fragment>
   );

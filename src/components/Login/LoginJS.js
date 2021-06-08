@@ -11,6 +11,7 @@ const isNotEmpty = (value) => value.trim() !== "";
 
 const Login = (props) => {
   //not very correct to start with true
+  //fazer isto com useReducer -> muitos state
   const [validCredentials, setValidCredentials] = useState(true);
   const [accountDisabled, setAccountDisabled] = useState(false);
   const [error, setError] = useState(false);
