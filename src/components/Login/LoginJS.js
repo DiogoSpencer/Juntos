@@ -20,10 +20,10 @@ const Login = (props) => {
   const {
     value: enteredEmail,
     isValid: enteredEmailIsValid,
-    hasError: usernameHasError,
+    hasError: emailHasError,
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
-    reset: resetUsernameInput,
+    reset: resetEmailInput,
   } = useInput(isNotEmpty); //pass func to validate
 
   const {
@@ -87,7 +87,7 @@ const Login = (props) => {
             onChange={emailChangeHandler}
             onBlur={emailBlurHandler}
           />
-          {usernameHasError && <p>Por favor insira um e-mail.</p>}
+          {emailHasError && <p>Por favor insira um e-mail.</p>}
         </div>
         <div>
           <label htmlFor="name">Password</label>
@@ -100,7 +100,7 @@ const Login = (props) => {
           />
           {passwordHasError && <p>Por favor insira uma password.</p>}
         </div>
-        <button disabled={!formIsValid}>Submit</button>
+        <button disabled={!formIsValid}>Entrar</button>
         {!validCredentials && <p>Credenciais inválidas</p>}
         {accountDisabled && <p>Esta conta está desativada.</p>}
         {error && <p>Por favor tente novamente</p>}

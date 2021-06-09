@@ -1,7 +1,17 @@
 import { useEffect } from "react";
 import { connect } from "react-redux";
-import { mapDispatchToProps, FullRouteProps, mapStateToProps } from "./store/store";
-import { Route, Switch, withRouter, Redirect, useLocation } from "react-router-dom";
+import {
+  mapDispatchToProps,
+  FullRouteProps,
+  mapStateToProps,
+} from "./store/store";
+import {
+  Route,
+  Switch,
+  withRouter,
+  Redirect,
+  useLocation,
+} from "react-router-dom";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 import gS from "./services/generalServices.json";
@@ -13,6 +23,7 @@ import Layout from "./components/layout/Layout";
 import NotFound from "./components/NotFound/NotFound";
 import FAQ from "./components/FAQ/FAQ";
 import HeroisWraper from "./components/Herois/HeroisWraper";
+import Contacts from "./components/Contacts/Contacts";
 
 function App(Props: FullRouteProps) {
   useEffect(() => {
@@ -67,11 +78,23 @@ function App(Props: FullRouteProps) {
           <Redirect to="/home" />
         </Route>
         <Route exact path="/home" render={() => <Home />} />
-        <Route exact path="/faq" render={() => <FAQ/>} />
+        <Route exact path="/faq" render={() => <FAQ />} />
         <Route exact path="/register" render={() => <Registration />} />
         <Route exact path="/login" render={() => <Login />} />
         <Route exact path="/profile" render={() => <Profile />} />
-        <Route exact path="/heroi1" render={() => <HeroisWraper img="" alt="" text="descriçao heroi" title="heroi 1"/>} />
+        <Route
+          exact
+          path="/heroi1"
+          render={() => (
+            <HeroisWraper
+              img=""
+              alt=""
+              text="descriçao heroi"
+              title="heroi 1"
+            />
+          )}
+        />
+        <Route exact path="/contactos" render={() => <Contacts />} />
         <Route path="*" render={() => <NotFound />} />
       </Switch>
     </Layout>
