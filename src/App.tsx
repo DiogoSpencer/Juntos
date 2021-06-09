@@ -26,6 +26,7 @@ import HeroisWraper from "./components/Herois/HeroisWraper";
 import Contacts from "./components/Contacts/Contacts";
 import PasswordRecover from "./components/Password/PasswordRecover";
 import ChangePassword from "./components/Password/ChangePassword";
+import AppPage from "./components/App/AppPage";
 
 function App(Props: FullRouteProps) {
   useEffect(() => {
@@ -107,6 +108,7 @@ function App(Props: FullRouteProps) {
           path="/alterarpassword"
           render={() => <ChangePassword />}
         />
+        <Route exact path="/app" render={() => <AppPage />} />
         <Route path="*" render={() => <NotFound />} />
       </Switch>
     </Layout>

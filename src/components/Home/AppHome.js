@@ -27,7 +27,7 @@ const AppHome = () => {
       </div>
       <div>
         <p>Ajudar alguém? Precisas de ajuda? Doar roupas de criança?</p>
-        <Link to="/App">
+        <Link to="/app">
           Vê aqui o que podemos fazer <span>juntos</span>
         </Link>
       </div>
