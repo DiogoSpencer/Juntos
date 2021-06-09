@@ -24,6 +24,8 @@ import NotFound from "./components/NotFound/NotFound";
 import FAQ from "./components/FAQ/FAQ";
 import HeroisWraper from "./components/Herois/HeroisWraper";
 import Contacts from "./components/Contacts/Contacts";
+import PasswordRecover from "./components/Password/PasswordRecover";
+import ChangePassword from "./components/Password/ChangePassword";
 
 function App(Props: FullRouteProps) {
   useEffect(() => {
@@ -95,6 +97,16 @@ function App(Props: FullRouteProps) {
           )}
         />
         <Route exact path="/contactos" render={() => <Contacts />} />
+        <Route
+          exact
+          path="/recuperarpassword"
+          render={() => <PasswordRecover />}
+        />
+        <Route
+          exact
+          path="/alterarpassword"
+          render={() => <ChangePassword />}
+        />
         <Route path="*" render={() => <NotFound />} />
       </Switch>
     </Layout>

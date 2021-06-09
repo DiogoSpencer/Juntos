@@ -50,6 +50,7 @@ const Contacts = () => {
     }
 
     //TODO: send to server
+    //TODO: fazer redirect para pagina em que metemos codigo
 
     resetNameInput();
     resetEmailInput();
@@ -109,3 +110,5 @@ const Contacts = () => {
 };
 
 export default Contacts;
+//considerar fazer componente input para simplificar os componentes
+//que tem as forms
