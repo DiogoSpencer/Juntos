@@ -1,29 +1,25 @@
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-.switchButton {
-  background: rgba(255, 255, 255, 0.56);
-  border-radius: 30px;
-  overflow: hidden;
-  width: 240px;
+.toggle-switch {
+  background: #b9e1ff;
+  position: relative;
+  width: 480px;
+  padding-right: 240px;
   text-align: center;
   font-size: 18px;
   letter-spacing: 1px;
-  color: #155fff;
-  position: relative;
-  padding-right: 120px;
-  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  border-radius: 30px;
+  color: white;
+  height: 40px;
 
   &:before {
-    content: "Video";
+    content: "Inativas";
     position: absolute;
     top: 0;
     bottom: 0;
     right: 0;
-    width: 120px;
+    width: 240px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -31,7 +27,7 @@
     pointer-events: none;
   }
 
-  &Checkbox {
+  &-checkbox {
     cursor: pointer;
     position: absolute;
     top: 0;
@@ -42,21 +38,22 @@
     opacity: 0;
     z-index: 2;
 
-    &:checked + .switchButtonLabel:before {
-      transform: translateX(120px);
+    &:checked + .toggle-switch-label:before {
+      transform: translateX(240px);
       transition: transform 300ms linear;
     }
 
-    & + .switchButtonLabel {
+    & + .toggle-switch-label {
+      height: 40px;
       position: relative;
-      padding: 15px 0;
+      padding: 7px 0;
       display: block;
       user-select: none;
       pointer-events: none;
 
-      &:before {
+      &::before {
         content: "";
-        background: #bbb;
+        background: #3385d9;
         height: 100%;
         width: 100%;
         position: absolute;
@@ -67,9 +64,23 @@
         transition: transform 300ms;
       }
 
-      .switchButtonLabelSpan {
+      .toggle-switch-label-span {
         position: relative;
+        text-align: center;
       }
     }
   }
+  @media screen and (max-width: 991px) {
+    transform: scale(0.9);
+  }
+  @media screen and (max-width: 767px) {
+    transform: scale(0.825);
+  }
+  @media screen and (max-width: 575px) {
+    transform: scale(0.75);
+  }
+}
+
+label {
+  margin-bottom: 0;
 }
