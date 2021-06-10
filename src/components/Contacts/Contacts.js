@@ -50,7 +50,6 @@ const Contacts = () => {
     }
 
     //TODO: send to server
-    //TODO: fazer redirect para pagina em que metemos codigo
 
     resetNameInput();
     resetEmailInput();

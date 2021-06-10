@@ -2,7 +2,7 @@ import useInput from "../hooks/use-input";
 import { mapStateToProps, mapDispatchToProps } from "../../store/store";
 import { login } from "../../services/http";
 import { useState } from "react";
-import { Redirect } from "react-router";
+import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import jwt_decode from "jwt-decode";
 
@@ -15,7 +15,6 @@ const Login = (props) => {
   const [validCredentials, setValidCredentials] = useState(true);
   const [accountDisabled, setAccountDisabled] = useState(false);
   const [error, setError] = useState(false);
-  const [completed, setCompleted] = useState(false)
 
   const {
     value: enteredEmail,
@@ -60,7 +59,9 @@ const Login = (props) => {
           //profilePic: data
         });
         localStorage.setItem("token", token);
-        setCompleted(true)
+        resetEmailInput();
+        resetPasswordInput();
+        props.history.push("/home")
       },
       (error) => {
         if (error.status === 400) {
@@ -104,10 +105,9 @@ const Login = (props) => {
         {!validCredentials && <p>Credenciais inválidas</p>}
         {accountDisabled && <p>Esta conta está desativada.</p>}
         {error && <p>Por favor tente novamente</p>}
-        {completed && <Redirect to ="/home" />}
       </div>
     </form>
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));

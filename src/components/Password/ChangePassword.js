@@ -46,7 +46,7 @@ const ChangePassword = (props) => {
 
     resetPasswordInput();
     resetConfirmationInput();
-    props.history.push("/");
+    props.history.push("/home");
   };
   return (
     <form onSubmit={formSubmissionHandler}>

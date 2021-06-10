@@ -27,6 +27,8 @@ import Contacts from "./components/Contacts/Contacts";
 import PasswordRecover from "./components/Password/PasswordRecover";
 import ChangePassword from "./components/Password/ChangePassword";
 import AppPage from "./components/App/AppPage";
+import PrivateRoute from "./components/Private/PrivateRoute";
+import MyHelps from "./components/MyHelps/MyHelps";
 
 function App(Props: FullRouteProps) {
   useEffect(() => {
@@ -77,38 +79,21 @@ function App(Props: FullRouteProps) {
   return (
     <Layout>
       <Switch>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
+        <Route exact path="/"><Redirect to="/home" /></Route>
         <Route exact path="/home" render={() => <Home />} />
         <Route exact path="/faq" render={() => <FAQ />} />
-        <Route exact path="/register" render={() => <Registration />} />
+        <Route exact path="/registar" render={() => <Registration />} />
         <Route exact path="/login" render={() => <Login />} />
-        <Route exact path="/profile" render={() => <Profile />} />
-        <Route
-          exact
-          path="/heroi1"
-          render={() => (
-            <HeroisWraper
-              img=""
-              alt=""
-              text="descriçao heroi"
-              title="heroi 1"
-            />
-          )}
-        />
+        <Route exact path="/perfil" render={() => <Profile />} />
+        <Route exact path="/heroi1" render={() => (<HeroisWraper img="" alt="" text="descriçao heroi" title="heroi 1"/>)}/>
         <Route exact path="/contactos" render={() => <Contacts />} />
-        <Route
-          exact
-          path="/recuperarpassword"
-          render={() => <PasswordRecover />}
-        />
-        <Route
-          exact
-          path="/alterarpassword"
-          render={() => <ChangePassword />}
-        />
+        <Route exact path="/recuperarpassword" render={() => <PasswordRecover />}/>
+        <Route exact path="/alterarpassword" render={() => <ChangePassword />}/>
         <Route exact path="/app" render={() => <AppPage />} />
+        <Route exact path="/minhasajudas" render={() => <MyHelps/>}/>
+
+        <PrivateRoute>
+        </PrivateRoute>
         <Route path="*" render={() => <NotFound />} />
       </Switch>
     </Layout>
