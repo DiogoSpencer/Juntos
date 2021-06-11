@@ -1,5 +1,4 @@
-import { Fragment, useState } from "react";
-import { Redirect, withRouter } from "react-router";
+import { withRouter } from "react-router";
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
 
