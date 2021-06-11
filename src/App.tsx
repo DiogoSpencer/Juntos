@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
 import {
   mapDispatchToProps,
@@ -29,6 +29,7 @@ import ChangePassword from "./components/Password/ChangePassword";
 import AppPage from "./components/App/AppPage";
 import PrivateRoute from "./components/Private/PrivateRoute";
 import MyHelps from "./components/MyHelps/MyHelps";
+import PrivateLayout from "./components/layout/PrivateLayout";
 
 function App(Props: FullRouteProps) {
   useEffect(() => {
