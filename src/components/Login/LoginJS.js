@@ -5,6 +5,7 @@ import { useState } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import jwt_decode from "jwt-decode";
+import Button from "../UI/Button";
 
 //out of rendering cycle - functions to verify input
 const isNotEmpty = (value) => value.trim() !== "";
@@ -101,7 +102,7 @@ const Login = (props) => {
           />
           {passwordHasError && <p>Por favor insira uma password.</p>}
         </div>
-        <button disabled={!formIsValid}>Entrar</button>
+        <Button disabled={!formIsValid} text={"Entrar"}/>
         {!validCredentials && <p>Credenciais inválidas</p>}
         {accountDisabled && <p>Esta conta está desativada.</p>}
         {error && <p>Por favor tente novamente</p>}

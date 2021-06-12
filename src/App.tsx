@@ -18,7 +18,7 @@ import gS from "./services/generalServices.json";
 import jwt_decode from "jwt-decode";
 //import { getUser } from "./services/http";
 import Login from "./components/Login/LoginJS";
-import Registration from "./components/Registration/Registration";
+//import Registration from "./components/Registration/Registration";
 import Layout from "./components/layout/Layout";
 import NotFound from "./components/NotFound/NotFound";
 import FAQ from "./components/FAQ/FAQ";
@@ -29,6 +29,7 @@ import ChangePassword from "./components/Password/ChangePassword";
 import AppPage from "./components/App/AppPage";
 import PrivateRoute from "./components/Private/PrivateRoute";
 import MyHelps from "./components/MyHelps/MyHelps";
+import Register from "./components/Registration/Register";
 
 function App(Props: FullRouteProps) {
   useEffect(() => {
@@ -82,7 +83,7 @@ function App(Props: FullRouteProps) {
         <Route exact path="/"><Redirect to="/home" /></Route>
         <Route exact path="/home" render={() => <Home />} />
         <Route exact path="/faq" render={() => <FAQ />} />
-        <Route exact path="/registar" render={() => <Registration />} />
+        <Route exact path="/registar" render={() => <Register />} />
         <Route exact path="/login" render={() => <Login />} />
         <Route exact path="/perfil" render={() => <Profile />} />
         <Route exact path="/heroi1" render={() => (<HeroisWraper img="" alt="" text="descriçao heroi" title="heroi 1"/>)}/>

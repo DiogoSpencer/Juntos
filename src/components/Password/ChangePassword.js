@@ -5,6 +5,7 @@ import Button from "../UI/Button";
 const isNotEmpty = (value) => value.trim() !== "";
 
 const ChangePassword = (props) => {
+
   const {
     value: enteredPassword,
     isValid: enteredPasswordIsValid,
@@ -55,7 +56,7 @@ const ChangePassword = (props) => {
       <div>
         <label htmlFor="name">Nova Password</label>
         <input
-          type="text"
+          type="password"
           id="newPassword"
           value={enteredPassword}
           onChange={passwordChangeHandler}
@@ -66,7 +67,7 @@ const ChangePassword = (props) => {
       <div>
         <label htmlFor="name">Confirmação</label>
         <input
-          type="text"
+          type="password"
           id="confirmation"
           value={enteredConfirmation}
           onChange={confirmationChangeHandler}
