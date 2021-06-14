@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import SearchBar from "../UI/SearchBar";
 import SideButtons from "../UI/SIdeButtons";
 //import SwitchBar from "../UI/SwitchBar";
@@ -10,15 +10,18 @@ const MyHelps = () => {
   const [hasActiveData, setHasActiveData] = useState(false); //assumindo que nao ha data de pedidos ativos no inicio - antes de fetch
   const [hasInactiveData, setHasInactiveData] = useState(false); //assumindo que nao ha data de pedidos inativas no inicio - antes de fetch
 
-  const ativasHandler = () => {
+  const activeHandler = () => {
     setIsActive(true);
   };
 
-  const inativasHandler = () => {
+  const inactiveHandler = () => {
     setIsActive(false);
   };
 
   //TODO FETCH DATA
+  useEffect( () => {
+    
+  }, [])
 
   const noDataActive = (
     <div>
@@ -65,8 +68,8 @@ const MyHelps = () => {
           <SideButtons
             button1="Ativas"
             button2="Inativas"
-            onClick1={ativasHandler}
-            onClick2={inativasHandler}
+            onClick1={activeHandler}
+            onClick2={inactiveHandler}
           />
         </div>
         {!hasActiveData && isActive && noDataActive}

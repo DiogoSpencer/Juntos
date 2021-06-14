@@ -1,15 +1,15 @@
 import Icon from './Icon'
 
-const AndroidButton = () => {
+const IconButton = (props) => {
     return (
-        <button>
+        <button onClick={props.onClick}>
             <span>
                 <Icon xmlns="" viewBox="" fill="" d=""/>
             </span>
-            <span>Descarrega Aqui!</span>
+            <span>{props.text}</span>
         </button>
     )
 
 }
 
-export default AndroidButton
+export default IconButton

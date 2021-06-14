@@ -8,7 +8,7 @@ import ImageUpload from "./ImageUpload";
 import { register as registar } from "../../services/http";
 
 const isNotEmpty = (value) => value.trim() !== "";
-//TODO: #1 fazer os REGEX de verificacao
+//TODO: #2 fazer os REGEX de verificacao
 //TODO: #3 Verify if image is one of these types
 //TODO: #4 Restrict image size
 const types = ["image/png", "image/jpeg", "image/gif"];

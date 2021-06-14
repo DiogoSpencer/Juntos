@@ -1,5 +1,4 @@
-import { Fragment, useState } from "react";
-import Button from "../UI/Button";
+import { Fragment } from "react";
 
 const ImageUpload = (props) => {
   return (

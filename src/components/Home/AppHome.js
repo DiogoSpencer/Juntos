@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import AndroidButton from "../UI/AndroidButton";
+import IconButton from "../UI/IconButton";
 
 const AppHome = () => {
   return (
@@ -31,7 +31,7 @@ const AppHome = () => {
           Vê aqui o que podemos fazer <span>juntos</span>
         </Link>
       </div>
-      <AndroidButton />
+      <IconButton text="Descarrega Aqui!" xmnls="" viewBox="" fill="" d="" />
     </div>
   );
 };

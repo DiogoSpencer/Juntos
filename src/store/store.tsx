@@ -19,6 +19,9 @@ export function mapStateToProps(state: any){
         user:state.session.user,
         role:state.session.role,
         language:state.language
+        //TODO #6 Add picture to store
+        //TODO #7 Add Name and Last Name to store
+        //TODO #8 Add number of helps to store
     }
 }
 

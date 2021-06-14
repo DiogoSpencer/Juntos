@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useInput from "../hooks/use-input";
 import Button from '..//UI/Button'
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import { mapStateToProps } from "../../store/store";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
-const Profile = () => {
+const Profile = (props) => {
   const [invalidInput, setInvalidInput] = useState(false);
-  const [emailHasAccount, setEmailHasAccount] = useState(false);
   const [error, setError] = useState(false);
-  const [privacy, setPrivacy] = useState("PUBLIC");
+  const [privacy, setPrivacy] = useState("");
   const [concluded, setConcluded] = useState(false);
+  const [fileUpload, setFileUpload] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const {
     value: enteredEmail,
@@ -17,7 +21,7 @@ const Profile = () => {
     hasError: emailHasError,
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
-    reset: resetEmailInput,
+    setValueHandler: setEmailValueHanlder,
   } = useInput(isNotEmpty); //pass func to validate
 
   const {
@@ -26,7 +30,7 @@ const Profile = () => {
     hasError: passwordHasError,
     valueChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
-    reset: resetPasswordInput,
+    setValueHandler: setPasswordValueHanlder,
   } = useInput(isNotEmpty);
 
   const {
@@ -35,7 +39,7 @@ const Profile = () => {
     hasError: confirmationHasError,
     valueChangeHandler: confirmationChangeHandler,
     inputBlurHandler: confirmationBlurHandler,
-    reset: resetConfirmationInput,
+    setValueHandler: setConfirmationValueHanlder,
   } = useInput(isNotEmpty);
 
   const {
@@ -44,7 +48,7 @@ const Profile = () => {
     hasError: firstNameHasError,
     valueChangeHandler: firstNameChangeHandler,
     inputBlurHandler: firstNameBlurHandler,
-    reset: resetFirstNameInput,
+    setValueHandler: setFirstNameValueHanlder,
   } = useInput(isNotEmpty);
 
   const {
@@ -53,7 +57,7 @@ const Profile = () => {
     hasError: lastNameHasError,
     valueChangeHandler: lastNameChangeHandler,
     inputBlurHandler: lastNameBlurHandler,
-    reset: resetLastNameInput,
+    setValueHandler: setLastNameValueHanlder,
   } = useInput(isNotEmpty);
 
   const {
@@ -62,10 +66,14 @@ const Profile = () => {
     hasError: usernameHasError,
     valueChangeHandler: usernameChangeHandler,
     inputBlurHandler: usernameBlurHandler,
-    reset: resetUsernameInput,
+    setValueHandler: setUsernameValueHanlder,
   } = useInput(isNotEmpty);
 
-
+  const userId = props.match.params.userId;
+  
+  useEffect(() => {
+    //getUser(userId).then((res) => {}, (error) => {})
+  }, [userId])
 
   let formIsValid = false;
 
@@ -106,21 +114,12 @@ const Profile = () => {
 
     register(formData).then(
       (response) => {
-        resetPasswordInput();
-        resetConfirmationInput();
-        resetEmailInput();
-        resetUsernameInput();
-        resetFirstNameInput();
-        resetLastNameInput();
-        setPrivacy("PUBLIC");
         //profilePic: data
         setConcluded(true);
       },
       (error) => {
         if (error.status === 400) {
           setInvalidInput(true);
-        } else if (error.status === 409) {
-          setEmailHasAccount(true);
         } else {
           setError(true);
         }
@@ -228,4 +227,4 @@ const Profile = () => {
   return <form></form>;
 };
 
-export default Profile;
+export default connect(mapStateToProps)(withRouter(Profile));

@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import STORE from "../store/store";
 import { resetToken } from "../store/session/actions";
-import { User } from "./httptypes";
+//import { User } from "./httptypes";
 
 const url = "https://juntos-313719.ew.r.appspot.com";
 

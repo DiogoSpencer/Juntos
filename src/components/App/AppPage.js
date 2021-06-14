@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import AndroidButton from "../UI/AndroidButton";
+import IconButton from "../UI/IconButton";
 import AppCard from "./AppCard";
 
 const AppPage = () => {
@@ -23,7 +23,7 @@ const AppPage = () => {
         <p>Podes criar ou participar em ações de voluntariado.</p>
         <p>Podes seguir o mapa em modo offline</p>
       </div>
-      <AndroidButton />
+      <IconButton text="Descarrega Aqui!" xmnls="" viewBox="" fill="" d="" />
     </Fragment>
   );
 };

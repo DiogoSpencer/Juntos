@@ -16,6 +16,8 @@ const inputStateReducer = (state, action) => {
       return { value: state.value, isTouched: true };
     case "RESET":
       return { value: "", isTouched: false };
+    case "SETVALUE":
+      return {value: action.value, isTouched: false};
     default:
       //default
       return initialInputState;
@@ -53,6 +55,13 @@ const useInput = (validateValue) => {
     });
   };
 
+  const setValueHandler = (value) => {
+    dispatch({
+      type: "SETVALUE",
+      value: value,
+    })
+  }
+
   return {
     value: inputState.value,
     isValid: valueIsValid,
@@ -60,6 +69,7 @@ const useInput = (validateValue) => {
     valueChangeHandler,
     inputBlurHandler,
     reset,
+    setValueHandler,
   };
 };
 
