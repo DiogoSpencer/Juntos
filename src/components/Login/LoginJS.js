@@ -11,9 +11,8 @@ import Button from "../UI/Button";
 const isNotEmpty = (value) => value.trim() !== "";
 
 const Login = (props) => {
-  //not very correct to start with true
   //fazer isto com useReducer -> muitos state
-  const [validCredentials, setValidCredentials] = useState(true);
+  const [invalidInput, setInvalidInput] = useState(false);
   const [accountDisabled, setAccountDisabled] = useState(false);
   const [error, setError] = useState(false);
 
@@ -66,7 +65,7 @@ const Login = (props) => {
       },
       (error) => {
         if (error.status === 400) {
-          setValidCredentials(false);
+          setInvalidInput(false);
         } else if (error.status === 403) {
           setAccountDisabled(true);
         } else {
@@ -103,7 +102,7 @@ const Login = (props) => {
           {passwordHasError && <p>Por favor insira uma password.</p>}
         </div>
         <Button disabled={!formIsValid} text={"Entrar"}/>
-        {!validCredentials && <p>Credenciais inválidas</p>}
+        {invalidInput && <p>Credenciais inválidas</p>}
         {accountDisabled && <p>Esta conta está desativada.</p>}
         {error && <p>Por favor tente novamente</p>}
       </div>

@@ -1,27 +1,15 @@
-import { Fragment, useState } from "react";
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-import { mapStateToProps } from "../../store/store";
+import { useState } from "react";
 import useInput from "../hooks/use-input";
-import Button from "../UI/Button";
-import ImageUpload from "./ImageUpload";
-import { register as registar } from "../../services/http";
+import Button from '..//UI/Button'
 
 const isNotEmpty = (value) => value.trim() !== "";
-//TODO: #1 fazer os REGEX de verificacao
-//TODO: #3 Verify if image is one of these types
-//TODO: #4 Restrict image size
-const types = ["image/png", "image/jpeg", "image/gif"];
 
-const Register = (props) => {
-  //TODO: #2 Fazer useReducer para isto tudo..
+const Profile = () => {
   const [invalidInput, setInvalidInput] = useState(false);
   const [emailHasAccount, setEmailHasAccount] = useState(false);
   const [error, setError] = useState(false);
   const [privacy, setPrivacy] = useState("PUBLIC");
   const [concluded, setConcluded] = useState(false);
-  const [fileUpload, setFileUpload] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
 
   const {
     value: enteredEmail,
@@ -77,21 +65,7 @@ const Register = (props) => {
     reset: resetUsernameInput,
   } = useInput(isNotEmpty);
 
-  const fileChangeHandler = (event) => {
-    const files = event.target.files; //files array
-    setFileUpload(true);
-    setSelectedFile(files[0]);
-  };
 
-  const removeImageHandler = () => {
-    setFileUpload(false);
-    setSelectedFile(undefined);
-  };
-
-  //redirect home if logged - logged users cant register
-  const redirectHandler = () => {
-    props.history.push("/home");
-  };
 
   let formIsValid = false;
 
@@ -120,12 +94,7 @@ const Register = (props) => {
       return;
     }
 
-    const formData = new FormData();
-    if (selectedFile !== null) {
-      formData.append("profileImg", selectedFile);
-    }
-
-    const userInfo = {
+    const formData = {
       email: enteredEmail,
       password: enteredPassword,
       confirmation: enteredConfirmation,
@@ -135,12 +104,7 @@ const Register = (props) => {
       privacy: privacy,
     };
 
-    formData.append(
-      "user",
-      new Blob([JSON.stringify(userInfo)], { type: "application/json" })
-    );
-
-    registar(formData).then(
+    register(formData).then(
       (response) => {
         resetPasswordInput();
         resetConfirmationInput();
@@ -149,7 +113,7 @@ const Register = (props) => {
         resetFirstNameInput();
         resetLastNameInput();
         setPrivacy("PUBLIC");
-        setSelectedFile(undefined);
+        //profilePic: data
         setConcluded(true);
       },
       (error) => {
@@ -180,12 +144,6 @@ const Register = (props) => {
     <form onSubmit={formSubmissionHandler}>
       <h1>Registar</h1>
       <div>
-        <ImageUpload
-          fileUpload={fileUpload}
-          removeImageHandler={removeImageHandler}
-          selectedFile={selectedFile}
-          fileChangeHandler={fileChangeHandler}
-        />
         <div>
           <label htmlFor="name">Nome de Utilizador</label>
           <input
@@ -267,32 +225,7 @@ const Register = (props) => {
       </div>
     </form>
   );
-
-  const registerComplete = (
-    <div>
-      <h1>Registo Completo com Sucesso!</h1>
-      <img src="" alt="juntos-icon" />
-      <p>Por favor verifique o seu e-mail para ativar a sua conta.</p>
-    </div>
-  );
-
-  return (
-    <Fragment>
-      {props.isLogged && redirectHandler}
-      {!props.isLogged && !concluded && register}
-      {!props.isLogged && concluded && registerComplete}
-      {invalidInput && <p>Informação inválida.</p>}
-      {emailHasAccount && (
-        <p>Uma conta com o mesmo e-mail já está registado no sistema.</p>
-      )}
-      {error && <p>Por favor tente novamente.</p>}
-    </Fragment>
-  );
+  return <form></form>;
 };
 
-export default connect(mapStateToProps)(withRouter(Register));
-
-/*
-email, username, password, confirmação, foto, se quer perfil publico ou privado + 1º e ultimo nome
-obrigatorio: email, username, password, confirmação, 1º e ultimo nome
-*/
+export default Profile;

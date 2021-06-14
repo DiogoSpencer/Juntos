@@ -47,16 +47,16 @@ function Registration(Props: FullLanguageRouterProps) {
             event.preventDefault();
             event.stopPropagation();
         }
-        register(profile, data).then( response => {
+        register(data).then( response => {
             alert("register")
-            Props.history.push("/")
+            Props.history.push("/home")
         },
             error => {
             if(error.statusCode === 409)
                 alert("Email already has an account")
             });
 
-        Props.history.push("/")
+        Props.history.push("/home")
     };
 
     useEffect(() => {

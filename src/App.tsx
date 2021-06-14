@@ -32,11 +32,18 @@ import MyHelps from "./components/MyHelps/MyHelps";
 import Register from "./components/Registration/Register";
 
 function App(Props: FullRouteProps) {
+  //verificar aqui se tokens sao iguais - redux e localstorage -> se nao for -> logout
+  //isto faz re render sempre que fazemos mount de um componente
   useEffect(() => {
     const language = localStorage.getItem(gS.storage.languageCode);
     if (language !== null)
       Props.changeLanguage(require(`./assets/languages/${language}.json`));
     const token = localStorage.getItem(gS.storage.token);
+    if (token?.localeCompare(Props.token)) { //0 -> they are equal -> is false in JS -> so true they are different
+      //log user out -> attempt to change token detected
+      Props.logout();
+      localStorage.removeItem(gS.storage.token);
+    }
     if (token !== null) {
       const parsed_token: any = jwt_decode(token);
       /*getUser(parsed_token.email).then(
@@ -56,6 +63,10 @@ function App(Props: FullRouteProps) {
       );*/
     }
   }, []);
+
+  //backoffice
+  //entities % para utilizadores, trilhos, pontos
+  //estatisticas, promover, apagar contas, email confirmaçao que expirou pedir report (da logged out) trocar pass, confirmar, -> desbloquear user 
 
   //Route to #
   const { pathname, hash } = useLocation();
@@ -102,3 +113,5 @@ function App(Props: FullRouteProps) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
+
+//npm i recharts
