@@ -9,21 +9,19 @@ const LocationBar = () => {
   const position = async () => {
     await navigator.geolocation.getCurrentPosition(
       (position) =>
-        setCurrLocation(
-          {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          }),
+        setCurrLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        }),
       (err) => console.log(err)
     );
   };
 
-  /*
   useEffect(() => {
-      console.log(currLocation)
-  }, [currLocation])
-*/
-  position();
+    position();
+  }, []);
+
+  console.log(currLocation)
 
   return (
     <div>
