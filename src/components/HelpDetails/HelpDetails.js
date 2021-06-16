@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import Button from "../UI/Button";
 import Icon from "../UI/Icon";
+import CommentList from "./CommentList";
 import HelpTitle from "./HelpTitle";
 import ImageDisplay from "./ImageDisplay";
 import ShareHelp from "./ShareHelp";
@@ -19,7 +20,7 @@ const HelpDetails = () => {
       <ImageDisplay images={[]} />
       <ShareHelp />
       <Button text="Ajudar" />
-      
+      <CommentList />
     </Fragment>
   );
 };

@@ -1,3 +1,5 @@
+import Icon from "../UI/Icon"
+
 const ShareHelp = () => {
     return(
         <div>

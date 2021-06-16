@@ -31,6 +31,7 @@ import PrivateRoute from "./components/Private/PrivateRoute";
 import MyHelps from "./components/MyHelps/MyHelps";
 import Register from "./components/Registration/Register";
 import Help from "./components/HelpForms/Help";
+import HelpDetails from "./components/HelpDetails/HelpDetails"
 
 function App(Props: FullRouteProps) {
   //verificar aqui se tokens sao iguais - redux e localstorage -> se nao for -> logout
@@ -105,6 +106,7 @@ function App(Props: FullRouteProps) {
         <Route exact path="/app" render={() => <AppPage />} />
         <Route exact path="/minhasajudas" render={() => <MyHelps/>}/>
         <Route exact path="/novopedido" render={() => <Help/>}/>
+        <Route exact path="/pedido" render={() => <HelpDetails />}/>
         <PrivateRoute>
         </PrivateRoute>
         <Route path="*" render={() => <NotFound />} />
