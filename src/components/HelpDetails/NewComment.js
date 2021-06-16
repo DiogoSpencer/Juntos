@@ -1,5 +1,4 @@
 //get AuthedUser so that we can create a new comment
-import { useState } from "react";
 import { connect } from "react-redux";
 import { mapStateToProps } from "../../store/store";
 
@@ -13,7 +12,7 @@ const NewComment = (props) => {
 
   return (
     <form onSubmit={props.newCommentHandler}>
-      <img src="" alt="user-profile-picture" />
+      <img src="" alt="user-profile" />
       <p>{props.user}</p>
       <label htmlFor="new-comment" />
       <textarea

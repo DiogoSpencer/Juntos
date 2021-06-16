@@ -7,7 +7,7 @@ const Anonimous = (props) => {
 
     const showAnonimous = (
         <div>
-            <img src="" alt="anonimous"/>
+            <img src="" alt="anonimo"/>
             <p>Primeiro Nome</p>
             <NumberHelp />
         </div>
@@ -16,7 +16,7 @@ const Anonimous = (props) => {
     //show picture from store
     const showPerson = (
         <div>
-            <img src="" alt="profile-image"/>
+            <img src="" alt="imagem-perfil"/>
             <p>Primeiro Nome e Apelido</p>
             <NumberHelp />
         </div>

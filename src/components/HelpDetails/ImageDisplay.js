@@ -3,7 +3,7 @@ const ImageDisplay = (props) => {
     return (
         <div>
             {props.images.map((image, index) => (
-                <img src={image} alt={`image-${index}`} key={index} />
+                <img src={image} alt={image.name} key={index} />
             ))}
         </div>
     )

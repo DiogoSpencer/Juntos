@@ -28,9 +28,6 @@ const Help = () => {
   const [formConcluded, setFormConcluded] = useState(false);
   const [anonimousValue, setAnonimousValue] = useState(false);
   const [volunteersValue, setVolunteersValue] = useState(false);
-  const [step3, setStep3] = useState(false);
-  const [invalidInput, setInvalidInput] = useState(false);
-  const [error, setError] = useState(false);
 
   const ajudarChangeHandler = () => {
     setSelected(AJUDAR);

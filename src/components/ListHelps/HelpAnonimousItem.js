@@ -1,9 +1,9 @@
-const HelpListItem = (props) => {
+const HelpAnonimousItem = (props) => {
   return (
     <div>
       <div>
-        <img src={props.picture} alt="imagem-perfil" />
-        <h6>{props.firstName + " " + props.lastName}</h6>
+        <img src="" alt="anonimo-foto" />
+        <h6>{props.firstName}</h6>
         <img src="" alt="icon-ajudas" />
         <p>{props.helps}</p>
       </div>
@@ -21,4 +21,4 @@ const HelpListItem = (props) => {
   );
 };
 
-export default HelpListItem;
+export default HelpAnonimousItem;

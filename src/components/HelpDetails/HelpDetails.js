@@ -7,7 +7,7 @@ import ImageDisplay from "./ImageDisplay";
 import ShareHelp from "./ShareHelp";
 import UserDisplay from "./UserDisplay";
 
-const HelpDetails = () => {
+const HelpDetails = (props) => {
   return (
     <Fragment>
       <div>
@@ -19,7 +19,7 @@ const HelpDetails = () => {
       <UserDisplay />
       <ImageDisplay images={[]} />
       <ShareHelp />
-      <Button text="Ajudar" />
+      <Button text={props.buttonText} />
       <CommentList />
     </Fragment>
   );

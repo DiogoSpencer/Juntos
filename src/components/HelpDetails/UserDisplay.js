@@ -5,7 +5,7 @@ import Icon from "../UI/Icon"
 const UserDisplay = () => {
     return(
         <div>
-            <img src="" alt="profile-picture" />
+            <img src="" alt="imagem-perfil" />
             <Icon />
             <p>Number of Helps</p>
         </div>

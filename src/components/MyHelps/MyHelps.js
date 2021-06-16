@@ -7,7 +7,7 @@ const MyHelps = () => {
   const [search, setSearch] = useState("");
   //const [switchBar, setSwitchBar] = useState(false);
   const [isActive, setIsActive] = useState(true); //mostrar as ativas
-  const [hasActiveData, setHasActiveData] = useState(false); //assumindo que nao ha data de pedidos ativos no inicio - antes de fetch
+  const [hasActiveData, setHasActiveData] = useState(false); //assumindo que nao ha data de pedidos ativos no inicio - antes de fetch -fazer set no fetch se return > 0
   const [hasInactiveData, setHasInactiveData] = useState(false); //assumindo que nao ha data de pedidos inativas no inicio - antes de fetch
 
   const activeHandler = () => {
