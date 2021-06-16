@@ -18,10 +18,11 @@ const LocationBar = () => {
     );
   };
 
+  /*
   useEffect(() => {
       console.log(currLocation)
   }, [currLocation])
-
+*/
   position();
 
   return (
