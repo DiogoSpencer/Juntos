@@ -3,6 +3,7 @@ import SideButtons from "../UI/SideButtons";
 import HelpListItem from "./HelpListItem";
 import HelpAnonimousItem from "./HelpAnonimousItem";
 import { Link } from "react-router-dom";
+import LocationBar from "./LocationBar";
 
 const dummy_pedidos = [
   {
@@ -114,7 +115,7 @@ const ListHelps = () => {
         onClick1={pedidosHandler}
         onClick2={ofertasHandler}
       />
-      <div>Barra Localização - TODO</div>
+      <LocationBar />
       <ol>
         {showPedidos &&
           dummy_pedidos.map((pedido) => (
