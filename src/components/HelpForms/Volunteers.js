@@ -1,4 +1,4 @@
-import SideButtons from "../UI/SIdeButtons";
+import SideButtons from "../UI/SideButtons";
 
 const Volunteers = (props) => {
   const numberVolunteers = (

@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import SearchBar from "../UI/SearchBar";
-import SideButtons from "../UI/SIdeButtons";
+import SideButtons from "../UI/SideButtons";
 //import SwitchBar from "../UI/SwitchBar";
 
 const MyHelps = () => {
@@ -19,9 +19,7 @@ const MyHelps = () => {
   };
 
   //TODO FETCH DATA
-  useEffect( () => {
-    
-  }, [])
+  useEffect(() => {}, []);
 
   const noDataActive = (
     <div>
@@ -83,7 +81,6 @@ const MyHelps = () => {
 
 export default MyHelps;
 
-
 /* <SwitchBar
 name="helps"
 class="minhasajudas"
@@ -91,4 +88,3 @@ yes="Ativas"
 checked={switchBar}
 onChange={setSwitchBar}
 /> */
-

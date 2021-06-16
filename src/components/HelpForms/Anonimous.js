@@ -1,6 +1,6 @@
 import { connect } from "react-redux"
 import { mapStateToProps } from "../../store/store"
-import SideButtons from "../UI/SIdeButtons"
+import SideButtons from "../UI/SideButtons"
 import NumberHelp from "./NumberHelp"
 
 const Anonimous = (props) => {
