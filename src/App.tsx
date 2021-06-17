@@ -33,6 +33,9 @@ import Register from "./components/Registration/Register";
 import Help from "./components/HelpForms/Help";
 import HelpDetails from "./components/HelpDetails/HelpDetails"
 import ListHelps from "./components/ListHelps/ListHelps";
+import Chat from './components/Chat/Chat'
+import Conversation from './components/Chat/Conversation'
+
 
 function App(Props: FullRouteProps) {
   //verificar aqui se tokens sao iguais - redux e localstorage -> se nao for -> logout
@@ -110,6 +113,10 @@ function App(Props: FullRouteProps) {
         <Route exact path="/ajudas" render={() => <ListHelps />}/>
         <Route exact path="/pedidos/:pedidoId" render={() => <HelpDetails buttonText="Oferecer Ajuda" />}/>
         <Route exact path="/ofertas/:ofertaId" render={() => <HelpDetails buttonText="Pedir Ajuda" />}/>
+        <Route exact path="/chats" render={() => <Chat />} />
+        <Route exact path="/chats/pedidos/:pedidoId" render={() => <Conversation />} />
+        <Route exact path="/chats/ofertas/:ofertaId" render={() => <Conversation />} />
+
         <PrivateRoute>
         </PrivateRoute>
         <Route path="*" render={() => <NotFound />} />
@@ -121,3 +128,10 @@ function App(Props: FullRouteProps) {
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
 
 //npm i recharts
+
+//falta pensar como vamos concluir os pedidos - concurrencia de pedidos... - pedido pode estar na lista mas ja concluido
+//2 pessoas podem carregar no pedido ao mesmo tempo...
+//pensar na pagina de editar pedido para o utilizador que o criou - apagar pedido, editar pedido, concluir pedido? e depois perguntar quem ajudou - 
+//ver quem clicou em ajudar e dar a escolher da lista?
+//falta pensar na pagina de chat.. -> da para marcar pedido concluido so atraves do chat?
+//possibilidade de reactivar pedido quando este esta inactivo por ja ter sido concluido?

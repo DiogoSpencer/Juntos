@@ -8,6 +8,7 @@ import ShareHelp from "./ShareHelp";
 import UserDisplay from "./UserDisplay";
 
 const HelpDetails = (props) => {
+  //ir buscar id atraves do url -> fazer pedido ao servidor com esse id
   return (
     <Fragment>
       <div>
