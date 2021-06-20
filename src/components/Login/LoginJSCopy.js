@@ -1,11 +1,12 @@
 import useInput from "../hooks/use-input";
 import { login } from "../../services/http";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import Button from "../UI/Button";
 import { useHistory } from "react-router-dom";
+import useHttp from "../hooks/use-http";
+import LoadingSpinner from "../UI/LoadingSpinner";
 import { useDispatch } from "react-redux";
-import { authActions } from "../../store/session/auth";
 
 //out of rendering cycle - functions to verify input
 const isNotEmpty = (value) => value.trim() !== "";
@@ -14,6 +15,7 @@ const Login = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const { sendRequest, status, data: response, errorHttp } = useHttp(login);
   //fazer isto com useReducer -> muitos state
   const [invalidInput, setInvalidInput] = useState(false);
   const [accountDisabled, setAccountDisabled] = useState(false);
@@ -50,17 +52,19 @@ const Login = () => {
       return;
     }
 
-    login(enteredEmail, enteredPassword).then(
+    sendRequest(enteredEmail, enteredPassword);
+
+    /* login(enteredEmail, enteredPassword).then(
       (response) => {
         const token = response.headers.authorization;
         const parsedToken = jwt_decode(token);
         console.log(parsedToken);
-        dispatch(authActions.login({
+        props.login({
           token: token,
-          username: parsedToken.username,
+          user: parsedToken.username,
           role: parsedToken.role,
           //profilePic: data
-        }));
+        });
         localStorage.setItem("token", token);
         resetEmailInput();
         resetPasswordInput();
@@ -75,11 +79,39 @@ const Login = () => {
           setError(true);
         }
       }
-    );
+    ); */
   };
+
+  if (status === "completed" && !errorHttp) {
+    const token = response.headers.authorization;
+    const parsedToken = jwt_decode(token);
+    dispatch(authActions.login({
+      token: token,
+      username: parsedToken.username,
+      role: parsedToken.role,
+      //profilePic: data
+    }));
+    localStorage.setItem("token", token);
+    resetEmailInput();
+    resetPasswordInput();
+    history.replace("/home"); //nao deixar o user ir para tras
+  } else if (status === "completed" && errorHttp) {
+    if (errorHttp.status === 400) {
+      setInvalidInput(false);
+    } else if (errorHttp.status === 403) {
+      setAccountDisabled(true);
+    } else {
+      setError(true);
+    }
+  }
 
   return (
     <form onSubmit={formSubmissionHandler}>
+      {status === "pending" && (
+        <div>
+          <LoadingSpinner />
+        </div>
+      )}
       <div>
         <h1>Login</h1>
         <div>

@@ -70,6 +70,7 @@ function App(Props: FullRouteProps) {
     }
   }, []);
 
+  //TODO
   //backoffice
   //entities % para utilizadores, trilhos, pontos
   //estatisticas, promover, apagar contas, email confirmaçao que expirou pedir report (da logged out) trocar pass, confirmar, -> desbloquear user 

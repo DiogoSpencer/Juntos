@@ -1,18 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from "react-redux";
-import {withRouter} from "react-router";
+import {useEffect, useState} from 'react';
 import "./WebPage.css";
-import {
-    mapDispatchToProps,
-    FullLanguageRouterProps,
-    FullRouteProps,
-    languageToProps,
-    mapStateToProps
-} from "../../store/store";
 import {User} from "../../services/httptypes";
 import {Button, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
+import { useHistory } from 'react-router';
 
-function WebPage(Props: FullLanguageRouterProps) {
+function WebPage() {
+    const history = useHistory();
     const [timeout, changeTimeout] = useState<boolean>(false)
     const [users, setUsers] = useState<User[]>([])
     useEffect(() => {
@@ -32,16 +25,16 @@ function WebPage(Props: FullLanguageRouterProps) {
         console.log(users.length)
     }, [users])
     const clickYou = () => {
-        Props.history.push("/register/")
+        history.push("/register/")
     }
     const loginButton = () => {
-        Props.history.push("/login/")
+        history.push("/login/")
     }
     const registerButton = () => {
-        Props.history.push("/register/")
+        history.push("/register/")
     }
     const profileButton = () => {
-        Props.history.push("/profile/")
+        history.push("/profile/")
     }
 
 
@@ -90,4 +83,4 @@ function WebPage(Props: FullLanguageRouterProps) {
 
  */
 
-export default connect(languageToProps)(withRouter(WebPage))
+export default WebPage

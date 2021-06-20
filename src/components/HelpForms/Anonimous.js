@@ -1,5 +1,3 @@
-import { connect } from "react-redux"
-import { mapStateToProps } from "../../store/store"
 import SideButtons from "../UI/SideButtons"
 import NumberHelp from "./NumberHelp"
 
@@ -32,4 +30,4 @@ return (
     </div>)
 }
 
-export default connect(mapStateToProps)(Anonimous)
+export default Anonimous

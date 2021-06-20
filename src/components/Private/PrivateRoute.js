@@ -1,12 +1,13 @@
 import { Fragment } from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { Redirect } from "react-router";
-import { mapStateToProps } from "../../store/store";
 
 const PrivateRoute = (props) => {
+  const isLogged = useSelector((state) => state.auth.isLogged)
+
   return (
-    <Fragment>{props.isLogged ? props.children : <Redirect to="/home" />}</Fragment>
+    <Fragment>{isLogged ? props.children : <Redirect to="/home" />}</Fragment>
   );
 };
 
-export default connect(mapStateToProps)(PrivateRoute);
+export default PrivateRoute;

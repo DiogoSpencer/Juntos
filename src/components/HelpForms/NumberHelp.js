@@ -1,5 +1,3 @@
-import { connect } from "react-redux";
-import { mapStateToProps } from "../../store/store";
 import Icon from "../UI/Icon";
 
 const NumberHelp = () => {
@@ -11,4 +9,4 @@ const NumberHelp = () => {
   );
 };
 
-export default connect(mapStateToProps)(NumberHelp);
+export default NumberHelp;

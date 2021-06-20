@@ -10,13 +10,12 @@ const REDUCERS = combineReducers({
     language: languageReducer
 })
 const STORE = createStore(REDUCERS)
-export default STORE
 
 export function mapStateToProps(state: any){
     return{
         isLogged:state.session.isLogged,
         token:state.session.token,
-        user:state.session.user,
+        username:state.session.user,
         role:state.session.role,
         language:state.language
         //TODO #6 Add picture to store
@@ -40,6 +39,9 @@ export function languageToProps(state:any){
         language:state.language
     }
 }
+
+export default STORE
+
 export type FullProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 export type FullRouteProps = FullProps & RouteComponentProps<any>
 export type FullLanguageProps = ReturnType<typeof languageToProps>

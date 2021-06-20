@@ -1,9 +1,9 @@
 //get AuthedUser so that we can create a new comment
-import { connect } from "react-redux";
-import { mapStateToProps } from "../../store/store";
+import { useSelector } from "react-redux";
 
 //set the text of the new comment
 const NewComment = (props) => {
+  const authUsername = useSelector((state) => state.auth.username)
   //const [commentText, setCommentText] = useState("");
 
   const commentTextHandler = (event) => {
@@ -13,7 +13,7 @@ const NewComment = (props) => {
   return (
     <form onSubmit={props.newCommentHandler}>
       <img src="" alt="user-profile" />
-      <p>{props.user}</p>
+      <p>{authUsername}</p>
       <label htmlFor="new-comment" />
       <textarea
         id="new-comment"
@@ -27,7 +27,7 @@ const NewComment = (props) => {
   );
 };
 
-export default connect(mapStateToProps)(NewComment);
+export default NewComment;
 
 /*
 Comment in DB:

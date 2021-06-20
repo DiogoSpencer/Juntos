@@ -1,10 +1,7 @@
-import {connect} from "react-redux";
-import {withRouter} from "react-router";
 import "./Header.css";
-import {mapDispatchToProps, FullRouteProps, mapStateToProps} from "../../store/store";
 import gS from "./../../services/generalServices.json"
 
-function Header(Props: FullRouteProps) {
+function Header() {
     /*
     useEffect(()=> {
         const role = Props.role
@@ -28,6 +25,7 @@ function Header(Props: FullRouteProps) {
 
      */
     const click = () => {
+        /*
         if (Props.language.code === "en") {
             Props.changeLanguage(require("./../../assets/languages/pt.json"))
             localStorage.setItem(gS.storage.languageCode, "pt")
@@ -36,7 +34,7 @@ function Header(Props: FullRouteProps) {
             Props.changeLanguage(require("./../../assets/languages/en.json"))
             localStorage.setItem(gS.storage.languageCode, "en")
         }
-
+*/
     }
     return (
         <div className="header-wrapper" onClick={click}>
@@ -45,6 +43,6 @@ function Header(Props: FullRouteProps) {
     );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header))
+export default Header;
 
-;
+//connect(mapStateToProps, mapDispatchToProps)(withRouter(Header))

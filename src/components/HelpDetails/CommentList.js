@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { mapStateToProps } from "../../store/store";
 import Button from "../UI/Button";
 import Comment from "./Comment";
@@ -23,7 +23,8 @@ const dummy_data = [
 ];
 
 //get List of comments
-const CommentsList = (props) => {
+const CommentsList = () => {
+  const authUsername = useSelector((state) => state.auth.username)
   const [commentText, setCommentText] = useState("");
 
   const newCommentHandler = (event) => {
@@ -38,7 +39,7 @@ const CommentsList = (props) => {
 
     dummy_data.unshift({
       "ownerPicture": "",
-      "ownerFirstName": props.user,
+      "ownerFirstName": authUsername,
       "ownerLastName": "SSS",
       "text" : commentText,
       "date" : today
@@ -67,4 +68,4 @@ const CommentsList = (props) => {
   );
 };
 
-export default connect(mapStateToProps)(CommentsList);
+export default CommentsList;

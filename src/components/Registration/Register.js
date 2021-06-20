@@ -1,11 +1,10 @@
 import { Fragment, useState } from "react";
-import { connect } from "react-redux";
 import { useHistory } from "react-router";
-import { mapStateToProps } from "../../store/store";
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
 import ImageUpload from "./ImageUpload";
 import { register as registar } from "../../services/http";
+import { useSelector } from "react-redux";
 
 const isNotEmpty = (value) => value.trim() !== "";
 //TODO: #2 fazer os REGEX de verificacao
@@ -13,8 +12,9 @@ const isNotEmpty = (value) => value.trim() !== "";
 //TODO: #4 Restrict image size
 const types = ["image/png", "image/jpeg", "image/gif"];
 
-const Register = (props) => {
+const Register = () => {
   const history = useHistory();
+  const isLogged = useSelector((state) => state.auth.isLogged)
 
   //TODO: #2 Fazer useReducer para isto tudo..
   const [invalidInput, setInvalidInput] = useState(false);
@@ -280,9 +280,9 @@ const Register = (props) => {
 
   return (
     <Fragment>
-      {props.isLogged && redirectHandler}
-      {!props.isLogged && !concluded && register}
-      {!props.isLogged && concluded && registerComplete}
+      {isLogged && redirectHandler}
+      {!isLogged && !concluded && register}
+      {!isLogged && concluded && registerComplete}
       {invalidInput && <p>Informação inválida.</p>}
       {emailHasAccount && (
         <p>Uma conta com o mesmo e-mail já está registado no sistema.</p>
@@ -292,7 +292,7 @@ const Register = (props) => {
   );
 };
 
-export default connect(mapStateToProps)(Register);
+export default Register;
 
 /*
 email, username, password, confirmação, foto, se quer perfil publico ou privado + 1º e ultimo nome

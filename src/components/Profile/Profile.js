@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import useInput from "../hooks/use-input";
 import Button from '..//UI/Button'
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-import { mapStateToProps } from "../../store/store";
+import { useSelector } from "react-redux";
+import { useRouteMatch } from "react-router";
+import {register} from '../../services/http'
 
 const isNotEmpty = (value) => value.trim() !== "";
 
 const Profile = (props) => {
+  const isLogged = useSelector((state) => state.auth.isLogged)
+  const match = useRouteMatch();
+
   const [invalidInput, setInvalidInput] = useState(false);
   const [error, setError] = useState(false);
   const [privacy, setPrivacy] = useState("");
@@ -69,7 +72,7 @@ const Profile = (props) => {
     setValueHandler: setUsernameValueHanlder,
   } = useInput(isNotEmpty);
 
-  const userId = props.match.params.userId;
+  const userId = match.params.username;
   
   useEffect(() => {
     //getUser(userId).then((res) => {}, (error) => {})
@@ -139,9 +142,9 @@ const Profile = (props) => {
     }
   };
 
-  const register = (
+  const profile = (
     <form onSubmit={formSubmissionHandler}>
-      <h1>Registar</h1>
+      <h1>Perfil</h1>
       <div>
         <div>
           <label htmlFor="name">Nome de Utilizador</label>
@@ -220,11 +223,12 @@ const Profile = (props) => {
             </select>
           </label>
         </div>
-        <Button disabled={!formIsValid} text="Registar" />
+        <Button disabled={!formIsValid} text="Guardar" />
       </div>
     </form>
   );
-  return <form></form>;
+  
+  return (profile);
 };
 
-export default connect(mapStateToProps)(withRouter(Profile));
+export default Profile;

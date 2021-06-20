@@ -1,16 +1,17 @@
 import { Fragment } from "react";
-import { connect } from "react-redux";
-import { mapStateToProps } from "../../store/store";
+import { useSelector } from "react-redux";
 import Footer from "./Footer";
 import NavBar from "./NavBar";
 import SideBar from "./SideBar";
 
 const Layout = (props) => {
+  const isLogged = useSelector((state) => state.auth.isLogged)
+
   return (
     <Fragment>
       <NavBar />
       <main>
-        {props.isLogged && <SideBar />}
+        {isLogged && <SideBar />}
         {props.children}
       </main>
       <Footer />
@@ -18,4 +19,4 @@ const Layout = (props) => {
   );
 };
 
-export default connect(mapStateToProps)(Layout);
+export default Layout;

@@ -1,8 +1,10 @@
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { mapStateToProps } from "../../store/store";
-import { connect } from "react-redux";
 
-const NavBar = (props) => {
+const NavBar = () => {
+  const isLogged = useSelector((state) => state.auth.isLogged)
+  const username = useSelector((state) => state.auth.username)
+
   return (
     <header>
       <div>
@@ -27,14 +29,14 @@ const NavBar = (props) => {
           <li>
             <NavLink to="/faq">FAQ</NavLink>
           </li>
-          {!props.isLogged && (
+          {!isLogged && (
             <li>
               <NavLink to="/login">Login</NavLink>
             </li>
           )}
-          {props.isLogged && (
+          {isLogged && (
             <li>
-              <NavLink to={`/perfil/${props.user}`}>
+              <NavLink to={`/perfil/${username}`}>
                 <img src="" alt="user-profile" />
               </NavLink>
             </li>
@@ -45,4 +47,4 @@ const NavBar = (props) => {
   );
 };
 
-export default connect(mapStateToProps)(NavBar);
+export default NavBar;

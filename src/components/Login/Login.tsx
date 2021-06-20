@@ -1,12 +1,10 @@
 import "./Login.css";
-import {FullLanguageRouterProps, languageToProps} from "../../store/store";
-import {connect} from "react-redux";
-import {withRouter} from "react-router";
 import {useState} from "react";
-
 import {login} from "../../services/http";
 import {Button, Form, InputGroup } from "react-bootstrap";
 import { User } from "../../services/httptypes";
+import { useHistory } from "react-router";
+
 interface Validity{
     emailValid ?: boolean,
     passwordValid ?: boolean,
@@ -23,7 +21,8 @@ interface Validity{
     firstNameError ?: string,
     lastNameError ?: string
 }
-function Registration(Props: FullLanguageRouterProps) {
+function Registration() {
+    const history = useHistory();
     const [validated, setValidated] = useState<Validity>();
     const [formSubmitValid, setformSubmitValid] =useState<boolean>(false)
     const [profile, setProfile] = useState<User>({
@@ -44,12 +43,12 @@ function Registration(Props: FullLanguageRouterProps) {
             event.stopPropagation();
         }
         login(profile.email, profile.password).then( response => {
-                Props.history.push("/")
+                history.push("/home")
             },
             error => {
                     alert("Credentials wrong!")
             });
-        Props.history.push("/")
+        history.push("/home")
     };
 
     const checkFormValid = () => {
@@ -113,4 +112,4 @@ function Registration(Props: FullLanguageRouterProps) {
         </Form>
     );
 }
-export default connect(languageToProps)(withRouter(Registration))
+export default Registration
