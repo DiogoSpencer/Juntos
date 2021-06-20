@@ -59,6 +59,7 @@ const Login = () => {
           token: token,
           username: parsedToken.username,
           role: parsedToken.role,
+          email: parsedToken.email,
           //profilePic: data
         }));
         localStorage.setItem("token", token);

@@ -7,7 +7,6 @@ import gS from "./services/generalServices.json";
 import jwt_decode from "jwt-decode";
 //import { getUser } from "./services/http";
 import Login from "./components/Login/LoginJS";
-//import Registration from "./components/Registration/Registration";
 import Layout from "./components/layout/Layout";
 import NotFound from "./components/NotFound/NotFound";
 import FAQ from "./components/FAQ/FAQ";

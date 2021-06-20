@@ -5,6 +5,7 @@ const initialState = {
   token: "",
   username: "",
   role: "",
+  email: "",
 };
 
 const authenticationSlice = createSlice({
@@ -16,6 +17,7 @@ const authenticationSlice = createSlice({
       state.token = action.payload.token;
       state.username = action.payload.username;
       state.role = action.payload.role;
+      state.email = action.payload.email;
     },
     logout(state) {
       state = initialState;

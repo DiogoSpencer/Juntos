@@ -9,6 +9,13 @@ const isNotEmpty = (value) => value.trim() !== "";
 
 const Profile = (props) => {
   const isLogged = useSelector((state) => state.auth.isLogged)
+  const authUsername = useSelector((state) => state.auth.username)
+  const authToken = useSelector((state) => state.auth.token)
+  const authRole = useSelector((state) => state.auth.role)
+  const authEmail = useSelector((state) => state.auth.email)
+
+  console.log(isLogged + " " + authUsername + " " + authToken + " " + authRole + " " + authEmail)
+
   const match = useRouteMatch();
 
   const [invalidInput, setInvalidInput] = useState(false);
