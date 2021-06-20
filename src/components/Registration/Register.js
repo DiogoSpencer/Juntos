@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router";
+import { useHistory } from "react-router";
 import { mapStateToProps } from "../../store/store";
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
@@ -14,6 +14,8 @@ const isNotEmpty = (value) => value.trim() !== "";
 const types = ["image/png", "image/jpeg", "image/gif"];
 
 const Register = (props) => {
+  const history = useHistory();
+
   //TODO: #2 Fazer useReducer para isto tudo..
   const [invalidInput, setInvalidInput] = useState(false);
   const [emailHasAccount, setEmailHasAccount] = useState(false);
@@ -88,9 +90,18 @@ const Register = (props) => {
     setSelectedFile(undefined);
   };
 
+  const privacyChangeHandler = () => {
+    if (!privacy.localeCompare("PUBLIC")) {
+      //str1 === str2 -> 0 = false
+      setPrivacy("PRIVATE");
+    } else {
+      setPrivacy("PUBLIC");
+    }
+  };
+
   //redirect home if logged - logged users cant register
   const redirectHandler = () => {
-    props.history.push("/home");
+    history.push("/home"); //deixar o user ir para tras
   };
 
   let formIsValid = false;
@@ -165,15 +176,6 @@ const Register = (props) => {
 
     //Mandar info ao server
     //TODO: img upload: https://codeburst.io/react-image-upload-with-kittens-cc96430eaece
-  };
-
-  const privacyChangeHandler = () => {
-    if (!privacy.localeCompare("PUBLIC")) {
-      //str1 === str2 -> 0 = false
-      setPrivacy("PRIVATE");
-    } else {
-      setPrivacy("PUBLIC");
-    }
   };
 
   const register = (
@@ -290,7 +292,7 @@ const Register = (props) => {
   );
 };
 
-export default connect(mapStateToProps)(withRouter(Register));
+export default connect(mapStateToProps)(Register);
 
 /*
 email, username, password, confirmação, foto, se quer perfil publico ou privado + 1º e ultimo nome

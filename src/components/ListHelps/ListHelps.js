@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import SideButtons from "../UI/SideButtons";
 import HelpListItem from "./HelpListItem";
 import HelpAnonimousItem from "./HelpAnonimousItem";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import LocationBar from "./LocationBar";
 
 const dummy_pedidos = [
@@ -96,6 +96,7 @@ const dummy_ofertas = [
 ];
 
 const ListHelps = () => {
+  const match = useRouteMatch();
   const [showPedidos, setShowPedidos] = useState(true);
 
   const pedidosHandler = () => {
@@ -120,7 +121,7 @@ const ListHelps = () => {
         {showPedidos &&
           dummy_pedidos.map((pedido) => (
             <li key={pedido.id}>
-              <Link to={`pedidos/${pedido.id}`}>
+              <Link to={`${match.path}/pedidos/${pedido.id}`}>
                 {!pedido.anonimous && (
                   <HelpListItem
                     title={pedido.title}
@@ -149,7 +150,7 @@ const ListHelps = () => {
         {!showPedidos &&
           dummy_ofertas.map((oferta) => (
             <li key={oferta.id}>
-              <Link to={`ofertas/${oferta.id}`}>
+              <Link to={`${match.path}/ofertas/${oferta.id}`}>
                 {!oferta.anonimous && (
                   <HelpListItem
                     title={oferta.title}

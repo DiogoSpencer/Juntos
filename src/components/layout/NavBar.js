@@ -34,7 +34,7 @@ const NavBar = (props) => {
           )}
           {props.isLogged && (
             <li>
-              <NavLink to="">
+              <NavLink to={`/perfil/${props.user}`}>
                 <img src="" alt="user-profile" />
               </NavLink>
             </li>

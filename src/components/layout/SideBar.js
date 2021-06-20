@@ -13,11 +13,11 @@ const SideBar = () => {
 
   const sideBar = (
     <div>
-      <Link to="/home">
+      <Link to="/novopedido">
         <SideBarIcon src="" alt="nova-ajuda-pedido" />
       </Link>
-      <Link to="/home">
-        <SideBarIcon src="" alt="mensagens" />
+      <Link to="/conversas">
+        <SideBarIcon src="" alt="conversas" />
       </Link>
       <Link to="/minhasajudas">
         <SideBarIcon src="" alt="minhas-ajudas" />
@@ -25,8 +25,8 @@ const SideBar = () => {
       <Link to="/home">
         <SideBarIcon src="" alt="mapa" />
       </Link>
-      <Link to="/home">
-        <SideBarIcon src="" alt="lista" />
+      <Link to="/ajudas">
+        <SideBarIcon src="" alt="ajudas" />
       </Link>
     </div>
   );

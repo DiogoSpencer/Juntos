@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import useInput from "../hooks/use-input";
 import ImageUpload from "../Registration/ImageUpload";
 import Button from "../UI/Button";
@@ -6,6 +6,7 @@ import Icon from "../UI/Icon";
 import IconButton from "../UI/IconButton";
 import Anonimous from "./Anonimous";
 import Volunteers from "./Volunteers";
+import { Prompt } from "react-router-dom";
 
 const AJUDAR = "Ajudar";
 const PEDIR = "Pedir Ajuda";
@@ -21,6 +22,9 @@ const isVolunteerNumber = (value) => {
   }
 };
 
+const ensureLeave =
+  "Tem a certeza que quer sair? Toda a informação inserida irá ser perdida.";
+
 const Help = () => {
   const [selected, setSelected] = useState("");
   const [fileUpload, setFileUpload] = useState(false);
@@ -28,6 +32,7 @@ const Help = () => {
   const [formConcluded, setFormConcluded] = useState(false);
   const [anonimousValue, setAnonimousValue] = useState(false);
   const [volunteersValue, setVolunteersValue] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const ajudarChangeHandler = () => {
     setSelected(AJUDAR);
@@ -84,10 +89,12 @@ const Help = () => {
   };
 
   const formConcludedHandler = () => {
+    setIsFocused(false);
     setFormConcluded(true);
   };
 
   const backFormHandler = () => {
+    setIsFocused(false); //decidir se vamos usar isto aqui tb
     setSelected("");
   };
 
@@ -105,6 +112,10 @@ const Help = () => {
 
   const noVolunteersHandler = () => {
     setVolunteersValue(false);
+  };
+
+  const formFocusedHandler = () => {
+    setIsFocused(true);
   };
 
   let formIsValid = false;
@@ -254,29 +265,32 @@ const Help = () => {
   //TODO: #9 Adicionar Mapas: {formConcluded && mapa}
 
   return (
-    <form onSubmit={formSubmissionHandler}>
-      {selected === "" && !formConcluded && selectHelp}
-      {selected !== "" && !formConcluded && info}
-      {selected !== "" && selected !== ACOES && !formConcluded && (
-        <Anonimous
-          yesAnonimous={yesAnonimousHandler}
-          noAnonimous={noAnonimousHandler}
-          anonimous={anonimousValue}
-        />
-      )}
-      {selected === ACOES && !formConcluded && (
-        <Volunteers
-          yesVolunteers={yesVolunteersHandler}
-          noVolunteers={noVolunteersHandler}
-          volunteersValue={volunteersValue}
-          value={enteredNumberVolunteers}
-          onChange={numberVolunteersChangeHandler}
-          onBlur={numberVolunteersBlurHandler}
-          error={numberVolunteersHasError}
-        />
-      )}
-      {selected !== "" && !formConcluded && renderButtons}
-    </form>
+    <Fragment>
+      <Prompt when={isFocused} message={(location) => ensureLeave} />
+      <form onFocus={formFocusedHandler} onSubmit={formSubmissionHandler}>
+        {selected === "" && !formConcluded && selectHelp}
+        {selected !== "" && !formConcluded && info}
+        {selected !== "" && selected !== ACOES && !formConcluded && (
+          <Anonimous
+            yesAnonimous={yesAnonimousHandler}
+            noAnonimous={noAnonimousHandler}
+            anonimous={anonimousValue}
+          />
+        )}
+        {selected === ACOES && !formConcluded && (
+          <Volunteers
+            yesVolunteers={yesVolunteersHandler}
+            noVolunteers={noVolunteersHandler}
+            volunteersValue={volunteersValue}
+            value={enteredNumberVolunteers}
+            onChange={numberVolunteersChangeHandler}
+            onBlur={numberVolunteersBlurHandler}
+            error={numberVolunteersHasError}
+          />
+        )}
+        {selected !== "" && !formConcluded && renderButtons}
+      </form>
+    </Fragment>
   );
 };
 

@@ -22,6 +22,7 @@ export function mapStateToProps(state: any){
         //TODO #6 Add picture to store
         //TODO #7 Add Name and Last Name to store
         //TODO #8 Add number of helps to store
+        //mudar user para username
     }
 }
 

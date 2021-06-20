@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import ChatItem from "./ChatItem"
 
 const pedidoChat = [
@@ -14,12 +14,14 @@ const pedidoChat = [
 ];
 
 const RequestChatList = () => {
+  const match = useRouteMatch();
+
   return (
     <div>
       <ol>
         {pedidoChat.map((request) => (
           <li key={request.id}>
-            <Link to={`chats/pedidos/${request.id}`}>
+            <Link to={`${match.path}/pedidos/${request.id}`}>
               <ChatItem
                 title={request.title}
                 status={request.status}

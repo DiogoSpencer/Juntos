@@ -98,24 +98,24 @@ function App(Props: FullRouteProps) {
     <Layout>
       <Switch>
         <Route exact path="/"><Redirect to="/home" /></Route>
-        <Route exact path="/home" render={() => <Home />} />
-        <Route exact path="/faq" render={() => <FAQ />} />
-        <Route exact path="/registar" render={() => <Register />} />
-        <Route exact path="/login" render={() => <Login />} />
-        <Route exact path="/perfil" render={() => <Profile />} />
-        <Route exact path="/heroi1" render={() => (<HeroisWraper img="" alt="" text="descriçao heroi" title="heroi 1"/>)}/>
-        <Route exact path="/contactos" render={() => <Contacts />} />
-        <Route exact path="/recuperarpassword" render={() => <PasswordRecover />}/>
-        <Route exact path="/alterarpassword" render={() => <ChangePassword />}/>
-        <Route exact path="/app" render={() => <AppPage />} />
-        <Route exact path="/minhasajudas" render={() => <MyHelps/>}/>
-        <Route exact path="/novopedido" render={() => <Help/>}/>
+        <Route path="/home" render={() => <Home />} />
+        <Route path="/faq" render={() => <FAQ />} />
+        <Route path="/registar" render={() => <Register />} />
+        <Route path="/login" render={() => <Login />} />
+        <Route path="/perfil/:username" render={() => <Profile />} />
+        <Route path="/herois/:heroiId" render={() => (<HeroisWraper img="" alt="" text="descriçao heroi" title="heroi 1"/>)}/>
+        <Route path="/contactos" render={() => <Contacts />} />
+        <Route path="/recuperarpassword" render={() => <PasswordRecover />}/>
+        <Route path="/alterarpassword" render={() => <ChangePassword />}/>
+        <Route path="/app" render={() => <AppPage />} />
+        <Route path="/minhasajudas" render={() => <MyHelps/>}/>
+        <Route path="/novopedido" render={() => <Help/>}/>
         <Route exact path="/ajudas" render={() => <ListHelps />}/>
-        <Route exact path="/pedidos/:pedidoId" render={() => <HelpDetails buttonText="Oferecer Ajuda" />}/>
-        <Route exact path="/ofertas/:ofertaId" render={() => <HelpDetails buttonText="Pedir Ajuda" />}/>
-        <Route exact path="/chats" render={() => <Chat />} />
-        <Route exact path="/chats/pedidos/:pedidoId" render={() => <Conversation />} />
-        <Route exact path="/chats/ofertas/:ofertaId" render={() => <Conversation />} />
+        <Route path="/ajudas/pedidos/:pedidoId" render={() => <HelpDetails buttonText="Oferecer Ajuda" />}/>
+        <Route path="/ajudas/ofertas/:ofertaId" render={() => <HelpDetails buttonText="Pedir Ajuda" />}/>
+        <Route exact path="/conversas" render={() => <Chat />} />
+        <Route path="/conversas/pedidos/:pedidoId" render={() => <Conversation />} />
+        <Route path="/conversas/ofertas/:ofertaId" render={() => <Conversation />} />
 
         <PrivateRoute>
         </PrivateRoute>
@@ -135,3 +135,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
 //ver quem clicou em ajudar e dar a escolher da lista?
 //falta pensar na pagina de chat.. -> da para marcar pedido concluido so atraves do chat?
 //possibilidade de reactivar pedido quando este esta inactivo por ja ter sido concluido?
+//Adicionar butao de reload as listagens para fazer novo pedido http para atualizar os pedidos
+
+//TODO: Construir uma pagina /herois que e uma galeria de todos os herois mensais
+//que ja tivemos

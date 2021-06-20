@@ -1,10 +1,11 @@
-import { withRouter } from "react-router";
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
+import { useHistory } from "react-router";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
 const ChangePassword = (props) => {
+  const history = useHistory();
 
   const {
     value: enteredPassword,
@@ -47,7 +48,7 @@ const ChangePassword = (props) => {
 
     resetPasswordInput();
     resetConfirmationInput();
-    props.history.push("/home");
+    history.replace("/home");
   };
   return (
     <form onSubmit={formSubmissionHandler}>
@@ -82,4 +83,4 @@ const ChangePassword = (props) => {
   );
 };
 
-export default withRouter(ChangePassword);
+export default ChangePassword;

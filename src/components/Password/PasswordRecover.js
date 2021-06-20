@@ -1,10 +1,11 @@
-import { withRouter } from "react-router";
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
+import { useHistory } from "react-router";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
 const PasswordRecover = (props) => {
+  const history = useHistory();
 
   const {
     value: enteredEmail,
@@ -31,7 +32,7 @@ const PasswordRecover = (props) => {
     //TODO: send to server
 
     resetEmailInput();
-    props.history.push("/alterarpassword")
+    history.replace("/alterarpassword")
   };
 
   return (
@@ -54,4 +55,4 @@ const PasswordRecover = (props) => {
   );
 };
 
-export default withRouter(PasswordRecover);
+export default PasswordRecover;
