@@ -24,6 +24,7 @@ import ListHelps from "./components/ListHelps/ListHelps";
 import Chat from "./components/Chat/Chat";
 import Conversation from "./components/Chat/Conversation";
 import { authActions } from "./store/session/auth";
+import classes from "./App.module.css"
 
 function App() {
   const dispatch = useDispatch();

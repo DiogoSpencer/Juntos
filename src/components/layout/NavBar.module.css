@@ -1,0 +1,51 @@
+.navHeader {
+  position: fixed;
+  width: 100%;
+  height: 5rem;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+  padding: 0 2rem;
+  font-weight: 700;
+  background-color: white;
+}
+
+.logo {
+    height: 5rem;
+    vertical-align: middle;
+}
+
+.navList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+}
+
+.navItem {
+    margin: 0 1rem;
+    text-decoration: none;
+    padding: 0.2rem 0;
+}
+
+.navLink,
+.navLinkActive,
+.navLink:hover,
+.navLinkJuntos:hover {
+    text-decoration: none;
+}
+
+.navLink {
+    color: #3385D9;
+}
+
+.navLink:hover {
+    color: #FF9F36;
+}
+
+.navLinkActive {
+    color: #FF9F36;
+}

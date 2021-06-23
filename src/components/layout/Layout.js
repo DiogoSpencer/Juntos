@@ -1,21 +1,25 @@
-import { Fragment } from "react";
 import { useSelector } from "react-redux";
 import Footer from "./Footer";
 import NavBar from "./NavBar";
 import SideBar from "./SideBar";
+import classes from "./Layout.module.css";
 
 const Layout = (props) => {
-  const isLogged = useSelector((state) => state.auth.isLogged)
+  const isLogged = useSelector((state) => state.auth.isLogged);
 
   return (
-    <Fragment>
-      <NavBar />
-      <main>
-        {isLogged && <SideBar />}
+    <div className={classes.mainContainer}>
+      <header className={classes.mainNav}>
+        <NavBar />
+      </header>
+      <main className={classes.mainBody}>
+        <aside className={classes.sideBar}> {isLogged && <SideBar />}</aside>
         {props.children}
       </main>
-      <Footer />
-    </Fragment>
+      <div className={classes.mainFooter}>
+        <Footer />
+      </div>
+    </div>
   );
 };
 
