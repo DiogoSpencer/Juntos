@@ -9,6 +9,7 @@
 }
 
 .mainNav {
+  z-index: 100;
   grid-area: hd;
 }
 

@@ -1,0 +1,63 @@
+.containerDiv {
+  display: grid;
+  grid-template-rows: auto 1fr 1fr;
+  grid-template-areas:
+    "img"
+    "cnt"
+    "vid";
+}
+
+.mainImageDiv {
+  background-image: url("../../img/sourcegif.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 0 55%;
+  width: 100%;
+  height: 0;
+  padding-bottom: 40%;
+  grid-area: img;
+}
+
+.hDiv {
+  grid-area: img;
+  color: white;
+  z-index: 10;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+}
+
+.hFirst {
+    font-weight: 700;
+    padding-bottom: 8em;
+}
+
+.hSecond {
+    font-weight: 700;
+}
+
+.juntosTitle {
+    color: #FF9F36;
+    font-weight: 800;
+}
+
+.mainContent {
+  grid-area: cnt;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+  font-weight: 400;
+  font-size: 1.5em;
+  color: #3385D9;
+}
+
+.juntos {
+    color: #FF9F36;
+    font-weight: 700;
+}
+
+.mainVideo {
+  grid-area: vid;
+  align-self: center;
+  justify-self: center;
+}
