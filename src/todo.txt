@@ -6,3 +6,7 @@ de stats vs dentro de home? -> Mudar no titulo + dentro do texto
 4. home herois -> links dinamicos com id + fetch data dos herois (3 ultimos) 
 + foto -> talvez slideshow
 5. home agradecimentos - fetch dos logos dos parceiros ao server?
+6. footer - meter icon que linka para o nosso facebook, twitter, instagram... +
++ link que linka para pagina sobre weHelp (7)
+7. pagina sobre a nossa empresa weHelp
+8. 
