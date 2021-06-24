@@ -17,6 +17,10 @@
   grid-area: mc;
 }
 
+.sideBar {
+  position: fixed;
+}
+
 .mainFooter {
   grid-area: ft;
 }
