@@ -1,0 +1,103 @@
+.mainApp {
+  padding-top: 3rem;
+  background-color: #322f2f;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 0.5fr 3fr 1.5fr;
+  grid-template-areas:
+    "itxt1 itxt2 itxt3"
+    "img1 img2 img3"
+    "txt txt txt";
+}
+
+.imgText1 {
+  justify-self: center;
+  text-align: center;
+  text-align: center;
+  grid-area: itxt1;
+  color: #e6513e;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.imgText2 {
+  justify-self: center;
+  text-align: center;
+  text-align: center;
+  grid-area: itxt2;
+  color: #e6513e;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.imgText3 {
+  justify-self: center;
+  text-align: center;
+  text-align: center;
+  grid-area: itxt3;
+  color: #e6513e;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.numbers {
+  color: white;
+}
+
+.divImage1 {
+  grid-area: img1;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+}
+
+.divImage2 {
+  grid-area: img2;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+}
+
+.divImage3 {
+  grid-area: img3;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+}
+
+.appText {
+  grid-area: txt;
+  align-self: center;
+  justify-self: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  font-weight: 700;
+}
+
+.appImage {
+  height: 30rem;
+  vertical-align: middle;
+}
+
+.appLink,
+.appLink:hover,
+.appLink:active {
+  text-decoration: none;
+}
+
+.appLink {
+  color: #3385d9;
+}
+
+.juntos {
+  color: #ff9f36;
+}
+
+.appLink:hover {
+  color: #ff9f36;
+}
+
+.appButton {
+  padding-top: 1rem;
+}

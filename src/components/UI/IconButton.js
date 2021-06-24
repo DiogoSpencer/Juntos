@@ -1,15 +1,17 @@
-import Icon from './Icon'
+import android from "../../img/android.png";
+import classes from "./IconButton.module.css";
 
 const IconButton = (props) => {
-    return (
-        <button onClick={props.onClick}>
-            <span>
-                <Icon xmlns="" viewBox="" fill="" d=""/>
-            </span>
-            <span>{props.text}</span>
-        </button>
-    )
+  return (
+    <button onClick={props.onClick} className={classes.iconBtn}>
+      <img
+        src={android}
+        alt="download-android-app"
+        className={classes.iconImage}
+      />
+      <p className={classes.iconText}>{props.text}</p>
+    </button>
+  );
+};
 
-}
-
-export default IconButton
+export default IconButton;
