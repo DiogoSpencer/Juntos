@@ -1,4 +1,5 @@
 1. NavBar - Imagem de user profile quando logged ou default se nao Imagem
++ logout button + link to /home no icon juntos
 2. sideBar - styling
 3. home stats -> operaçao de fetch das estatisticas - nº parceiros registados +
 nº total de pedidos + nº total de utilizadores registados -> fazer isto dentro

@@ -1,0 +1,57 @@
+.footer {
+  display: grid;
+  grid-template-columns: 0.15fr 1fr 4fr 1fr 0.15fr;
+  grid-template-rows: 0.5fr 2fr 1fr 0.5fr;
+  row-gap: 2rem;
+  column-gap: 2rem;
+  grid-template-areas:
+    ". . . . ."
+    ". ct . sc ."
+    ". . wh . ."
+    ". . . . .";
+}
+
+.contactos {
+  grid-area: ct;
+  color: #3385d9;
+  justify-self: center;
+  align-self: start;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.contactos:hover {
+  text-decoration: none;
+  color: #ff9f36;
+}
+
+.social {
+  grid-area: sc;
+  justify-self: center;
+  align-self: start;
+  font-weight: 600;
+  font-size: 1.2rem;
+
+}
+
+.social p {
+  color: #3385d9;
+}
+
+.social img {
+    height: 3rem;
+    padding: .5rem;
+}
+
+.weHelp {
+  grid-area: wh;
+  justify-self: center;
+  align-self: center;
+  color: #3385d9;
+  font-weight: 600;
+}
+
+.juntos {
+  color: #ff9f36;
+  font-weight: 700;
+}

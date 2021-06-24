@@ -1,0 +1,50 @@
+.navigation {
+  padding-top: 2rem;
+  position: fixed;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 0.5fr 5fr;
+  grid-template-areas:
+    " . ic . "
+    " nv nv nv"
+}
+
+.iconList {
+  height: 4rem;
+  grid-area: ic;
+  z-index: 200;
+  align-self: center;
+  justify-self: center;
+}
+
+.nav {
+  background-color: rgb(255, 255, 255);
+  grid-area: nv;
+  align-self: start;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: space-between;
+  z-index: 150;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  padding-top: 1rem;
+}
+
+.navItem {
+    padding: 1rem;
+}
+
+.navItem:hover {
+    background-color: #E4EFFF;
+    border-radius: 50%;
+}
+
+.navIcon {
+    height: 4rem;
+}

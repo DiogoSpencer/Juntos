@@ -14,26 +14,26 @@ const Agradecimentos = () => {
         <span className={classes.juntos}>juntos</span>
       </p>
       <div className={classes.allLogos1}>
-        <div className={classes.logo}>
+        <Link to={{ pathname: "https://www.fct.unl.pt/" }} target="_blank" className={classes.logo}>
           <img src={nova} alt="logo-1" className={classes.logoImg} />
-        </div>
-        <div className={classes.logo}>
+        </Link>
+        <Link to={{ pathname: "https://www.fct.unl.pt/" }} target="_blank" className={classes.logo}>
           <img src={nova} alt="logo-1" className={classes.logoImg} />
-        </div>
-        <div className={classes.logo}>
+        </Link>
+        <Link to={{ pathname: "https://www.fct.unl.pt/" }} target="_blank" className={classes.logo}>
           <img src={nova} alt="logo-1" className={classes.logoImg} />
-        </div>
+        </Link>
       </div>
       <div className={classes.allLogos2}>
-        <div className={classes.logo}>
+        <Link to={{ pathname: "https://www.fct.unl.pt/" }} target="_blank" className={classes.logo}>
           <img src={nova} alt="logo-2" className={classes.logoImg} />
-        </div>
-        <div className={classes.logo}>
+        </Link>
+        <Link to={{ pathname: "https://www.fct.unl.pt/" }} target="_blank" className={classes.logo}>
           <img src={nova} alt="logo-2" className={classes.logoImg} />
-        </div>
-        <div className={classes.logo}>
+        </Link>
+        <Link to={{ pathname: "https://www.fct.unl.pt/" }} target="_blank" className={classes.logo}>
           <img src={nova} alt="logo-2" className={classes.logoImg} />
-        </div>
+        </Link>
       </div>
       <div className={classes.thanks}>
         <h3 className={classes.thanksText}>Obrigado</h3>
