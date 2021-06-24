@@ -1,6 +1,8 @@
 1. NavBar - Imagem de user profile quando logged ou default se nao Imagem
 2. sideBar - styling
-3. home - stats -> operaçao de fetch das estatisticas - nº parceiros registados +
+3. home stats -> operaçao de fetch das estatisticas - nº parceiros registados +
 nº total de pedidos + nº total de utilizadores registados -> fazer isto dentro
 de stats vs dentro de home? -> Mudar no titulo + dentro do texto
-4. 
+4. home herois -> links dinamicos com id + fetch data dos herois (3 ultimos) 
++ foto -> talvez slideshow
+5. home agradecimentos - fetch dos logos dos parceiros ao server?

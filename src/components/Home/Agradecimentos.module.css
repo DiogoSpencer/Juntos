@@ -1,0 +1,98 @@
+.mainParceiros {
+  background-image: linear-gradient(
+      rgba(152, 145, 145, 0.4),
+      rgba(152, 145, 145, 0.4)
+    ),
+    url("../../img/bumpHands.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 0 40%;
+  color: white;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 0.15fr 1fr 0.5fr 1fr 0.15fr;
+  grid-template-rows: 0.5fr 1fr 1fr 6fr 1fr 0.5fr 0.5fr;
+  grid-template-areas:
+    ". . . . ."
+    ". dp dp dp ."
+    ". dt dt dt ."
+    ". lg1 . lg2 ."
+    ". . og . ."
+    ". . . jn ."
+    ". . . . ."
+    ;
+}
+
+.mainTitle {
+  grid-area: dp;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+  font-weight: 700;
+  font-size: 3rem;
+}
+
+.descriptionTextParceiros {
+  grid-area: dt;
+  align-self: end;
+  justify-self: center;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.juntos {
+  color: #ff9f36;
+}
+
+.allLogos1 {
+  grid-area: lg1;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.allLogos2 {
+  grid-area: lg2;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+}
+
+.logoImg {
+  height: 8rem;
+}
+
+.thanks {
+  grid-area: og;
+  align-self: center;
+  justify-self: center;
+}
+
+.thanksText {
+    display: inline-block;
+}
+
+.heartImg {
+  height: 5rem;
+}
+
+.joinLink {
+  grid-area: jn;
+  align-self: center;
+  justify-self: center;
+  text-decoration: none;
+  color: white;
+  font-size: 1.2rem;
+  padding-bottom: 2rem;
+}
+
+.joinLink:hover {
+    text-decoration: none;
+    color: #3385d9;
+}

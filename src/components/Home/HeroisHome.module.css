@@ -1,0 +1,64 @@
+.mainHeroisHome {
+    background-color: #322f2f;
+    display: grid;
+    grid-template-columns: .15fr 1fr 1fr 1fr .15fr;
+    grid-template-rows: .5fr 1fr 6fr .5fr;
+    row-gap: 2rem;
+    column-gap: 2rem;
+    grid-template-areas:
+      ". . . . ."
+      ". tt tt tt ."
+      ". h1 h2 h3 ."
+      ". . . . .";
+}
+
+.mainHeroisTitle {
+    grid-area: tt;
+    align-self: center;
+    justify-self: center;
+    color: #e6513e;
+    font-weight: 600;
+}
+
+.linkHerois1 {
+    grid-area: h1;
+    align-self: center;
+    justify-self: center;
+    text-align: center;
+}
+
+.linkHerois2 {
+    grid-area: h2;
+    align-self: center;
+    justify-self: center;
+    text-align: center;
+}
+
+.linkHerois3 {
+    grid-area: h3;
+    align-self: center;
+    justify-self: center;
+    text-align: center;
+}
+
+.heroisName {
+    color: white;
+    padding-top: 1rem;
+    font-weight: 700;
+}
+
+.linkHerois1:hover,
+.linkHerois2:hover,
+.linkHerois3:hover {
+    text-decoration: none;
+    color: #e6513e;
+}
+
+.heroisImg {
+    height: 25rem;
+}
+
+.heroisName:hover {
+    text-decoration: none;
+    color: #e6513e;
+}
