@@ -1,35 +1,38 @@
+import classes from "./Stats.module.css"
+
 const Stats = () => {
   return (
-    <div>
-      <h1>
-        O Que Significa <span>juntos</span>?
+    <div className={classes.mainStats}>
+      <h1 className={classes.mainTitleStats}>
+        O Que Significa <span className={classes.juntosTitle}>juntos</span>?
       </h1>
-      <div>
-        <h1>10</h1>
-        <h3>Parceiros</h3>
-        <p>
-          <span>juntos</span> com os nossos parceiros caminhamos para um futuro
-          melhor
-        </p>
+      <div className={classes.parceirosStats}>
+        <h1 className={classes.numberStats}>10</h1>
+        <h3 className={classes.titleStats}>Parceiros</h3>
+        <p className={classes.textStats}>
+          <span className={classes.juntos}>juntos</span> com os nossos parceiros caminhamos para um futuro
+          melhor<br/><br/></p>
       </div>
-      <div>
-        <h1>10.000</h1>
-        <h3>Ajudas</h3>
-        <p>
-          <span>juntos</span> os nossos heróis já realizaram <span>10.000</span>{" "}
-          ajudas e ainda agora começámos!
-        </p>
+      <div className={classes.ajudasStats}>
+        <h1 className={classes.numberStats}>10.000</h1>
+        <h3 className={classes.titleStats}>Ajudas</h3>
+        <p className={classes.textStats}>
+          <span className={classes.juntos}>juntos</span> os nossos heróis já realizaram <span>10.000</span>{" "}
+          ajudas e ainda agora começámos!</p>
       </div>
-      <div>
-        <h1>30.000</h1>
-        <h3>Heróis</h3>
-        <p>
-          já caminhamos <span>juntos</span> com <span>30.000</span> heróis do
-          dia a dia
-        </p>
+      <div className={classes.heroisStats}>
+        <h1 className={classes.numberStats}>30.000</h1>
+        <h3 className={classes.titleStats}>Heróis</h3>
+        <p className={classes.textStats}>
+          já caminhamos <span className={classes.juntos}>juntos</span> com <span>30.000</span> heróis do
+          dia a dia<br/><br/></p>
       </div>
     </div>
   );
 };
+
+//TODO: Operacao para ir buscar estatisticas - numero de parceiros registados + 
+//numero total de ajudas + numero total utilizadores registados
+//fazer aqui dentro se calhar? vs fazer em home
 
 export default Stats;

@@ -1,0 +1,71 @@
+.mainStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 0.5fr 1fr 6fr;
+  row-gap: 2rem;
+  column-gap: 4rem;
+  grid-template-areas:
+    ". . . . ."
+    "tt tt tt tt tt"
+    " . ps as hs . ";
+}
+
+.mainTitleStats {
+  grid-area: tt;
+  justify-self: center;
+  align-self: center;
+  color: #3385d9;
+  font-weight: 600;
+}
+
+.juntosTitle {
+  color: #ff9f36;
+}
+
+.parceirosStats {
+  grid-area: ps;
+  justify-self: end;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ajudasStats {
+  grid-area: as;
+  justify-self: center;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+}
+
+.heroisStats {
+  grid-area: hs;
+  justify-self: center;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.numberStats {
+  color: #e6513e;
+  font-weight: 700;
+  font-size: 4rem;
+}
+
+.titleStats {
+  color: #3385d9;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.textStats {
+  font-weight: 700;
+}
+
+.juntos {
+  color: #ff9f36;
+}

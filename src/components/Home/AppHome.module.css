@@ -1,13 +1,14 @@
 .mainApp {
-  padding-top: 3rem;
   background-color: #322f2f;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 0.5fr 3fr 1.5fr;
+  grid-template-rows: 0.25fr 0.5fr 3fr 1.5fr 0.25fr;
   grid-template-areas:
+    " . . ."
     "itxt1 itxt2 itxt3"
     "img1 img2 img3"
-    "txt txt txt";
+    "txt txt txt"
+    ". . .";
 }
 
 .imgText1 {
