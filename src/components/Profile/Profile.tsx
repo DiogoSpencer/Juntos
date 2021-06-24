@@ -45,14 +45,14 @@ function Profile(Props: FullRouteProps) {
   //const [user, setUser] = useState<User | undefined>()
   useEffect(() => {
     if (Props.isLogged) {
-      getUser(userId).then(
+      /*getUser(userId).then(
         (response) => {
           setProfile(response.data);
         },
         (error) => {
           console.log(error.statusCode);
         }
-      );
+      );*/
     }
   }, [Props.isLogged, userId]);
 

@@ -124,7 +124,7 @@ const SideBar = () => {
   );
 
   return (
-    <div class={classes.navigation}>
+    <div className={classes.navigation}>
       <img
         src={show ? close : iconList}
         alt="sidebar-show-hide"

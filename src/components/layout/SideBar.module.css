@@ -18,7 +18,7 @@
 }
 
 .nav {
-  background-color: rgb(255, 255, 255);
+  background-color: transparent;
   grid-area: nv;
   align-self: start;
   justify-self: center;

@@ -24,39 +24,55 @@ import ListHelps from "./components/ListHelps/ListHelps";
 import Chat from "./components/Chat/Chat";
 import Conversation from "./components/Chat/Conversation";
 import { authActions } from "./store/session/auth";
-import classes from "./App.module.css"
+import { getUser } from "./services/http";
+import classes from "./App.module.css";
 
 function App() {
   const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
+  const isLogged = useSelector((state) => state.auth.isLogged);
   //verificar aqui se tokens sao iguais - redux e localstorage -> se nao for -> logout
   //isto faz re render sempre que fazemos mount de um componente
   useEffect(() => {
     const token = localStorage.getItem(gS.storage.token);
 
-    if (token?.localeCompare(authToken)) {
+    /* if (token !== authToken) {
       dispatch(authActions.logout());
       localStorage.removeItem(gS.storage.token);
     }
-    if (token !== null) {
-      const parsed_token = jwt_decode(token);
-      /*getUser(parsed_token.email).then(
-        (response) => {
-          Props.login({
-            token: token as string,
+    console.log("here")
+*/
+    console.log(token);
+    if (token !== null && token !== undefined) {
+      const parsedToken = jwt_decode(token);
+      console.log(parsedToken);
+      if (!isLogged) {
+        dispatch(
+          authActions.login({
+            token: token,
             isLogged: true,
-            role: parsed_token.role,
-            user: parsed_token.username,
-            //buscar foto url
-          });
-        },
-        (error) => {
-          Props.logout();
-          localStorage.removeItem(gS.storage.token);
-        }
-      );*/
+          })
+        );
+      } else {
+        getUser(parsedToken.email).then(
+          (response) => {
+            dispatch(
+              authActions.login({
+                token: token,
+                username: parsedToken.username,
+                role: parsedToken.role,
+                email: parsedToken.email,
+                //profilePic: data
+              })
+            );
+          },
+          (error) => {
+            dispatch(authActions.logout());
+            localStorage.removeItem(gS.storage.token);
+          }
+        );
+      }
     }
-  }, []);
+  }, [isLogged]);
 
   //backoffice
   //entities % para utilizadores, trilhos, pontos
@@ -150,7 +166,7 @@ export default App;
 //TODO: Construir uma pagina /herois que e uma galeria de todos os herois mensais
 //que ja tivemos
 
-    /*const language = localStorage.getItem(gS.storage.languageCode);
+/*const language = localStorage.getItem(gS.storage.languageCode);
     if (language !== null)
       Props.changeLanguage(require(`./assets/languages/${language}.json`));
     const token = localStorage.getItem(gS.storage.token);
