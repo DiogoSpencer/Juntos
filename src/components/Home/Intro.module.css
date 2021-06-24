@@ -1,10 +1,11 @@
 .containerDiv {
   display: grid;
+  grid-template-columns: auto;
   grid-template-rows: auto 1fr 1fr;
   grid-template-areas:
-    "img"
-    "cnt"
-    "vid";
+    "im"
+    "ct"
+    "vd";
 }
 
 .mainImageDiv {
@@ -15,49 +16,50 @@
   width: 100%;
   height: 0;
   padding-bottom: 40%;
-  grid-area: img;
+  grid-area: im;
+  align-self: center;
+  justify-self: center;
 }
 
 .hDiv {
-  grid-area: img;
   color: white;
   z-index: 10;
-  align-self: center;
-  justify-self: center;
+  padding-top: 8%;
   text-align: center;
 }
 
 .hFirst {
-    font-weight: 700;
-    padding-bottom: 8em;
+  font-weight: 700;
+  padding-bottom: 8em;
 }
 
 .hSecond {
-    font-weight: 700;
+  font-weight: 700;
 }
 
 .juntosTitle {
-    color: #FF9F36;
-    font-weight: 800;
+  color: #ff9f36;
+  font-weight: 800;
 }
 
 .mainContent {
-  grid-area: cnt;
+  width: 100%;
+  grid-area: ct;
   align-self: center;
   justify-self: center;
   text-align: center;
   font-weight: 400;
   font-size: 1.5em;
-  color: #3385D9;
+  color: #3385d9;
 }
 
 .juntos {
-    color: #FF9F36;
-    font-weight: 700;
+  color: #ff9f36;
+  font-weight: 700;
 }
 
 .mainVideo {
-  grid-area: vid;
+  grid-area: vd;
   align-self: center;
   justify-self: center;
 }

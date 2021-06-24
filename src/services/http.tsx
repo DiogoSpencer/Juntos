@@ -20,7 +20,6 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   function (response: AxiosResponse) {
-    
     if (store.getState().auth.token !== "") {
       store.dispatch(resetToken(response.headers["Authorization"]));
       localStorage.setItem("token", response.headers["Authorization"]);

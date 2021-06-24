@@ -25,6 +25,8 @@
     align-self: center;
     justify-self: center;
     text-align: center;
+    color: white;
+    font-weight: 700;
 }
 
 .linkHerois2 {
@@ -32,6 +34,8 @@
     align-self: center;
     justify-self: center;
     text-align: center;
+    color: white;
+    font-weight: 700;
 }
 
 .linkHerois3 {
@@ -39,11 +43,7 @@
     align-self: center;
     justify-self: center;
     text-align: center;
-}
-
-.heroisName {
     color: white;
-    padding-top: 1rem;
     font-weight: 700;
 }
 
@@ -56,6 +56,7 @@
 
 .heroisImg {
     height: 25rem;
+    padding-bottom: 1rem;
 }
 
 .heroisName:hover {
