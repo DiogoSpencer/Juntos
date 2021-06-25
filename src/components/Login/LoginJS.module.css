@@ -1,11 +1,19 @@
+.spinnerContainer {
+  display:flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
 .mainContainer {
   display: grid;
   grid-template-columns: 1fr 1fr 0.25fr;
-  grid-template-rows: 0.25fr 2fr 0.25fr 0.3fr 0.3fr;
+  grid-template-rows: 0.25fr 2fr 0.3fr 0.3fr;
   grid-template-areas:
     ". . ci"
     "lf lf lf"
-    ". . ."
     "rr rr rr"
     "hl hl hl";
 }
@@ -41,6 +49,8 @@
   color: #e6513e;
   font-weight: 600;
   text-align: center;
+  font-size: 1.1rem;
+  padding-top: 2rem;
 }
 
 .formInputDiv {
@@ -63,7 +73,7 @@
   color: rgb(51, 133, 217);
   font-weight: 700;
   padding-left: 1rem;
-  font-family:inherit;
+  font-family: inherit;
   font-size: inherit;
 }
 
@@ -78,6 +88,10 @@
   padding: 0.3rem;
 }
 
+.formInputEmail:focus {
+  outline: none;
+}
+
 .formLabelPass {
   align-self: end;
   grid-area: lp;
@@ -85,7 +99,7 @@
   color: #3385d9;
   font-weight: 700;
   padding-left: 1rem;
-  font-family:inherit;
+  font-family: inherit;
   font-size: inherit;
 }
 
@@ -98,6 +112,10 @@
   border-radius: 10px;
   width: 15rem;
   padding: 0.3rem;
+}
+
+.formInputPass {
+  outline: none;
 }
 
 .registerLink {

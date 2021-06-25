@@ -41,7 +41,8 @@ function App() {
     }
     console.log("here")
 */
-    console.log(token);
+    console.log("token " + token)
+    console.log(isLogged + " isLogged")
     if (token !== null && token !== undefined) {
       const parsedToken = jwt_decode(token);
       console.log(parsedToken);
@@ -53,7 +54,7 @@ function App() {
           })
         );
       } else {
-        getUser(parsedToken.email).then(
+        /*getUser(parsedToken.email).then(
           (response) => {
             dispatch(
               authActions.login({
@@ -69,10 +70,10 @@ function App() {
             dispatch(authActions.logout());
             localStorage.removeItem(gS.storage.token);
           }
-        );
+        );*/
       }
     }
-  }, [isLogged]);
+  }, []);
 
   //backoffice
   //entities % para utilizadores, trilhos, pontos

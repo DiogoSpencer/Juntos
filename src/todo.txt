@@ -12,3 +12,27 @@ de stats vs dentro de home? -> Mudar no titulo + dentro do texto
 7. pagina sobre a nossa empresa weHelp
 8. .? perfil e em todos os sitios em que temos fetch data
 9. login - recuperar password link para a pagina 
+10. login - testar se erros do servidor aparecem no modal - se calhar meter como
+notificaçao no topo
+
+
+
+
+server:
+1. mandar foto no login e nº ajudas
+2. herois - info + foto + titulo.. etc 
+3. parceiros - logo + url
+4. faq - perguntas e respostas, hardcoded?
+5. mandar email depois de registo para ativar conta
+6. listagem de todos os herois existentes (mais recentes primeiro)
+7. recuperar password -> pedido server que manda mail que linka para pag no site
+8. minhas ajudas activas e inactivas - listagens
+9. ajudas ativas listagem
+10. chat websockets? - chats de pedidos e de ajudas listagem?
+11. detalhes do pedido, id do pedido? comentarios do pedido?
+12. mandar formulario de ajuda antes do mapa ou com o mapa?
+13. como "verificar" que o pedido foi concluido? - notificaçao? (se nao der chat)
+- ambos confirmam?
+14. thumbs up e thumbs down + reviews no perfil??
+15. backoffice que info?
+16. data das estatisticas front page
