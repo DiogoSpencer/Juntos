@@ -15,6 +15,12 @@
   outline: none;
 }
 
+.buttonCustom:disabled,
+.buttonGradient:disabled {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
 .buttonCustom:hover {
   background-position: 100% 0;
   transition: all .4s ease-in-out;
