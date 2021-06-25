@@ -6,11 +6,15 @@ import Button from "../UI/Button";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/session/auth";
+import { Link } from "react-router-dom";
+import Modal from "../UI/Modal";
+import closeIcon from "../../img/closered.png";
+import classes from "./LoginJS.module.css";
 
 //out of rendering cycle - functions to verify input
 const isNotEmpty = (value) => value.trim() !== "";
 
-const Login = () => {
+const Login = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -55,13 +59,15 @@ const Login = () => {
         const token = response.headers.authorization;
         const parsedToken = jwt_decode(token);
         console.log(parsedToken);
-        dispatch(authActions.login({
-          token: token,
-          username: parsedToken.username,
-          role: parsedToken.role,
-          email: parsedToken.email,
-          //profilePic: data
-        }));
+        dispatch(
+          authActions.login({
+            token: token,
+            username: parsedToken.username,
+            role: parsedToken.role,
+            email: parsedToken.email,
+            //profilePic: data
+          })
+        );
         localStorage.setItem("token", token);
         resetEmailInput();
         resetPasswordInput();
@@ -80,37 +86,69 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={formSubmissionHandler}>
-      <div>
-        <h1>Login</h1>
-        <div>
-          <label htmlFor="name">Email</label>
-          <input
-            type="text"
-            id="email"
-            value={enteredEmail}
-            onChange={emailChangeHandler}
-            onBlur={emailBlurHandler}
-          />
-          {emailHasError && <p>Por favor insira um e-mail.</p>}
-        </div>
-        <div>
-          <label htmlFor="name">Password</label>
-          <input
-            type="text"
-            id="password"
-            value={enteredPassword}
-            onChange={passwordChangeHandler}
-            onBlur={passwordBlurHandler}
-          />
-          {passwordHasError && <p>Por favor insira uma password.</p>}
-        </div>
-        <Button disabled={!formIsValid} text={"Entrar"} />
-        {invalidInput && <p>Credenciais inválidas</p>}
-        {accountDisabled && <p>Esta conta está desativada.</p>}
-        {error && <p>Por favor tente novamente</p>}
+    <Modal onClose={props.onClose}>
+      <div className={classes.mainContainer}>
+        <img
+          src={closeIcon}
+          alt="close"
+          onClick={props.onClose}
+          className={classes.closeIcon}
+        />
+        <form onSubmit={formSubmissionHandler} className={classes.loginForm}>
+          <h1 className={classes.formTitle}>Login</h1>
+          {invalidInput && (
+            <p className={classes.formError}>Credenciais inválidas</p>
+          )}
+          {accountDisabled && (
+            <p className={classes.formError}>Esta conta está desativada.</p>
+          )}
+          {error && (
+            <p className={classes.formError}>Por favor tente novamente</p>
+          )}
+          <div className={classes.formInputDiv}>
+            <label htmlFor="email" className={classes.formLabelEmail}>
+              Email
+            </label>
+            <input
+              type="text"
+              id="email"
+              value={enteredEmail}
+              onChange={emailChangeHandler}
+              onBlur={emailBlurHandler}
+              className={classes.formInputEmail}
+            />
+            {emailHasError && (
+              <p className={classes.formError}>Por favor insira um e-mail.</p>
+            )}
+            <label htmlFor="password" className={classes.formLabelPass}>
+              Password
+            </label>
+            <input
+              type="text"
+              id="password"
+              value={enteredPassword}
+              onChange={passwordChangeHandler}
+              onBlur={passwordBlurHandler}
+              className={classes.formInputPass}
+            />
+            {passwordHasError && (
+              <p className={classes.formError}>
+                Por favor insira uma password.
+              </p>
+            )}
+          </div>
+          <div className={classes.buttonDiv}>
+            <Button disabled={!formIsValid} text={"Entrar"} />
+          </div>
+        </form>
+        <Link to="/registar" className={classes.registerLink}>
+          Registar
+        </Link>
+        <Link to="/home" className={classes.homeLink}>
+          Recuperar Password
+        </Link>
       </div>
-    </form>
+    </Modal>
   );
 };
 

@@ -49,3 +49,12 @@
 .navLinkActive {
     color: #FF9F36;
 }
+
+.loginLink {
+    color: #3385D9;
+}
+
+.loginLink:hover {
+    color: #FF9F36;
+    cursor: pointer;
+}

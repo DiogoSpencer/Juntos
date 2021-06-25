@@ -11,3 +11,4 @@ de stats vs dentro de home? -> Mudar no titulo + dentro do texto
 + link que linka para pagina sobre weHelp (7)
 7. pagina sobre a nossa empresa weHelp
 8. .? perfil e em todos os sitios em que temos fetch data
+9. login - recuperar password link para a pagina 

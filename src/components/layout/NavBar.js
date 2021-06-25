@@ -2,10 +2,22 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import classes from "./NavBar.module.css";
 import logo from "../../img/logo.png";
+import Login from "../Login/LoginJS";
+import { useState } from "react";
 
 const NavBar = () => {
   const isLogged = useSelector((state) => state.auth.isLogged);
   const username = useSelector((state) => state.auth.username);
+
+  const [loginShow, setLoginShow] = useState(false);
+
+  const hideModalHandler = () => {
+    setLoginShow(false);
+  };
+
+  const showModalHandler = () => {
+    setLoginShow(true);
+  };
 
   return (
     <div className={classes.navHeader}>
@@ -86,13 +98,10 @@ const NavBar = () => {
           </li>
           {!isLogged && (
             <li className={classes.navItem}>
-              <NavLink
-                activeClassName={classes.navLinkActive}
-                className={classes.navLink}
-                to="/login"
-              >
+              <span className={classes.loginLink} onClick={showModalHandler}>
                 Login
-              </NavLink>
+              </span>
+              {loginShow && <Login onClose={hideModalHandler} />}
             </li>
           )}
           {isLogged && (
@@ -113,3 +122,15 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
+/*
+
+              <NavLink
+                activeClassName={classes.navLinkActive}
+                className={classes.navLink}
+                to="/login"
+              >
+                Login
+              </NavLink>
+
+*/
