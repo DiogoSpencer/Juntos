@@ -20,6 +20,7 @@ para pagina de download da app
 13. register -> restringuir tamanho da imagem
 14. faq -> perguntas e respostas + fetch da data
 15. apagar FAQCard
+16. HeroisHome - fetch data dos 3 herois do ultimo mes
 
 
 #FF9F36
@@ -30,7 +31,8 @@ para pagina de download da app
 
 server:
 1. mandar foto no login e nº ajudas
-2. herois - info + foto + titulo.. etc 
+2. herois - fetch info reduzida (foto + titulo + username) etc 
++ operacao para os 3 herois deste mes + fetch heroi por id 
 3. parceiros - logo + url
 4. faq - perguntas e respostas, hardcoded?
 5. mandar email depois de registo para ativar conta
@@ -47,3 +49,4 @@ server:
 15. backoffice que info?
 16. data das estatisticas front page
 17. formulario de contactos para onde enviar a info?
+18. como registar/fazer um heroi?

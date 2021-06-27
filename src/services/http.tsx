@@ -66,6 +66,15 @@ export async function deleteUser(email: string) {
   }
 }
 
+
+export async function logout() {
+  try {
+    return await axios.put(`${url}/rest/user/logout`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
 /*//ir ao store fazer dispatch de logout e apagar local storage
 //dentro de use effect do app -> redux tb nao ha -> /home
 //= a estar a verificar */

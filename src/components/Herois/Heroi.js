@@ -1,14 +1,14 @@
-import { Fragment } from "react";
+import volunteer1 from "../../img/boxesVolunteer.jpg";
+import classes from "./Herois.module.css";
 
+//imagem vem de props
 const Heroi = (props) => {
   return (
-    <Fragment>
-      <h1>{props.title}</h1>
-      <div>
-        <p>{props.text}</p>
-        <img src={props.img} alt={props.alt} />
-      </div>
-    </Fragment>
+    <div className={classes.container}>
+      <h1 className={classes.title}>{props.title}</h1>
+      <p className={classes.info}>{props.text}</p>
+      <img src={volunteer1} alt={props.alt} className={classes.image} />
+    </div>
   );
 };
 

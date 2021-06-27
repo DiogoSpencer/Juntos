@@ -1,13 +1,18 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import classes from "./NavBar.module.css";
 import logo from "../../img/logo.png";
+import logoutIcon from "../../img/exit.png";
 import { useState } from "react";
 import ModalAuth from "../Login/ModalAuth.js";
+import { authActions } from "../../store/session/auth";
+import gS from "../../services/generalServices.json";
+import { logout } from "../../services/http";
 
 const NavBar = () => {
   const isLogged = useSelector((state) => state.auth.isLogged);
   const username = useSelector((state) => state.auth.username);
+  const dispatch = useDispatch();
 
   const [loginShow, setLoginShow] = useState(false);
 
@@ -17,6 +22,19 @@ const NavBar = () => {
 
   const showModalHandler = () => {
     setLoginShow(true);
+  };
+
+  const logoutHandler = () => {
+    logout().then(
+      (response) => {
+        dispatch(authActions.logout());
+        localStorage.removeItem(gS.storage.token);
+      },
+      (error) => {
+        dispatch(authActions.logout());
+        localStorage.removeItem(gS.storage.token);
+      }
+    );
   };
 
   return (
@@ -113,6 +131,16 @@ const NavBar = () => {
               >
                 <img src="" alt="user-profile" />
               </NavLink>
+            </li>
+          )}
+          {isLogged && (
+            <li className={classes.navItem}>
+              <img
+                src={logoutIcon}
+                alt="logout"
+                onClick={logoutHandler}
+                className={classes.logoutIcon}
+              />
             </li>
           )}
         </ul>

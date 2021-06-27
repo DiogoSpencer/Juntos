@@ -20,7 +20,11 @@ const authenticationSlice = createSlice({
       state.email = action.payload.email;
     },
     logout(state) {
-      state = initialState;
+      state.isLogged = false;
+      state.token = "";
+      state.username = "";
+      state.role = "";
+      state.email = "";
     },
     resetToken(state, action) {
       state.token = action.payload.token;

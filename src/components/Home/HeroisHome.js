@@ -4,6 +4,10 @@ import boxesVolunteer from "../../img/boxesVolunteer.jpg";
 import foodVolunteer from "../../img/foodVolunteer.jpg";
 import classes from "./HeroisHome.module.css";
 
+//falta fetch data herois do mes
+//se calhar op que vai buscar so os 3 mais recentes?
+//se nao o home poderia demorar mt tempo a carregar
+
 const HeroisHome = () => {
   return (
     <div id="herois" className={classes.mainHeroisHome}>

@@ -58,3 +58,12 @@
     color: #FF9F36;
     cursor: pointer;
 }
+
+.logoutIcon {
+    height: 2rem;
+    vertical-align: middle;
+}
+
+.logoutIcon:hover {
+    cursor: pointer;
+}

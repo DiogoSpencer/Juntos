@@ -1,0 +1,30 @@
+.container {
+  display: grid;
+  grid-template-columns: 0.5fr 2fr 0.3fr 1fr 0.35fr;
+  grid-template-rows: 1fr auto;
+  row-gap: 1rem;
+  grid-template-areas:
+    "tl tl tl tl tl"
+    ". if . im ."
+    ". if . im .";
+}
+
+.title {
+    grid-area: tl;
+    color: #e6513e;
+    font-weight: 700;
+    font-size: 2rem;
+    align-self: center;
+    justify-self: center;
+}
+
+.info {
+    grid-area: if;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.image {
+    grid-area: im;
+    width: 40vw;
+}

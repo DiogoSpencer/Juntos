@@ -23,12 +23,16 @@ const ModalAuth = (props) => {
     props.onClose();
   };
 
+  const onCloseModal = () => {
+    props.onClose();
+  }
+
   //dont allow to close modal if isLoading
   const closeModal = () => (isLoading ? "" : props.onClose());
 
   const renderLogin = (
     <div className={classes.authForm}>
-      <Login isLoading={isLoading} setIsLoading={setIsLoading} onClickLink={onClickLinkHandler} />
+      <Login isLoading={isLoading} setIsLoading={setIsLoading} onClickLink={onClickLinkHandler} onCloseModal={onCloseModal} />
     </div>
   );
 

@@ -51,12 +51,12 @@ const Login = (props) => {
     }
 
     props.setIsLoading(true);
+
     login(enteredEmail, enteredPassword).then(
       (response) => {
         props.setIsLoading(false);
         const token = response.headers.authorization;
         const parsedToken = jwt_decode(token);
-        console.log(parsedToken);
         dispatch(
           authActions.login({
             token: token,
@@ -67,6 +67,7 @@ const Login = (props) => {
           })
         );
         localStorage.setItem("token", token);
+        props.onCloseModal();
         history.push("/home");
       },
       (error) => {

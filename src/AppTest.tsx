@@ -104,7 +104,7 @@ function App(Props: FullRouteProps) {
         <Route path="/registar" render={() => <Register />} />
         <Route path="/login" render={() => <Login />} />
         <Route path="/perfil/:username" render={() => <Profile />} />
-        <Route path="/herois/:heroiId" render={() => (<HeroisWraper img="" alt="" text="descriçao heroi" title="heroi 1"/>)}/>
+        <Route path="/herois/:heroiId" render={() => (<HeroisWraper />)}/>
         <Route path="/contactos" render={() => <Contacts />} />
         <Route path="/recuperarpassword" render={() => <PasswordRecover />}/>
         <Route path="/alterarpassword" render={() => <ChangePassword />}/>
