@@ -19,6 +19,7 @@ notificaçao no topo
 para pagina de download da app
 13. register -> restringuir tamanho da imagem
 14. faq -> perguntas e respostas + fetch da data
+15. apagar FAQCard
 
 
 #FF9F36
@@ -45,3 +46,4 @@ server:
 14. thumbs up e thumbs down + reviews no perfil??
 15. backoffice que info?
 16. data das estatisticas front page
+17. formulario de contactos para onde enviar a info?

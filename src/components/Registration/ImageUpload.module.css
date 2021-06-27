@@ -13,7 +13,7 @@
 }
 
 .imageButton:hover {
-  box-shadow: 0 4px 10px 0 rgba(179, 179, 179, 0.75);
+  box-shadow: 0 0 10px #719ECE;
 }
 
 .imageInput {

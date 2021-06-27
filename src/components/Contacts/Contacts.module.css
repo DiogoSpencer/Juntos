@@ -1,0 +1,115 @@
+.container {
+  height: 100%;
+  background: url("../../img/contacts.jpg");
+  background-size: 40vw auto;
+  background-position: 51vw bottom;
+  background-repeat: no-repeat;
+  display: grid;
+  grid-template-columns: 0.2fr 0.7fr 1fr;
+  grid-template-rows: 1fr auto 1fr;
+  row-gap: 0.5rem;
+  grid-template-areas:
+    "tl tl tl"
+    ". sc ."
+    ". bc .";
+}
+
+.title {
+  grid-area: tl;
+  color: #e6513e;
+  font-weight: 700;
+  font-size: 2rem;
+  align-self: center;
+  justify-self: center;
+}
+
+.subContainer {
+  grid-area: sc;
+  display: grid;
+  row-gap: 1rem;
+  grid-template-areas:
+    "sj"
+    "nm"
+    "em"
+    "he";
+}
+
+.subContainer label {
+  font-weight: 700;
+  color: #3385d9;
+}
+
+.subContainer input {
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+  box-shadow: 1px 1px 1px #999;
+}
+
+.subContainer input:focus {
+  outline: none;
+  box-shadow: 0 0 10px #719ece;
+}
+
+.buttonContainer {
+  grid-area: bc;
+  align-self: center;
+  justify-self: center;
+}
+
+.subject {
+  grid-area: sj;
+  display: flex;
+  flex-direction: column;
+}
+
+.selectSub {
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+  box-shadow: 1px 1px 1px #999;
+}
+
+.selectSub:focus {
+  outline: none;
+  box-shadow: 0 0 10px #719ece;
+}
+
+.name {
+  grid-area: nm;
+  display: flex;
+  flex-direction: column;
+}
+
+.email {
+  grid-area: em;
+  display: flex;
+  flex-direction: column;
+}
+
+.help {
+  grid-area: he;
+  display: flex;
+  flex-direction: column;
+}
+
+.help textarea {
+  max-width: 100%;
+  padding: 10px;
+  line-height: 1.5;
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+  box-shadow: 1px 1px 1px #999;
+}
+
+.help textarea:focus {
+  outline: none;
+  box-shadow: 0 0 10px #719ece;
+}
+
+.formError {
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding-top: 0.5rem;
+  width: 15rem;
+  margin: 0;
+}

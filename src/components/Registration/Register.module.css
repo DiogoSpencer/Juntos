@@ -31,7 +31,6 @@
     align-items: center;
     justify-content: center;
 }
-  
 
 .registTitle {
   padding-top: 1rem;
@@ -59,7 +58,7 @@
 .registForm input[type="text"],
 .registForm input[type="password"] {
   border: 1px solid #3385d9;
-  box-shadow: 0 4px 5px 0 rgba(65, 133, 234, 0.585);
+  box-shadow: 1px 2px 2px rgba(65, 132, 234, 0.585);
   border-radius: 10px;
   width: 15rem;
   padding: 0.3rem;
@@ -67,6 +66,7 @@
 
 .registForm input:focus {
   outline: none;
+  box-shadow: 0 0 10px #719ECE;
 }
 
 .registError {

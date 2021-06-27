@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import classes from "./NavBar.module.css";
 import logo from "../../img/logo.png";
 import { useState } from "react";
@@ -21,9 +21,9 @@ const NavBar = () => {
 
   return (
     <div className={classes.navHeader}>
-      <div className={classes.navImgDiv}>
+      <Link to="/home" className={classes.navImgDiv}>
         <img className={classes.logo} src={logo} alt="logo" />
-      </div>
+      </Link>
       <nav className={classes.navBar}>
         <ul className={classes.navList}>
           <li className={classes.navItem}>

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import useInput from "../hooks/use-input";
+import classes from "./Contacts.module.css";
+import Button from "../UI/Button";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
@@ -58,18 +60,23 @@ const Contacts = () => {
   };
 
   return (
-    <form onSubmit={formSubmissionHandler}>
-      <div>
-        <h1>Contactos</h1>
-        <div>
-          <label htmlFor="name">Assunto</label>
-          <select id="subject" value={subject} onChange={subjectHandler}>
+    <form onSubmit={formSubmissionHandler} className={classes.container}>
+      <h1 className={classes.title}>Contactos</h1>
+      <div className={classes.subContainer}>
+        <div className={classes.subject}>
+          <label htmlFor="subject">Assunto</label>
+          <select
+            id="subject"
+            value={subject}
+            onChange={subjectHandler}
+            className={classes.selectSub}
+          >
             <option value="sugestions">Sugestões</option>
             <option value="partnership">Parcerias</option>
             <option value="problems">Problemas</option>
           </select>
         </div>
-        <div>
+        <div className={classes.name}>
           <label htmlFor="name">Nome</label>
           <input
             type="text"
@@ -78,10 +85,10 @@ const Contacts = () => {
             onChange={nameChangeHandler}
             onBlur={nameBlurHandler}
           />
-          {nameHasError && <p>Por favor insira um nome.</p>}
+          {nameHasError && <p className={classes.formError}>Por favor insira um nome.</p>}
         </div>
-        <div>
-          <label htmlFor="name">Email</label>
+        <div className={classes.email}>
+          <label htmlFor="email">Email</label>
           <input
             type="text"
             id="email"
@@ -89,20 +96,26 @@ const Contacts = () => {
             onChange={emailChangeHandler}
             onBlur={emailBlurHandler}
           />
-          {emailHasError && <p>Por favor insira um e-mail.</p>}
+          {emailHasError && <p className={classes.formError}>Por favor insira um e-mail.</p>}
         </div>
-        <div>
-          <label htmlFor="name">Como podemos ajudar?</label>
-          <input
-            type="text"
+        <div className={classes.help}>
+          <label htmlFor="help">Como podemos ajudar?</label>
+          <textarea
             id="help"
+            rows="4"
+            minlenght="10"
+            maxlength="5000"
             value={enteredDescription}
             onChange={descriptionChangeHandler}
             onBlur={descriptionBlurHandler}
-          />
-          {descriptionHasError && <p>Por favor insira uma descrição.</p>}
+          >
+            Descrição...
+          </textarea>
+          {descriptionHasError && <p className={classes.formError}>Por favor insira uma descrição.</p>}
         </div>
-        <button disabled={!formIsValid}>Enviar</button>
+      </div>
+      <div className={classes.buttonContainer}>
+        <Button disabled={!formIsValid} text="Enviar" />
       </div>
     </form>
   );

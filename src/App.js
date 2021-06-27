@@ -41,8 +41,8 @@ function App() {
     }
     console.log("here")
 */
-    console.log("token " + token)
-    console.log(isLogged + " isLogged")
+    //console.log("token " + token)
+    //console.log(isLogged + " isLogged")
     if (token !== null && token !== undefined) {
       const parsedToken = jwt_decode(token);
       console.log(parsedToken);
@@ -93,7 +93,7 @@ function App() {
         const id = hash.replace("#", "");
         const element = document.getElementById(id);
         if (element) {
-          element.scrollIntoView();
+          element.scrollIntoView(false);
         }
       }, 0);
     }

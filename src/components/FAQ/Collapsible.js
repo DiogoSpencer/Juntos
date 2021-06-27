@@ -1,4 +1,5 @@
 import { useState } from "react";
+import classes from "./Collapsible.module.css"
 
 const Collapsible = (props) => {
   const [show, setShow] = useState(false);
@@ -8,9 +9,9 @@ const Collapsible = (props) => {
   };
 
   return (
-    <div onClick={toggleHandler}>
-      <p>{props.text}</p>
-      {show && props.children}
+    <div onClick={toggleHandler} className={classes.container}>
+      <p className={classes.question}>{props.text}</p>
+      {show && <p>{props.info}</p>}
     </div>
   );
 };
