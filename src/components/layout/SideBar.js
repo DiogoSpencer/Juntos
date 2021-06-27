@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import SideBarIcon from "../UI/SideBarIcon";
 import classes from "./SideBar.module.css";
 import iconList from "../../img/downorange.png";
 import close from "../../img/uporange.png";
@@ -26,51 +25,6 @@ const SideBar = () => {
     }
     return false;
   };
-
-  const sideBar = (
-    <div className={classes.sideBar}>
-      <Link to="/novopedido">
-        <SideBarIcon
-          src={novaIcon}
-          alt="nova-ajuda-pedido"
-          className={classes.navIcon}
-        />
-      </Link>
-      <Link to="/conversas">
-        <SideBarIcon
-          src={chatIcon}
-          alt="conversas"
-          className={classes.navIcon}
-        />
-      </Link>
-      <Link to="/minhasajudas">
-        <SideBarIcon
-          src={minhasIcon}
-          alt="minhas-ajudas"
-          className={classes.navIcon}
-        />
-      </Link>
-      <Link to="/home">
-        <SideBarIcon src={mapIcon} alt="mapa" className={classes.navIcon} />
-      </Link>
-      <Link to="/ajudas">
-        <SideBarIcon
-          src={ajudasIcon}
-          alt="ajudas"
-          className={classes.navIcon}
-        />
-      </Link>
-      {checkRole(userRole) && (
-        <Link to="/home">
-          <SideBarIcon
-            src={backofficeIcon}
-            alt="backend"
-            className={classes.navIcon}
-          />
-        </Link>
-      )}
-    </div>
-  );
 
   const sideBarStyle = (
     <nav className={classes.nav}>

@@ -1,0 +1,30 @@
+.imageButton {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  border-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  background-image: url("../../img/userblue.png");
+  background-size: 8rem;
+}
+
+.imageButton:hover {
+  box-shadow: 0 4px 10px 0 rgba(179, 179, 179, 0.75);
+}
+
+.imageInput {
+  display: none;
+}
+
+.imgPreview {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    z-index: 1;
+}

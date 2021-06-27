@@ -1,0 +1,69 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.15fr 0.5fr auto;
+  grid-template-areas:
+    " . ci"
+    "bd bd"
+    "af af";
+}
+
+.closeIcon {
+  height: 2.5rem;
+  cursor: pointer;
+  grid-area: ci;
+  justify-self: end;
+  align-self: center;
+  padding-right: 1rem;
+}
+
+.buttonDiv {
+  align-self: center;
+  grid-area: bd;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.modalButton {
+  width: 12rem;
+  color: #3385d9;
+  font-weight: 700;
+  background: transparent;
+  border: 2px solid #3385d9;
+  border-radius: 15px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0.3rem;
+  margin: 0.5rem;
+  outline: none;
+  transition: background-color 0.2s ease-out, color 0.2s ease-out;
+}
+
+.modalButton:hover,
+.modalButton:active {
+  background-color: #e6513e;
+  border-color: #e6513e;
+  color: white;
+  transition: background-color 0.3s ease-in, color 0.3s ease-in;
+}
+
+.modalButtonActive {
+  width: 12rem;
+  color: white;
+  font-weight: 700;
+  background-color: #e6513e;
+  border: 2px solid #e6513e;
+  border-radius: 15px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0.3rem;
+  margin: 0.5rem;
+  outline: none;
+}
+
+.authForm {
+  grid-area: af;
+}

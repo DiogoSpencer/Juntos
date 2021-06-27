@@ -5,24 +5,27 @@ import Button from "../UI/Button";
 import ImageUpload from "./ImageUpload";
 import { register as registar } from "../../services/http";
 import { useSelector } from "react-redux";
+import LoadingSpinner from "../UI/LoadingSpinner";
+import classes from "./Register.module.css";
+import juntosIcon from "../../img/logo.png";
 
+const PUBLIC = "PUBLIC";
+const PRIVATE = "PRIVATE";
 const isNotEmpty = (value) => value.trim() !== "";
 //TODO: #2 fazer os REGEX de verificacao
 //TODO: #3 Verify if image is one of these types
 //TODO: #4 Restrict image size
-const types = ["image/png", "image/jpeg", "image/gif"];
 
-const Register = () => {
+const Register = (props) => {
   const history = useHistory();
-  const isLogged = useSelector((state) => state.auth.isLogged)
+  const isLogged = useSelector((state) => state.auth.isLogged);
 
   //TODO: #2 Fazer useReducer para isto tudo..
   const [invalidInput, setInvalidInput] = useState(false);
   const [emailHasAccount, setEmailHasAccount] = useState(false);
   const [error, setError] = useState(false);
-  const [privacy, setPrivacy] = useState("PUBLIC");
+  const [privacy, setPrivacy] = useState(PUBLIC);
   const [concluded, setConcluded] = useState(false);
-  const [fileUpload, setFileUpload] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
   const {
@@ -31,7 +34,6 @@ const Register = () => {
     hasError: emailHasError,
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
-    reset: resetEmailInput,
   } = useInput(isNotEmpty); //pass func to validate
 
   const {
@@ -40,7 +42,6 @@ const Register = () => {
     hasError: passwordHasError,
     valueChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
-    reset: resetPasswordInput,
   } = useInput(isNotEmpty);
 
   const {
@@ -49,7 +50,6 @@ const Register = () => {
     hasError: confirmationHasError,
     valueChangeHandler: confirmationChangeHandler,
     inputBlurHandler: confirmationBlurHandler,
-    reset: resetConfirmationInput,
   } = useInput(isNotEmpty);
 
   const {
@@ -58,7 +58,6 @@ const Register = () => {
     hasError: firstNameHasError,
     valueChangeHandler: firstNameChangeHandler,
     inputBlurHandler: firstNameBlurHandler,
-    reset: resetFirstNameInput,
   } = useInput(isNotEmpty);
 
   const {
@@ -67,7 +66,6 @@ const Register = () => {
     hasError: lastNameHasError,
     valueChangeHandler: lastNameChangeHandler,
     inputBlurHandler: lastNameBlurHandler,
-    reset: resetLastNameInput,
   } = useInput(isNotEmpty);
 
   const {
@@ -76,32 +74,19 @@ const Register = () => {
     hasError: usernameHasError,
     valueChangeHandler: usernameChangeHandler,
     inputBlurHandler: usernameBlurHandler,
-    reset: resetUsernameInput,
   } = useInput(isNotEmpty);
 
-  const fileChangeHandler = (event) => {
-    const files = event.target.files; //files array
-    setFileUpload(true);
-    setSelectedFile(files[0]);
-  };
-
-  const removeImageHandler = () => {
-    setFileUpload(false);
-    setSelectedFile(undefined);
-  };
-
   const privacyChangeHandler = () => {
-    if (!privacy.localeCompare("PUBLIC")) {
-      //str1 === str2 -> 0 = false
-      setPrivacy("PRIVATE");
+    if (privacy === PUBLIC) {
+      setPrivacy(PRIVATE);
     } else {
-      setPrivacy("PUBLIC");
+      setPrivacy(PUBLIC);
     }
   };
 
   //redirect home if logged - logged users cant register
   const redirectHandler = () => {
-    history.push("/home"); //deixar o user ir para tras
+    history.replace("/home");
   };
 
   let formIsValid = false;
@@ -131,6 +116,8 @@ const Register = () => {
       return;
     }
 
+    props.setIsLoading(true);
+
     const formData = new FormData();
     if (selectedFile !== null) {
       formData.append("profileImg", selectedFile);
@@ -153,17 +140,11 @@ const Register = () => {
 
     registar(formData).then(
       (response) => {
-        resetPasswordInput();
-        resetConfirmationInput();
-        resetEmailInput();
-        resetUsernameInput();
-        resetFirstNameInput();
-        resetLastNameInput();
-        setPrivacy("PUBLIC");
-        setSelectedFile(undefined);
+        props.setIsLoading(false);
         setConcluded(true);
       },
       (error) => {
+        props.setIsLoading(false);
         if (error.status === 400) {
           setInvalidInput(true);
         } else if (error.status === 409) {
@@ -173,121 +154,173 @@ const Register = () => {
         }
       }
     );
-
-    //Mandar info ao server
-    //TODO: img upload: https://codeburst.io/react-image-upload-with-kittens-cc96430eaece
   };
 
   const register = (
-    <form onSubmit={formSubmissionHandler}>
-      <h1>Registar</h1>
-      <div>
+    <form onSubmit={formSubmissionHandler} className={classes.registForm}>
+      <h1 className={classes.registTitle}>Junta-te a Nós</h1>
+      <div className={classes.imageUploadDiv}>
         <ImageUpload
-          fileUpload={fileUpload}
-          removeImageHandler={removeImageHandler}
+          alt="upload-profile"
           selectedFile={selectedFile}
-          fileChangeHandler={fileChangeHandler}
+          fileChangeHandler={setSelectedFile}
         />
-        <div>
-          <label htmlFor="name">Nome de Utilizador</label>
+      </div>
+      <div className={classes.usernameDiv}>
+        <label htmlFor="username" className={classes.labelForm}>
+          Nome de Utilizador
+        </label>
+        <input
+          type="text"
+          id="username"
+          value={enteredUsername}
+          onChange={usernameChangeHandler}
+          onBlur={usernameBlurHandler}
+        />
+        {usernameHasError && (
+          <p className={classes.registError}>
+            Por favor insira um nome de utilizador.
+          </p>
+        )}
+      </div>
+      <div className={classes.privacyDiv}>
+        <label htmlFor="public" className={classes.radioLabel}>
           <input
-            type="text"
-            id="username"
-            value={enteredUsername}
-            onChange={usernameChangeHandler}
-            onBlur={usernameBlurHandler}
+            type="radio"
+            id="public"
+            value={PUBLIC}
+            onChange={privacyChangeHandler}
+            checked={privacy === PUBLIC}
           />
-          {usernameHasError && <p>Por favor insira um nome de utilizador.</p>}
-        </div>
-        <div>
-          <label htmlFor="name">Password</label>
+          Público
+        </label>
+        <label htmlFor="private" className={classes.radioLabel}>
           <input
-            type="password"
-            id="password"
-            value={enteredPassword}
-            onChange={passwordChangeHandler}
-            onBlur={passwordBlurHandler}
+            type="radio"
+            id="private"
+            value={PRIVATE}
+            onChange={privacyChangeHandler}
+            checked={privacy === PRIVATE}
           />
-          {passwordHasError && <p>Por favor insira uma password.</p>}
-        </div>
-        <div>
-          <label htmlFor="name">Confirmação</label>
-          <input
-            type="password"
-            id="confirmation"
-            value={enteredConfirmation}
-            onChange={confirmationChangeHandler}
-            onBlur={confirmationBlurHandler}
-          />
-          {confirmationHasError && (
-            <p>Por favor insira uma confirmação de password válida.</p>
-          )}
-        </div>
-        <div>
-          <label htmlFor="name">Email</label>
-          <input
-            type="text"
-            id="email"
-            value={enteredEmail}
-            onChange={emailChangeHandler}
-            onBlur={emailBlurHandler}
-          />
-          {emailHasError && <p>Por favor insira um e-mail.</p>}
-        </div>
-        <div>
-          <label htmlFor="name">Nome</label>
-          <input
-            type="text"
-            id="firstName"
-            value={enteredFirstName}
-            onChange={firstNameChangeHandler}
-            onBlur={firstNameBlurHandler}
-          />
-          {firstNameHasError && <p>Por favor insira um nome.</p>}
-        </div>
-        <div>
-          <label htmlFor="name">Apelido</label>
-          <input
-            type="text"
-            id="lastName"
-            value={enteredLastName}
-            onChange={lastNameChangeHandler}
-            onBlur={lastNameBlurHandler}
-          />
-          {lastNameHasError && <p>Por favor insira um apelido.</p>}
-        </div>
-        <div>
-          <label>
-            Privacidade:
-            <select value={privacy} onChange={privacyChangeHandler}>
-              <option value="PUBLIC">Público</option>
-              <option value="PRIVATE">Privado</option>
-            </select>
-          </label>
-        </div>
+          Privado
+        </label>
+      </div>
+      <div className={classes.passwordDiv}>
+        <label htmlFor="password" className={classes.labelForm}>
+          Password
+        </label>
+        <input
+          type="password"
+          id="password"
+          value={enteredPassword}
+          onChange={passwordChangeHandler}
+          onBlur={passwordBlurHandler}
+        />
+        {passwordHasError && (
+          <p className={classes.registError}>Por favor insira uma password.</p>
+        )}
+      </div>
+      <div className={classes.confirmDiv}>
+        <label htmlFor="confirmation" className={classes.labelForm}>
+          Confirmação
+        </label>
+        <input
+          type="password"
+          id="confirmation"
+          value={enteredConfirmation}
+          onChange={confirmationChangeHandler}
+          onBlur={confirmationBlurHandler}
+        />
+        {confirmationHasError && (
+          <p className={classes.registError}>
+            Por favor insira uma confirmação de password válida.
+          </p>
+        )}
+      </div>
+      <div className={classes.firstNameDiv}>
+        <label htmlFor="firstName" className={classes.labelForm}>
+          Nome
+        </label>
+        <input
+          type="text"
+          id="firstName"
+          value={enteredFirstName}
+          onChange={firstNameChangeHandler}
+          onBlur={firstNameBlurHandler}
+        />
+        {firstNameHasError && (
+          <p className={classes.registError}>Por favor insira um nome.</p>
+        )}
+      </div>
+      <div className={classes.lastNameDiv}>
+        <label htmlFor="lastName" className={classes.labelForm}>
+          Apelido
+        </label>
+        <input
+          type="text"
+          id="lastName"
+          value={enteredLastName}
+          onChange={lastNameChangeHandler}
+          onBlur={lastNameBlurHandler}
+        />
+        {lastNameHasError && (
+          <p className={classes.registError}>Por favor insira um apelido.</p>
+        )}
+      </div>
+      <div className={classes.emailDiv}>
+        <label htmlFor="email" className={classes.labelForm}>
+          Email
+        </label>
+        <input
+          type="text"
+          id="email"
+          value={enteredEmail}
+          onChange={emailChangeHandler}
+          onBlur={emailBlurHandler}
+        />
+        {emailHasError && (
+          <p className={classes.registError}>Por favor insira um e-mail.</p>
+        )}
+      </div>
+      <div className={classes.buttonDiv}>
         <Button disabled={!formIsValid} text="Registar" />
       </div>
+      {invalidInput && (
+        <p className={classes.invalidError}>Informação inválida.</p>
+      )}
+      {emailHasAccount && (
+        <p className={classes.invalidError}>
+          Uma conta com o mesmo e-mail já está registado no sistema.
+        </p>
+      )}
+      {error && (
+        <p className={classes.invalidError}>Por favor tente novamente.</p>
+      )}
     </form>
   );
 
   const registerComplete = (
-    <div>
-      <h1>Registo Completo com Sucesso!</h1>
-      <img src="" alt="juntos-icon" />
-      <p>Por favor verifique o seu e-mail para ativar a sua conta.</p>
+    <div className={classes.completeDiv}>
+      <h1 className={classes.completeTitle}>Registo Completo com Sucesso!</h1>
+      <img src={juntosIcon} alt="juntos-icon" className={classes.completeImg} />
+      <p className={classes.completeText}>
+        Por favor verifique o seu e-mail para ativar a sua conta.
+      </p>
+    </div>
+  );
+
+  const spinner = (
+    <div className={classes.spinnerContainer}>
+      <LoadingSpinner />
     </div>
   );
 
   return (
     <Fragment>
-      {isLogged && redirectHandler}
-      {!isLogged && !concluded && register}
-      {!isLogged && concluded && registerComplete}
-      {invalidInput && <p>Informação inválida.</p>}
-      {emailHasAccount && (
-        <p>Uma conta com o mesmo e-mail já está registado no sistema.</p>
-      )}
-      {error && <p>Por favor tente novamente.</p>}
+      {isLogged && redirectHandler()}
+      {!isLogged && !concluded && !props.isLoading && register}
+      {!isLogged && concluded && !props.isLoading && registerComplete}
+      {props.isLoading && spinner}
     </Fragment>
   );
 };

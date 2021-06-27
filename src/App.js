@@ -107,8 +107,6 @@ function App() {
         </Route>
         <Route path="/home" render={() => <Home />} />
         <Route path="/faq" render={() => <FAQ />} />
-        <Route path="/registar" render={() => <Register />} />
-        <Route path="/login" render={() => <Login />} />
         <Route path="/perfil/:username" render={() => <Profile />} />
         <Route
           path="/herois/:heroiId"

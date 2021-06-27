@@ -1,29 +1,22 @@
+.mainContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.25fr;
+  grid-template-rows: 2fr 0.5fr;
+  grid-template-areas:
+    "lf lf lf"
+    "hl hl hl";
+}
+
 .spinnerContainer {
-  display:flex;
+  grid-area: lf;
+  align-self: center;
+  justify-self: center;
+  display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   align-content: center;
   align-items: center;
   justify-content: center;
-}
-
-.mainContainer {
-  display: grid;
-  grid-template-columns: 1fr 1fr 0.25fr;
-  grid-template-rows: 0.25fr 2fr 0.3fr 0.3fr;
-  grid-template-areas:
-    ". . ci"
-    "lf lf lf"
-    "rr rr rr"
-    "hl hl hl";
-}
-
-.closeIcon {
-  height: 2.5rem;
-  cursor: pointer;
-  grid-area: ci;
-  justify-self: center;
-  align-self: center;
 }
 
 .loginForm {
@@ -39,18 +32,21 @@
 }
 
 .formTitle {
+  padding-top: 1rem;
   text-align: center;
   color: #e6513e;
   font-weight: 600;
   padding-bottom: 1rem;
+  font-size: 2rem;
 }
 
 .formError {
   color: #e6513e;
-  font-weight: 600;
+  font-weight: 400;
   text-align: center;
-  font-size: 1.1rem;
-  padding-top: 2rem;
+  font-size: 0.8rem;
+  padding-top: 0.5rem;
+  width: 15rem;
 }
 
 .formInputDiv {
@@ -118,19 +114,6 @@
   outline: none;
 }
 
-.registerLink {
-  grid-area: rr;
-  justify-self: center;
-  align-self: center;
-  color: #3385d9;
-  font-weight: 600;
-}
-
-.registerLink:hover {
-  text-decoration: none;
-  color: #ff9f36;
-}
-
 .homeLink {
   grid-area: hl;
   justify-self: center;
@@ -141,5 +124,5 @@
 
 .homeLink:hover {
   text-decoration: none;
-  color: #ff9f36;
+  color: #e6513e;
 }

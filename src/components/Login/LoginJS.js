@@ -1,13 +1,11 @@
 import useInput from "../hooks/use-input";
 import { login } from "../../services/http";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import jwt_decode from "jwt-decode";
 import Button from "../UI/Button";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import { Link, useHistory } from "react-router-dom";
-import Modal from "../UI/Modal";
-import closeIcon from "../../img/closered.png";
 import classes from "./LoginJS.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
@@ -22,7 +20,6 @@ const Login = (props) => {
   const [invalidInput, setInvalidInput] = useState(false);
   const [accountDisabled, setAccountDisabled] = useState(false);
   const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     value: enteredEmail,
@@ -53,10 +50,10 @@ const Login = (props) => {
       return;
     }
 
-    setIsLoading(true);
+    props.setIsLoading(true);
     login(enteredEmail, enteredPassword).then(
       (response) => {
-        setIsLoading(false);
+        props.setIsLoading(false);
         const token = response.headers.authorization;
         const parsedToken = jwt_decode(token);
         console.log(parsedToken);
@@ -73,7 +70,7 @@ const Login = (props) => {
         history.push("/home");
       },
       (error) => {
-        setIsLoading(false);
+        props.setIsLoading(false);
         if (error.status === 400) {
           setInvalidInput(true);
         } else if (error.status === 403) {
@@ -85,16 +82,16 @@ const Login = (props) => {
     );
   };
 
+  const spinner = (
+    <div className={classes.spinnerContainer}>
+      <LoadingSpinner />
+    </div>
+  );
+
   const loginForm = (
     <div className={classes.mainContainer}>
-      <img
-        src={closeIcon}
-        alt="close"
-        onClick={props.onClose}
-        className={classes.closeIcon}
-      />
       <form onSubmit={formSubmissionHandler} className={classes.loginForm}>
-        <h1 className={classes.formTitle}>Login</h1>
+        <h1 className={classes.formTitle}>Começa a Ajudar</h1>
         <div className={classes.formInputDiv}>
           <label htmlFor="email" className={classes.formLabelEmail}>
             Email
@@ -144,26 +141,17 @@ const Login = (props) => {
           </p>
         )}
       </form>
-      <Link to="/registar" className={classes.registerLink}>
-        Registar
-      </Link>
-      <Link to="/home" className={classes.homeLink}>
+      <Link to="/home" className={classes.homeLink} onClick={props.onClickLink}>
         Recuperar Password
       </Link>
     </div>
   );
 
-  const spinner = (
-    <div className={classes.spinnerContainer}>
-      <LoadingSpinner />
-    </div>
-  );
-
   return (
-    <Modal onClose={props.onClose}>
-      {!isLoading && loginForm}
-      {isLoading && spinner}
-    </Modal>
+    <Fragment>
+      {!props.isLoading && loginForm}
+      {props.isLoading && spinner}
+    </Fragment>
   );
 };
 

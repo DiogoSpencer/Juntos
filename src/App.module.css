@@ -11,6 +11,8 @@
 :global(html) {
     /*82.5%*/
     font-size: .85vw;
+    scrollbar-color: #3385d9 white;
+    scrollbar-width: thin;
 }
 
 :global(body) {
@@ -18,4 +20,14 @@
     line-height: 1.7;
     box-sizing: border-box;
     font-family: 'Open Sans', sans-serif;
+}
+
+::-webkit-scrollbar {
+    background: white;
+    width: 8px;
+
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3385d9;
 }

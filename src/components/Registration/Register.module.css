@@ -1,0 +1,189 @@
+.registForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
+  column-gap: 2rem;
+  grid-template-areas:
+    "tt tt"
+    "iu iu"
+    "un pv"
+    "ps cf"
+    "fn ln"
+    "ed ed"
+    "bt bt"
+    "ie ie";
+  justify-items: center;
+  align-items: start;
+  justify-content: space-between;
+  overflow-y: auto;
+  height: 35vw;
+  scrollbar-width: thin;
+}
+
+.spinnerContainer {
+    grid-area: iu;
+    align-self: center;
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+  
+
+.registTitle {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  grid-area: tt;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.labelForm {
+  color: rgb(51, 133, 217);
+  font-weight: 700;
+  padding-left: 1rem;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.radioLabel {
+  font-weight: 700;
+  color: rgb(51, 133, 217);
+}
+
+.registForm input[type="text"],
+.registForm input[type="password"] {
+  border: 1px solid #3385d9;
+  box-shadow: 0 4px 5px 0 rgba(65, 133, 234, 0.585);
+  border-radius: 10px;
+  width: 15rem;
+  padding: 0.3rem;
+}
+
+.registForm input:focus {
+  outline: none;
+}
+
+.registError {
+  color: #e6513e;
+  font-weight: 400;
+  text-align: center;
+  padding-top: 0.5rem;
+  width: 15rem;
+  font-size: 0.8rem;
+}
+
+.invalidError {
+    grid-area: ie;
+    color: #e6513e;
+    font-weight: 400;
+    text-align: center;
+    padding-top: 0.5rem;
+    width: 15rem;
+    font-size: 1rem;
+    padding-top: 1rem;
+}
+
+.imageUploadDiv {
+  grid-area: iu;
+  justify-self: center;
+  align-self: center;
+}
+
+.usernameDiv {
+  grid-area: un;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+.passwordDiv {
+  grid-area: ps;
+  display: flex;
+  flex-direction: column;
+}
+
+.confirmDiv {
+  grid-area: cf;
+  display: flex;
+  flex-direction: column;
+}
+
+.emailDiv {
+  grid-area: ed;
+  display: flex;
+  flex-direction: column;
+}
+
+.firstNameDiv {
+  grid-area: fn;
+  display: flex;
+  flex-direction: column;
+}
+
+.lastNameDiv {
+  grid-area: ln;
+  display: flex;
+  flex-direction: column;
+}
+
+.privacyDiv {
+  grid-area: pv;
+  align-self: center;
+  justify-self: stretch;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  align-content: center;
+}
+
+.privacyDiv input {
+  display: grid;
+  grid-template-columns: min-content auto;
+}
+
+.buttonDiv {
+  grid-area: bt;
+}
+
+.completeDiv {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-areas:
+    "tl"
+    "lg"
+    "pc";
+    row-gap: 3rem;
+}
+
+.completeTitle {
+  grid-area: tl;
+  padding-top: 1rem;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.completeImg {
+  height: 10rem;
+  grid-area: lg;
+  justify-self: center;
+  align-self: center;
+}
+
+.completeText {
+  grid-area: pc;
+  justify-self: center;
+  align-self: center;
+  font-weight: 600;
+  color: #3385d9;
+  font-size: 1.1rem;
+}

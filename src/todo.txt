@@ -14,8 +14,18 @@ de stats vs dentro de home? -> Mudar no titulo + dentro do texto
 9. login - recuperar password link para a pagina 
 10. login - testar se erros do servidor aparecem no modal - se calhar meter como
 notificaçao no topo
+11. login e register -> fazer regex de verificaçao de input
+12. register -> verificar se imagem é de um dos tipos aceitados
+13. register -> restringuir tamanho da imagem
+14. verificar se user está a aceder de um mobile e se tiver direcionar
+para pagina de download da app
 
 
+
+#FF9F36
+#3385D9
+#e6513e
+#B9E1FF
 
 
 server:

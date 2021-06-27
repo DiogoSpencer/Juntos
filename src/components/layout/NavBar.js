@@ -2,8 +2,8 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import classes from "./NavBar.module.css";
 import logo from "../../img/logo.png";
-import Login from "../Login/LoginJS";
 import { useState } from "react";
+import ModalAuth from "../Login/ModalAuth.js";
 
 const NavBar = () => {
   const isLogged = useSelector((state) => state.auth.isLogged);
@@ -101,7 +101,7 @@ const NavBar = () => {
               <span className={classes.loginLink} onClick={showModalHandler}>
                 Login
               </span>
-              {loginShow && <Login onClose={hideModalHandler} />}
+              {loginShow && <ModalAuth onClose={hideModalHandler} />}
             </li>
           )}
           {isLogged && (
