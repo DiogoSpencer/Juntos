@@ -1,7 +1,8 @@
 .mainContainer {
+  min-height: 100vh;
   display: grid;
   grid-template-columns: 20% auto;
-  grid-template-rows: 5rem auto 10rem;
+  grid-template-rows: auto 1fr auto;
   grid-template-areas:
     "hd hd"
     "mc mc"

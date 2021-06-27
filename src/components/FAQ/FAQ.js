@@ -1,11 +1,11 @@
-import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import Button from "../UI/Button";
 import FaqCard from "./FaqCard";
+import classes from "./Faq.module.css";
 
 const text = "Não encontras o que procuras?";
 
-//esta data vai ver do servidor?
+//esta data vai vir do servidor?
 const data = [
   { text: "Como instalar?", info: "Para instalar a app basta descarregar" },
   { text: "Como instalar?", info: "Para instalar a app basta descarregar" },
@@ -16,23 +16,17 @@ const data = [
 
 const FAQ = () => {
   return (
-    <Fragment>
-      <h1>FAQ</h1>
-      <div>
+    <div className={classes.container}>
+      <h1 className={classes.mainTitle}>FAQ</h1>
+      <div className={classes.questionContainer}>
         {data.map((faqQuestion, index) => {
-          return (
-            <div key={index}>
-              <FaqCard text={faqQuestion.text} info={faqQuestion.info} />
-            </div>
-          );
+          return <FaqCard key={index} text={faqQuestion.text} info={faqQuestion.info} />;
         })}
       </div>
-      <div>
-        <Link to="/Contactos">
-          <Button text={text} />
-        </Link>
-      </div>
-    </Fragment>
+      <Link to="/Contactos" className={classes.linkContacts}>
+        <Button text={text} />
+      </Link>
+    </div>
   );
 };
 
