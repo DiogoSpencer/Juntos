@@ -1,4 +1,19 @@
 .imageButton {
+  width: 12rem;
+  height: 12rem;
+  border-radius: 50%;
+  border-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  background-image: url("../../img/userblue.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.imageButtonRegist {
   width: 8rem;
   height: 8rem;
   border-radius: 50%;
@@ -9,11 +24,12 @@
   justify-content: center;
   background-color: transparent;
   background-image: url("../../img/userblue.png");
-  background-size: 8rem;
+  background-repeat: no-repeat;
+  background-size: 100%;
 }
 
 .imageButton:hover {
-  box-shadow: 0 0 10px #719ECE;
+  box-shadow: 0 0 10px #719ece;
 }
 
 .imageInput {
@@ -21,10 +37,19 @@
 }
 
 .imgPreview {
-    width: 8rem;
-    height: 8rem;
-    border-radius: 50%;
-    object-fit: cover;
-    cursor: pointer;
-    z-index: 1;
+  width: 12rem;
+  height: 12rem;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.imgPreviewRegist {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  z-index: 1;
 }

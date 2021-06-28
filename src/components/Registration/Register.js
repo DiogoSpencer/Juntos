@@ -11,6 +11,7 @@ import juntosIcon from "../../img/logo.png";
 
 const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
+const isProfile = false
 const isNotEmpty = (value) => value.trim() !== "";
 //TODO: #2 fazer os REGEX de verificacao
 //TODO: #3 Verify if image is one of these types
@@ -164,6 +165,7 @@ const Register = (props) => {
           alt="upload-profile"
           selectedFile={selectedFile}
           fileChangeHandler={setSelectedFile}
+          isProfile={isProfile}
         />
       </div>
       <div className={classes.usernameDiv}>

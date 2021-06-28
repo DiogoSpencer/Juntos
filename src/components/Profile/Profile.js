@@ -1,56 +1,47 @@
 import { useEffect, useState } from "react";
 import useInput from "../hooks/use-input";
-import Button from '..//UI/Button'
-import { useSelector } from "react-redux";
-import { useRouteMatch } from "react-router";
-import {register} from '../../services/http'
+import Button from "..//UI/Button";
+import { useDispatch, useSelector } from "react-redux";
+//import { useRouteMatch } from "react-router";
+import { changeCreds } from "../../services/http";
+import { getUser } from "../../services/http";
+import keyIcon from "../../img/key.png";
+import classes from "./Profile.module.css";
+import { authActions } from "../../store/session/auth";
+import gS from "../../services/generalServices.json";
+import { useHistory } from "react-router";
+import ImageUpload from "../Registration/ImageUpload";
+import { Link } from "react-router-dom";
+import logoIcon from "../../img/logo.png";
 
+const PUBLIC = "PUBLIC";
+const PRIVATE = "PRIVATE";
+const isProfile = true;
+let firstNameChanged = "";
+let lastNameChanged = "";
+let privacyChanged = "";
+let photoChanged = "";
 const isNotEmpty = (value) => value.trim() !== "";
 
 const Profile = (props) => {
-  const isLogged = useSelector((state) => state.auth.isLogged)
-  const authUsername = useSelector((state) => state.auth.username)
-  const authToken = useSelector((state) => state.auth.token)
-  const authRole = useSelector((state) => state.auth.role)
-  const authEmail = useSelector((state) => state.auth.email)
-
-  console.log(isLogged + " " + authUsername + " " + authToken + " " + authRole + " " + authEmail)
-
-  const match = useRouteMatch();
+  const authEmail = useSelector((state) => state.auth.email);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  //const match = useRouteMatch();
 
   const [invalidInput, setInvalidInput] = useState(false);
   const [error, setError] = useState(false);
-  const [privacy, setPrivacy] = useState("");
   const [concluded, setConcluded] = useState(false);
-  const [fileUpload, setFileUpload] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [privacy, setPrivacy] = useState(PUBLIC);
+  const [numHelps, setNumHelps] = useState("0");
+  const [creationDate, setCreationDate] = useState("");
 
   const {
     value: enteredEmail,
-    isValid: enteredEmailIsValid,
     hasError: emailHasError,
-    valueChangeHandler: emailChangeHandler,
-    inputBlurHandler: emailBlurHandler,
-    setValueHandler: setEmailValueHanlder,
+    setValueHandler: setEmailValueHandler,
   } = useInput(isNotEmpty); //pass func to validate
-
-  const {
-    value: enteredPassword,
-    isValid: enteredPasswordIsValid,
-    hasError: passwordHasError,
-    valueChangeHandler: passwordChangeHandler,
-    inputBlurHandler: passwordBlurHandler,
-    setValueHandler: setPasswordValueHanlder,
-  } = useInput(isNotEmpty);
-
-  const {
-    value: enteredConfirmation,
-    isValid: enteredConfirmationIsValid,
-    hasError: confirmationHasError,
-    valueChangeHandler: confirmationChangeHandler,
-    inputBlurHandler: confirmationBlurHandler,
-    setValueHandler: setConfirmationValueHanlder,
-  } = useInput(isNotEmpty);
 
   const {
     value: enteredFirstName,
@@ -58,7 +49,7 @@ const Profile = (props) => {
     hasError: firstNameHasError,
     valueChangeHandler: firstNameChangeHandler,
     inputBlurHandler: firstNameBlurHandler,
-    setValueHandler: setFirstNameValueHanlder,
+    setValueHandler: setFirstNameValueHandler,
   } = useInput(isNotEmpty);
 
   const {
@@ -67,40 +58,64 @@ const Profile = (props) => {
     hasError: lastNameHasError,
     valueChangeHandler: lastNameChangeHandler,
     inputBlurHandler: lastNameBlurHandler,
-    setValueHandler: setLastNameValueHanlder,
+    setValueHandler: setLastNameValueHandler,
   } = useInput(isNotEmpty);
 
   const {
     value: enteredUsername,
-    isValid: enteredUsernameIsValid,
     hasError: usernameHasError,
-    valueChangeHandler: usernameChangeHandler,
-    inputBlurHandler: usernameBlurHandler,
-    setValueHandler: setUsernameValueHanlder,
+    setValueHandler: setUsernameValueHandler,
   } = useInput(isNotEmpty);
 
-  const userId = match.params.username;
-  
+  //const userId = match.params.username;
+
+  //queremos so fazer useEffect onMount -> []
   useEffect(() => {
     //getUser(userId).then((res) => {}, (error) => {})
-  }, [userId])
+    getUser(authEmail).then(
+      (response) => {
+        setUsernameValueHandler(response.data.username);
+        setEmailValueHandler(response.data.email);
+        setLastNameValueHandler(response.data.lastName);
+        lastNameChanged = response.data.lastName;
+        setFirstNameValueHandler(response.data.firstName);
+        firstNameChanged = response.data.firstName;
+        setPrivacy(response.data.privacy);
+        privacyChanged = response.data.privacy;
+        setNumHelps(response.data.numHelps);
+        setCreationDate(
+          `${response.data.creationDate.date.day}-${response.data.creationDate.date.month}-${response.data.creationDate.date.year}`
+        );
+        if (response.data.profileImg === undefined) {
+          setSelectedFile(null);
+          photoChanged = null;
+        } else {
+          setSelectedFile(response.data.profileImg);
+          photoChanged = response.data.profileImg;
+        }
+        console.log(response.data.profileImg);
+      },
+      (error) => {
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+          history.replace("/home");
+        }
+        console.log(error);
+      }
+    );
+  }, []);
 
   let formIsValid = false;
 
-  let passConfirmed = false;
-
-  if (!enteredPassword.localeCompare(enteredConfirmation)) {
-    passConfirmed = true;
-  }
-
   if (
-    enteredEmailIsValid &&
-    enteredPasswordIsValid &&
-    enteredUsernameIsValid &&
-    enteredConfirmationIsValid &&
     enteredFirstNameIsValid &&
     enteredLastNameIsValid &&
-    passConfirmed
+    (enteredFirstName !== firstNameChanged ||
+      enteredLastName !== lastNameChanged ||
+      privacy !== privacyChanged ||
+      selectedFile !== photoChanged)
   ) {
     formIsValid = true;
   }
@@ -112,17 +127,23 @@ const Profile = (props) => {
       return;
     }
 
-    const formData = {
-      email: enteredEmail,
-      password: enteredPassword,
-      confirmation: enteredConfirmation,
-      username: enteredUsername,
+    const formData = new FormData();
+    if (selectedFile !== null) {
+      formData.append("profileImg", selectedFile);
+    }
+
+    const userInfo = {
       firstName: enteredFirstName,
       lastName: enteredLastName,
       privacy: privacy,
     };
 
-    register(formData).then(
+    formData.append(
+      "user",
+      new Blob([JSON.stringify(userInfo)], { type: "application/json" })
+    );
+
+    changeCreds(formData).then(
       (response) => {
         //profilePic: data
         setConcluded(true);
@@ -141,8 +162,7 @@ const Profile = (props) => {
   };
 
   const privacyChangeHandler = () => {
-    if (!privacy.localeCompare("PUBLIC")) {
-      //str1 === str2 -> 0 = false
+    if (privacy === "PUBLIC") {
       setPrivacy("PRIVATE");
     } else {
       setPrivacy("PUBLIC");
@@ -150,92 +170,93 @@ const Profile = (props) => {
   };
 
   const profile = (
-    <form onSubmit={formSubmissionHandler}>
-      <h1>Perfil</h1>
-      <div>
-        <div>
-          <label htmlFor="name">Nome de Utilizador</label>
+    <form onSubmit={formSubmissionHandler} className={classes.profileContainer}>
+      <h1 className={classes.title}>Perfil</h1>
+      <div className={classes.imageDiv}>
+        <ImageUpload
+          alt="Profile-Image"
+          selectedFile={selectedFile}
+          fileChangeHandler={setSelectedFile}
+          isProfile={isProfile}
+        />
+        <p>
+          <img src={logoIcon} alt="ajudas" className={classes.logo} />
+          {numHelps}
+        </p>
+        <p>
+          <span className={classes.juntos}>juntos</span> desde: {creationDate}
+        </p>
+      </div>
+      <div className={classes.emailDiv}>
+        <label htmlFor="email">Email</label>
+        <input readOnly disabled type="text" id="email" value={enteredEmail} />
+        {emailHasError && <p>Por favor insira um e-mail.</p>}
+      </div>
+      <div className={classes.usernameDiv}>
+        <label htmlFor="username">Nome de Utilizador</label>
+        <input
+          readOnly
+          disabled
+          type="text"
+          id="username"
+          value={enteredUsername}
+        />
+        {usernameHasError && <p>Por favor insira um nome de utilizador.</p>}
+      </div>
+      <Link to="/alterarpassword" className={classes.passLink}>
+        <img src={keyIcon} alt="change-password" className={classes.keyIcon} />
+      </Link>
+      <div className={classes.firstNameDiv}>
+        <label htmlFor="firstName">Nome</label>
+        <input
+          type="text"
+          id="firstName"
+          value={enteredFirstName}
+          onChange={firstNameChangeHandler}
+          onBlur={firstNameBlurHandler}
+        />
+        {firstNameHasError && <p>Por favor insira um nome.</p>}
+      </div>
+      <div className={classes.lastNameDiv}>
+        <label htmlFor="lastName">Apelido</label>
+        <input
+          type="text"
+          id="lastName"
+          value={enteredLastName}
+          onChange={lastNameChangeHandler}
+          onBlur={lastNameBlurHandler}
+        />
+        {lastNameHasError && <p>Por favor insira um apelido.</p>}
+      </div>
+      <div className={classes.privacyDiv}>
+        <label htmlFor="public" className={classes.radioLabel}>
           <input
-            type="text"
-            id="username"
-            value={enteredUsername}
-            onChange={usernameChangeHandler}
-            onBlur={usernameBlurHandler}
+            type="radio"
+            id="public"
+            value={PUBLIC}
+            onChange={privacyChangeHandler}
+            checked={privacy === PUBLIC}
           />
-          {usernameHasError && <p>Por favor insira um nome de utilizador.</p>}
-        </div>
-        <div>
-          <label htmlFor="name">Password</label>
+          Público
+        </label>
+        <label htmlFor="private" className={classes.radioLabel}>
           <input
-            type="password"
-            id="password"
-            value={enteredPassword}
-            onChange={passwordChangeHandler}
-            onBlur={passwordBlurHandler}
+            type="radio"
+            id="private"
+            value={PRIVATE}
+            onChange={privacyChangeHandler}
+            checked={privacy === PRIVATE}
           />
-          {passwordHasError && <p>Por favor insira uma password.</p>}
-        </div>
-        <div>
-          <label htmlFor="name">Confirmação</label>
-          <input
-            type="password"
-            id="confirmation"
-            value={enteredConfirmation}
-            onChange={confirmationChangeHandler}
-            onBlur={confirmationBlurHandler}
-          />
-          {confirmationHasError && (
-            <p>Por favor insira uma confirmação de password válida.</p>
-          )}
-        </div>
-        <div>
-          <label htmlFor="name">Email</label>
-          <input
-            type="text"
-            id="email"
-            value={enteredEmail}
-            onChange={emailChangeHandler}
-            onBlur={emailBlurHandler}
-          />
-          {emailHasError && <p>Por favor insira um e-mail.</p>}
-        </div>
-        <div>
-          <label htmlFor="name">Nome</label>
-          <input
-            type="text"
-            id="firstName"
-            value={enteredFirstName}
-            onChange={firstNameChangeHandler}
-            onBlur={firstNameBlurHandler}
-          />
-          {firstNameHasError && <p>Por favor insira um nome.</p>}
-        </div>
-        <div>
-          <label htmlFor="name">Apelido</label>
-          <input
-            type="text"
-            id="lastName"
-            value={enteredLastName}
-            onChange={lastNameChangeHandler}
-            onBlur={lastNameBlurHandler}
-          />
-          {lastNameHasError && <p>Por favor insira um apelido.</p>}
-        </div>
-        <div>
-          <label>
-            Privacidade:
-            <select value={privacy} onChange={privacyChangeHandler}>
-              <option value="PUBLIC">Público</option>
-              <option value="PRIVATE">Privado</option>
-            </select>
-          </label>
-        </div>
+          Privado
+        </label>
+      </div>
+      <div className={classes.buttonContainer}>
         <Button disabled={!formIsValid} text="Guardar" />
       </div>
     </form>
   );
-  
-  return (profile);
+
+  return profile;
 };
 
 export default Profile;

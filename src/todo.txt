@@ -1,15 +1,13 @@
 1. NavBar - Imagem de user profile quando logged ou default se nao Imagem
-+ logout button + link to /home no icon juntos
-2. sideBar - styling
+2. pagina sobre a nossa empresa weHelp
 3. home stats -> operaçao de fetch das estatisticas - nº parceiros registados +
 nº total de pedidos + nº total de utilizadores registados -> fazer isto dentro
 de stats vs dentro de home? -> Mudar no titulo + dentro do texto
 4. home herois -> links dinamicos com id + fetch data dos herois (3 ultimos) 
 + foto -> talvez slideshow
 5. home agradecimentos - fetch dos logos dos parceiros ao server?
-6. footer - meter icon que linka para o nosso facebook, twitter, instagram... +
-+ link que linka para pagina sobre weHelp (7)
-7. pagina sobre a nossa empresa weHelp
+6. footer - link que linka para pagina sobre weHelp
+7. Mudar titulo de faq e contactos
 8. .? perfil e em todos os sitios em que temos fetch data
 9. login - recuperar password link para a pagina 
 10. login - testar se erros do servidor aparecem no modal - se calhar meter como
@@ -21,6 +19,7 @@ para pagina de download da app
 14. faq -> perguntas e respostas + fetch da data
 15. apagar FAQCard
 16. HeroisHome - fetch data dos 3 herois do ultimo mes
+17. Fix - erros de servidor aparecem todos uns em cima dos outros
 
 
 #FF9F36
@@ -50,3 +49,4 @@ server:
 16. data das estatisticas front page
 17. formulario de contactos para onde enviar a info?
 18. como registar/fazer um heroi?
+19. mostrar perfis de outras pessoas, precisamos de ter um fetch da info por username

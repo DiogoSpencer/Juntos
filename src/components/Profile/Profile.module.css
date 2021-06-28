@@ -1,0 +1,118 @@
+.profileContainer {
+    background-image: url("../../img/togetherapart.jpg");
+    height: 100%;
+    background-size: 25vw auto;
+    background-position: 38vw bottom;
+    background-repeat: no-repeat;
+    display: grid;
+    grid-template-columns: 1fr .5fr .5fr 1fr;
+    grid-template-rows: .5fr .5fr .5fr .5fr .5fr 2.5fr;
+    row-gap: 1rem;
+    grid-template-areas:
+      "tt tt tt tt"
+      ". un . iu"
+      ". ed ed iu"
+      ". ps pv iu"
+      ". fn ln iu"
+      "bt bt bt bt";
+    align-items: start;
+}
+
+.profileContainer input[type="text"] {
+    border: 1px solid #3385d9;
+    box-shadow: 1px 2px 2px rgba(65, 132, 234, 0.585);
+    border-radius: 10px;
+    width: 15rem;
+    padding: 0.3rem;
+    justify-items: center;
+}
+
+.profileContainer label {
+    color: #3385D9;
+    font-weight: 700;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.radioLabel input {
+    margin-right: .2rem;
+}
+
+.title {
+    grid-area: tt;
+    justify-self: center;
+    color: #e6513e;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.imageDiv {
+    grid-area: iu;
+    display: flex;
+    flex-direction: column;
+    justify-self: start;
+    align-self: start;
+    text-align: center;
+    font-weight: 600;
+    color: #3385D9;
+    margin-left: 2rem;
+}
+
+.juntos {
+    font-weight: 700;
+    color: #FF9F36;
+}
+
+.emailDiv {
+    grid-area: ed;
+    display: flex;
+    flex-direction: column;
+    justify-self: start;
+}
+
+.usernameDiv {
+    grid-area: un;
+    display: flex;
+    flex-direction: column;
+}
+
+.passLink {
+    grid-area: ps;
+}
+
+.firstNameDiv {
+    grid-area: fn;
+    display: flex;
+    flex-direction: column;
+}
+
+.lastNameDiv {
+    grid-area: ln;
+    display: flex;
+    flex-direction: column;
+    justify-self: start;
+}
+
+.privacyDiv {
+    grid-area: pv;
+    display: flex;
+    justify-self: start;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.buttonContainer {
+    grid-area: bt;
+    justify-self: center;
+}
+
+.keyIcon {
+    height: 5rem;
+}
+
+.logo {
+    height: 2.5rem;
+    margin-right: .5rem;
+    margin-top: .5rem;
+}

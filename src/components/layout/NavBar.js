@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import classes from "./NavBar.module.css";
 import logo from "../../img/logo.png";
 import logoutIcon from "../../img/exit.png";
@@ -13,6 +13,7 @@ const NavBar = () => {
   const isLogged = useSelector((state) => state.auth.isLogged);
   const username = useSelector((state) => state.auth.username);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [loginShow, setLoginShow] = useState(false);
 
@@ -29,11 +30,13 @@ const NavBar = () => {
       (response) => {
         dispatch(authActions.logout());
         localStorage.removeItem(gS.storage.token);
+        history.replace("/home");
       },
       (error) => {
         //logout anyways
         dispatch(authActions.logout());
         localStorage.removeItem(gS.storage.token);
+        history.replace("/home");
       }
     );
   };

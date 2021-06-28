@@ -29,7 +29,7 @@ const ImageUpload = (props) => {
             <img
               alt={props.alt}
               src={preview}
-              className={classes.imgPreview}
+              className={props.isProfile? classes.imgPreview : classes.imgPreviewRegist}
               onClick={() => {
                 props.fileChangeHandler(null);
                 setSelectedFile(null);
@@ -42,7 +42,7 @@ const ImageUpload = (props) => {
                 event.preventDefault();
                 fileInputRef.current.click();
               }}
-              className={classes.imageButton}
+              className={props.isProfile? classes.imageButton : classes.imageButtonRegist}
             ></button>
           )}
           <input
