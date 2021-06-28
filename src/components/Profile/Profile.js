@@ -253,6 +253,12 @@ const Profile = (props) => {
       <div className={classes.buttonContainer}>
         <Button disabled={!formIsValid} text="Guardar" />
       </div>
+      {invalidInput && (
+        <p className={classes.invalidError}>Informação inválida.</p>
+      )}
+      {error && (
+        <p className={classes.invalidError}>Por favor tente novamente.</p>
+      )}
     </form>
   );
 

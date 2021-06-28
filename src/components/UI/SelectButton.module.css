@@ -1,0 +1,42 @@
+.iconBtn {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    /*border: 1px solid #3385D9;*/
+    background-color: white;
+    border-radius: 100px;
+    width: 20rem;
+    height: 6rem;
+    color:#3385D9;
+    font-weight: 700;
+    line-height: 1.5rem;
+    border-color: transparent;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+.iconText {
+    margin-top: 1rem;
+}
+
+.iconImage {
+    padding: .2rem;
+    height: 4rem;
+}
+
+.iconBtn:hover {
+    color: white;
+    background-position: 100% 0;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+    background-image: linear-gradient(to right, #25aae1, #4481eb, #04befe, #3f86ed);
+    box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
+}
+
+.iconBtn:focus {
+    outline: none;
+}

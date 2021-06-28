@@ -3,10 +3,10 @@ import useInput from "../hooks/use-input";
 import ImageUpload from "../Registration/ImageUpload";
 import Button from "../UI/Button";
 import Icon from "../UI/Icon";
-import IconButton from "../UI/IconButton";
 import Anonimous from "./Anonimous";
 import Volunteers from "./Volunteers";
 import { Prompt } from "react-router-dom";
+import SelectHelp from "./SelectHelp";
 
 const AJUDAR = "Ajudar";
 const PEDIR = "Pedir Ajuda";
@@ -34,21 +34,24 @@ const Help = () => {
   const [volunteersValue, setVolunteersValue] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
-  const ajudarChangeHandler = () => {
-    setSelected(AJUDAR);
-  };
-
-  const pedirAjudaChangeHandler = () => {
-    setSelected(PEDIR);
-  };
-
-  const doarChangeHandler = () => {
-    setSelected(DOAR);
-  };
-
-  const acoesChangeHandler = () => {
-    setSelected(ACOES);
-  };
+  const onSelectChangeHandler = (selectedAction) => {
+    switch (selectedAction) {
+      case AJUDAR:
+        setSelected(AJUDAR);
+        break;
+      case PEDIR:
+        setSelected(PEDIR);
+        break;
+      case DOAR:
+        setSelected(DOAR);
+        break;
+      case ACOES:
+        setSelected(ACOES);
+        break;
+      default:
+        setSelected("");
+    }
+  }
 
   const {
     value: enteredTitle,
@@ -206,49 +209,6 @@ const Help = () => {
     </div>
   );
 
-  const selectHelp = (
-    <div>
-      <div>
-        <Icon xmnls="" viewBox="" fill="" d="" />
-        <h1>Escolhe Uma Categoria</h1>
-      </div>
-      <div>
-        <IconButton
-          xmnls=""
-          viewBox=""
-          fill=""
-          d=""
-          text={AJUDAR}
-          onClick={ajudarChangeHandler}
-        />
-        <IconButton
-          xmnls=""
-          viewBox=""
-          fill=""
-          d=""
-          text={PEDIR}
-          onClick={pedirAjudaChangeHandler}
-        />
-        <IconButton
-          xmnls=""
-          viewBox=""
-          fill=""
-          d=""
-          text={DOAR}
-          onClick={doarChangeHandler}
-        />
-        <IconButton
-          xmnls=""
-          viewBox=""
-          fill=""
-          d=""
-          text={ACOES}
-          onClick={acoesChangeHandler}
-        />
-      </div>
-    </div>
-  );
-
   const renderButtons = (
     <div>
       <button onClick={backFormHandler}>
@@ -268,9 +228,18 @@ const Help = () => {
     <Fragment>
       <Prompt when={isFocused} message={(location) => ensureLeave} />
       <form onFocus={formFocusedHandler} onSubmit={formSubmissionHandler}>
-        {selected === "" && !formConcluded && selectHelp}
-        {selected !== "" && !formConcluded && info}
-        {selected !== "" && selected !== ACOES && !formConcluded && (
+        {!selected && !formConcluded && <SelectHelp onSelect={onSelectChangeHandler}/>}
+        {selected && !formConcluded && info}
+      </form>
+    </Fragment>
+  );
+};
+
+export default Help;
+
+/*
+        
+        {selected && selected !== ACOES && !formConcluded && (
           <Anonimous
             yesAnonimous={yesAnonimousHandler}
             noAnonimous={noAnonimousHandler}
@@ -288,10 +257,6 @@ const Help = () => {
             error={numberVolunteersHasError}
           />
         )}
-        {selected !== "" && !formConcluded && renderButtons}
-      </form>
-    </Fragment>
-  );
-};
+        {selected && !formConcluded && renderButtons}
 
-export default Help;
+*/

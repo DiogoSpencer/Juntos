@@ -1,0 +1,56 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 0.5fr 0.5fr 0.5fr 0.5fr 2fr;
+  row-gap: 1rem;
+  grid-template-areas:
+    "tt tt tt"
+    ". hp ."
+    ". rt ."
+    ". dt ."
+    ". at ."
+    ". . .";
+    align-items: center;
+}
+
+.title {
+    grid-area: tt;
+    align-self: center;
+    justify-self: center;
+    color: #e6513e;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.number {
+    border-radius: 50%;
+    background-color: #3385D9;
+    color: white;
+    margin: 1rem;
+    padding-left: .8rem;
+    padding-right: .8rem;
+}
+
+.help {
+    grid-area: hp;
+    align-self: center;
+    justify-self: center;
+}
+
+.request {
+    grid-area: rt;
+    align-self: center;
+    justify-self: center;
+}
+
+.donate {
+    grid-area: dt;
+    align-self: center;
+    justify-self: center;
+}
+
+.action {
+    grid-area: at;
+    align-self: center;
+    justify-self: center;
+}

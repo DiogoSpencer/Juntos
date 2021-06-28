@@ -20,6 +20,7 @@ para pagina de download da app
 15. apagar FAQCard
 16. HeroisHome - fetch data dos 3 herois do ultimo mes
 17. Fix - erros de servidor aparecem todos uns em cima dos outros
+18. profile - falta changeCreds a funcionar
 
 
 #FF9F36

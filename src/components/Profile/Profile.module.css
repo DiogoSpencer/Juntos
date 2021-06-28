@@ -6,7 +6,7 @@
     background-repeat: no-repeat;
     display: grid;
     grid-template-columns: 1fr .5fr .5fr 1fr;
-    grid-template-rows: .5fr .5fr .5fr .5fr .5fr 2.5fr;
+    grid-template-rows: .5fr .5fr .5fr .5fr .5fr .5fr 2fr;
     row-gap: 1rem;
     grid-template-areas:
       "tt tt tt tt"
@@ -14,7 +14,8 @@
       ". ed ed iu"
       ". ps pv iu"
       ". fn ln iu"
-      "bt bt bt bt";
+      "bt bt bt bt"
+      "ie ie ie ie";
     align-items: start;
 }
 
@@ -104,6 +105,17 @@
 
 .buttonContainer {
     grid-area: bt;
+    justify-self: center;
+}
+
+.invalidError {
+    grid-area: ie;
+    color: #e6513e;
+    font-weight: 400;
+    text-align: center;
+    padding-top: 0.5rem;
+    width: 15rem;
+    font-size: 1rem;
     justify-self: center;
 }
 
