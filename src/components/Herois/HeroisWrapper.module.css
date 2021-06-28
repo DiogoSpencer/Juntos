@@ -1,0 +1,17 @@
+.container {
+  display: grid;
+  grid-template-columns: .3fr 5fr .5fr;
+  grid-template-rows: 1fr 0.2fr;
+  row-gap: 2rem;
+  grid-template-areas:
+    ". hc ."
+    ". sc .";
+}
+
+.heroiContainer {
+    grid-area: hc;
+}
+
+.slidesContainer {
+    grid-area: sc;
+}

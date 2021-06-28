@@ -31,6 +31,7 @@ const NavBar = () => {
         localStorage.removeItem(gS.storage.token);
       },
       (error) => {
+        //logout anyways
         dispatch(authActions.logout());
         localStorage.removeItem(gS.storage.token);
       }

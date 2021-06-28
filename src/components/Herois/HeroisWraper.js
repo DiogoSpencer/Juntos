@@ -1,8 +1,7 @@
-import { Fragment } from "react";
 import { useRouteMatch } from "react-router";
 import Heroi from "./Heroi";
 import Slides from "./Slides";
-import classes from "./HeroisWrapper.module.css"
+import classes from "./HeroisWrapper.module.css";
 
 //ir buscar todos aqui ou em slides?
 //ir buscar o do endereço por id
@@ -21,15 +20,19 @@ const HeroisWraper = () => {
   const id = match.params.heroidId;
 
   return (
-    <Fragment>
-      <Heroi
-        img={dummy.img}
-        alt={dummy.alt}
-        title={dummy.title}
-        text={dummy.text}
-      />
-      <Slides />
-    </Fragment>
+    <div className={classes.container}>
+      <div className={classes.heroiContainer}>
+        <Heroi
+          img={dummy.img}
+          alt={dummy.alt}
+          title={dummy.title}
+          text={dummy.text}
+        />
+      </div>
+      <div className={classes.slidesContainer}>
+        <Slides />
+      </div>
+    </div>
   );
 };
 

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import HeroiCard from "./HeroiCard";
 import classes from "./slideshow.module.css";
-//import classes from "./slideshow.module.css";
 
 const data = [
   { img: "", alt: "", text: "1", link: "/" },
