@@ -1,0 +1,71 @@
+.container {
+  height: 15rem;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: .25fr auto;
+  row-gap: .5rem;
+  grid-template-areas:
+    "ib"
+    "il";
+}
+
+.imageList {
+  grid-area: il;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 0.3rem;
+}
+
+.imgPreview {
+  height: 18rem;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.imageButton {
+  grid-area: ib;
+  align-self: center;
+  justify-self: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  border-style: none;
+  cursor: pointer;
+  background-color: transparent;
+  background-image: url("../../img/add.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  z-index: 5;
+}
+
+.imageButton:hover {
+  box-shadow: 0 0 10px #719ece;
+}
+
+.imageButton:disabled {
+  display: none;
+}
+
+.imageButton:focus {
+  outline: none;
+}
+
+.imageInput {
+  display: none;
+}
+
+.initialButton {
+  grid-area: il;
+  align-self: center;
+  justify-self: center;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+  background-color: transparent;
+  background-image: url("../../img/foto.png");
+  background-repeat: no-repeat;
+  background-size: 5rem;
+}

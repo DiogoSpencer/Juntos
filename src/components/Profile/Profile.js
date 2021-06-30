@@ -135,11 +135,11 @@ const Profile = (props) => {
     const userInfo = {
       firstName: enteredFirstName,
       lastName: enteredLastName,
-      privacy: privacy,
+      privacy,
     };
 
     formData.append(
-      "user",
+      "creds",
       new Blob([JSON.stringify(userInfo)], { type: "application/json" })
     );
 
@@ -156,22 +156,19 @@ const Profile = (props) => {
         }
       }
     );
-
-    //Mandar info ao server
-    //TODO: img upload: https://codeburst.io/react-image-upload-with-kittens-cc96430eaece
   };
 
   const privacyChangeHandler = () => {
-    if (privacy === "PUBLIC") {
-      setPrivacy("PRIVATE");
+    if (privacy === PUBLIC) {
+      setPrivacy(PRIVATE);
     } else {
-      setPrivacy("PUBLIC");
+      setPrivacy(PUBLIC);
     }
   };
 
   const profile = (
     <form onSubmit={formSubmissionHandler} className={classes.profileContainer}>
-      <h1 className={classes.title}>Perfil</h1>
+      <h1 className={classes.title}>Olá {enteredFirstName}</h1>
       <div className={classes.imageDiv}>
         <ImageUpload
           alt="Profile-Image"

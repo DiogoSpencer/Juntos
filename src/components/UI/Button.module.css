@@ -1,6 +1,5 @@
 .buttonCustom {
   width: 15rem;
-  font-size: 1.2rem;
   font-weight: 600;
   color: #fff;
   cursor: pointer;
@@ -38,4 +37,5 @@
 }
 
 .buttonText {
+  font-size: 1.1rem;
 }

@@ -1,12 +1,13 @@
 import { Fragment, useState } from "react";
 import useInput from "../hooks/use-input";
-import ImageUpload from "../Registration/ImageUpload";
 import Button from "../UI/Button";
-import Icon from "../UI/Icon";
+import backIcon from "../../img/back.png";
 import Anonimous from "./Anonimous";
 import Volunteers from "./Volunteers";
 import { Prompt } from "react-router-dom";
 import SelectHelp from "./SelectHelp";
+import Info from "./Info";
+import classes from "./Help.module.css";
 
 const AJUDAR = "Ajudar";
 const PEDIR = "Pedir Ajuda";
@@ -27,11 +28,10 @@ const ensureLeave =
 
 const Help = () => {
   const [selected, setSelected] = useState("");
-  const [fileUpload, setFileUpload] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState([]);
   const [formConcluded, setFormConcluded] = useState(false);
-  const [anonimousValue, setAnonimousValue] = useState(false);
-  const [volunteersValue, setVolunteersValue] = useState(false);
+  const [anonimousValue, setAnonimousValue] = useState(true);
+  const [volunteersValue, setVolunteersValue] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
 
   const onSelectChangeHandler = (selectedAction) => {
@@ -51,7 +51,7 @@ const Help = () => {
       default:
         setSelected("");
     }
-  }
+  };
 
   const {
     value: enteredTitle,
@@ -79,17 +79,6 @@ const Help = () => {
     inputBlurHandler: numberVolunteersBlurHandler,
     reset: resetNumberVolunteersInput,
   } = useInput(isVolunteerNumber);
-
-  const fileChangeHandler = (event) => {
-    const files = event.target.files; //files array
-    setFileUpload(true);
-    setSelectedFile(files[0]);
-  };
-
-  const removeImageHandler = () => {
-    setFileUpload(false);
-    setSelectedFile(undefined);
-  };
 
   const formConcludedHandler = () => {
     setIsFocused(false);
@@ -173,52 +162,16 @@ const Help = () => {
     ) */
   };
 
-  const info = (
-    <div>
-      <div>
-        <h1>{selected}</h1>
-        <div>
-          <label htmlFor="name">Título</label>
-          <input
-            type="text"
-            id="title"
-            value={enteredTitle}
-            onChange={titleChangeHandler}
-            onBlur={titleBlurHandler}
-          />
-          {titleHasError && <p>Por favor insira um título.</p>}
-        </div>
-        <div>
-          <label htmlFor="name">Descrição</label>
-          <input
-            type="text"
-            id="description"
-            value={enteredDescription}
-            onChange={descriptionChangeHandler}
-            onBlur={descriptionBlurHandler}
-          />
-          {descriptionHasError && <p>Por favor insira uma descrição.</p>}
-        </div>
-        <ImageUpload
-          fileUpload={fileUpload}
-          removeImageHandler={removeImageHandler}
-          selectedFile={selectedFile}
-          fileChangeHandler={fileChangeHandler}
+  const renderButtons = (
+    <div className={classes.buttonContainer}>
+      <img src={backIcon} className={classes.back} onClick={backFormHandler} />
+      <div className={classes.nextButton}>
+        <Button
+          disabled={!formIsValid}
+          onClick={formConcludedHandler}
+          text="Próximo"
         />
       </div>
-    </div>
-  );
-
-  const renderButtons = (
-    <div>
-      <button onClick={backFormHandler}>
-        <Icon />
-      </button>
-      <Button
-        disabled={!formIsValid}
-        onClick={formConcludedHandler}
-        text="Próximo"
-      />
     </div>
   );
 
@@ -228,17 +181,25 @@ const Help = () => {
     <Fragment>
       <Prompt when={isFocused} message={(location) => ensureLeave} />
       <form onFocus={formFocusedHandler} onSubmit={formSubmissionHandler}>
-        {!selected && !formConcluded && <SelectHelp onSelect={onSelectChangeHandler}/>}
-        {selected && !formConcluded && info}
-      </form>
-    </Fragment>
-  );
-};
-
-export default Help;
-
-/*
-        
+        {!selected && !formConcluded && (
+          <SelectHelp onSelect={onSelectChangeHandler} />
+        )}
+        {selected && !formConcluded && (
+          <Info
+            selected={selected}
+            enteredTitle={enteredTitle}
+            titleChangeHandler={titleChangeHandler}
+            titleBlurHandler={titleBlurHandler}
+            titleHasError={titleHasError}
+            enteredDescription={enteredDescription}
+            descriptionChangeHandler={descriptionChangeHandler}
+            descriptionBlurHandler={descriptionBlurHandler}
+            descriptionHasError={descriptionHasError}
+            fileChangeHandler={setSelectedFile}
+            back={backFormHandler}
+            hasImage={selectedFile.length <= 0 ? true : false}
+          />
+        )}
         {selected && selected !== ACOES && !formConcluded && (
           <Anonimous
             yesAnonimous={yesAnonimousHandler}
@@ -258,5 +219,9 @@ export default Help;
           />
         )}
         {selected && !formConcluded && renderButtons}
+      </form>
+    </Fragment>
+  );
+};
 
-*/
+export default Help;

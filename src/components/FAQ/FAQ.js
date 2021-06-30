@@ -16,7 +16,7 @@ const data = [
 const FAQ = () => {
   return (
     <div className={classes.container}>
-      <h1 className={classes.mainTitle}>FAQ</h1>
+      <h1 className={classes.mainTitle}>Dúvidas mais Frequentes</h1>
       <div className={classes.questionContainer}>
         {data.map((faqQuestion, index) => {
           return (

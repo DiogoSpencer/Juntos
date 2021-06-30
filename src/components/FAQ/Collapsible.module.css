@@ -12,3 +12,7 @@
     color: #e6513e;
     font-weight: 700;
 }
+
+.container:hover {
+    cursor: pointer;
+}

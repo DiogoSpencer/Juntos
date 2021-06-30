@@ -1,0 +1,68 @@
+.container {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: .8fr 0.5fr 0.5fr 3fr .5fr;
+  row-gap: 1rem;
+  grid-template-areas:
+    "tt"
+    "tx"
+    "bt"
+    "ad"
+    "ui";
+  align-items: start;
+  justify-items: center;
+}
+
+.title {
+  grid-area: tt;
+  color: #e6513e;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.text {
+  grid-area: tx;
+  font-weight: 600;
+  color: #3385d9;
+}
+
+.buttons {
+  grid-area: bt;
+}
+
+.anonimousDiv {
+  grid-area: ad;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.avatar {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userInfo {
+  grid-area: ui;
+  margin-top: -1.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+}
+
+.name {
+  font-weight: 600;
+}
+
+.helpIcon {
+  height: 2.5rem;
+}
+
+.numHelps {
+  padding-top: 0.5rem;
+}

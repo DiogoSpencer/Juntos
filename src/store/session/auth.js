@@ -18,6 +18,9 @@ const authenticationSlice = createSlice({
       state.username = action.payload.username;
       state.role = action.payload.role;
       state.email = action.payload.email;
+      state.firstName = action.payload.firstName;
+      state.lastName = action.payload.lastName;
+      state.profileImg = action.payload.profileImg;
     },
     logout(state) {
       state.isLogged = false;
@@ -25,6 +28,9 @@ const authenticationSlice = createSlice({
       state.username = "";
       state.role = "";
       state.email = "";
+      state.firstName = "";
+      state.lastName = "";
+      state.profileImg = "";
     },
     resetToken(state, action) {
       state.token = action.payload.token;

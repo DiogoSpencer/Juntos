@@ -20,8 +20,8 @@ para pagina de download da app
 15. apagar FAQCard
 16. HeroisHome - fetch data dos 3 herois do ultimo mes
 17. Fix - erros de servidor aparecem todos uns em cima dos outros
-18. profile - falta changeCreds a funcionar
-
+18. Anonimous - ir buscar foto 1º e ultimo nome do user
+19. regist enviar company -> tirar comentario
 
 #FF9F36
 #3385D9
@@ -51,3 +51,45 @@ server:
 17. formulario de contactos para onde enviar a info?
 18. como registar/fazer um heroi?
 19. mostrar perfis de outras pessoas, precisamos de ter um fetch da info por username
+
+
+//Must haves
+1. Os registos com diferentes atributos e tipologias de utilizadores:
+individuais ou entidades/organizações no terreno que possam ser escrutinadas ou verificadas para
+que esses registos se tornem efetivos na plataforma devem poder ser mantidos e modificados
+O registo pode conter atributos de perfil/preferências de utilizadores, podendo estes
+igualmente ser geridos e dinamicamente modificados ao longo do tempo.
+
+2. Criação de Percursos Solidários com composição de Pontos de Ação Solidária, devendo estes ter:
+Título, Descrição ou Caracterização do Percurso e suas Rotas, **// Distância (aproximada), Tópicos,
+Nível de Dificuldade (exigência física), Coordenadas GPS e representação dos pontos das ações
+solidárias ou pontos acrescidos de interesse colateral ou complementar no percurso (sempre com
+informação georreferenciada), com imagens associadas, e outras informações associadas a
+apontadores //** (Web). As rotas podem depois ter anotações e conteúdos que podem ser colocados na
+fase de tracking pelos voluntários no terreno (Móvel)
+
+3. Mecanismos para comentar os percursos e ações solidárias em que cada utilizador participa (Web e
+    Móvel), com a vertente móvel podendo produzir notificações e reporte em “tempo real” e a vertente
+    Web permitindo complementar essa informação à posteriori.
+
+4. Mecanismos para identificação de zonas de risco nas Rotas Solidárias ou que exijam condições
+específicas para a realização dessas Rotas e suas Acções de Solidariedade (Web e Móvel) -
+Dificuldades de Acessibilidade, Risco de Chuva ou ações prévias a ter em conta e preparar
+inicialmente, como por exemplo, contacto com autoridades e entidades locais, etc.
+
+5. Mecanismo para moderação da discussão para evitar SPAM e TROLLS (Web e Móvel).
+
+6. Iniciação do percurso e registo de participação de utilizadores voluntários que o vão realizar
+ **// conjuntamente e de forma colaborativa (Móvel). //**
+
+ 7. Dados estatísticos associados ao percurso incluído, **// tempo médio de realização, número de
+utilizadores voluntários, pontuação média atribuída pelos mesmos (Web e Móvel) //**
+
+8. Back-office de gestão da plataforma, incluindo nomeadamente controlo e estatísticas de acessos,
+funcionalidade de moderação ou intermediação que promova princípios de fairness, correção e
+qualidade da informação e dados criados utilizadores/ como social players, podendo ainda abranger
+aspectos de regulação e gestão de benefícios resultantes do processo de criação de valor promovido
+pela plataforma.
+
+
+//falar sobre o token trazer profileImg e 1º e ultimo nome -> ou return do login?

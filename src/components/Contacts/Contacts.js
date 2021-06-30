@@ -103,8 +103,8 @@ const Contacts = () => {
           <textarea
             id="help"
             rows="4"
-            minlenght="10"
-            maxlength="5000"
+            minLength="10"
+            maxLength="5000"
             value={enteredDescription}
             onChange={descriptionChangeHandler}
             onBlur={descriptionBlurHandler}

@@ -11,7 +11,7 @@ import juntosIcon from "../../img/logo.png";
 
 const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
-const isProfile = false
+const isProfile = false;
 const isNotEmpty = (value) => value.trim() !== "";
 //TODO: #2 fazer os REGEX de verificacao
 //TODO: #3 Verify if image is one of these types
@@ -28,6 +28,7 @@ const Register = (props) => {
   const [privacy, setPrivacy] = useState(PUBLIC);
   const [concluded, setConcluded] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isCompany, setIsCompany] = useState(false);
 
   const {
     value: enteredEmail,
@@ -85,6 +86,10 @@ const Register = (props) => {
     }
   };
 
+  const checkChangeHandler = () => {
+    setIsCompany((prevState) => !prevState);
+  };
+
   //redirect home if logged - logged users cant register
   const redirectHandler = () => {
     history.replace("/home");
@@ -94,7 +99,7 @@ const Register = (props) => {
 
   let passConfirmed = false;
 
-  if (!enteredPassword.localeCompare(enteredConfirmation)) {
+  if (enteredPassword === enteredConfirmation) {
     passConfirmed = true;
   }
 
@@ -131,7 +136,8 @@ const Register = (props) => {
       username: enteredUsername,
       firstName: enteredFirstName,
       lastName: enteredLastName,
-      privacy: privacy,
+      privacy,
+      //isCompany,
     };
 
     formData.append(
@@ -238,6 +244,11 @@ const Register = (props) => {
             Por favor insira uma confirmação de password válida.
           </p>
         )}
+        {enteredConfirmationIsValid && !passConfirmed && (
+          <p className={classes.registError}>
+            Confirmação e Password não são iguais
+          </p>
+        )}
       </div>
       <div className={classes.firstNameDiv}>
         <label htmlFor="firstName" className={classes.labelForm}>
@@ -284,6 +295,17 @@ const Register = (props) => {
           <p className={classes.registError}>Por favor insira um e-mail.</p>
         )}
       </div>
+      <div className={classes.companyDiv}>
+        <input
+          type="checkbox"
+          id="company"
+          onChange={checkChangeHandler}
+          checked={isCompany}
+        />
+        <label htmlFor="company" className={classes.labelForm}>
+          Organização
+        </label>
+      </div>
       <div className={classes.buttonDiv}>
         <Button disabled={!formIsValid} text="Registar" />
       </div>
@@ -308,6 +330,11 @@ const Register = (props) => {
       <p className={classes.completeText}>
         Por favor verifique o seu e-mail para ativar a sua conta.
       </p>
+      {isCompany && (
+        <p className={classes.organization}>
+          A sua conta organizacional irá ficar pendente de aprovação e verificação.
+        </p>
+      )}
     </div>
   );
 

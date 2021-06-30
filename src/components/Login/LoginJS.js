@@ -63,7 +63,6 @@ const Login = (props) => {
             username: parsedToken.username,
             role: parsedToken.role,
             email: parsedToken.email,
-            //profilePic: data
           })
         );
         localStorage.setItem("token", token);

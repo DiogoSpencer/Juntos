@@ -1,0 +1,119 @@
+.container {
+  display: grid;
+  grid-template-columns: 0.5fr 5fr;
+  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.2fr 2.7fr;
+  row-gap: 0.5rem;
+  grid-template-areas:
+    "tt tt"
+    ". it"
+    ". dc"
+    ". ."
+    "iu iu";
+  align-items: start;
+}
+
+.container input[type="text"] {
+  border: 1px solid #3385d9;
+  box-shadow: 1px 2px 2px rgba(65, 132, 234, 0.585);
+  border-radius: 10px;
+  width: 15rem;
+  padding: 0.3rem;
+  justify-items: center;
+}
+
+.container input:focus {
+  outline: none;
+  box-shadow: 0 0 10px #719ece;
+}
+
+.container textarea {
+  border: 1px solid #3385d9;
+  box-shadow: 1px 2px 2px rgba(65, 132, 234, 0.585);
+  border-radius: 10px;
+  padding: 0.3rem;
+  justify-items: center;
+}
+
+.container textarea:focus {
+  outline: none;
+  box-shadow: 0 0 10px #719ece;
+}
+
+.container label {
+  color: #3385d9;
+  font-weight: 700;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.title {
+  grid-area: tt;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2rem;
+  display: grid;
+  grid-template-columns: 5fr auto;
+  grid-template-rows: auto;
+  row-gap: 0.5rem;
+  grid-template-areas: "bk nb st";
+}
+
+.back {
+  grid-area: bk;
+  padding-top: 0.7rem;
+  padding-bottom: 0.8rem;
+  height: 5rem;
+  cursor: pointer;
+}
+
+.number {
+  grid-area: nb;
+  border-radius: 50%;
+  background-color: #3385d9;
+  color: white;
+  margin: 1rem;
+  padding-top: 0.2rem;
+  padding-left: 0.9rem;
+  padding-right: 0.9rem;
+}
+
+.selectedTitle {
+  grid-area: st;
+  align-self: center;
+}
+
+.inputTitle {
+  grid-area: it;
+  display: flex;
+  flex-direction: column;
+}
+
+.description {
+  grid-area: dc;
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+
+.imageUpload {
+  grid-area: iu;
+  align-self: start;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  grid-template-areas: "mu";
+}
+
+.multiUpload {
+  grid-area: mu;
+}
+
+.donateImage {
+  grid-area: mu;
+  padding-top: 2rem;
+  align-self: center;
+  justify-self: center;
+  height: 25rem;
+  margin-bottom: 2rem;
+}

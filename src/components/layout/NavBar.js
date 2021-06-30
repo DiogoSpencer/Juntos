@@ -115,7 +115,7 @@ const NavBar = () => {
               className={classes.navLink}
               to="/faq"
             >
-              FAQ
+              Dúvidas
             </NavLink>
           </li>
           {!isLogged && (
@@ -154,15 +154,3 @@ const NavBar = () => {
 };
 
 export default NavBar;
-
-/*
-
-              <NavLink
-                activeClassName={classes.navLinkActive}
-                className={classes.navLink}
-                to="/login"
-              >
-                Login
-              </NavLink>
-
-*/

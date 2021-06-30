@@ -1,0 +1,20 @@
+.buttonContainer {
+  display: grid;
+  grid-template-columns: .74fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "bk nx";
+  align-items: center;
+}
+
+.back {
+  grid-area: bk;
+  justify-self: end;
+  padding-top: 1.5rem;
+  height: 5rem;
+  cursor: pointer;
+}
+
+.next {
+  grid-area: nx;
+  justify-self: start;
+}

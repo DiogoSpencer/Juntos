@@ -9,7 +9,10 @@ const ImageUpload = (props) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef();
 
+  const fileChanger = props.fileChangeHandler;
+
   useEffect(() => {
+    fileChanger(selectedFile);
     if (selectedFile) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -19,7 +22,7 @@ const ImageUpload = (props) => {
     } else {
       setPreview(null);
     }
-  }, [selectedFile]);
+  }, [selectedFile, fileChanger]);
 
   return (
     <Fragment>
@@ -31,7 +34,7 @@ const ImageUpload = (props) => {
               src={preview}
               className={props.isProfile? classes.imgPreview : classes.imgPreviewRegist}
               onClick={() => {
-                props.fileChangeHandler(null);
+                //props.fileChangeHandler(null);
                 setSelectedFile(null);
               }}
             />
@@ -52,10 +55,10 @@ const ImageUpload = (props) => {
             onChange={(event) => {
               const file = event.target.files[0];
               if (file && file.type.substring(0, 5) === "image") {
-                props.fileChangeHandler(file);
+                //props.fileChangeHandler(file);
                 setSelectedFile(file);
               } else {
-                props.fileChangeHandler(null);
+                //props.fileChangeHandler(null);
                 setSelectedFile(null);
               }
             }}

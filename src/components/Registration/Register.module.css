@@ -3,13 +3,14 @@
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
   column-gap: 2rem;
+  row-gap: 1rem;
   grid-template-areas:
     "tt tt"
     "iu iu"
     "un pv"
     "ps cf"
     "fn ln"
-    "ed ed"
+    "ed cd"
     "bt bt"
     "ie ie";
   justify-items: center;
@@ -21,15 +22,15 @@
 }
 
 .spinnerContainer {
-    grid-area: iu;
-    align-self: center;
-    justify-self: center;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
+  grid-area: iu;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .registTitle {
@@ -66,7 +67,7 @@
 
 .registForm input:focus {
   outline: none;
-  box-shadow: 0 0 10px #719ECE;
+  box-shadow: 0 0 10px #719ece;
 }
 
 .registError {
@@ -79,14 +80,14 @@
 }
 
 .invalidError {
-    grid-area: ie;
-    color: #e6513e;
-    font-weight: 400;
-    text-align: center;
-    padding-top: 0.5rem;
-    width: 15rem;
-    font-size: 1rem;
-    padding-top: 1rem;
+  grid-area: ie;
+  color: #e6513e;
+  font-weight: 400;
+  text-align: center;
+  padding-top: 0.5rem;
+  width: 15rem;
+  font-size: 1rem;
+  padding-top: 1rem;
 }
 
 .imageUploadDiv {
@@ -149,6 +150,29 @@
   grid-template-columns: min-content auto;
 }
 
+.privacyDiv input:focus {
+  box-shadow: none;
+}
+
+.companyDiv {
+  justify-self: center;
+  align-self: center;
+  grid-area: cd;
+}
+
+.companyDiv label {
+  color: #3385d9;
+  font-weight: 700;
+  padding-left: 0.5rem;
+  padding-top: 0.5rem;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.companyDiv input:focus {
+  box-shadow: none;
+}
+
 .buttonDiv {
   grid-area: bt;
 }
@@ -159,8 +183,9 @@
   grid-template-areas:
     "tl"
     "lg"
-    "pc";
-    row-gap: 3rem;
+    "pc"
+    "io";
+  row-gap: 3rem;
 }
 
 .completeTitle {
@@ -186,4 +211,15 @@
   font-weight: 600;
   color: #3385d9;
   font-size: 1.1rem;
+}
+
+.organization {
+  grid-area: io;
+  justify-self: center;
+  align-self: center;
+  color: #e6513e;
+  font-weight: 400;
+  text-align: center;
+  width: 15rem;
+  font-size: 0.8rem;
 }
