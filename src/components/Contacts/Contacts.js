@@ -3,10 +3,15 @@ import useInput from "../hooks/use-input";
 import classes from "./Contacts.module.css";
 import Button from "../UI/Button";
 
+const PARTNERSHIP = "PARTNERSHIP";
+const SUGESTIONS = "SUGESTIONS";
+const ISSUES = "ISSUES";
+
 const isNotEmpty = (value) => value.trim() !== "";
 
 const Contacts = () => {
-  const [subject, setSubject] = useState("sugestions");
+  const [subject, setSubject] = useState(SUGESTIONS);
+
   const {
     value: enteredName,
     isValid: enteredNameIsValid,
@@ -34,13 +39,35 @@ const Contacts = () => {
     reset: resetDescriptionInput,
   } = useInput(isNotEmpty);
 
+  const {
+    value: enteredUrl,
+    isValid: enteredUrlIsValid,
+    hasError: urlHasError,
+    valueChangeHandler: urlChangeHandler,
+    inputBlurHandler: urlBlurHandler,
+    reset: resetUrlInput,
+  } = useInput(isNotEmpty);
+
   const subjectHandler = (event) => {
-    setSubject(event.value);
+    setSubject(event.target.value);
   };
 
   let formIsValid = false;
 
-  if (enteredEmailIsValid && enteredNameIsValid && enteredDescriptionIsValid) {
+  if (
+    subject !== PARTNERSHIP &&
+    enteredEmailIsValid &&
+    enteredNameIsValid &&
+    enteredDescriptionIsValid
+  ) {
+    formIsValid = true;
+  } else if (
+    subject === PARTNERSHIP &&
+    enteredEmailIsValid &&
+    enteredNameIsValid &&
+    enteredDescriptionIsValid &&
+    enteredUrlIsValid
+  ) {
     formIsValid = true;
   }
 
@@ -56,7 +83,8 @@ const Contacts = () => {
     resetNameInput();
     resetEmailInput();
     resetDescriptionInput();
-    setSubject("sugestions");
+    resetUrlInput();
+    setSubject(SUGESTIONS);
   };
 
   return (
@@ -71,9 +99,9 @@ const Contacts = () => {
             onChange={subjectHandler}
             className={classes.selectSub}
           >
-            <option value="sugestions">Sugestões</option>
-            <option value="partnership">Parcerias</option>
-            <option value="problems">Problemas</option>
+            <option value={SUGESTIONS}>Sugestões</option>
+            <option value={PARTNERSHIP}>Parcerias</option>
+            <option value={ISSUES}>Problemas</option>
           </select>
         </div>
         <div className={classes.name}>
@@ -85,7 +113,9 @@ const Contacts = () => {
             onChange={nameChangeHandler}
             onBlur={nameBlurHandler}
           />
-          {nameHasError && <p className={classes.formError}>Por favor insira um nome.</p>}
+          {nameHasError && (
+            <p className={classes.formError}>Por favor insira um nome.</p>
+          )}
         </div>
         <div className={classes.email}>
           <label htmlFor="email">Email</label>
@@ -96,7 +126,9 @@ const Contacts = () => {
             onChange={emailChangeHandler}
             onBlur={emailBlurHandler}
           />
-          {emailHasError && <p className={classes.formError}>Por favor insira um e-mail.</p>}
+          {emailHasError && (
+            <p className={classes.formError}>Por favor insira um e-mail.</p>
+          )}
         </div>
         <div className={classes.help}>
           <label htmlFor="help">Como podemos ajudar?</label>
@@ -111,8 +143,27 @@ const Contacts = () => {
           >
             Descrição...
           </textarea>
-          {descriptionHasError && <p className={classes.formError}>Por favor insira uma descrição.</p>}
+          {descriptionHasError && (
+            <p className={classes.formError}>Por favor insira uma descrição.</p>
+          )}
         </div>
+        {subject === PARTNERSHIP && (
+          <div className={classes.urlDiv}>
+            <label htmlFor="url">Endereço de Web:</label>
+            <input
+              type="text"
+              id="url"
+              value={enteredUrl}
+              onChange={urlChangeHandler}
+              onBlur={urlBlurHandler}
+            />
+            {urlHasError && (
+              <p className={classes.formError}>
+                Por favor insira um endereço válido.
+              </p>
+            )}
+          </div>
+        )}
       </div>
       <div className={classes.buttonContainer}>
         <Button disabled={!formIsValid} text="Enviar" />

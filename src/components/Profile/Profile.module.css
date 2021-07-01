@@ -1,130 +1,157 @@
 .profileContainer {
-    background-image: url("../../img/togetherapart.jpg");
-    height: 100%;
-    background-size: 25vw auto;
-    background-position: 38vw bottom;
-    background-repeat: no-repeat;
-    display: grid;
-    grid-template-columns: 1fr .5fr .5fr 1fr;
-    grid-template-rows: .5fr .5fr .5fr .5fr .5fr .5fr 2fr;
-    row-gap: 1rem;
-    grid-template-areas:
-      "tt tt tt tt"
-      ". un . iu"
-      ". ed ed iu"
-      ". ps pv iu"
-      ". fn ln iu"
-      "bt bt bt bt"
-      "ie ie ie ie";
-    align-items: start;
-}
-
-.profileContainer input[type="text"] {
-    border: 1px solid #3385d9;
-    box-shadow: 1px 2px 2px rgba(65, 132, 234, 0.585);
-    border-radius: 10px;
-    width: 15rem;
-    padding: 0.3rem;
-    justify-items: center;
-}
-
-.profileContainer label {
-    color: #3385D9;
-    font-weight: 700;
-    font-family: inherit;
-    font-size: inherit;
-}
-
-.radioLabel input {
-    margin-right: .2rem;
+  background-image: url("../../img/togetherapart.jpg");
+  height: 100%;
+  background-size: 27vw auto;
+  background-position: 33.5vw bottom;
+  background-repeat: no-repeat;
+  display: grid;
+  grid-template-columns: 1fr 0.5fr 0.2fr 1fr;
+  grid-template-rows: 0.2fr 0.5fr 0.5fr;
+  row-gap: 1rem;
+  grid-template-areas:
+    "tt tt tt tt"
+    ". fc . iu"
+    ". fc . pl";
+  align-items: start;
 }
 
 .title {
-    grid-area: tt;
-    justify-self: center;
-    color: #e6513e;
-    font-weight: 600;
-    font-size: 2rem;
+  grid-area: tt;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2rem;
 }
 
 .imageDiv {
-    grid-area: iu;
-    display: flex;
-    flex-direction: column;
-    justify-self: start;
-    align-self: start;
-    text-align: center;
-    font-weight: 600;
-    color: #3385D9;
-    margin-left: 2rem;
-}
-
-.juntos {
-    font-weight: 700;
-    color: #FF9F36;
-}
-
-.emailDiv {
-    grid-area: ed;
-    display: flex;
-    flex-direction: column;
-    justify-self: start;
-}
-
-.usernameDiv {
-    grid-area: un;
-    display: flex;
-    flex-direction: column;
+  grid-area: iu;
+  display: flex;
+  flex-direction: column;
+  justify-self: start;
+  align-self: start;
+  text-align: center;
+  font-weight: 600;
+  color: #3385d9;
+  margin-left: 2rem;
 }
 
 .passLink {
-    grid-area: ps;
-}
-
-.firstNameDiv {
-    grid-area: fn;
-    display: flex;
-    flex-direction: column;
-}
-
-.lastNameDiv {
-    grid-area: ln;
-    display: flex;
-    flex-direction: column;
-    justify-self: start;
-}
-
-.privacyDiv {
-    grid-area: pv;
-    display: flex;
-    justify-self: start;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-}
-
-.buttonContainer {
-    grid-area: bt;
-    justify-self: center;
-}
-
-.invalidError {
-    grid-area: ie;
-    color: #e6513e;
-    font-weight: 400;
-    text-align: center;
-    padding-top: 0.5rem;
-    width: 15rem;
-    font-size: 1rem;
-    justify-self: center;
+  margin-left: 4rem;
+  grid-area: pl;
+  justify-self: start;
+  text-align: center;
+  align-self: start;
+  font-size: 0.9rem;
 }
 
 .keyIcon {
-    height: 5rem;
+  height: 4rem;
+  cursor: pointer;
+}
+
+.formContainer {
+  grid-area: fc;
+  display: grid;
+  grid-template-columns: 1fr 0.5fr 0.5fr;
+  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 2fr;
+  row-gap: 2.5rem;
+  column-gap: 3rem;
+  grid-template-areas:
+    ". un ."
+    ". ed pv"
+    ". fn ln"
+    "bt bt bt"
+    "ie ie ie";
+  align-items: start;
+}
+
+.formContainer input[type="text"] {
+  border: 1px solid #3385d9;
+  box-shadow: 1px 2px 2px rgba(65, 132, 234, 0.585);
+  border-radius: 10px;
+  width: 15rem;
+  padding: 0.3rem;
+  justify-items: center;
+}
+
+.formContainer label,
+.changePass {
+  color: #3385d9;
+  font-weight: 700;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.radioLabel input {
+  margin-right: 0.2rem;
+}
+
+.juntos {
+  font-weight: 700;
+  color: #ff9f36;
+}
+
+.emailDiv {
+  grid-area: ed;
+  display: flex;
+  flex-direction: column;
+  justify-self: start;
+}
+
+.usernameDiv {
+  grid-area: un;
+  display: flex;
+  flex-direction: column;
+}
+
+.firstNameDiv {
+  grid-area: fn;
+  display: flex;
+  flex-direction: column;
+}
+
+.lastNameDiv {
+  grid-area: ln;
+  display: flex;
+  flex-direction: column;
+  justify-self: start;
+}
+
+.privacyDiv {
+  grid-area: pv;
+  display: flex;
+  justify-self: start;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.buttonContainer {
+  grid-area: bt;
+  justify-self: center;
+}
+
+.invalidError {
+  grid-area: ie;
+  color: #e6513e;
+  font-weight: 400;
+  text-align: center;
+  padding-top: 0.5rem;
+  width: 15rem;
+  font-size: 1rem;
+  justify-self: center;
 }
 
 .logo {
-    height: 2.5rem;
-    margin-right: .5rem;
-    margin-top: .5rem;
+  height: 2.5rem;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.profileContainer input:focus {
+  outline: none;
+}
+
+input:disabled {
+  cursor: not-allowed;
 }

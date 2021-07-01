@@ -18,6 +18,10 @@
     vertical-align: middle;
 }
 
+.logo:focus {
+    outline: none;
+}
+
 .navList {
     margin: 0;
     padding: 0;

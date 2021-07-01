@@ -1,5 +1,4 @@
 import { Fragment, useState } from "react";
-import { useHistory } from "react-router";
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
 import ImageUpload from "./ImageUpload";
@@ -18,7 +17,6 @@ const isNotEmpty = (value) => value.trim() !== "";
 //TODO: #4 Restrict image size
 
 const Register = (props) => {
-  const history = useHistory();
   const isLogged = useSelector((state) => state.auth.isLogged);
 
   //TODO: #2 Fazer useReducer para isto tudo..
@@ -90,11 +88,6 @@ const Register = (props) => {
     setIsCompany((prevState) => !prevState);
   };
 
-  //redirect home if logged - logged users cant register
-  const redirectHandler = () => {
-    history.replace("/home");
-  };
-
   let formIsValid = false;
 
   let passConfirmed = false;
@@ -123,6 +116,10 @@ const Register = (props) => {
     }
 
     props.setIsLoading(true);
+
+    setInvalidInput(false);
+    setEmailHasAccount(false);
+    setError(false);
 
     const formData = new FormData();
     if (selectedFile !== null) {
@@ -346,9 +343,8 @@ const Register = (props) => {
 
   return (
     <Fragment>
-      {isLogged && redirectHandler()}
-      {!isLogged && !concluded && !props.isLoading && register}
-      {!isLogged && concluded && !props.isLoading && registerComplete}
+      {!concluded && !props.isLoading && register}
+      {concluded && !props.isLoading && registerComplete}
       {props.isLoading && spinner}
     </Fragment>
   );

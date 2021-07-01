@@ -28,7 +28,7 @@ const FAQ = () => {
           );
         })}
       </div>
-      <Link to="/Contactos" className={classes.linkContacts}>
+      <Link to="/contactos" className={classes.linkContacts}>
         <Button text={text} />
       </Link>
     </div>

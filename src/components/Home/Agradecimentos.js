@@ -39,7 +39,7 @@ const Agradecimentos = () => {
         <h3 className={classes.thanksText}>Obrigado</h3>
         <img src={heart} alt="heart" className={classes.heartImg} />
       </div>
-      <Link to="/Juntar" className={classes.joinLink}>
+      <Link to="/contactos" className={classes.joinLink}>
         Junta-te a Nós
       </Link>
     </div>

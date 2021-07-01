@@ -4,10 +4,14 @@ import Button from "../UI/Button";
 import backIcon from "../../img/back.png";
 import Anonimous from "./Anonimous";
 import Volunteers from "./Volunteers";
-import { Prompt } from "react-router-dom";
+import { Prompt, useHistory } from "react-router-dom";
 import SelectHelp from "./SelectHelp";
 import Info from "./Info";
 import classes from "./Help.module.css";
+import { createMarker } from "../../services/http";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../../store/session/auth";
+import gS from "../../services/generalServices.json";
 
 const AJUDAR = "Ajudar";
 const PEDIR = "Pedir Ajuda";
@@ -28,11 +32,16 @@ const ensureLeave =
 
 const Help = () => {
   const [selected, setSelected] = useState("");
-  const [selectedFile, setSelectedFile] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [formConcluded, setFormConcluded] = useState(false);
   const [anonimousValue, setAnonimousValue] = useState(true);
   const [volunteersValue, setVolunteersValue] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
+
+  const history = useHistory();
+
+  const dispatch = useDispatch();
+  const ownerEmail = useSelector((state) => state.auth.email);
 
   const onSelectChangeHandler = (selectedAction) => {
     switch (selectedAction) {
@@ -98,15 +107,18 @@ const Help = () => {
     setAnonimousValue(false);
   };
 
-  const yesVolunteersHandler = () => {
+  const yesVolunteersHandler = (event) => {
+    event.preventDefault();
     setVolunteersValue(true);
   };
 
-  const noVolunteersHandler = () => {
+  const noVolunteersHandler = (event) => {
+    event.preventDefault();
     setVolunteersValue(false);
   };
 
-  const formFocusedHandler = () => {
+  const formFocusedHandler = (event) => {
+    event.preventDefault();
     setIsFocused(true);
   };
 
@@ -134,53 +146,60 @@ const Help = () => {
     }
 
     const formData = new FormData();
-    if (selectedFile !== null) {
-      formData.append("profileImg", selectedFile);
+    if (selectedFiles.length > 0) {
+      for (const image of selectedFiles) {
+        formData.append("img", image);
+      }
     }
 
     const formInfo = {
       title: enteredTitle,
       description: enteredDescription,
+      lat: "1",
+      lon: "1",
+      owner: ownerEmail,
+      pathId: null,
+      difficulty: "1",
     };
 
     formData.append(
-      "info",
+      "marker",
       new Blob([JSON.stringify(formInfo)], { type: "application/json" })
     );
 
-    /*     registar(formData).then(
+    createMarker(formData).then(
       (response) => {
-        setSelectedFile(undefined);
+        console.log(response);
       },
       (error) => {
-        if (error.status === 400) {
-          setInvalidInput(true);
-        } else {
-          setError(true);
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+          history.go(0)
         }
       }
-    ) */
+    );
   };
 
+  //formConcludedHandler
   const renderButtons = (
     <div className={classes.buttonContainer}>
       <img src={backIcon} className={classes.back} onClick={backFormHandler} />
       <div className={classes.nextButton}>
-        <Button
-          disabled={!formIsValid}
-          onClick={formConcludedHandler}
-          text="Próximo"
-        />
+        <Button disabled={!formIsValid} text="Próximo" />
       </div>
     </div>
   );
+
+  //onFocus={formFocusedHandler}
 
   //TODO: #9 Adicionar Mapas: {formConcluded && mapa}
 
   return (
     <Fragment>
       <Prompt when={isFocused} message={(location) => ensureLeave} />
-      <form onFocus={formFocusedHandler} onSubmit={formSubmissionHandler}>
+      <form onSubmit={formSubmissionHandler}>
         {!selected && !formConcluded && (
           <SelectHelp onSelect={onSelectChangeHandler} />
         )}
@@ -195,9 +214,10 @@ const Help = () => {
             descriptionChangeHandler={descriptionChangeHandler}
             descriptionBlurHandler={descriptionBlurHandler}
             descriptionHasError={descriptionHasError}
-            fileChangeHandler={setSelectedFile}
+            fileChangeHandler={setSelectedFiles}
             back={backFormHandler}
-            hasImage={selectedFile.length <= 0 ? true : false}
+            images = {selectedFiles}
+            hasImage={selectedFiles.length <= 0 ? true : false}
           />
         )}
         {selected && selected !== ACOES && !formConcluded && (

@@ -3,7 +3,7 @@ import classes from "./MultipleUpload.module.css";
 
 const MultipleUpload = (props) => {
   const [preview, setPreview] = useState([]);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(props.images);
   const fileInputRef = useRef();
 
   useEffect(() => {
@@ -89,16 +89,3 @@ const MultipleUpload = (props) => {
 };
 
 export default MultipleUpload;
-/*
-
-      {preview.length <= 0 && (
-        <button
-          className={classes.initialButton}
-          disabled={images.length >= 5}
-          onClick={(event) => {
-            event.preventDefault();
-            fileInputRef.current.click();
-          }}
-        ></button>
-      )}
-*/

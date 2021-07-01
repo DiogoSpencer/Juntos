@@ -50,6 +50,10 @@ const Login = (props) => {
       return;
     }
 
+    setInvalidInput(false);
+    setAccountDisabled(false);
+    setError(false);
+
     props.setIsLoading(true);
 
     login(enteredEmail, enteredPassword).then(
@@ -67,7 +71,7 @@ const Login = (props) => {
         );
         localStorage.setItem("token", token);
         props.onCloseModal();
-        history.push("/home");
+        history.go(0)
       },
       (error) => {
         props.setIsLoading(false);

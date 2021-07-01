@@ -30,13 +30,13 @@ const NavBar = () => {
       (response) => {
         dispatch(authActions.logout());
         localStorage.removeItem(gS.storage.token);
-        history.replace("/home");
+        history.go(0)
       },
       (error) => {
         //logout anyways
         dispatch(authActions.logout());
         localStorage.removeItem(gS.storage.token);
-        history.replace("/home");
+        history.go(0)
       }
     );
   };

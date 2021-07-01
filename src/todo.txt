@@ -7,11 +7,8 @@ de stats vs dentro de home? -> Mudar no titulo + dentro do texto
 + foto -> talvez slideshow
 5. home agradecimentos - fetch dos logos dos parceiros ao server?
 6. footer - link que linka para pagina sobre weHelp
-7. Mudar titulo de faq e contactos
+7. Mudar titulo de contactos
 8. .? perfil e em todos os sitios em que temos fetch data
-9. login - recuperar password link para a pagina 
-10. login - testar se erros do servidor aparecem no modal - se calhar meter como
-notificaçao no topo
 11. login e register -> fazer regex de verificaçao de input
 12. verificar se user está a aceder de um mobile e se tiver direcionar
 para pagina de download da app
@@ -19,9 +16,9 @@ para pagina de download da app
 14. faq -> perguntas e respostas + fetch da data
 15. apagar FAQCard
 16. HeroisHome - fetch data dos 3 herois do ultimo mes
-17. Fix - erros de servidor aparecem todos uns em cima dos outros
 18. Anonimous - ir buscar foto 1º e ultimo nome do user
 19. regist enviar company -> tirar comentario
+20. logout - timeout do botao para nao dar SPAM
 
 #FF9F36
 #3385D9
@@ -52,12 +49,13 @@ server:
 18. como registar/fazer um heroi?
 19. mostrar perfis de outras pessoas, precisamos de ter um fetch da info por username
 
+PROBLEMAS:
+1. obrigar pessoas a meterem fotos nos pedidos -> 400
+2. obrigar a ter foto no perfil quando se altera -> 400
+
 
 //Must haves
-1. Os registos com diferentes atributos e tipologias de utilizadores:
-individuais ou entidades/organizações no terreno que possam ser escrutinadas ou verificadas para
-que esses registos se tornem efetivos na plataforma devem poder ser mantidos e modificados
-O registo pode conter atributos de perfil/preferências de utilizadores, podendo estes
+1. O registo pode conter atributos de perfil/preferências de utilizadores, podendo estes
 igualmente ser geridos e dinamicamente modificados ao longo do tempo.
 
 2. Criação de Percursos Solidários com composição de Pontos de Ação Solidária, devendo estes ter:

@@ -39,7 +39,7 @@ const Info = (props) => {
       </div>
       <div className={classes.imageUpload}>
         <div className={classes.multiUpload}>
-          <MultipleUpload fileChangeHandler={props.fileChangeHandler} />
+          <MultipleUpload fileChangeHandler={props.fileChangeHandler} images={props.images} />
         </div>
         {props.hasImage && (
           <img

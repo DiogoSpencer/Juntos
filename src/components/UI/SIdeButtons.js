@@ -19,6 +19,7 @@ const SideButtons = (props) => {
   return (
     <div className={classes.container}>
       <button
+        type="button"
         className={`${classBtn1} ${classes.btn1}`}
         onClick={() => {
           props.onClick1();
@@ -28,6 +29,7 @@ const SideButtons = (props) => {
         {props.button1}
       </button>
       <button
+        type="button"
         className={`${classBtn2} ${classes.btn2}`}
         onClick={() => {
           props.onClick2();

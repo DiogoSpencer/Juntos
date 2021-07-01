@@ -30,7 +30,8 @@
     "sj"
     "nm"
     "em"
-    "he";
+    "he"
+    "ud";
 }
 
 .subContainer label {
@@ -102,6 +103,12 @@
 .help textarea:focus {
   outline: none;
   box-shadow: 0 0 10px #719ece;
+}
+
+.urlDiv {
+  grid-area: ud;
+  display: flex;
+  flex-direction: column;
 }
 
 .formError {

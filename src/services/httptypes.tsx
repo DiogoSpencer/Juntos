@@ -7,3 +7,12 @@ export interface User{
     role:string
     stateAccount: string
 }
+
+export interface MarkerPage {
+    by:string
+    dir:string
+    number:number
+    order:string
+    size:number
+    value:string
+}

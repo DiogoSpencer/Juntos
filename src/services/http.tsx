@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 //import store from "../store/store";
 import { resetToken } from "../store/session/actions";
 import store from "../store/newStore"
+import { MarkerPage } from "./httptypes";
 
 const url = "https://juntos-313719.ew.r.appspot.com";
 
@@ -78,6 +79,35 @@ export async function logout() {
 export async function changeCreds(form: FormData) {
   try {
     return await axios.put(`${url}/rest/user/creds`, form);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function changePass(oldPassword: string, password: string, confirmaion: string) {
+  try {
+    console.log("old: "+ oldPassword + "pass1: " + password + "pass2: " + confirmaion)
+    return await axios.put(`${url}/rest/user/password`, {
+      oldpassword: oldPassword,
+      password1: password,
+      password2: confirmaion
+    });
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function createMarker (form: FormData) {
+  try {
+    return await axios.post(`${url}/rest/marker`, form)
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function markerPage() {
+  try {
+    return await axios.get(`${url}/rest/marker`);
   } catch (error) {
     throw error.response;
   }

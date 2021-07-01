@@ -11,8 +11,8 @@ import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import { useHistory } from "react-router";
 import ImageUpload from "../Registration/ImageUpload";
-import { Link } from "react-router-dom";
 import logoIcon from "../../img/logo.png";
+import PassModal from "./PassModal";
 
 const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
@@ -31,11 +31,12 @@ const Profile = (props) => {
 
   const [invalidInput, setInvalidInput] = useState(false);
   const [error, setError] = useState(false);
-  const [concluded, setConcluded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [privacy, setPrivacy] = useState(PUBLIC);
   const [numHelps, setNumHelps] = useState("0");
   const [creationDate, setCreationDate] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     value: enteredEmail,
@@ -69,8 +70,17 @@ const Profile = (props) => {
 
   //const userId = match.params.username;
 
+  const openPassModalHandler = () => {
+    setIsModalOpen(true);
+  };
+
+  const closePassModalHandler = () => {
+    setIsModalOpen(false);
+  };
+
   //queremos so fazer useEffect onMount -> []
   useEffect(() => {
+    setIsLoading(true);
     //getUser(userId).then((res) => {}, (error) => {})
     getUser(authEmail).then(
       (response) => {
@@ -94,17 +104,20 @@ const Profile = (props) => {
           photoChanged = response.data.profileImg;
         }
         console.log(response.data.profileImg);
+        setIsLoading(false);
       },
       (error) => {
         if (error.status === 401) {
           alert("Sessão expirou");
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
-          history.replace("/home");
+          history.go(0)
         }
         console.log(error);
+        setIsLoading(false);
       }
     );
+    // eslint-disable-next-line
   }, []);
 
   let formIsValid = false;
@@ -127,6 +140,10 @@ const Profile = (props) => {
       return;
     }
 
+    setError(false);
+    setInvalidInput(false);
+    setIsLoading(true);
+
     const formData = new FormData();
     if (selectedFile !== null) {
       formData.append("profileImg", selectedFile);
@@ -146,7 +163,11 @@ const Profile = (props) => {
     changeCreds(formData).then(
       (response) => {
         //profilePic: data
-        setConcluded(true);
+        firstNameChanged = enteredFirstName;
+        lastNameChanged = enteredLastName;
+        photoChanged = selectedFile;
+        privacyChanged = privacy;
+        setIsLoading(false);
       },
       (error) => {
         if (error.status === 400) {
@@ -154,6 +175,7 @@ const Profile = (props) => {
         } else {
           setError(true);
         }
+        setIsLoading(false);
       }
     );
   };
@@ -167,7 +189,7 @@ const Profile = (props) => {
   };
 
   const profile = (
-    <form onSubmit={formSubmissionHandler} className={classes.profileContainer}>
+    <div className={classes.profileContainer}>
       <h1 className={classes.title}>Olá {enteredFirstName}</h1>
       <div className={classes.imageDiv}>
         <ImageUpload
@@ -184,79 +206,95 @@ const Profile = (props) => {
           <span className={classes.juntos}>juntos</span> desde: {creationDate}
         </p>
       </div>
-      <div className={classes.emailDiv}>
-        <label htmlFor="email">Email</label>
-        <input readOnly disabled type="text" id="email" value={enteredEmail} />
-        {emailHasError && <p>Por favor insira um e-mail.</p>}
-      </div>
-      <div className={classes.usernameDiv}>
-        <label htmlFor="username">Nome de Utilizador</label>
-        <input
-          readOnly
-          disabled
-          type="text"
-          id="username"
-          value={enteredUsername}
+      <div className={classes.passLink}>
+        <p className={classes.changePass}>Alterar Password</p>
+        <img
+          src={keyIcon}
+          alt="change-password"
+          className={classes.keyIcon}
+          onClick={openPassModalHandler}
         />
-        {usernameHasError && <p>Por favor insira um nome de utilizador.</p>}
+        {isModalOpen && <PassModal onClose={closePassModalHandler} />}
       </div>
-      <Link to="/alterarpassword" className={classes.passLink}>
-        <img src={keyIcon} alt="change-password" className={classes.keyIcon} />
-      </Link>
-      <div className={classes.firstNameDiv}>
-        <label htmlFor="firstName">Nome</label>
-        <input
-          type="text"
-          id="firstName"
-          value={enteredFirstName}
-          onChange={firstNameChangeHandler}
-          onBlur={firstNameBlurHandler}
-        />
-        {firstNameHasError && <p>Por favor insira um nome.</p>}
-      </div>
-      <div className={classes.lastNameDiv}>
-        <label htmlFor="lastName">Apelido</label>
-        <input
-          type="text"
-          id="lastName"
-          value={enteredLastName}
-          onChange={lastNameChangeHandler}
-          onBlur={lastNameBlurHandler}
-        />
-        {lastNameHasError && <p>Por favor insira um apelido.</p>}
-      </div>
-      <div className={classes.privacyDiv}>
-        <label htmlFor="public" className={classes.radioLabel}>
+      <form onSubmit={formSubmissionHandler} className={classes.formContainer}>
+        <div className={classes.emailDiv}>
+          <label htmlFor="email">Email</label>
           <input
-            type="radio"
-            id="public"
-            value={PUBLIC}
-            onChange={privacyChangeHandler}
-            checked={privacy === PUBLIC}
+            readOnly
+            disabled
+            type="text"
+            id="email"
+            value={enteredEmail}
           />
-          Público
-        </label>
-        <label htmlFor="private" className={classes.radioLabel}>
+          {emailHasError && <p>Por favor insira um e-mail.</p>}
+        </div>
+        <div className={classes.usernameDiv}>
+          <label htmlFor="username">Nome de Utilizador</label>
           <input
-            type="radio"
-            id="private"
-            value={PRIVATE}
-            onChange={privacyChangeHandler}
-            checked={privacy === PRIVATE}
+            readOnly
+            disabled
+            type="text"
+            id="username"
+            value={enteredUsername}
           />
-          Privado
-        </label>
-      </div>
-      <div className={classes.buttonContainer}>
-        <Button disabled={!formIsValid} text="Guardar" />
-      </div>
-      {invalidInput && (
-        <p className={classes.invalidError}>Informação inválida.</p>
-      )}
-      {error && (
-        <p className={classes.invalidError}>Por favor tente novamente.</p>
-      )}
-    </form>
+          {usernameHasError && <p>Por favor insira um nome de utilizador.</p>}
+        </div>
+
+        <div className={classes.firstNameDiv}>
+          <label htmlFor="firstName">Nome</label>
+          <input
+            type="text"
+            id="firstName"
+            value={enteredFirstName}
+            onChange={firstNameChangeHandler}
+            onBlur={firstNameBlurHandler}
+          />
+          {firstNameHasError && <p>Por favor insira um nome.</p>}
+        </div>
+        <div className={classes.lastNameDiv}>
+          <label htmlFor="lastName">Apelido</label>
+          <input
+            type="text"
+            id="lastName"
+            value={enteredLastName}
+            onChange={lastNameChangeHandler}
+            onBlur={lastNameBlurHandler}
+          />
+          {lastNameHasError && <p>Por favor insira um apelido.</p>}
+        </div>
+        <div className={classes.privacyDiv}>
+          <label htmlFor="public" className={classes.radioLabel}>
+            <input
+              type="radio"
+              id="public"
+              value={PUBLIC}
+              onChange={privacyChangeHandler}
+              checked={privacy === PUBLIC}
+            />
+            Público
+          </label>
+          <label htmlFor="private" className={classes.radioLabel}>
+            <input
+              type="radio"
+              id="private"
+              value={PRIVATE}
+              onChange={privacyChangeHandler}
+              checked={privacy === PRIVATE}
+            />
+            Privado
+          </label>
+        </div>
+        <div className={classes.buttonContainer}>
+          <Button disabled={!formIsValid} text="Guardar" />
+        </div>
+        {invalidInput && (
+          <p className={classes.invalidError}>Informação inválida.</p>
+        )}
+        {error && (
+          <p className={classes.invalidError}>Por favor tente novamente.</p>
+        )}
+      </form>
+    </div>
   );
 
   return profile;

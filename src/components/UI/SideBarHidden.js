@@ -3,7 +3,7 @@ import classes from "./SideBarHidden.module.css"
 
 const SideBarHidden = (props) => {
     return (
-        <div onClick={props.onClick} className>
+        <div onClick={props.onClick}>
             <img src="" alt="sidebar" />
         </div>
     )
