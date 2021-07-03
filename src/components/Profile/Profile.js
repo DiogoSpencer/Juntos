@@ -3,8 +3,7 @@ import useInput from "../hooks/use-input";
 import Button from "..//UI/Button";
 import { useDispatch, useSelector } from "react-redux";
 //import { useRouteMatch } from "react-router";
-import { changeCreds } from "../../services/http";
-import { getUser } from "../../services/http";
+import { getUser, changeCreds, deleteUser } from "../../services/http";
 import keyIcon from "../../img/key.png";
 import classes from "./Profile.module.css";
 import { authActions } from "../../store/session/auth";
@@ -31,6 +30,7 @@ const Profile = (props) => {
 
   const [invalidInput, setInvalidInput] = useState(false);
   const [error, setError] = useState(false);
+  const [deleteError, setDeleteError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [origionalFile, setOriginalFile] = useState(null);
@@ -70,14 +70,6 @@ const Profile = (props) => {
   } = useInput(isNotEmpty);
 
   //const userId = match.params.username;
-
-  const openPassModalHandler = () => {
-    setIsModalOpen(true);
-  };
-
-  const closePassModalHandler = () => {
-    setIsModalOpen(false);
-  };
 
   //queremos so fazer useEffect onMount -> []
   useEffect(() => {
@@ -191,6 +183,45 @@ const Profile = (props) => {
     }
   };
 
+  const openPassModalHandler = () => {
+    setIsModalOpen(true);
+  };
+
+  const closePassModalHandler = () => {
+    setIsModalOpen(false);
+  };
+
+  const deleteAccountHandler = () => {
+    if (
+      window.confirm(
+        "Tem a certeza que pretende apagar a sua conta? Esta ação é irreversível."
+      )
+    ) {
+      setIsLoading(true);
+
+      deleteUser().then(
+        (response) => {
+          history.replace("/home");
+        },
+        (error) => {
+          if (error.status === 401) {
+            alert(
+              "Sessão expirou! Efetue login novamente para concluir a operação"
+            );
+            dispatch(authActions.logout());
+            localStorage.removeItem(gS.storage.token);
+            history.replace("/home");
+          } else {
+            console.log(error )
+            setDeleteError(true);
+          }
+        }
+      );
+
+      setIsLoading(false);
+    }
+  };
+
   const profile = (
     <div className={classes.mainContainer}>
       {isLoading && (
@@ -198,7 +229,6 @@ const Profile = (props) => {
           <LoadingSpinner />
         </div>
       )}
-
       <div className={classes.profileContainer}>
         <h1 className={classes.title}>Olá {enteredFirstName}</h1>
         <div className={classes.imageDiv}>
@@ -217,14 +247,29 @@ const Profile = (props) => {
           </p>
         </div>
         <div className={classes.passLink}>
-          <p className={classes.changePass}>Alterar Password</p>
-          <img
-            src={keyIcon}
-            alt="change-password"
-            className={classes.keyIcon}
-            onClick={openPassModalHandler}
-          />
-          {isModalOpen && <PassModal onClose={closePassModalHandler} />}
+          <div>
+            <p className={classes.changePass}>Alterar Password</p>
+            <img
+              src={keyIcon}
+              alt="change-password"
+              className={classes.keyIcon}
+              onClick={openPassModalHandler}
+            />
+            {isModalOpen && <PassModal onClose={closePassModalHandler} />}
+          </div>
+          <div>
+            <span
+              onClick={deleteAccountHandler}
+              className={classes.deleteButton}
+            >
+              Apagar Conta
+            </span>
+            {deleteError && (
+              <p className={classes.deleteError}>
+                Erro inesperado, por favor tente novamente
+              </p>
+            )}
+          </div>
         </div>
         <form
           onSubmit={formSubmissionHandler}
