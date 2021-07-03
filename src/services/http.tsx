@@ -1,12 +1,11 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { resetToken } from "../store/session/actions";
-import store from "../store/newStore"
+import store from "../store/newStore";
 
 const url = "https://juntos-318522.appspot.com";
 
 axios.interceptors.request.use(
   function (c: AxiosRequestConfig) {
-
     let token = store.getState().auth.token;
     if (token) c.headers["Authorization"] = token;
 
@@ -65,7 +64,6 @@ export async function deleteUser(email: string) {
   }
 }
 
-
 export async function logout() {
   try {
     return await axios.put(`${url}/rest/user/logout`);
@@ -82,21 +80,25 @@ export async function changeCreds(form: FormData) {
   }
 }
 
-export async function changePass(oldPassword: string, password: string, confirmaion: string) {
+export async function changePass(
+  oldPassword: string,
+  password: string,
+  confirmaion: string
+) {
   try {
     return await axios.put(`${url}/rest/user/password`, {
       oldpassword: oldPassword,
       password1: password,
-      password2: confirmaion
+      password2: confirmaion,
     });
   } catch (error) {
     throw error.response;
   }
 }
 
-export async function createMarker (form: FormData) {
+export async function createMarker(form: FormData) {
   try {
-    return await axios.post(`${url}/rest/marker`, form)
+    return await axios.post(`${url}/rest/marker`, form);
   } catch (error) {
     throw error.response;
   }

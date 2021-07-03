@@ -58,15 +58,36 @@
 .passLink {
   margin-left: 4rem;
   grid-area: pl;
-  justify-self: start;
-  text-align: center;
-  align-self: start;
   font-size: 0.9rem;
 }
 
 .keyIcon {
   height: 4rem;
   cursor: pointer;
+  margin-left: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.deleteButton {
+  margin-top: 5rem;
+  color: #c0392b;
+  cursor: pointer;
+  padding-left: .5rem;
+  font-weight: 600;
+}
+
+.deleteButton:hover {
+  text-decoration: underline;
+}
+
+.deleteError {
+  color: #e6513e;
+  padding-left: 1.5rem;
+  font-weight: 400;
+  text-align: center;
+  padding-top: 0.5rem;
+  width: 5rem;
+  font-size: 1rem;
 }
 
 .formContainer {
