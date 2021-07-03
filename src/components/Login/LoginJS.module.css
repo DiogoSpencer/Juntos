@@ -56,10 +56,10 @@
   grid-template-areas:
     "le"
     "ie"
-    "."
+    "ee"
     "lp"
     "ip"
-    ".";
+    "ep";
 }
 
 .formInputDiv input:focus {
@@ -93,6 +93,10 @@
   outline: none;
 }
 
+.emailError {
+  grid-area: ee;
+}
+
 .formLabelPass {
   align-self: end;
   grid-area: lp;
@@ -117,6 +121,10 @@
 
 .formInputPass:focus {
   outline: none;
+}
+
+.passError {
+  grid-area: ep;
 }
 
 .homeLink {

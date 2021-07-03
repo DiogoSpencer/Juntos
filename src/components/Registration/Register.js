@@ -3,7 +3,6 @@ import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
 import ImageUpload from "./ImageUpload";
 import { register as registar } from "../../services/http";
-import { useSelector } from "react-redux";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import classes from "./Register.module.css";
 import juntosIcon from "../../img/logo.png";
@@ -17,7 +16,6 @@ const isNotEmpty = (value) => value.trim() !== "";
 //TODO: #4 Restrict image size
 
 const Register = (props) => {
-  const isLogged = useSelector((state) => state.auth.isLogged);
 
   //TODO: #2 Fazer useReducer para isto tudo..
   const [invalidInput, setInvalidInput] = useState(false);
@@ -134,7 +132,7 @@ const Register = (props) => {
       firstName: enteredFirstName,
       lastName: enteredLastName,
       privacy,
-      //isCompany,
+      isCompany,
     };
 
     formData.append(

@@ -53,3 +53,9 @@
   cursor: pointer;
   z-index: 1;
 }
+
+.isLoading {
+  justify-self: center;
+  align-self: center;
+  z-index: 5;
+}

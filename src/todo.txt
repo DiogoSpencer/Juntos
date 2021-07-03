@@ -19,6 +19,7 @@ para pagina de download da app
 18. Anonimous - ir buscar foto 1º e ultimo nome do user
 19. regist enviar company -> tirar comentario
 20. logout - timeout do botao para nao dar SPAM
+21. Pensar se basta mostrar paginas privadas sem conteudo ou se é melhor restringir acesso e no logout redirecionar para a home (work around novopedido -> refresh -> redirect)
 
 #FF9F36
 #3385D9

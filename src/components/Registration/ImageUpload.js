@@ -3,26 +3,31 @@ import classes from "./ImageUpload.module.css";
 
 //component that uses this should have image state
 //and passes the setImage via props and the value of the image
-//via props aswell
 const ImageUpload = (props) => {
-  const [preview, setPreview] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState(props.selectedFile);
   const fileInputRef = useRef();
 
   const fileChanger = props.fileChangeHandler;
 
   useEffect(() => {
-    fileChanger(selectedFile);
-    if (selectedFile) {
+    if (props.selectedFile && props.selectedFile.type) {
+      fileChanger(props.selectedFile);
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result);
       };
-      reader.readAsDataURL(selectedFile);
-    } else {
+      reader.readAsDataURL(props.selectedFile);
+    } else if (props.selectedFile) {
+
+      setPreview(props.selectedFile);
+    } else if (props.selectedFile === null) {
+
+      fileChanger(props.selectedFile);
+
       setPreview(null);
     }
-  }, [selectedFile, fileChanger]);
+  }, [props.selectedFile, fileChanger]);
 
   return (
     <Fragment>
@@ -36,8 +41,7 @@ const ImageUpload = (props) => {
                 props.isProfile ? classes.imgPreview : classes.imgPreviewRegist
               }
               onClick={() => {
-                //props.fileChangeHandler(null);
-                setSelectedFile(null);
+                props.fileChangeHandler(null);
               }}
             />
           )}
@@ -62,11 +66,9 @@ const ImageUpload = (props) => {
             onChange={(event) => {
               const file = event.target.files[0];
               if (file && file.type.substring(0, 5) === "image") {
-                //props.fileChangeHandler(file);
-                setSelectedFile(file);
+                props.fileChangeHandler(file);
               } else {
-                //props.fileChangeHandler(null);
-                setSelectedFile(null);
+                props.fileChangeHandler(null);
               }
             }}
             className={classes.imageInput}
@@ -79,13 +81,3 @@ const ImageUpload = (props) => {
 };
 
 export default ImageUpload;
-
-/*
-<span className={classes.imageButton}></span>
-<button className={classes.imageButton}></button>
-
-{ //3º arg no axios
-        onUploadProgress = progressEvent => {
-            console.log(Math.round(progressEvent.loaded / progressEvent.total * 100) + "%")
-        }
-*/

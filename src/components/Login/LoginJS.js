@@ -17,9 +17,7 @@ const Login = (props) => {
   const history = useHistory();
 
   //fazer isto com useReducer -> muitos state
-  const [invalidInput, setInvalidInput] = useState(false);
-  const [accountDisabled, setAccountDisabled] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
 
   const {
     value: enteredEmail,
@@ -50,9 +48,7 @@ const Login = (props) => {
       return;
     }
 
-    setInvalidInput(false);
-    setAccountDisabled(false);
-    setError(false);
+    setError(null);
 
     props.setIsLoading(true);
 
@@ -71,16 +67,17 @@ const Login = (props) => {
         );
         localStorage.setItem("token", token);
         props.onCloseModal();
-        history.go(0)
       },
       (error) => {
         props.setIsLoading(false);
         if (error.status === 400) {
-          setInvalidInput(true);
+          setError("Credenciais Inválidas")
         } else if (error.status === 403) {
-          setAccountDisabled(true);
+          setError("Esta conta está desativada")
+        } else if (error.status === 404) {
+          setError("Não existe um utilizador registado com este e-mail")
         } else {
-          setError(true);
+          setError("Algo Inesperado aconteceu, tente novamente");
         }
       }
     );
@@ -109,7 +106,9 @@ const Login = (props) => {
             className={classes.formInputEmail}
           />
           {emailHasError && (
-            <p className={classes.formError}>Por favor insira um e-mail.</p>
+            <p className={`${classes.formError} ${classes.emailError}`}>
+              Por favor insira um e-mail.
+            </p>
           )}
           <label htmlFor="password" className={classes.formLabelPass}>
             Password
@@ -123,25 +122,17 @@ const Login = (props) => {
             className={classes.formInputPass}
           />
           {passwordHasError && (
-            <p className={classes.formError}>Por favor insira uma password.</p>
+            <p className={`${classes.formError} ${classes.passError}`}>
+              Por favor insira uma password.
+            </p>
           )}
         </div>
         <div className={classes.buttonDiv}>
           <Button disabled={!formIsValid} text={"Entrar"} />
         </div>
-        {invalidInput && (
-          <p className={`${classes.formError} ${classes.serverError}`}>
-            Credenciais inválidas
-          </p>
-        )}
-        {accountDisabled && (
-          <p className={`${classes.formError} ${classes.serverError}`}>
-            Esta conta está desativada.
-          </p>
-        )}
         {error && (
           <p className={`${classes.formError} ${classes.serverError}`}>
-            Por favor tente novamente
+            {error}
           </p>
         )}
       </form>

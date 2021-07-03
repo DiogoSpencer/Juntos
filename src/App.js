@@ -51,13 +51,17 @@ function App() {
           authActions.login({
             token: token,
             isLogged: true,
+            username: parsedToken.username,
+            role: parsedToken.role,
+            email: parsedToken.email,
           })
         );
       } else {
-        /*getUser(parsedToken.email).then(
+        getUser(parsedToken.email).then(
           (response) => {
             dispatch(
               authActions.login({
+                isLogged: true,
                 token: token,
                 username: parsedToken.username,
                 role: parsedToken.role,
@@ -70,7 +74,7 @@ function App() {
             dispatch(authActions.logout());
             localStorage.removeItem(gS.storage.token);
           }
-        );*/
+        );
       }
     }
   }, []);

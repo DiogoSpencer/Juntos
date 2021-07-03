@@ -158,7 +158,7 @@ const ChangeProfilePassword = (props) => {
             </p>
           )}
           {enteredConfirmationIsValid && !passConfirmed && (
-            <p className={classes.formError}>
+            <p className={`${classes.formError} ${classes.confirmationError}`}>
               Confirmação e Password não são iguais
             </p>
           )}

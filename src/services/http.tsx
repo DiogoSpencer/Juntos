@@ -1,10 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-//import store from "../store/store";
 import { resetToken } from "../store/session/actions";
 import store from "../store/newStore"
-import { MarkerPage } from "./httptypes";
 
-const url = "https://juntos-313719.ew.r.appspot.com";
+const url = "https://juntos-318522.appspot.com";
 
 axios.interceptors.request.use(
   function (c: AxiosRequestConfig) {
@@ -22,8 +20,8 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   function (response: AxiosResponse) {
     if (store.getState().auth.token !== "") {
-      store.dispatch(resetToken(response.headers["Authorization"]));
-      localStorage.setItem("token", response.headers["Authorization"]);
+      store.dispatch(resetToken(response.headers["authorization"]));
+      localStorage.setItem("token", response.headers["authorization"]);
     }
     return response;
   },
@@ -86,7 +84,6 @@ export async function changeCreds(form: FormData) {
 
 export async function changePass(oldPassword: string, password: string, confirmaion: string) {
   try {
-    console.log("old: "+ oldPassword + "pass1: " + password + "pass2: " + confirmaion)
     return await axios.put(`${url}/rest/user/password`, {
       oldpassword: oldPassword,
       password1: password,

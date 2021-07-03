@@ -13,6 +13,7 @@ import { useHistory } from "react-router";
 import ImageUpload from "../Registration/ImageUpload";
 import logoIcon from "../../img/logo.png";
 import PassModal from "./PassModal";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
 const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
@@ -20,7 +21,6 @@ const isProfile = true;
 let firstNameChanged = "";
 let lastNameChanged = "";
 let privacyChanged = "";
-let photoChanged = "";
 const isNotEmpty = (value) => value.trim() !== "";
 
 const Profile = (props) => {
@@ -33,6 +33,7 @@ const Profile = (props) => {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [origionalFile, setOriginalFile] = useState(null);
   const [privacy, setPrivacy] = useState(PUBLIC);
   const [numHelps, setNumHelps] = useState("0");
   const [creationDate, setCreationDate] = useState("");
@@ -80,45 +81,46 @@ const Profile = (props) => {
 
   //queremos so fazer useEffect onMount -> []
   useEffect(() => {
-    setIsLoading(true);
-    //getUser(userId).then((res) => {}, (error) => {})
-    getUser(authEmail).then(
-      (response) => {
-        setUsernameValueHandler(response.data.username);
-        setEmailValueHandler(response.data.email);
-        setLastNameValueHandler(response.data.lastName);
-        lastNameChanged = response.data.lastName;
-        setFirstNameValueHandler(response.data.firstName);
-        firstNameChanged = response.data.firstName;
-        setPrivacy(response.data.privacy);
-        privacyChanged = response.data.privacy;
-        setNumHelps(response.data.numHelps);
-        setCreationDate(
-          `${response.data.creationDate.date.day}-${response.data.creationDate.date.month}-${response.data.creationDate.date.year}`
-        );
-        if (response.data.profileImg === undefined) {
-          setSelectedFile(null);
-          photoChanged = null;
-        } else {
-          setSelectedFile(response.data.profileImg);
-          photoChanged = response.data.profileImg;
+    if (authEmail !== "") {
+      setIsLoading(true);
+
+      //getUser(userId).then((res) => {}, (error) => {})
+      getUser(authEmail).then(
+        (response) => {
+          setUsernameValueHandler(response.data.username);
+          setEmailValueHandler(response.data.email);
+          setLastNameValueHandler(response.data.lastName);
+          lastNameChanged = response.data.lastName;
+          setFirstNameValueHandler(response.data.firstName);
+          firstNameChanged = response.data.firstName;
+          setPrivacy(response.data.privacy);
+          privacyChanged = response.data.privacy;
+          setNumHelps(response.data.numHelps);
+          const date = new Date(response.data.creationDate);
+          setCreationDate(
+            `${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`
+          );
+          if (response.data.profileImg === undefined) {
+            setSelectedFile(null);
+            setOriginalFile(null);
+          } else {
+            setSelectedFile(response.data.profileImg);
+            setOriginalFile(response.data.profileImg);
+          }
+        },
+        (error) => {
+          if (error.status === 401) {
+            alert("Sessão expirou");
+            dispatch(authActions.logout());
+            localStorage.removeItem(gS.storage.token);
+            history.replace("/home");
+          }
         }
-        console.log(response.data.profileImg);
-        setIsLoading(false);
-      },
-      (error) => {
-        if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
-          history.go(0)
-        }
-        console.log(error);
-        setIsLoading(false);
-      }
-    );
+      );
+      setIsLoading(false);
+    }
     // eslint-disable-next-line
-  }, []);
+  }, [authEmail]);
 
   let formIsValid = false;
 
@@ -128,7 +130,7 @@ const Profile = (props) => {
     (enteredFirstName !== firstNameChanged ||
       enteredLastName !== lastNameChanged ||
       privacy !== privacyChanged ||
-      selectedFile !== photoChanged)
+      selectedFile !== origionalFile)
   ) {
     formIsValid = true;
   }
@@ -165,8 +167,9 @@ const Profile = (props) => {
         //profilePic: data
         firstNameChanged = enteredFirstName;
         lastNameChanged = enteredLastName;
-        photoChanged = selectedFile;
         privacyChanged = privacy;
+
+        setOriginalFile(selectedFile);
         setIsLoading(false);
       },
       (error) => {
@@ -189,111 +192,123 @@ const Profile = (props) => {
   };
 
   const profile = (
-    <div className={classes.profileContainer}>
-      <h1 className={classes.title}>Olá {enteredFirstName}</h1>
-      <div className={classes.imageDiv}>
-        <ImageUpload
-          alt="Profile-Image"
-          selectedFile={selectedFile}
-          fileChangeHandler={setSelectedFile}
-          isProfile={isProfile}
-        />
-        <p>
-          <img src={logoIcon} alt="ajudas" className={classes.logo} />
-          {numHelps}
-        </p>
-        <p>
-          <span className={classes.juntos}>juntos</span> desde: {creationDate}
-        </p>
-      </div>
-      <div className={classes.passLink}>
-        <p className={classes.changePass}>Alterar Password</p>
-        <img
-          src={keyIcon}
-          alt="change-password"
-          className={classes.keyIcon}
-          onClick={openPassModalHandler}
-        />
-        {isModalOpen && <PassModal onClose={closePassModalHandler} />}
-      </div>
-      <form onSubmit={formSubmissionHandler} className={classes.formContainer}>
-        <div className={classes.emailDiv}>
-          <label htmlFor="email">Email</label>
-          <input
-            readOnly
-            disabled
-            type="text"
-            id="email"
-            value={enteredEmail}
-          />
-          {emailHasError && <p>Por favor insira um e-mail.</p>}
+    <div className={classes.mainContainer}>
+      {isLoading && (
+        <div className={classes.spinner}>
+          <LoadingSpinner />
         </div>
-        <div className={classes.usernameDiv}>
-          <label htmlFor="username">Nome de Utilizador</label>
-          <input
-            readOnly
-            disabled
-            type="text"
-            id="username"
-            value={enteredUsername}
-          />
-          {usernameHasError && <p>Por favor insira um nome de utilizador.</p>}
-        </div>
+      )}
 
-        <div className={classes.firstNameDiv}>
-          <label htmlFor="firstName">Nome</label>
-          <input
-            type="text"
-            id="firstName"
-            value={enteredFirstName}
-            onChange={firstNameChangeHandler}
-            onBlur={firstNameBlurHandler}
+      <div className={classes.profileContainer}>
+        <h1 className={classes.title}>Olá {enteredFirstName}</h1>
+        <div className={classes.imageDiv}>
+          <ImageUpload
+            alt="Profile-Image"
+            selectedFile={selectedFile}
+            fileChangeHandler={setSelectedFile}
+            isProfile={isProfile}
           />
-          {firstNameHasError && <p>Por favor insira um nome.</p>}
+          <p>
+            <img src={logoIcon} alt="ajudas" className={classes.logo} />
+            {numHelps}
+          </p>
+          <p>
+            <span className={classes.juntos}>juntos</span> desde: {creationDate}
+          </p>
         </div>
-        <div className={classes.lastNameDiv}>
-          <label htmlFor="lastName">Apelido</label>
-          <input
-            type="text"
-            id="lastName"
-            value={enteredLastName}
-            onChange={lastNameChangeHandler}
-            onBlur={lastNameBlurHandler}
+        <div className={classes.passLink}>
+          <p className={classes.changePass}>Alterar Password</p>
+          <img
+            src={keyIcon}
+            alt="change-password"
+            className={classes.keyIcon}
+            onClick={openPassModalHandler}
           />
-          {lastNameHasError && <p>Por favor insira um apelido.</p>}
+          {isModalOpen && <PassModal onClose={closePassModalHandler} />}
         </div>
-        <div className={classes.privacyDiv}>
-          <label htmlFor="public" className={classes.radioLabel}>
+        <form
+          onSubmit={formSubmissionHandler}
+          className={classes.formContainer}
+        >
+          <div className={classes.emailDiv}>
+            <label htmlFor="email_profile">Email</label>
             <input
-              type="radio"
-              id="public"
-              value={PUBLIC}
-              onChange={privacyChangeHandler}
-              checked={privacy === PUBLIC}
+              readOnly
+              disabled
+              type="text"
+              id="email_profile"
+              value={enteredEmail}
             />
-            Público
-          </label>
-          <label htmlFor="private" className={classes.radioLabel}>
+            {emailHasError && <p>Por favor insira um e-mail.</p>}
+          </div>
+          <div className={classes.usernameDiv}>
+            <label htmlFor="username">Nome de Utilizador</label>
             <input
-              type="radio"
-              id="private"
-              value={PRIVATE}
-              onChange={privacyChangeHandler}
-              checked={privacy === PRIVATE}
+              readOnly
+              disabled
+              type="text"
+              id="username"
+              value={enteredUsername}
             />
-            Privado
-          </label>
-        </div>
-        <div className={classes.buttonContainer}>
-          <Button disabled={!formIsValid} text="Guardar" />
-        </div>
-        {invalidInput && (
-          <p className={classes.invalidError}>Informação inválida.</p>
-        )}
-        {error && (
-          <p className={classes.invalidError}>Por favor tente novamente.</p>
-        )}
-      </form>
+            {usernameHasError && <p>Por favor insira um nome de utilizador.</p>}
+          </div>
+
+          <div className={classes.firstNameDiv}>
+            <label htmlFor="firstName">Nome</label>
+            <input
+              type="text"
+              id="firstName"
+              value={enteredFirstName}
+              onChange={firstNameChangeHandler}
+              onBlur={firstNameBlurHandler}
+            />
+            {firstNameHasError && <p>Por favor insira um nome.</p>}
+          </div>
+          <div className={classes.lastNameDiv}>
+            <label htmlFor="lastName">Apelido</label>
+            <input
+              type="text"
+              id="lastName"
+              value={enteredLastName}
+              onChange={lastNameChangeHandler}
+              onBlur={lastNameBlurHandler}
+            />
+            {lastNameHasError && <p>Por favor insira um apelido.</p>}
+          </div>
+          <div className={classes.privacyDiv}>
+            <label htmlFor="public" className={classes.radioLabel}>
+              <input
+                type="radio"
+                id="public"
+                value={PUBLIC}
+                onChange={privacyChangeHandler}
+                checked={privacy === PUBLIC}
+              />
+              Público
+            </label>
+            <label htmlFor="private" className={classes.radioLabel}>
+              <input
+                type="radio"
+                id="private"
+                value={PRIVATE}
+                onChange={privacyChangeHandler}
+                checked={privacy === PRIVATE}
+              />
+              Privado
+            </label>
+          </div>
+          <div className={classes.buttonContainer}>
+            <Button disabled={!formIsValid} text="Guardar" />
+          </div>
+          {invalidInput && (
+            <p className={classes.invalidError}>Informação inválida.</p>
+          )}
+          {error && (
+            <p className={classes.invalidError}>Por favor tente novamente.</p>
+          )}
+        </form>
+        )
+      </div>
     </div>
   );
 

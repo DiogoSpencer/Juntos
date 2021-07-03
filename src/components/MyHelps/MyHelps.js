@@ -28,7 +28,15 @@ const MyHelps = () => {
   useEffect(() => {
     console.log("useEffect");
     if (isOwnRequest) {
-      markerPage().then(
+      const pageData = {
+        by: "owner",
+        dir: "ASC",
+        number: 0,
+        order: "",
+        size: 10,
+        value: ownerEmail,
+      };
+      markerPage(pageData).then(
         (response) => {
           console.log(response);
           responseData = response.data.content;

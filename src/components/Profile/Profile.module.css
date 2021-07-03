@@ -1,4 +1,24 @@
+.mainContainer {
+  height: 100%;
+  display: grid;
+  grid-template-areas: "mn";
+}
+
+.spinner {
+  grid-area: mn;
+  align-self: center;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  z-index: 5;
+}
+
 .profileContainer {
+  grid-area: mn;
   background-image: url("../../img/togetherapart.jpg");
   height: 100%;
   background-size: 27vw auto;
