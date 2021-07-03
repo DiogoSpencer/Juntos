@@ -1,4 +1,77 @@
+.mainContainer {
+  height: 100%;
+  display: grid;
+  grid-template-areas: "mn";
+}
+
+.spinnerContainer {
+  grid-area: mn;
+  align-self: center;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.completeDiv {
+  grid-area: mn;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-areas:
+    "tl"
+    "lg"
+    "pc"
+    "io";
+  row-gap: 3rem;
+  z-index: 5;
+}
+
+.completeTitle {
+  grid-area: tl;
+  padding-top: 1rem;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.completeImg {
+  height: 18rem;
+  grid-area: lg;
+  justify-self: center;
+  align-self: center;
+}
+
+.completeText {
+  grid-area: pc;
+  justify-self: center;
+  align-self: center;
+  font-weight: 600;
+  color: #3385d9;
+  font-size: 1.1rem;
+}
+
+.organization {
+  grid-area: io;
+  justify-self: center;
+  align-self: center;
+  color: #e6513e;
+  font-weight: 400;
+  text-align: center;
+  width: 15rem;
+  font-size: 0.8rem;
+}
+
+
 .registForm {
+  grid-area: mn;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
@@ -19,18 +92,6 @@
   overflow-y: auto;
   height: 73vh;
   scrollbar-width: thin;
-}
-
-.spinnerContainer {
-  grid-area: iu;
-  align-self: center;
-  justify-self: center;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
 }
 
 .registTitle {
@@ -175,51 +236,4 @@
 
 .buttonDiv {
   grid-area: bt;
-}
-
-.completeDiv {
-  display: grid;
-  grid-template-columns: auto;
-  grid-template-areas:
-    "tl"
-    "lg"
-    "pc"
-    "io";
-  row-gap: 3rem;
-}
-
-.completeTitle {
-  grid-area: tl;
-  padding-top: 1rem;
-  justify-self: center;
-  color: #e6513e;
-  font-weight: 600;
-  font-size: 2rem;
-}
-
-.completeImg {
-  height: 10rem;
-  grid-area: lg;
-  justify-self: center;
-  align-self: center;
-}
-
-.completeText {
-  grid-area: pc;
-  justify-self: center;
-  align-self: center;
-  font-weight: 600;
-  color: #3385d9;
-  font-size: 1.1rem;
-}
-
-.organization {
-  grid-area: io;
-  justify-self: center;
-  align-self: center;
-  color: #e6513e;
-  font-weight: 400;
-  text-align: center;
-  width: 15rem;
-  font-size: 0.8rem;
 }

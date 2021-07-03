@@ -340,11 +340,11 @@ const Register = (props) => {
   );
 
   return (
-    <Fragment>
-      {!concluded && !props.isLoading && register}
+    <div className={classes.mainContainer}>
+      {register}
       {concluded && !props.isLoading && registerComplete}
       {props.isLoading && spinner}
-    </Fragment>
+    </div>
   );
 };
 

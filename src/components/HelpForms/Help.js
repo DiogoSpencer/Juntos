@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
 import backIcon from "../../img/back.png";
@@ -12,6 +12,7 @@ import { createMarker } from "../../services/http";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
+import Map from "../Map/Map";
 
 const AJUDAR = "Ajudar";
 const PEDIR = "Pedir Ajuda";
@@ -37,6 +38,15 @@ const Help = () => {
   const [anonimousValue, setAnonimousValue] = useState(true);
   const [volunteersValue, setVolunteersValue] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
+
+  //AjudaMap state
+  const [point, setPoint] = useState([]);
+  const pointsCallback = useCallback(
+    (points) => {
+      setPoint(points);
+    },
+    [point]
+  );
 
   const history = useHistory();
 
@@ -93,6 +103,10 @@ const Help = () => {
     setIsFocused(false);
     setFormConcluded(true);
   };
+
+  const backFormConcludedHandler = () => {
+    setFormConcluded(false);
+  }
 
   const backFormHandler = () => {
     setIsFocused(false); //decidir se vamos usar isto aqui tb
@@ -155,8 +169,8 @@ const Help = () => {
     const formInfo = {
       title: enteredTitle,
       description: enteredDescription,
-      lat: "1",
-      lon: "1",
+      lat: point[0].latitude,
+      lon: point[0].longitude,
       owner: ownerEmail,
       pathId: null,
       difficulty: "1",
@@ -170,14 +184,16 @@ const Help = () => {
     createMarker(formData).then(
       (response) => {
         console.log(response);
+        history.go(0);
       },
       (error) => {
         if (error.status === 401) {
           alert("Sessão expirou");
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
-          history.go(0)
+          history.go(0);
         }
+        console.log(error)
       }
     );
   };
@@ -187,8 +203,33 @@ const Help = () => {
     <div className={classes.buttonContainer}>
       <img src={backIcon} className={classes.back} onClick={backFormHandler} />
       <div className={classes.nextButton}>
-        <Button disabled={!formIsValid} text="Próximo" />
+        <Button type="button" disabled={!formIsValid} onClick={formConcludedHandler} text="Próximo" />
       </div>
+    </div>
+  );
+
+  const renderCompleteButtons = (
+    <div className={classes.buttonContainer}>
+      <img src={backIcon} className={classes.back} onClick={backFormConcludedHandler} />
+      <div className={classes.nextButton}>
+        <Button disabled={!formIsValid} onClick={formSubmissionHandler} text="Criar"/>
+      </div>
+    </div>
+  );
+
+  const ajudaMap = (
+    <div>
+      <Map
+        unique
+        points={point.length <= 0 ? [] : [point[0]]}
+        callback={pointsCallback}
+      />
+    </div>
+  );
+
+  const percursoMap = (
+    <div>
+      <Map points={point} callback={pointsCallback} />
     </div>
   );
 
@@ -199,7 +240,7 @@ const Help = () => {
   return (
     <Fragment>
       <Prompt when={isFocused} message={(location) => ensureLeave} />
-      <form onSubmit={formSubmissionHandler}>
+      <form>
         {!selected && !formConcluded && (
           <SelectHelp onSelect={onSelectChangeHandler} />
         )}
@@ -216,7 +257,7 @@ const Help = () => {
             descriptionHasError={descriptionHasError}
             fileChangeHandler={setSelectedFiles}
             back={backFormHandler}
-            images = {selectedFiles}
+            images={selectedFiles}
             hasImage={selectedFiles.length <= 0 ? true : false}
           />
         )}
@@ -240,8 +281,15 @@ const Help = () => {
         )}
         {selected && !formConcluded && renderButtons}
       </form>
+      {selected !== ACOES && formConcluded && ajudaMap}
+      {selected === ACOES && formConcluded && percursoMap}
+      {formConcluded && renderCompleteButtons}
     </Fragment>
   );
 };
 
 export default Help;
+/*
+      {selected === ACOES && formConcluded && <Percurso />}
+
+*/

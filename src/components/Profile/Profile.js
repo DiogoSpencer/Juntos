@@ -197,10 +197,12 @@ const Profile = (props) => {
         "Tem a certeza que pretende apagar a sua conta? Esta ação é irreversível."
       )
     ) {
-      setIsLoading(true);
 
-      deleteUser().then(
+      setIsLoading(true);
+      deleteUser(authEmail).then(
         (response) => {
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
           history.replace("/home");
         },
         (error) => {
