@@ -6,7 +6,6 @@ import Profile from "./components/Profile/Profile";
 import gS from "./services/generalServices.json";
 import jwt_decode from "jwt-decode";
 //import { getUser } from "./services/http";
-import Login from "./components/Login/LoginJS";
 import Layout from "./components/layout/Layout";
 import NotFound from "./components/NotFound/NotFound";
 import FAQ from "./components/FAQ/FAQ";
@@ -17,7 +16,6 @@ import ChangePassword from "./components/Password/ChangePassword";
 import AppPage from "./components/App/AppPage";
 import PrivateRoute from "./components/Private/PrivateRoute";
 import MyHelps from "./components/MyHelps/MyHelps";
-import Register from "./components/Registration/Register";
 import Help from "./components/HelpForms/Help";
 import HelpDetails from "./components/HelpDetails/HelpDetails";
 import ListHelps from "./components/ListHelps/ListHelps";
@@ -30,22 +28,14 @@ import classes from "./App.module.css";
 function App() {
   const dispatch = useDispatch();
   const isLogged = useSelector((state) => state.auth.isLogged);
+  
   //verificar aqui se tokens sao iguais - redux e localstorage -> se nao for -> logout
   //isto faz re render sempre que fazemos mount de um componente
   useEffect(() => {
     const token = localStorage.getItem(gS.storage.token);
 
-    /* if (token !== authToken) {
-      dispatch(authActions.logout());
-      localStorage.removeItem(gS.storage.token);
-    }
-    console.log("here")
-*/
-    //console.log("token " + token)
-    //console.log(isLogged + " isLogged")
     if (token !== null && token !== undefined) {
       const parsedToken = jwt_decode(token);
-      console.log(parsedToken);
       if (!isLogged) {
         dispatch(
           authActions.login({
@@ -66,7 +56,10 @@ function App() {
                 username: parsedToken.username,
                 role: parsedToken.role,
                 email: parsedToken.email,
-                //profilePic: data
+                firstName: response.data.firstName,
+                lastName: response.data.lastName,
+                numHelps: response.data.numHelps,
+                profileImg: response.data.profileImg,
               })
             );
           },
@@ -77,7 +70,7 @@ function App() {
         );
       }
     }
-  }, []);
+  }, [isLogged]);
 
   //backoffice
   //entities % para utilizadores, trilhos, pontos

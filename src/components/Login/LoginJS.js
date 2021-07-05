@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 import Button from "../UI/Button";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/session/auth";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import classes from "./LoginJS.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
@@ -14,7 +14,6 @@ const isNotEmpty = (value) => value.trim() !== "";
 
 const Login = (props) => {
   const dispatch = useDispatch();
-  const history = useHistory();
 
   //fazer isto com useReducer -> muitos state
   const [error, setError] = useState(null);
@@ -59,10 +58,15 @@ const Login = (props) => {
         const parsedToken = jwt_decode(token);
         dispatch(
           authActions.login({
+            isLogged: true,
             token: token,
             username: parsedToken.username,
             role: parsedToken.role,
             email: parsedToken.email,
+            firstName: response.data.firstName,
+            lastName: response.data.lastName,
+            numHelps: response.data.numHelps,
+            profileImg: response.data.profileImg,
           })
         );
         localStorage.setItem("token", token);

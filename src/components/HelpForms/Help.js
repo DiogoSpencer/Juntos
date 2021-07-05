@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
 import backIcon from "../../img/back.png";
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import Map from "../Map/Map";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
 const AJUDAR = "Ajudar";
 const PEDIR = "Pedir Ajuda";
@@ -35,9 +36,11 @@ const Help = () => {
   const [selected, setSelected] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [formConcluded, setFormConcluded] = useState(false);
-  const [anonimousValue, setAnonimousValue] = useState(true);
+  const [anonimousValue, setAnonimousValue] = useState(false);
   const [volunteersValue, setVolunteersValue] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [status, setStatus] = useState(false);
 
   //AjudaMap state
   const [point, setPoint] = useState([]);
@@ -52,6 +55,13 @@ const Help = () => {
 
   const dispatch = useDispatch();
   const ownerEmail = useSelector((state) => state.auth.email);
+
+  useEffect(() => {
+    if (status) {
+      setIsLoading(false);
+      history.go(0);
+    }
+  }, [status, history]);
 
   const onSelectChangeHandler = (selectedAction) => {
     switch (selectedAction) {
@@ -78,7 +88,6 @@ const Help = () => {
     hasError: titleHasError,
     valueChangeHandler: titleChangeHandler,
     inputBlurHandler: titleBlurHandler,
-    reset: resetTitleInput,
   } = useInput(isNotEmpty); //pass func to validate
 
   const {
@@ -87,7 +96,6 @@ const Help = () => {
     hasError: descriptionHasError,
     valueChangeHandler: descriptionChangeHandler,
     inputBlurHandler: descriptionBlurHandler,
-    reset: resetDescriptionInput,
   } = useInput(isNotEmpty); //pass func to validate
 
   const {
@@ -96,8 +104,15 @@ const Help = () => {
     hasError: numberVolunteersHasError,
     valueChangeHandler: numberVolunteersChangeHandler,
     inputBlurHandler: numberVolunteersBlurHandler,
-    reset: resetNumberVolunteersInput,
   } = useInput(isVolunteerNumber);
+
+  const {
+    value: enteredPass,
+    isValid: enteredPassIsValid,
+    hasError: passHasError,
+    valueChangeHandler: passChangeHandler,
+    inputBlurHandler: passBlurHandler,
+  } = useInput(isNotEmpty); //pass func to validate
 
   const formConcludedHandler = () => {
     setIsFocused(false);
@@ -106,7 +121,7 @@ const Help = () => {
 
   const backFormConcludedHandler = () => {
     setFormConcluded(false);
-  }
+  };
 
   const backFormHandler = () => {
     setIsFocused(false); //decidir se vamos usar isto aqui tb
@@ -131,19 +146,20 @@ const Help = () => {
     setVolunteersValue(false);
   };
 
-  const formFocusedHandler = (event) => {
-    event.preventDefault();
-    setIsFocused(true);
-  };
-
   let formIsValid = false;
 
-  if (selected !== ACOES && enteredTitleIsValid && enteredDescriptionIsValid) {
+  if (
+    selected !== ACOES &&
+    enteredTitleIsValid &&
+    enteredDescriptionIsValid &&
+    enteredPassIsValid
+  ) {
     formIsValid = true;
   } else if (
     selected === ACOES &&
     enteredTitleIsValid &&
-    enteredDescriptionIsValid
+    enteredDescriptionIsValid &&
+    enteredPassIsValid
   ) {
     if (volunteersValue && enteredNumberVolunteersIsValid) {
       formIsValid = true;
@@ -158,6 +174,8 @@ const Help = () => {
     if (!formIsValid) {
       return;
     }
+
+    setIsLoading(true);
 
     const formData = new FormData();
     if (selectedFiles.length > 0) {
@@ -184,16 +202,15 @@ const Help = () => {
     createMarker(formData).then(
       (response) => {
         console.log(response);
-        history.go(0);
+        setStatus(true);
       },
       (error) => {
         if (error.status === 401) {
           alert("Sessão expirou");
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
-          history.go(0);
         }
-        console.log(error)
+        console.log(error);
       }
     );
   };
@@ -201,24 +218,53 @@ const Help = () => {
   //formConcludedHandler
   const renderButtons = (
     <div className={classes.buttonContainer}>
-      <img src={backIcon} className={classes.back} onClick={backFormHandler} />
+      <img
+        src={backIcon}
+        className={classes.back}
+        onClick={backFormHandler}
+        alt="página-anterior"
+      />
       <div className={classes.nextButton}>
-        <Button type="button" disabled={!formIsValid} onClick={formConcludedHandler} text="Próximo" />
+        <Button
+          type="button"
+          disabled={!formIsValid}
+          onClick={formConcludedHandler}
+          text="Próximo"
+        />
       </div>
     </div>
   );
 
   const renderCompleteButtons = (
-    <div className={classes.buttonContainer}>
-      <img src={backIcon} className={classes.back} onClick={backFormConcludedHandler} />
+    <div className={`${classes.buttonContainer} ${classes.completeButtons}`}>
+      <img
+        src={backIcon}
+        className={classes.back}
+        onClick={backFormConcludedHandler}
+        alt="página-anterior"
+      />
       <div className={classes.nextButton}>
-        <Button disabled={!formIsValid} onClick={formSubmissionHandler} text="Criar"/>
+        <Button
+          disabled={!formIsValid}
+          onClick={formSubmissionHandler}
+          text="Criar"
+        />
       </div>
     </div>
   );
 
   const ajudaMap = (
-    <div>
+    <div className={classes.map}>
+      <h1 className={classes.title}>
+        <img
+          src={backIcon}
+          alt="página-anterior"
+          className={classes.back}
+          onClick={backFormHandler}
+        />
+        <span className={classes.number}>3</span>
+        <span className={classes.selectedTitle}>{selected}</span>
+      </h1>
       <Map
         unique
         points={point.length <= 0 ? [] : [point[0]]}
@@ -228,19 +274,27 @@ const Help = () => {
   );
 
   const percursoMap = (
-    <div>
+    <div className={classes.map}>
+      <h1 className={classes.title}>
+        <img
+          src={backIcon}
+          alt="página-anterior"
+          className={classes.back}
+          onClick={backFormHandler}
+        />
+        <span className={classes.number}>3</span>
+        <span className={classes.selectedTitle}>{selected}</span>
+      </h1>
       <Map points={point} callback={pointsCallback} />
     </div>
   );
 
   //onFocus={formFocusedHandler}
 
-  //TODO: #9 Adicionar Mapas: {formConcluded && mapa}
-
   return (
-    <Fragment>
+    <div className={classes.mainContainer}>
       <Prompt when={isFocused} message={(location) => ensureLeave} />
-      <form>
+      <form className={classes.formContainer}>
         {!selected && !formConcluded && (
           <SelectHelp onSelect={onSelectChangeHandler} />
         )}
@@ -251,6 +305,10 @@ const Help = () => {
             titleChangeHandler={titleChangeHandler}
             titleBlurHandler={titleBlurHandler}
             titleHasError={titleHasError}
+            enteredPass={enteredPass}
+            passChangeHandler={passChangeHandler}
+            passBlurHandler={passBlurHandler}
+            passHasError={passHasError}
             enteredDescription={enteredDescription}
             descriptionChangeHandler={descriptionChangeHandler}
             descriptionBlurHandler={descriptionBlurHandler}
@@ -281,15 +339,18 @@ const Help = () => {
         )}
         {selected && !formConcluded && renderButtons}
       </form>
-      {selected !== ACOES && formConcluded && ajudaMap}
-      {selected === ACOES && formConcluded && percursoMap}
-      {formConcluded && renderCompleteButtons}
-    </Fragment>
+      <div className={classes.maps}>
+        {selected !== ACOES && formConcluded && ajudaMap}
+        {selected === ACOES && formConcluded && percursoMap}
+        {formConcluded && renderCompleteButtons}
+      </div>
+      {isLoading && (
+        <div className={classes.spinner}>
+          <LoadingSpinner />
+        </div>
+      )}
+    </div>
   );
 };
 
 export default Help;
-/*
-      {selected === ACOES && formConcluded && <Percurso />}
-
-*/

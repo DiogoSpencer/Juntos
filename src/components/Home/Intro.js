@@ -1,5 +1,4 @@
 import classes from "./Intro.module.css";
-import background from "../../img/sourcegif.gif"
 
 const Intro = () => {
   return (

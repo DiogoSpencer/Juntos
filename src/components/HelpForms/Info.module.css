@@ -1,11 +1,12 @@
 .container {
   display: grid;
   grid-template-columns: 0.5fr 5fr;
-  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.2fr 2.7fr;
+  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.2fr 2.7fr;
   row-gap: 0.5rem;
   grid-template-areas:
     "tt tt"
     ". it"
+    ". ip"
     ". dc"
     ". ."
     "iu iu";
@@ -87,6 +88,22 @@
   grid-area: it;
   display: flex;
   flex-direction: column;
+}
+
+.inputPass {
+  grid-area: ip;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputPass span {
+  font-size: 0.7rem;
+  color: #3385D9;
+  visibility: hidden;
+}
+
+.inputPass:hover span {
+  visibility: visible;
 }
 
 .description {

@@ -21,6 +21,7 @@ const authenticationSlice = createSlice({
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
       state.profileImg = action.payload.profileImg;
+      state.numHelps = action.payload.numHelps;
     },
     logout(state) {
       state.isLogged = false;
@@ -31,6 +32,7 @@ const authenticationSlice = createSlice({
       state.firstName = "";
       state.lastName = "";
       state.profileImg = "";
+      state.numHelps = 0;
     },
     resetToken(state, action) {
       state.token = action.payload.token;

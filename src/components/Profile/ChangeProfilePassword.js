@@ -2,7 +2,7 @@ import useInput from "../hooks/use-input";
 import { changePass } from "../../services/http";
 import { Fragment, useState } from "react";
 import Button from "../UI/Button";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import classes from "./ChangeProfilePassword.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { useDispatch } from "react-redux";

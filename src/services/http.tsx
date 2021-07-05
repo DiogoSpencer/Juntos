@@ -104,9 +104,10 @@ export async function createMarker(form: FormData) {
   }
 }
 
-export async function markerPage() {
+export async function markerPage(urlParams: string) {
   try {
-    return await axios.get(`${url}/rest/marker`);
+    console.log(urlParams)
+    return await axios.get(`${url}/rest/marker${urlParams}`);
   } catch (error) {
     throw error.response;
   }

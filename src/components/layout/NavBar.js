@@ -12,6 +12,7 @@ import { logout } from "../../services/http";
 const NavBar = () => {
   const isLogged = useSelector((state) => state.auth.isLogged);
   const username = useSelector((state) => state.auth.username);
+  const profileImg = useSelector((state) => state.auth.profileImg)
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -44,7 +45,7 @@ const NavBar = () => {
   return (
     <div className={classes.navHeader}>
       <Link to="/home" className={classes.navImgDiv}>
-        <img className={classes.logo} src={logo} alt="logo" />
+        <img className={classes.logo} src={logo} alt="juntos" />
       </Link>
       <nav className={classes.navBar}>
         <ul className={classes.navList}>
@@ -133,7 +134,7 @@ const NavBar = () => {
                 className={classes.navLink}
                 to={`/perfil/${username}`}
               >
-                <img src="" alt="user-profile" />
+                <img src={profileImg} alt="user-profile" className={classes.profileImg}/>
               </NavLink>
             </li>
           )}

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { mapStateToProps } from "../../store/store";
 import Button from "../UI/Button";
 import Comment from "./Comment";
 import NewComment from "./NewComment";

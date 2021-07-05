@@ -1,7 +1,83 @@
+.mainContainer {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-areas: "mf"
+}
+
+.formContainer {
+  grid-area: mf;
+}
+
+.maps {
+  grid-area: mf;
+  align-self: start;
+  justify-self: center;
+  display: grid;
+  grid-template-areas: "mp" "cb";
+}
+
+.map {
+  grid-area: mp;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: flex-start;
+}
+
+.completeButtons {
+  grid-area: cb;
+  justify-self: center;
+  align-self: end;
+}
+
+.title {
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+}
+
+.back {
+  padding-bottom: 0.5rem;
+  height: 5rem;
+  cursor: pointer;
+}
+
+.number {
+  border-radius: 50%;
+  background-color: #3385d9;
+  color: white;
+  margin: 1rem;
+  padding-top: 0.2rem;
+  padding-left: 0.9rem;
+  padding-right: 0.9rem;
+}
+
+.selectedTitle {
+  align-self: center;
+}
+
+.spinner {
+  grid-area: mf;
+  align-self: center;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
 .buttonContainer {
   display: grid;
-  grid-template-columns: .74fr 1fr;
-  grid-template-rows: 1fr;
+  grid-template-columns: .7fr 1fr;
+  grid-template-rows: auto;
   grid-template-areas: "bk nx";
   align-items: center;
 }

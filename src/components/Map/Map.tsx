@@ -9,8 +9,8 @@ import {
 import Autocomplete from "react-google-autocomplete";
 
 const containerStyle = {
-  width: "50rem",
-  height: "50rem",
+  width: "40rem",
+  height: "40rem",
 };
 
 interface center {
@@ -35,11 +35,7 @@ interface MapProps {
 }
 
 function Map(props: MapProps) {
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: "AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU",
-  });
-
+  
   const [points, setPoints] = useState<Point[]>(props.points);
   const [center, setCenter] = useState<center>({
     lat: props.points.length > 0 ? props.points[0].latitude : 38.7071,
@@ -115,7 +111,7 @@ function Map(props: MapProps) {
     setOpen({ index: index, openIn: true });
   };
 
-  return isLoaded ? (
+  return (
     <div>
       <Autocomplete
         apiKey="AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU"
@@ -169,9 +165,7 @@ function Map(props: MapProps) {
         }
       </GoogleMap>
     </div>
-  ) : (
-    <></>
-  );
+  )
 }
 
 /*

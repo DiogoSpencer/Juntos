@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
 import ImageUpload from "./ImageUpload";

@@ -1,0 +1,56 @@
+.mainContainer {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-areas: "tt" "mf";
+}
+
+.title {
+  grid-area: tt;
+  align-self: start;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.spinner {
+  grid-area: mf;
+  align-self: center;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.subContainer {
+  grid-area: mf;
+  display: grid;
+  grid-template-areas: "";
+}
+
+.navPage {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+}
+
+.pageNumber {
+  color: #3385d9;
+  padding: 1rem;
+  font-size: 1.5rem;
+}
+
+.navArrow {
+  height: 5rem;
+  padding: 1rem;
+}
+
+.navArrow:hover {
+  cursor: pointer;
+}

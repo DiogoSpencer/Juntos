@@ -2,19 +2,32 @@ import SideButtons from "../UI/SideButtons";
 import classes from "./Anonimous.module.css";
 import avatarIcon from "../../img/userblue.png";
 import helpIcon from "../../img/logo.png";
+import { useSelector } from "react-redux";
 
 const Anonimous = (props) => {
+  const profileImg = useSelector((state) => state.auth.profileImg);
+  const firstName = useSelector((state) => state.auth.firstName);
+  const lastName = useSelector((state) => state.auth.lastName);
+  const numHelps = useSelector((state) => state.auth.numHelps);
+
   const showAnonimous = (
     <div className={classes.anonimousDiv}>
       <img src={avatarIcon} alt="anonimo" className={classes.avatar} />
-      <p className={classes.name}>Primeiro Nome</p>
+      <p className={classes.name}>{firstName}</p>
     </div>
   );
 
   //show picture from store
   const showPerson = (
     <div className={classes.anonimousDiv}>
-      <img src="" alt="imagem-perfil-utilizador" className={classes.avatar} />
+      <img
+        src={profileImg}
+        alt="imagem-perfil-utilizador"
+        className={classes.avatar}
+      />
+      <p className={classes.name}>
+        {firstName} {lastName}
+      </p>
     </div>
   );
 
@@ -28,13 +41,14 @@ const Anonimous = (props) => {
           button2="Não"
           onClick1={props.yesAnonimous}
           onClick2={props.noAnonimous}
+          isButton1={props.anonimous ? true : false}
         />
       </div>
       {props.anonimous && showAnonimous}
       {!props.anonimous && showPerson}
       <div className={classes.userInfo}>
         <img src={helpIcon} alt="helps" className={classes.helpIcon} />
-        <p className={classes.numHelps}>numHelps</p>
+        <p className={classes.numHelps}>{numHelps}</p>
       </div>
     </div>
   );
