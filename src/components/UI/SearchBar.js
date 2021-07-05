@@ -1,11 +1,14 @@
 const SearchBar = (props) => {
-    
   const inputChangeHandler = (event) => {
     props.setInput(event.target.value);
   };
 
+  const searchHandler = (event) => {
+    event.preventDefault();
+  };
+
   return (
-    <div>
+    <form onSubmit={searchHandler}>
       <input
         value={props.input}
         placeholder={props.placeholder}
@@ -13,11 +16,13 @@ const SearchBar = (props) => {
         type="text"
         id="search_bar"
       />
-      <button type="submit">Procurar</button>
-    </div>
+      <button type="button" onClick={searchHandler}>
+        Procurar
+      </button>
+    </form>
   );
 };
 
 export default SearchBar;
 
-//TODO: substituir botao com icon 
+//TODO: substituir botao com icon

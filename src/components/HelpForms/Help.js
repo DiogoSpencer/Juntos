@@ -168,10 +168,20 @@ const Help = () => {
     }
   }
 
+  let pointIsValid = false;
+
+  if (point.length > 0) {
+    pointIsValid = true;
+  }
+
   const formSubmissionHandler = (event) => {
     event.preventDefault();
 
     if (!formIsValid) {
+      return;
+    }
+
+    if (!pointIsValid) {
       return;
     }
 
@@ -211,6 +221,7 @@ const Help = () => {
           localStorage.removeItem(gS.storage.token);
         }
         console.log(error);
+        setIsLoading(false);
       }
     );
   };
@@ -245,7 +256,7 @@ const Help = () => {
       />
       <div className={classes.nextButton}>
         <Button
-          disabled={!formIsValid}
+          disabled={!pointIsValid}
           onClick={formSubmissionHandler}
           text="Criar"
         />
