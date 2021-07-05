@@ -7,7 +7,12 @@ const Info = (props) => {
   return (
     <div className={classes.container}>
       <h1 className={classes.title}>
-        <img src={backIcon} alt="página-anterior" className={classes.back} onClick={props.back} />
+        <img
+          src={backIcon}
+          alt="página-anterior"
+          className={classes.back}
+          onClick={props.back}
+        />
         <span className={classes.number}>2</span>
         <span className={classes.selectedTitle}>{props.selected}</span>
       </h1>
@@ -16,6 +21,8 @@ const Info = (props) => {
         <input
           type="text"
           id="title"
+          minLength="4"
+          maxLength="40"
           value={props.enteredTitle}
           onChange={props.titleChangeHandler}
           onBlur={props.titleBlurHandler}
@@ -32,7 +39,8 @@ const Info = (props) => {
           onBlur={props.passBlurHandler}
         />
         <span>
-          Dá esta password às pessoas que te ajudarem para que a ajuda conte. Não a partilhes antes do final do evento.
+          Dá esta password às pessoas que te ajudarem para que a ajuda conte.
+          Não a partilhes antes do final do evento.
         </span>
         {props.passHasError && <p>Por favor defina uma password</p>}
       </div>

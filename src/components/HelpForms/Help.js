@@ -28,6 +28,7 @@ const isVolunteerNumber = (value) => {
     return false;
   }
 };
+let type;
 
 const ensureLeave =
   "Tem a certeza que quer sair? Toda a informação inserida irá ser perdida.";
@@ -67,15 +68,19 @@ const Help = () => {
     switch (selectedAction) {
       case AJUDAR:
         setSelected(AJUDAR);
+        type = "HELP_OFFER";
         break;
       case PEDIR:
         setSelected(PEDIR);
+        type = "HELP_REQUEST";
         break;
       case DOAR:
         setSelected(DOAR);
+        type = "DONATE";
         break;
       case ACOES:
         setSelected(ACOES);
+        type = "ACTION";
         break;
       default:
         setSelected("");
@@ -200,9 +205,13 @@ const Help = () => {
       lat: point[0].latitude,
       lon: point[0].longitude,
       owner: ownerEmail,
-      pathId: null,
       difficulty: "1",
+      type,
+      password: enteredPass,
+      anonymousOwner: anonimousValue,
     };
+
+    console.log(formInfo);
 
     formData.append(
       "marker",
@@ -228,7 +237,7 @@ const Help = () => {
 
   //formConcludedHandler
   const renderButtons = (
-    <div className={classes.buttonContainer}>
+    <div className={`${classes.buttonContainer} ${classes.formButtons}`}>
       <img
         src={backIcon}
         className={classes.back}
@@ -309,46 +318,54 @@ const Help = () => {
         {!selected && !formConcluded && (
           <SelectHelp onSelect={onSelectChangeHandler} />
         )}
-        {selected && !formConcluded && (
-          <Info
-            selected={selected}
-            enteredTitle={enteredTitle}
-            titleChangeHandler={titleChangeHandler}
-            titleBlurHandler={titleBlurHandler}
-            titleHasError={titleHasError}
-            enteredPass={enteredPass}
-            passChangeHandler={passChangeHandler}
-            passBlurHandler={passBlurHandler}
-            passHasError={passHasError}
-            enteredDescription={enteredDescription}
-            descriptionChangeHandler={descriptionChangeHandler}
-            descriptionBlurHandler={descriptionBlurHandler}
-            descriptionHasError={descriptionHasError}
-            fileChangeHandler={setSelectedFiles}
-            back={backFormHandler}
-            images={selectedFiles}
-            hasImage={selectedFiles.length <= 0 ? true : false}
-          />
-        )}
-        {selected && selected !== ACOES && !formConcluded && (
-          <Anonimous
-            yesAnonimous={yesAnonimousHandler}
-            noAnonimous={noAnonimousHandler}
-            anonimous={anonimousValue}
-          />
-        )}
-        {selected === ACOES && !formConcluded && (
-          <Volunteers
-            yesVolunteers={yesVolunteersHandler}
-            noVolunteers={noVolunteersHandler}
-            volunteersValue={volunteersValue}
-            value={enteredNumberVolunteers}
-            onChange={numberVolunteersChangeHandler}
-            onBlur={numberVolunteersBlurHandler}
-            error={numberVolunteersHasError}
-          />
-        )}
-        {selected && !formConcluded && renderButtons}
+        <div className={classes.subContainer}>
+          {selected && !formConcluded && (
+            <div className={classes.infoContainer}>
+              <Info
+                selected={selected}
+                enteredTitle={enteredTitle}
+                titleChangeHandler={titleChangeHandler}
+                titleBlurHandler={titleBlurHandler}
+                titleHasError={titleHasError}
+                enteredPass={enteredPass}
+                passChangeHandler={passChangeHandler}
+                passBlurHandler={passBlurHandler}
+                passHasError={passHasError}
+                enteredDescription={enteredDescription}
+                descriptionChangeHandler={descriptionChangeHandler}
+                descriptionBlurHandler={descriptionBlurHandler}
+                descriptionHasError={descriptionHasError}
+                fileChangeHandler={setSelectedFiles}
+                back={backFormHandler}
+                images={selectedFiles}
+                hasImage={selectedFiles.length <= 0 ? true : false}
+              />
+            </div>
+          )}
+          {selected && selected !== ACOES && !formConcluded && (
+            <div className={classes.actionContainer}>
+              <Anonimous
+                yesAnonimous={yesAnonimousHandler}
+                noAnonimous={noAnonimousHandler}
+                anonimous={anonimousValue}
+              />
+            </div>
+          )}
+          {selected === ACOES && !formConcluded && (
+            <div className={classes.actionContainer}>
+              <Volunteers
+                yesVolunteers={yesVolunteersHandler}
+                noVolunteers={noVolunteersHandler}
+                volunteersValue={volunteersValue}
+                value={enteredNumberVolunteers}
+                onChange={numberVolunteersChangeHandler}
+                onBlur={numberVolunteersBlurHandler}
+                error={numberVolunteersHasError}
+              />
+            </div>
+          )}
+          {selected && !formConcluded && renderButtons}
+        </div>
       </form>
       <div className={classes.maps}>
         {selected !== ACOES && formConcluded && ajudaMap}

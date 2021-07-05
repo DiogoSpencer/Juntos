@@ -3,8 +3,12 @@ import classes from "./MultipleUpload.module.css";
 
 const MultipleUpload = (props) => {
   const [preview, setPreview] = useState([]);
-  const [images, setImages] = useState(props.images);
+  const [images, setImages] = useState([]);
   const fileInputRef = useRef();
+
+  useEffect(() => {
+    setImages(props.images)
+  }, [])
 
   useEffect(() => {
     setPreview([]);

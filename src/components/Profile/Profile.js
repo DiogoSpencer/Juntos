@@ -76,7 +76,6 @@ const Profile = (props) => {
     if (authEmail !== "") {
       setIsLoading(true);
 
-      //getUser(userId).then((res) => {}, (error) => {})
       getUser(authEmail).then(
         (response) => {
           setUsernameValueHandler(response.data.username);
@@ -90,7 +89,7 @@ const Profile = (props) => {
           setNumHelps(response.data.numHelps);
           const date = new Date(response.data.creationDate);
           setCreationDate(
-            `${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`
+            `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
           );
           if (response.data.profileImg === undefined) {
             setSelectedFile(null);
@@ -219,7 +218,6 @@ const Profile = (props) => {
           }
         }
       );
-
       setIsLoading(false);
     }
   };

@@ -9,13 +9,21 @@ import rightArrowIcon from "../../img/rightArrow.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import RequestCardOwner from "./RequestCardOwner";
 import AnonimousCard from "./AnonimousCard";
+import volunteersIcon from "../../img/volunteersdonate.jpg";
+import { Link, useRouteMatch } from "react-router-dom";
 
 const ASC = "ASC";
 const DESC = "DESC";
 const OWNER = "owner";
 const DATE = "creationDate";
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+const MS_PER_HOUR = 1000 * 60 * 60;
+const MS_PER_MINUTE = 1000 * 60;
+const PAGE_SIZE = 5;
 
 const MyHelps = () => {
+  const match = useRouteMatch();
+
   const ownerUsername = useSelector((state) => state.auth.username);
 
   const [search, setSearch] = useState("");
@@ -34,8 +42,8 @@ const MyHelps = () => {
   }, [ownerUsername]);
 
   useEffect(() => {
-    setIsLoading(true);
     if (valueParam !== "") {
+      setIsLoading(true);
       if (isOwnRequest) {
         markerPage(
           `?by=${byParam}&value=${valueParam}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${5}`
@@ -45,8 +53,10 @@ const MyHelps = () => {
           },
           (error) => {
             console.log(error);
+            setIsLoading(false);
           }
         );
+        setIsLoading(false);
       }
     }
   }, [byParam, orderParam, dirParam, pageNumber, valueParam, isOwnRequest]);
@@ -74,7 +84,13 @@ const MyHelps = () => {
   };
 
   const nextPageHandler = () => {
-    setPageNumber((prevState) => prevState + 1);
+    setPageNumber((prevState) => {
+      if (hasOwnData.length === PAGE_SIZE) {
+        return prevState + 1;
+      } else {
+        return prevState;
+      }
+    });
   };
 
   const prevPageHandler = () => {
@@ -95,13 +111,63 @@ const MyHelps = () => {
     setIsOwnRequest(false);
   };
 
+  const formatDate = (longDate) => {
+    const now = new Date(Date.now());
+    const date = new Date(longDate);
+
+    const nowDate = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+    const serverDate = Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+
+    const diffInDays = Math.floor((nowDate - serverDate) / MS_PER_DAY);
+
+    if (diffInDays <= 1) {
+      const hours = Math.abs(now - date) / MS_PER_HOUR;
+      const minutes = Math.abs(now - date) / MS_PER_MINUTE;
+      const roundedHours = Math.round(hours);
+      const roundedMinutes = Math.round(minutes);
+
+      if (roundedHours === 24) {
+        return `${diffInDays} dia atrás`;
+      } else if (hours < 1) {
+        return `${minutes < 1 ? 1 : roundedMinutes} ${
+          roundedMinutes <= 1 ? "minuto" : "minutos"
+        } atrás`;
+      } else if (roundedHours > hours) {
+        return `< ${roundedHours} ${
+          roundedHours === 1 ? "hora" : "horas"
+        } atrás`;
+      } else if (roundedHours < hours) {
+        return `> ${roundedHours} ${
+          roundedHours === 1 ? "hora" : "horas"
+        } atrás`;
+      } else {
+        return `${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
+      }
+    } else {
+      return `${diffInDays} dias atrás`;
+    }
+
+    // return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+  };
+
+
   //lista de ajudas ativas -> mapear da data que se recebe
   const ownRequests = (
     <Fragment>
       {hasOwnData.length <= 0 && (
         <Fragment>
-          <img src="" alt="criadas-aparecem-aqui" />
-          <p>As ajudas que criares aparecem aqui!</p>
+          <img
+            src={volunteersIcon}
+            alt="criadas-aparecem-aqui"
+            className={classes.emptyRequests}
+          />
+          <p className={classes.emptyRequestsText}>
+            As ajudas que criares aparecem aqui!
+          </p>
         </Fragment>
       )}
 
@@ -110,27 +176,32 @@ const MyHelps = () => {
           <ul>
             {hasOwnData.map((request) => (
               <li key={request.id}>
-                {request.anonymousOwner ? (
-                  <AnonimousCard
-                    id={request.id}
-                    creationDate={request.creationDate}
-                    difficulty={request.difficulty}
-                    lat={request.lat}
-                    lon={request.lon}
-                    title={request.title}
-                  />
-                ) : (
-                  <RequestCardOwner
-                    id={request.id}
-                    creationDate={request.creationDate}
-                    difficulty={request.difficulty}
-                    lat={request.lat}
-                    lon={request.lon}
-                    owner={request.owner}
-                    title={request.title}
-                    username={ownerUsername}
-                  />
-                )}
+                <Link
+                  to={`${match.path}/criadas/${request.id}`}
+                  className={classes.requestLink}
+                >
+                  {request.anonymousOwner ? (
+                    <AnonimousCard
+                      id={request.id}
+                      creationDate={formatDate(request.creationDate)}
+                      difficulty={request.difficulty}
+                      lat={request.lat}
+                      lon={request.lon}
+                      title={request.title}
+                    />
+                  ) : (
+                    <RequestCardOwner
+                      id={request.id}
+                      creationDate={formatDate(request.creationDate)}
+                      difficulty={request.difficulty}
+                      lat={request.lat}
+                      lon={request.lon}
+                      owner={request.owner}
+                      title={request.title}
+                      username={ownerUsername}
+                    />
+                  )}
+                </Link>
               </li>
             ))}
           </ul>
@@ -144,8 +215,14 @@ const MyHelps = () => {
     <Fragment>
       {!hasPaticipationData && (
         <Fragment>
-          <img src="" alt="participações-aparecem-aqui" />
-          <p>As ajudas em que participares aparecem aqui!</p>
+          <img
+            src={volunteersIcon}
+            alt="participações-aparecem-aqui"
+            className={classes.emptyRequests}
+          />
+          <p className={classes.emptyRequestsText}>
+            As ajudas em que participares aparecem aqui!
+          </p>
         </Fragment>
       )}
 
@@ -160,7 +237,7 @@ const MyHelps = () => {
   );
 
   const filterButtons = (
-    <div className={classes.sorting}>
+    <div className={classes.filterButtons}>
       <button onClick={changeDirHandler}>
         Ordem {dirParam === DESC ? "Descendente" : "Ascendente"}
       </button>
@@ -202,15 +279,16 @@ const MyHelps = () => {
             placeholder="Procurar..."
           />
         </div>
-        <div className={classes.SideButtons}>
+        <div className={classes.sideButtons}>
           <SideButtons
             button1="Criadas"
             button2="Paticipações"
             onClick1={activeHandler}
             onClick2={inactiveHandler}
+            isButton1={hasOwnData}
           />
         </div>
-        <div className={classes.subContainer}>
+        <div className={classes.requestContainer}>
           {isOwnRequest && ownRequests}
           {!isOwnRequest && participations}
         </div>

@@ -1,0 +1,90 @@
+.container {
+  display: grid;
+  grid-template-columns: 0.8fr 0.8fr 2fr 0.8fr 0.8fr;
+  grid-template-areas: "pi ui tt mi ri";
+  column-gap: 0.5fr;
+  border: 1.5px solid #addbff;
+  border-radius: 25px;
+  margin-bottom: 1rem;
+  box-shadow: #dbebf7 0px 5px 8px;
+}
+
+.container:hover {
+  cursor: pointer;
+  box-shadow:  #aad7ff 0px 5px 10px;
+}
+
+.profileImg {
+  grid-area: pi;
+  align-self: center;
+  justify-self: center;
+  height: 3.5rem;
+  width: 3.5rem;
+  border-radius: 50%;
+}
+
+.userInfo {
+  grid-area: ui;
+  align-self: center;
+  justify-self: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+}
+
+.userInfo p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.userInfo img {
+  height: 2rem;
+}
+
+.title {
+  grid-area: tt;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+  color: #3385d9;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.markerInfo {
+  grid-area: mi;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}
+
+.markerInfo p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.markerInfo img {
+  height: 3rem;
+}
+
+.requestInfo {
+  grid-area: ri;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+}
+
+.requestInfo p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.requestInfo img {
+  height: 3rem;
+}

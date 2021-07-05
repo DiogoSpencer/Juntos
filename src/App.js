@@ -5,7 +5,6 @@ import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 import gS from "./services/generalServices.json";
 import jwt_decode from "jwt-decode";
-//import { getUser } from "./services/http";
 import Layout from "./components/layout/Layout";
 import NotFound from "./components/NotFound/NotFound";
 import FAQ from "./components/FAQ/FAQ";
@@ -28,7 +27,7 @@ import classes from "./App.module.css";
 function App() {
   const dispatch = useDispatch();
   const isLogged = useSelector((state) => state.auth.isLogged);
-  
+
   //verificar aqui se tokens sao iguais - redux e localstorage -> se nao for -> logout
   //isto faz re render sempre que fazemos mount de um componente
   useEffect(() => {
@@ -110,7 +109,15 @@ function App() {
         <Route path="/recuperarpassword" render={() => <PasswordRecover />} />
         <Route path="/alterarpassword" render={() => <ChangePassword />} />
         <Route path="/app" render={() => <AppPage />} />
-        <Route path="/minhasajudas" render={() => <MyHelps />} />
+        <Route exact path="/minhasajudas" render={() => <MyHelps />} />
+        <Route
+          path="/minhasajudas/criadas/:requestId"
+          render={() => <HelpDetails buttonText="Guardar" />}
+        />
+        <Route
+          path="/minhasajudas/participacoes/:participationId"
+          render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
+        />
         <Route path="/novopedido" render={() => <Help />} />
         <Route exact path="/ajudas" render={() => <ListHelps />} />
         <Route
