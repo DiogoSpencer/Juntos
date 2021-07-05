@@ -125,3 +125,26 @@
 .navArrow:hover {
   cursor: pointer;
 }
+
+.filterButtons label {
+  font-weight: 700;
+  color: #3385d9;
+}
+.filterButtons input {
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+}
+
+.filterButtons input:focus {
+  outline: none;
+}
+
+.selectSub {
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+}
+
+.selectSub:focus {
+  outline: none;
+  box-shadow: 0 0 10px #719ece;
+}

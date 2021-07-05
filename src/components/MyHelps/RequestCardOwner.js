@@ -9,9 +9,9 @@ import classes from "./RequestCardOwner.module.css";
 const RequestCardOwner = (props) => {
   const typeHandler = (type) => {
     switch (type) {
-      case "OFFER_HELP":
+      case "HELP_OFFER":
         return offerHelpIcon;
-      case "REQUEST_HELP":
+      case "HELP_REQUEST":
         return requestHelpIcon;
       case "DONATE":
         return donateIcon;
@@ -23,16 +23,16 @@ const RequestCardOwner = (props) => {
   return (
     <div className={classes.container}>
       <img
-        src={actionIcon}
+        src={props.profileImg}
         alt="imagem-perfil"
         className={classes.profileImg}
       />
       <div className={classes.userInfo}>
-        <p>Nome Apelido</p>
+        <p>{props.firstName} {props.lastName}</p>
 
         <p>
           <img src={helpIcon} alt="número-ajudas" />
-          NumAjudas
+          {props.numHelps}
         </p>
       </div>
       <h3 className={classes.title}>{props.title}</h3>
@@ -42,7 +42,7 @@ const RequestCardOwner = (props) => {
       </div>
       <div className={classes.requestInfo}>
         <p>{props.creationDate}</p>
-        <img src={actionIcon} alt="tipo-pedido" />
+        <img src={typeHandler(props.type)} alt="tipo-pedido" />
       </div>
     </div>
   );

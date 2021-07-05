@@ -10,9 +10,9 @@ import classes from "./AnonimousCard.module.css";
 const AnonimousCard = (props) => {
   const typeHandler = (type) => {
     switch (type) {
-      case "OFFER_HELP":
+      case "HELP_OFFER":
         return offerHelpIcon;
-      case "REQUEST_HELP":
+      case "HELP_REQUEST":
         return requestHelpIcon;
       case "DONATE":
         return donateIcon;
@@ -22,18 +22,22 @@ const AnonimousCard = (props) => {
   };
 
   return (
-    <div className={classes.container}>
+    <div
+      className={`${classes.container} ${
+        props.isActive ? "" : classes.inactiveRequest
+      }`}
+    >
       <img
         src={avatarIcon}
         alt="pedido-anónimo"
         className={classes.profileImg}
       />
       <div className={classes.userInfo}>
-        <p>Nome</p>
+        <p>{props.firstName}</p>
 
         <p>
           <img src={helpIcon} alt="número-ajudas" />
-          NumAjudas
+          {props.numHelps}
         </p>
       </div>
       <h3 className={classes.title}>{props.title}</h3>
@@ -43,7 +47,7 @@ const AnonimousCard = (props) => {
       </div>
       <div className={classes.requestInfo}>
         <p>{props.creationDate}</p>
-        <img src="" alt="tipo-pedido" />
+        <img src={typeHandler(props.type)} alt="tipo-pedido" />
       </div>
     </div>
   );

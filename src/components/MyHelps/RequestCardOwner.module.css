@@ -5,7 +5,7 @@
   column-gap: 0.5fr;
   border: 1.5px solid #addbff;
   border-radius: 25px;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   box-shadow: #dbebf7 0px 5px 8px;
 }
 
@@ -18,8 +18,8 @@
   grid-area: pi;
   align-self: center;
   justify-self: center;
-  height: 3.5rem;
-  width: 3.5rem;
+  height: 3rem;
+  width: 3rem;
   border-radius: 50%;
 }
 
@@ -29,7 +29,7 @@
   justify-self: start;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   justify-items: center;
 }
 
@@ -86,5 +86,5 @@
 }
 
 .requestInfo img {
-  height: 3rem;
+  height: 2.5rem;
 }

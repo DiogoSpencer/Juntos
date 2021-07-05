@@ -36,6 +36,8 @@ const MyHelps = () => {
   const [valueParam, setValueParam] = useState("");
   const [pageNumber, setPageNumber] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentFilter, setCurrentFilter] = useState(DESC);
+  const [disableSelect, setDisableSelect] = useState(false);
 
   useEffect(() => {
     setValueParam(ownerUsername);
@@ -54,9 +56,11 @@ const MyHelps = () => {
           (error) => {
             console.log(error);
             setIsLoading(false);
+            setDisableSelect(false);
           }
         );
         setIsLoading(false);
+        setDisableSelect(false);
       }
     }
   }, [byParam, orderParam, dirParam, pageNumber, valueParam, isOwnRequest]);
@@ -65,11 +69,8 @@ const MyHelps = () => {
 
   useEffect(() => {
     setIsLoading(false);
+    setDisableSelect(false);
   }, [hasOwnData]);
-
-  const changeDirHandler = () => {
-    setDirParam((prevState) => (prevState === DESC ? ASC : DESC));
-  };
 
   const changeByHandler = (byValue) => {
     setByParam(byValue);
@@ -111,6 +112,14 @@ const MyHelps = () => {
     setIsOwnRequest(false);
   };
 
+  const changeFilterHandler = (event) => {
+    setCurrentFilter(event.target.value);
+    setDisableSelect(true);
+    if (event.target.value === ASC || event.target.value === DESC) {
+      setDirParam(event.target.value);
+    }
+  };
+
   const formatDate = (longDate) => {
     const now = new Date(Date.now());
     const date = new Date(longDate);
@@ -150,10 +159,7 @@ const MyHelps = () => {
     } else {
       return `${diffInDays} dias atrás`;
     }
-
-    // return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
   };
-
 
   //lista de ajudas ativas -> mapear da data que se recebe
   const ownRequests = (
@@ -188,6 +194,10 @@ const MyHelps = () => {
                       lat={request.lat}
                       lon={request.lon}
                       title={request.title}
+                      firstName={request.firstName}
+                      type={request.type}
+                      isActive={request.activeMaker}
+                      numHelps={request.numHelps}
                     />
                   ) : (
                     <RequestCardOwner
@@ -198,7 +208,13 @@ const MyHelps = () => {
                       lon={request.lon}
                       owner={request.owner}
                       title={request.title}
-                      username={ownerUsername}
+                      username={request.owner}
+                      firstName={request.firstName}
+                      lastName={request.lastName}
+                      type={request.type}
+                      isActive={request.activeMaker}
+                      profileImg={request.profileImg}
+                      numHelps={request.numHelps}
                     />
                   )}
                 </Link>
@@ -238,9 +254,17 @@ const MyHelps = () => {
 
   const filterButtons = (
     <div className={classes.filterButtons}>
-      <button onClick={changeDirHandler}>
-        Ordem {dirParam === DESC ? "Descendente" : "Ascendente"}
-      </button>
+      <label htmlFor="filters">Filtrar</label>
+      <select
+        id="filters"
+        value={currentFilter}
+        onChange={changeFilterHandler}
+        className={classes.selectSub}
+        disabled={disableSelect}
+      >
+        <option value={DESC}>Mais Recentes</option>
+        <option value={ASC}>Mais Antigos</option>
+      </select>
     </div>
   );
 
