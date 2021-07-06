@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   GoogleMap,
   Marker,
@@ -9,11 +9,11 @@ import {
 import Autocomplete from "react-google-autocomplete";
 
 const containerStyle = {
-  width: "40rem",
-  height: "40rem",
+  width: "50rem",
+  height: "50rem",
 };
 
-interface center {
+export interface Center {
   lat: number;
   lng: number;
 }
@@ -24,23 +24,30 @@ interface infoOpen {
 }
 
 export interface Point {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lon: number;
+  description?: string;
+  title?: string;
+  difficulty?: number;
 }
 
 interface MapProps {
   unique?: boolean;
+  noAdd?: boolean;
+  noRoute?: boolean;
   callback: (points: Point[]) => void;
+  callbackC?: (center: Center) => void;
+  callbackZ?: (zoom: number) => void;
   points: Point[];
+  center: Center;
+  zoom: number;
 }
 
 function Map(props: MapProps) {
-  
+  const mapRef = useRef<any>(null);
   const [points, setPoints] = useState<Point[]>(props.points);
-  const [center, setCenter] = useState<center>({
-    lat: props.points.length > 0 ? props.points[0].latitude : 38.7071,
-    lng: props.points.length > 0 ? props.points[0].longitude : -9.13549,
-  });
+  const [center, setCenter] = useState<Center>(props.center);
+  const [zoom, setZoom] = useState<number>(props.zoom);
   const [open, setOpen] = useState<infoOpen>({
     index: 0,
     openIn: false,
@@ -50,18 +57,32 @@ function Map(props: MapProps) {
   const client = new google.maps.DirectionsService();
 
   const onClick = (ev: any) => {
-    if (ev.latLng !== null)
+    if (ev.latLng !== null && !props.noAdd)
       if (!props.unique)
         props.callback([
           ...points,
-          { latitude: ev.latLng.lat(), longitude: ev.latLng.lng() },
+          { lat: ev.latLng.lat(), lon: ev.latLng.lng() },
         ]);
       else {
-        props.callback([
-          { latitude: ev.latLng.lat(), longitude: ev.latLng.lng() },
-        ]);
+        props.callback([{ lat: ev.latLng.lat(), lon: ev.latLng.lng() }]);
       }
   };
+  const handleCenterChanged = () => {
+    if (mapRef.current !== null && props.callbackC)
+      if (
+        Math.abs(mapRef.current.getCenter().toJSON().lat - center.lat) > 0.4 ||
+        Math.abs(mapRef.current.getCenter().toJSON().lng - center.lng) > 0.4
+      )
+        props.callbackC({
+          lat: mapRef.current.getCenter().toJSON().lat,
+          lng: mapRef.current.getCenter().toJSON().lng,
+        });
+  };
+  const handleZoomChanged = () => {
+    if (mapRef.current !== null && props.callbackZ)
+      props.callbackZ(mapRef.current.getZoom());
+  };
+
   const onRightClick = (index: number) => {
     if (!props.unique) {
       let newVec = [...points];
@@ -73,29 +94,30 @@ function Map(props: MapProps) {
     setPoints(props.points);
   }, [props.points]);
 
+  useEffect(() => {
+    setCenter(props.center);
+  }, [props.center]);
+  useEffect(() => {
+    setZoom(props.zoom);
+  }, [props.zoom]);
+
   const wayPoints = () => {
     let waypoints = [];
     for (let i = 1; i < points.length - 1; i++)
       waypoints.push({
-        location: new google.maps.LatLng(
-          points[i].latitude,
-          points[i].longitude
-        ),
+        location: new google.maps.LatLng(points[i].lat, points[i].lon),
         stopover: true,
       });
     return waypoints;
   };
   useEffect(() => {
-    if (points.length > 1)
+    if (points.length > 1 && !props.noRoute)
       client.route(
         {
-          origin: new google.maps.LatLng(
-            points[0].latitude,
-            points[0].longitude
-          ),
+          origin: new google.maps.LatLng(points[0].lat, points[0].lon),
           destination: new google.maps.LatLng(
-            points[points.length - 1].latitude,
-            points[points.length - 1].longitude
+            points[points.length - 1].lat,
+            points[points.length - 1].lon
           ),
           travelMode: google.maps.TravelMode.DRIVING,
           waypoints: wayPoints(),
@@ -110,6 +132,9 @@ function Map(props: MapProps) {
   const clickMarker = (index: number) => {
     setOpen({ index: index, openIn: true });
   };
+  function handleLoad(map: any) {
+    mapRef.current = map;
+  }
 
   return (
     <div>
@@ -126,20 +151,24 @@ function Map(props: MapProps) {
               lng: place.geometry?.location?.lng(),
             });
         }}
-        defaultValue=""
+        defaultValue="Insira localização"
       />
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={10}
+        zoom={zoom}
+        onLoad={handleLoad}
         onClick={onClick}
+        onCenterChanged={handleCenterChanged}
+        onZoomChanged={handleZoomChanged}
       >
+        {" "}
         {directions !== null && <DirectionsRenderer directions={directions} />}
         {
           /* Child components, such as markers, info windows, etc. */
           points.map((point: Point, index: number) => (
             <Marker
-              position={{ lat: point.latitude, lng: point.longitude }}
+              position={{ lat: point.lat, lng: point.lon }}
               onRightClick={() => onRightClick(index)}
               onClick={() => clickMarker(index)}
               key={index}
@@ -150,10 +179,7 @@ function Map(props: MapProps) {
                 >
                   <div className="info-wrapper">
                     <>
-                      <span className="info-title-wrapper">
-                        {point.longitude}
-                      </span>
-                      <span className="text-wrapper">{point.latitude}</span>
+                      <span className="info-title-wrapper">{point.title}</span>
                     </>
                   </div>
                 </InfoWindow>
@@ -165,12 +191,7 @@ function Map(props: MapProps) {
         }
       </GoogleMap>
     </div>
-  )
+  );
 }
-
-/*
-
-
- */
 
 export default React.memo(Map);

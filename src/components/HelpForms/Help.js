@@ -8,7 +8,7 @@ import { Prompt, useHistory } from "react-router-dom";
 import SelectHelp from "./SelectHelp";
 import Info from "./Info";
 import classes from "./Help.module.css";
-import { createMarker } from "../../services/http";
+import { createMarker, createPath } from "../../services/http";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
@@ -45,6 +45,23 @@ const Help = () => {
 
   //AjudaMap state
   const [point, setPoint] = useState([]);
+  const [center, setCenter] = useState({
+    lat: 38.7071,
+    lng: -9.13549,
+  });
+  const [zoom, setZoom] = useState(10);
+  const callbackC = useCallback(
+    (center) => {
+      setCenter(center);
+    },
+    [center]
+  );
+  const callbackZ = useCallback(
+    (zoom) => {
+      setZoom(zoom);
+    },
+    [zoom]
+  );
   const pointsCallback = useCallback(
     (points) => {
       setPoint(points);
@@ -52,6 +69,7 @@ const Help = () => {
     [point]
   );
 
+  /************/
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -202,8 +220,8 @@ const Help = () => {
     const formInfo = {
       title: enteredTitle,
       description: enteredDescription,
-      lat: point[0].latitude,
-      lon: point[0].longitude,
+      lat: point[0].lat,
+      lon: point[0].lng,
       owner: ownerEmail,
       difficulty: "1",
       type,
@@ -211,28 +229,60 @@ const Help = () => {
       anonymousOwner: anonimousValue,
     };
 
-    console.log(formInfo);
+    const formAcaoInfo = {
+      title: enteredTitle,
+      description: enteredDescription,
+      points: point,
+      owner: ownerEmail,
+      difficulty: "1",
+      type,
+      password: enteredPass,
+      anonymousOwner: anonimousValue,
+    };
 
-    formData.append(
-      "marker",
-      new Blob([JSON.stringify(formInfo)], { type: "application/json" })
-    );
+    if (selected !== ACOES) {
+      formData.append(
+        "marker",
+        new Blob([JSON.stringify(formInfo)], { type: "application/json" })
+      );
+    } else if (selected === ACOES)
+      formData.append(
+        "path",
+        new Blob([JSON.stringify(formAcaoInfo)], { type: "application/json" })
+      );
 
-    createMarker(formData).then(
-      (response) => {
-        console.log(response);
-        setStatus(true);
-      },
-      (error) => {
-        if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
+    if (selected !== ACOES) {
+      createMarker(formData).then(
+        (response) => {
+          setStatus(true);
+        },
+        (error) => {
+          if (error.status === 401) {
+            alert("Sessão expirou");
+            dispatch(authActions.logout());
+            localStorage.removeItem(gS.storage.token);
+          }
+          console.log(error);
+          setIsLoading(false);
         }
-        console.log(error);
-        setIsLoading(false);
-      }
-    );
+      );
+
+    } else if (selected === ACOES) {
+      createPath(formData).then(
+        (response) => {
+          setStatus(true);
+        },
+        (error) => {
+          if (error.status === 401) {
+            alert("Sessão expirou");
+            dispatch(authActions.logout());
+            localStorage.removeItem(gS.storage.token);
+          }
+          console.log(error);
+          setIsLoading(false);
+        }
+      );
+    }
   };
 
   //formConcludedHandler
@@ -287,8 +337,12 @@ const Help = () => {
       </h1>
       <Map
         unique
+        zoom={zoom}
+        center={center}
         points={point.length <= 0 ? [] : [point[0]]}
         callback={pointsCallback}
+        callbackC={callbackC}
+        callbackZ={callbackZ}
       />
     </div>
   );
@@ -305,7 +359,14 @@ const Help = () => {
         <span className={classes.number}>3</span>
         <span className={classes.selectedTitle}>{selected}</span>
       </h1>
-      <Map points={point} callback={pointsCallback} />
+      <Map
+        points={point}
+        callback={pointsCallback}
+        zoom={zoom}
+        center={center}
+        callbackC={callbackC}
+        callbackZ={callbackZ}
+      />
     </div>
   );
 

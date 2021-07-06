@@ -1,3 +1,5 @@
+import classes from "./SearchBar.module.css";
+
 const SearchBar = (props) => {
   const inputChangeHandler = (event) => {
     props.setInput(event.target.value);
@@ -8,16 +10,21 @@ const SearchBar = (props) => {
   };
 
   return (
-    <form onSubmit={searchHandler}>
+    <form onSubmit={searchHandler} className={classes.container}>
       <input
         value={props.input}
-        placeholder={props.placeholder}
+        placeholder="Procurar..."
         onChange={inputChangeHandler}
         type="text"
         id="search_bar"
+        className={classes.searchInput}
       />
-      <button type="button" onClick={searchHandler}>
-        Procurar
+      <button
+        type="button"
+        onClick={searchHandler}
+        className={classes.searchButton}
+      >
+        <img src="" className={classes.searchText}></img>
       </button>
     </form>
   );
