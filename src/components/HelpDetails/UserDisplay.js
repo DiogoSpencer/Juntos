@@ -12,7 +12,7 @@ const UserDisplay = (props) => {
           className={classes.profileImg}
         />
       ) : (
-        <img src="" alt="imagem-perfil" className={classes.profileImg} />
+        <img src={props.profileImg} alt="imagem-perfil" className={classes.profileImg} />
       )}
       <div className={classes.nameContainer}>
         {props.isAnonimous ? (

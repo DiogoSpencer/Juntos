@@ -53,7 +53,7 @@ const SideBar = () => {
           </Link>
         </li>
         <li className={classes.navItem}>
-          <Link to="/home">
+          <Link to="/mapa">
             <img src={mapIcon} alt="mapa" className={classes.navIcon} />
           </Link>
         </li>
@@ -91,13 +91,3 @@ const SideBar = () => {
 };
 
 export default SideBar;
-
-/*
-      <img
-        src={iconList}
-        alt="sidebar-show-hide"
-        className={classes.iconList}
-        onClick={hideSideBarHandler}
-      />
-            {show && sideBar}
-*/

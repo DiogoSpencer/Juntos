@@ -3,7 +3,7 @@ import Button from "../UI/Button";
 import CommentList from "./CommentList";
 import HelpTitle from "./HelpTitle";
 import ImageDisplay from "./ImageDisplay";
-import ShareHelp from "./ShareHelp";
+//import ShareHelp from "./ShareHelp";
 import UserDisplay from "./UserDisplay";
 import { Route, Link, useRouteMatch } from "react-router-dom";
 import classes from "./HelpDetails.module.css";
@@ -13,8 +13,14 @@ import requestHelpIcon from "../../img/hand.png";
 import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import InputPassword from "./InputPassword";
+import gS from "../../services/generalServices.json";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/session/auth";
 
 const HelpDetails = (props) => {
+  const dispatch = useDispatch();
+
   const [responseData, setResponseData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,6 +37,11 @@ const HelpDetails = (props) => {
       (error) => {
         console.log(error);
         setIsLoading(false);
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+        }
       }
     );
   }, [helpId]);
@@ -55,27 +66,49 @@ const HelpDetails = (props) => {
   //ir buscar id atraves do url -> fazer pedido ao servidor com esse id
   return (
     <div className={classes.mainContainer}>
+      <h1 className={classes.title}>
+        <img src={typeHandler(responseData.type)} alt={responseData.type} />
+        {responseData.title}
+      </h1>
       {isLoading && (
         <div className={classes.spinner}>
           <LoadingSpinner />
         </div>
       )}
       <div className={classes.subContainer}>
-        <h1 className={classes.title}>
-          <img src={typeHandler(responseData.type)} alt={responseData.type} />
-          {responseData.title}
-        </h1>
-        <div className={classes.mapContent} id="MAPA_AQUI">MAPA_AQUI</div>
+        <div className={classes.mapContent} id="MAPA_AQUI">
+          MAPA_AQUI
+        </div>
         <div className={classes.infoContent}>
-          <HelpTitle
-            title={responseData.title}
-            helpType={responseData.type}
-            creationDate={responseData.creationDate}
-          />
-          <UserDisplay />
-          <ImageDisplay images={responseData.photoGalery} />
-          <ShareHelp />
-          <Button text={props.buttonText} />
+          <div className={classes.helpTitle}>
+            <HelpTitle
+              title={responseData.title}
+              helpType={responseData.type}
+              creationDate={responseData.creationDate}
+            />
+          </div>
+          <div className={classes.userDisplay}>
+            <UserDisplay
+              profileImg={
+                responseData.anonymousOwner ? "" : responseData.profileImg
+              }
+              firstName={responseData.firstName}
+              lastName={
+                responseData.anonymousOwner ? "" : responseData.lastName
+              }
+              numHelps={responseData.numHelps}
+              isAnonimous={responseData.anonymousOwner}
+            />
+          </div>
+          <div className={classes.imageDisplay}>
+            <ImageDisplay images={responseData.photoGalery} />
+          </div>
+          <div className={classes.inputPass}>
+            <InputPassword />
+          </div>
+          <div className={classes.buttonDisplay}>
+            <Button text={props.buttonText} />
+          </div>
         </div>
         <div className={classes.commentContent}>
           <Route path={match.path} exact>
@@ -97,3 +130,6 @@ export default HelpDetails;
 //assim so carregamos se user quiser ver os comments, salva-nos um pedido ao server que ate
 //podera ser enorme.
 //ter link dentro de route faz com que o react router faça desaparecer o link
+
+/*          <ShareHelp />
+ */

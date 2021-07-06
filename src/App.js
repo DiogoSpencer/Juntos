@@ -138,7 +138,7 @@ function App() {
           path="/conversas/ofertas/:ofertaId"
           render={() => <Conversation />}
         />
-        <Route path="/todasajudas" render={() => <TodasAjudas />} />
+        <Route path="/mapa" render={() => <TodasAjudas />} />
         <PrivateRoute></PrivateRoute>
         <Route path="*" render={() => <NotFound />} />
       </Switch>

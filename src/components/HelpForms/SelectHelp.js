@@ -5,7 +5,7 @@ import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
 import classes from "./SelectHelp.module.css";
 
-const AJUDAR = "Ajudar";
+const AJUDAR = "Oferecer Ajuda";
 const PEDIR = "Pedir Ajuda";
 const DOAR = "Doar";
 const ACOES = "Ações";
@@ -19,7 +19,7 @@ const SelectHelp = (props) => {
       <div className={classes.help}>
         <SelectButton
           icon={helpIcon}
-          alt="ajudar"
+          alt="oferecer-ajuda"
           text={AJUDAR}
           onClick={() => props.onSelect(AJUDAR)}
         />
@@ -43,7 +43,7 @@ const SelectHelp = (props) => {
       <div className={classes.action}>
         <SelectButton
           icon={actionIcon}
-          alt="acção"
+          alt="ação"
           text={ACOES}
           onClick={() => props.onSelect(ACOES)}
         />

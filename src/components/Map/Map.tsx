@@ -2,15 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   GoogleMap,
   Marker,
-  useJsApiLoader,
   DirectionsRenderer,
   InfoWindow,
 } from "@react-google-maps/api";
 import Autocomplete from "react-google-autocomplete";
 
 const containerStyle = {
-  width: "50rem",
-  height: "50rem",
+  width: "100%",
+  height: "40rem",
 };
 
 export interface Center {
@@ -153,7 +152,6 @@ function Map(props: MapProps) {
               lng: place.geometry?.location?.lng(),
             });
         }}
-        defaultValue="Insira localização"
       />
       <GoogleMap
         mapContainerStyle={containerStyle}
@@ -164,7 +162,6 @@ function Map(props: MapProps) {
         onCenterChanged={handleCenterChanged}
         onZoomChanged={handleZoomChanged}
       >
-        {" "}
         {directions !== null && <DirectionsRenderer directions={directions} />}
         {
           /* Child components, such as markers, info windows, etc. */

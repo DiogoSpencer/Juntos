@@ -98,7 +98,7 @@
 
 .inputPass span {
   font-size: 0.7rem;
-  color: #3385D9;
+  color: #3385d9;
   visibility: hidden;
 }
 
@@ -133,4 +133,13 @@
   justify-self: center;
   height: 25rem;
   margin-bottom: 2rem;
+}
+
+.infoError {
+  color: #e6513e;
+  font-weight: 400;
+  text-align: center;
+  padding-top: 0.5rem;
+  width: 15rem;
+  font-size: 0.8rem;
 }

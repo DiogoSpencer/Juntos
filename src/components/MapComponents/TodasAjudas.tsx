@@ -5,17 +5,20 @@ import SideButtons from "../UI/SideButtons";
 import classes from "./TodasAjudas.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
+const HELP_REQUEST = "HELP_REQUEST";
+const HELP_OFFER = "HELP_OFFER";
+
 function TodasAjudas() {
   const [hasOwnData, setHasOwnData] = useState([]);
   const [point, setPoint] = useState<Point[]>([]);
-  const [pedido, setPedido] = useState<string>("HELP_REQUEST");
+  const [pedido, setPedido] = useState<string>(HELP_REQUEST);
   const [center, setCenter] = useState<Center>({
     lat: 38.7071,
     lng: -9.13549,
   });
   const [zoom, setZoom] = useState<number>(10);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [isLoading, setLoading] = useState<boolean>(true);
   const callbackC = useCallback(
     (center: Center) => {
       setCenter(center);
@@ -35,31 +38,33 @@ function TodasAjudas() {
     [point]
   );
   useEffect(() => {
+    setIsLoading(true);
     let radius: number = zoom;
     if (radius - 10 < 0) radius = (Math.abs(radius - 10) + 10) * 6;
     else if (radius - 10 > 0) radius = Math.round((-(radius - 10) + 10) / 2);
     getMarkers(center.lat, center.lng, radius).then(
       (response) => {
-        setLoading(false);
         let newVec = response.data;
         for (let i = 0; i < newVec.length; i++) {
           newVec[i].lat = parseFloat(newVec[i].lat);
           newVec[i].lon = parseFloat(newVec[i].lon);
         }
-        console.log(newVec);
         setPoint(newVec);
+        setIsLoading(false);
       },
       (error) => {
         console.log(error);
+        setIsLoading(false);
       }
     );
   }, [center, zoom]);
+
   const requestHandler = () => {
-    setPedido("HELP_REQUEST");
+    setPedido(HELP_REQUEST);
   };
 
   const offerHandler = () => {
-    setPedido("HELP_OFFER");
+    setPedido(HELP_OFFER);
   };
   const donationHandler = () => {
     setPedido("DONATE");
@@ -67,7 +72,7 @@ function TodasAjudas() {
 
   return (
     <div className={classes.mainContainer}>
-      <h1 className={classes.title}>Ajudas disponÃ­veis</h1>
+      <h1 className={classes.title}>Ajudas Disponíveis</h1>
       {isLoading && (
         <div className={classes.spinner}>
           <LoadingSpinner />
@@ -80,6 +85,7 @@ function TodasAjudas() {
             button2="Ofertas"
             onClick1={requestHandler}
             onClick2={offerHandler}
+            isButton1={pedido === HELP_REQUEST}
           />
         </div>
         <div className={classes.map}>

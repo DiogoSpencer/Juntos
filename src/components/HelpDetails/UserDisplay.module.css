@@ -1,11 +1,14 @@
 .container {
-  grid-area: "pi sc" "pi nh";
+  display: grid;
+  grid-template-columns: 0.4fr .3fr .9fr 2.8fr;
+  grid-template-rows: 1fr 0.5fr;
+  grid-template-areas: ". pi sc ." ". pi nh .";
 }
 
 .profileImg {
   grid-area: pi;
   align-self: center;
-  justify-self: center;
+  justify-self: start;
   height: 5rem;
   width: 5rem;
   border-radius: 50%;
@@ -13,10 +16,16 @@
 
 .nameContainer {
   grid-area: sc;
+  align-self: center;
+  justify-self: start;
 }
 
 .numHelps {
   grid-area: nh;
+  align-self: center;
+  justify-self: start;
+  display: flex;
+  flex-direction: row;
 }
 
 .numHelps img {

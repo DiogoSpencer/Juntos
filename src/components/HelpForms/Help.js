@@ -15,7 +15,7 @@ import gS from "../../services/generalServices.json";
 import Map from "../Map/Map";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
-const AJUDAR = "Ajudar";
+const AJUDAR = "Oferecer Ajuda";
 const PEDIR = "Pedir Ajuda";
 const DOAR = "Doar";
 const ACOES = "Ações";
@@ -28,7 +28,8 @@ const isVolunteerNumber = (value) => {
     return false;
   }
 };
-let type;
+
+let typeOfHelp;
 
 const ensureLeave =
   "Tem a certeza que quer sair? Toda a informação inserida irá ser perdida.";
@@ -86,19 +87,19 @@ const Help = () => {
     switch (selectedAction) {
       case AJUDAR:
         setSelected(AJUDAR);
-        type = "HELP_OFFER";
+        typeOfHelp = "HELP_OFFER";
         break;
       case PEDIR:
         setSelected(PEDIR);
-        type = "HELP_REQUEST";
+        typeOfHelp = "HELP_REQUEST";
         break;
       case DOAR:
         setSelected(DOAR);
-        type = "DONATE";
+        typeOfHelp = "DONATE";
         break;
       case ACOES:
         setSelected(ACOES);
-        type = "ACTION";
+        typeOfHelp = "ACTION";
         break;
       default:
         setSelected("");
@@ -143,6 +144,7 @@ const Help = () => {
   };
 
   const backFormConcludedHandler = () => {
+    setIsFocused(false);
     setFormConcluded(false);
   };
 
@@ -217,16 +219,25 @@ const Help = () => {
       }
     }
 
+    let generalType;
+
+    if (typeOfHelp === "HELP_OFFER" || typeOfHelp === "DONATE") {
+      generalType = "OFFER";
+    } else {
+      generalType = "REQUEST";
+    }
+
     const formInfo = {
       title: enteredTitle,
       description: enteredDescription,
       lat: point[0].lat,
-      lon: point[0].lng,
+      lon: point[0].lon,
       owner: ownerEmail,
       difficulty: "1",
-      type,
+      type: typeOfHelp,
       password: enteredPass,
       anonymousOwner: anonimousValue,
+      generalType,
     };
 
     const formAcaoInfo = {
@@ -235,9 +246,10 @@ const Help = () => {
       points: point,
       owner: ownerEmail,
       difficulty: "1",
-      type,
+      type: typeOfHelp,
       password: enteredPass,
       anonymousOwner: anonimousValue,
+      generalType,
     };
 
     if (selected !== ACOES) {
@@ -266,7 +278,6 @@ const Help = () => {
           setIsLoading(false);
         }
       );
-
     } else if (selected === ACOES) {
       createPath(formData).then(
         (response) => {
@@ -330,7 +341,7 @@ const Help = () => {
           src={backIcon}
           alt="página-anterior"
           className={classes.back}
-          onClick={backFormHandler}
+          onClick={backFormConcludedHandler}
         />
         <span className={classes.number}>3</span>
         <span className={classes.selectedTitle}>{selected}</span>

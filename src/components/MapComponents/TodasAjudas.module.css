@@ -4,9 +4,19 @@
   height: 100%;
   width: 100%;
   grid-template-rows: 0.25fr auto;
-  row-gap: 1fr;
+  row-gap: 2rem;
   grid-template-areas: "tt" "mf";
 }
+
+.title {
+  grid-area: tt;
+  align-self: start;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
 .spinner {
   grid-area: mf;
   align-self: center;
@@ -23,32 +33,25 @@
 .subContainer {
   grid-area: mf;
   display: grid;
-  grid-template-rows: 1fr 5fr 0.5fr;
-  grid-template-columns: 1fr 1.5fr 1fr;
+  grid-template-rows: 1fr auto;
+  grid-template-columns: auto;
   column-gap: 1rem;
   row-gap: 1rem;
   grid-template-areas:
-    "fb sb sc"
-    "rc rc rc"
-    "np np np";
+    "sb"
+    "mp";
 }
-.title {
-  grid-area: tt;
-  align-self: start;
-  justify-self: center;
-  color: #e6513e;
-  font-weight: 600;
-  font-size: 2rem;
-}
-.map {
-  grid-area: mp;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: flex-start;
-}
+
 .sideButtons {
   grid-area: sb;
+  align-self: center;
+  justify-self: center;
+}
+
+.map {
+  grid-area: mp;
+  height: 50rem;
+  width: 70rem;
   align-self: center;
   justify-self: center;
 }

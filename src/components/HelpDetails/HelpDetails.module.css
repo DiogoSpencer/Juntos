@@ -8,18 +8,68 @@
   grid-template-areas: "tt" "mc";
 }
 
+.title {
+  grid-area: tt;
+  align-self: center;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.title img {
+  padding-right: 1rem;
+  height: 4rem;
+}
+
 .spinner {
   grid-area: mc;
 }
 
 .subContainer {
   grid-area: mc;
+  display: grid;
+  grid-template-rows: auto;
+  row-gap: 5rem;
+  grid-template-areas: "mc" "ic" "cc";
 }
 
-.title {
-  grid-area: tt;
+.mapContent {
+  grid-area: mc;
 }
 
-.title img {
-  height: 4rem;
+.commentContent {
+  grid-area: cc;
+  align-self: center;
+  justify-self: center;
+}
+
+.infoContent {
+  grid-area: ic;
+  display: grid;
+  row-gap: 1rem;
+  grid-template-rows: .25fr .25fr 1.5fr .5fr .25fr;
+  grid-template-areas: "ht" "ud" "id" "ip" "bd";
+}
+
+.helpTitle {
+  grid-area: ht;
+}
+
+.userDisplay {
+  grid-area: ud;
+}
+
+.imageDisplay {
+  grid-area: id;
+}
+
+.inputPass {
+  grid-area: ip;
+}
+
+.buttonDisplay {
+  grid-area: bd;
+  align-self: center;
+  justify-self: center;
 }
