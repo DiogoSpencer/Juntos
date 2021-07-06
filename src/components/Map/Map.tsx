@@ -29,6 +29,7 @@ export interface Point {
   description?: string;
   title?: string;
   difficulty?: number;
+  type?: string;
 }
 
 interface MapProps {
@@ -41,6 +42,7 @@ interface MapProps {
   points: Point[];
   center: Center;
   zoom: number;
+  typeSelected?: string;
 }
 
 function Map(props: MapProps) {
@@ -166,28 +168,35 @@ function Map(props: MapProps) {
         {directions !== null && <DirectionsRenderer directions={directions} />}
         {
           /* Child components, such as markers, info windows, etc. */
-          points.map((point: Point, index: number) => (
-            <Marker
-              position={{ lat: point.lat, lng: point.lon }}
-              onRightClick={() => onRightClick(index)}
-              onClick={() => clickMarker(index)}
-              key={index}
-            >
-              {open.openIn && open.index === index ? (
-                <InfoWindow
-                  onCloseClick={() => setOpen({ index: index, openIn: false })}
+          points.map(
+            (point: Point, index: number) =>
+              point.type === props.typeSelected && (
+                <Marker
+                  position={{ lat: point.lat, lng: point.lon }}
+                  onRightClick={() => onRightClick(index)}
+                  onClick={() => clickMarker(index)}
+                  key={index}
                 >
-                  <div className="info-wrapper">
-                    <>
-                      <span className="info-title-wrapper">{point.title}</span>
-                    </>
-                  </div>
-                </InfoWindow>
-              ) : (
-                <div></div>
-              )}
-            </Marker>
-          ))
+                  {open.openIn && open.index === index ? (
+                    <InfoWindow
+                      onCloseClick={() =>
+                        setOpen({ index: index, openIn: false })
+                      }
+                    >
+                      <div className="info-wrapper">
+                        <>
+                          <span className="info-title-wrapper">
+                            {point.title}
+                          </span>
+                        </>
+                      </div>
+                    </InfoWindow>
+                  ) : (
+                    <div></div>
+                  )}
+                </Marker>
+              )
+          )
         }
       </GoogleMap>
     </div>

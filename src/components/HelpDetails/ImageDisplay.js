@@ -1,13 +1,23 @@
+import classes from "./ImageDisplay.module.css"
+
 const ImageDisplay = (props) => {
+  return (
+    <div>
+      {props.images && (
+        <ul className={classes.imageList}>
+          {props.images.map((image, index) => (
+            <li key={index} className={classes.imageItem}>
+              <img
+                src={image}
+                alt={image.name}
+                className={classes.imgPreview}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
 
-    return (
-        <div>
-            {props.images.map((image, index) => (
-                <img src={image} alt={image.name} key={index} />
-            ))}
-        </div>
-    )
-}
-//TODO: pensar em quantas imagens max
-
-export default ImageDisplay
+export default ImageDisplay;

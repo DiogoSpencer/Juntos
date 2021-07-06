@@ -22,6 +22,7 @@ import Chat from "./components/Chat/Chat";
 import Conversation from "./components/Chat/Conversation";
 import { authActions } from "./store/session/auth";
 import { getUser } from "./services/http";
+import TodasAjudas from "./components/MapComponents/TodasAjudas";
 import classes from "./App.module.css";
 
 function App() {
@@ -137,7 +138,7 @@ function App() {
           path="/conversas/ofertas/:ofertaId"
           render={() => <Conversation />}
         />
-
+        <Route path="/todasajudas" render={() => <TodasAjudas />} />
         <PrivateRoute></PrivateRoute>
         <Route path="*" render={() => <NotFound />} />
       </Switch>
@@ -148,8 +149,6 @@ function App() {
 export default App;
 //npm i recharts
 
-//falta pensar como vamos concluir os pedidos - concurrencia de pedidos... - pedido pode estar na lista mas ja concluido
-//2 pessoas podem carregar no pedido ao mesmo tempo...
 //pensar na pagina de editar pedido para o utilizador que o criou - apagar pedido, editar pedido, concluir pedido? e depois perguntar quem ajudou -
 //ver quem clicou em ajudar e dar a escolher da lista?
 //falta pensar na pagina de chat.. -> da para marcar pedido concluido so atraves do chat?

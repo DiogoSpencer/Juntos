@@ -42,7 +42,7 @@ const RequestCardOwner = (props) => {
       </div>
       <div className={classes.requestInfo}>
         <p>{props.creationDate}</p>
-        <img src={typeHandler(props.type)} alt="tipo-pedido" />
+        <img src={typeHandler(props.type)} alt={props.type} />
       </div>
     </div>
   );

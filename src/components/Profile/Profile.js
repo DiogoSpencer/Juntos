@@ -22,7 +22,7 @@ let lastNameChanged = "";
 let privacyChanged = "";
 const isNotEmpty = (value) => value.trim() !== "";
 
-const Profile = (props) => {
+const Profile = () => {
   const authEmail = useSelector((state) => state.auth.email);
   const dispatch = useDispatch();
   const history = useHistory();

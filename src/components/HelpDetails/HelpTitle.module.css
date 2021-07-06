@@ -1,0 +1,38 @@
+.container {
+  display: grid;
+  grid-template-columns: 0.4fr 1fr 2fr 1fr;
+  grid-template-rows: 1fr 0.5fr;
+  grid-template-areas:
+    ". tt . ht"
+    ". rc . ht";
+  margin-bottom: 1px solid #3385d9;
+}
+
+.title {
+  grid-area: tt;
+  align-self: center;
+  justify-self: start;
+}
+
+.requestContainer {
+  grid-area: rc;
+  align-self: center;
+  display: grid;
+  grid-template-columns: 0.5fr 0.2fr 0.5fr;
+  grid-template-areas: "ty . cd";
+}
+
+.type {
+  grid-area: ty;
+}
+
+.creationDate {
+  grid-area: cd;
+}
+
+.helpType {
+  grid-area: ht;
+  height: 5rem;
+  align-self: center;
+  justify-self: start;
+}

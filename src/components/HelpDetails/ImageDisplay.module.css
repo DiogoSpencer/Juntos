@@ -1,0 +1,17 @@
+.imageList {
+  grid-area: il;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 0.3rem;
+}
+
+.imageItem {
+}
+
+.imgPreview {
+  height: 15rem;
+  object-fit: cover;
+  cursor: pointer;
+}

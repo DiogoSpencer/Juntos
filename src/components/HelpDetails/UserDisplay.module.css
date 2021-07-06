@@ -1,0 +1,24 @@
+.container {
+  grid-area: "pi sc" "pi nh";
+}
+
+.profileImg {
+  grid-area: pi;
+  align-self: center;
+  justify-self: center;
+  height: 5rem;
+  width: 5rem;
+  border-radius: 50%;
+}
+
+.nameContainer {
+  grid-area: sc;
+}
+
+.numHelps {
+  grid-area: nh;
+}
+
+.numHelps img {
+  height: 3rem;
+}

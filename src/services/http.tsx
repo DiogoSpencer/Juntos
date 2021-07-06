@@ -113,6 +113,14 @@ export async function markerPage(urlParams: string) {
   }
 }
 
+export async function markerDetails(markerId: string) {
+  try {
+    return await axios.get(`${url}/rest/marker/${markerId}`)
+  } catch (error) {
+    throw error.response;
+  }
+}
+
 export async function getMarkers(centerLat: number, centerLon:number, radius:number) {
   try {
     return await axios.get(`${url}/rest/marker/area`, {params: {
