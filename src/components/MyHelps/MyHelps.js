@@ -26,6 +26,7 @@ const MyHelps = () => {
 
   const ownerUsername = useSelector((state) => state.auth.username);
 
+  // !!! fazer um novo estado para mudar paginas quando e participacao
   const [search, setSearch] = useState("");
   const [isOwnRequest, setIsOwnRequest] = useState(true); //mostrar as ativas
   const [hasOwnData, setHasOwnData] = useState([]); //assumindo que nao ha data de pedidos ativos no inicio - antes de fetch -fazer set no fetch se return > 0
@@ -59,9 +60,9 @@ const MyHelps = () => {
             setDisableSelect(false);
           }
         );
-        setIsLoading(false);
         setDisableSelect(false);
       }
+      setIsLoading(false);
     }
   }, [byParam, orderParam, dirParam, pageNumber, valueParam, isOwnRequest]);
 
