@@ -1,9 +1,10 @@
 .container {
+  height: 4rem;
   display: grid;
   grid-template-columns: 0.8fr 0.8fr 2fr 0.8fr 0.8fr;
   grid-template-areas: "pi ui tt mi ri";
   column-gap: 0.5fr;
-  border: 1.5px solid #addbff;
+  border-bottom: 1.5px solid #addbff;
   border-radius: 25px;
   margin-bottom: 1.5rem;
   box-shadow: #dbebf7 0px 5px 8px;
@@ -11,7 +12,7 @@
 
 .container:hover {
   cursor: pointer;
-  box-shadow:  #aad7ff 0px 5px 10px;
+  box-shadow: #aad7ff 0px 5px 10px;
 }
 
 .profileImg {
@@ -48,7 +49,7 @@
   justify-self: center;
   text-align: center;
   color: #3385d9;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 
@@ -86,5 +87,5 @@
 }
 
 .requestInfo img {
-  height: 2.5rem;
+  height: 2rem;
 }

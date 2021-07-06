@@ -10,6 +10,7 @@
 
 .requestLink {
   text-decoration: none;
+  color: black;
 }
 
 .requestLink:hover,
@@ -18,6 +19,7 @@
 .requestLink:visited,
 .requestLink:link {
   text-decoration: none;
+  color: black;
 }
 
 .title {
