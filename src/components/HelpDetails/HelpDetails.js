@@ -129,6 +129,7 @@ const HelpDetails = (props) => {
           </div>
           <div className={classes.userDisplay}>
             <UserDisplay
+              username={responseData.owner}
               profileImg={
                 responseData.anonymousOwner ? "" : responseData.profileImg
               }

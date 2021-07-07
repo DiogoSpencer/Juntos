@@ -5,6 +5,7 @@ import requestHelpIcon from "../../img/hand.png";
 import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
 import classes from "./RequestCardOwner.module.css";
+import userIcon from "../../img/userblue.png";
 
 const RequestCardOwner = (props) => {
   const typeHandler = (type) => {
@@ -22,13 +23,23 @@ const RequestCardOwner = (props) => {
 
   return (
     <div className={classes.container}>
-      <img
-        src={props.profileImg}
-        alt="imagem-perfil"
-        className={classes.profileImg}
-      />
+      {props.profileImg ? (
+        <img
+          src={props.profileImg}
+          alt="imagem-perfil"
+          className={classes.profileImg}
+        />
+      ) : (
+        <img
+          src={userIcon}
+          alt="imagem-perfil"
+          className={classes.profileImg}
+        />
+      )}
       <div className={classes.userInfo}>
-        <p>{props.firstName} {props.lastName}</p>
+        <p>
+          {props.firstName} {props.lastName}
+        </p>
 
         <p>
           <img src={helpIcon} alt="número-ajudas" />

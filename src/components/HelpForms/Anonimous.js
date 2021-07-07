@@ -3,6 +3,7 @@ import classes from "./Anonimous.module.css";
 import avatarIcon from "../../img/userblue.png";
 import helpIcon from "../../img/logo.png";
 import { useSelector } from "react-redux";
+import userIcon from "../../img/userblue.png";
 
 const Anonimous = (props) => {
   const profileImg = useSelector((state) => state.auth.profileImg);
@@ -20,11 +21,19 @@ const Anonimous = (props) => {
   //show picture from store
   const showPerson = (
     <div className={classes.anonimousDiv}>
-      <img
-        src={profileImg}
-        alt="imagem-perfil-utilizador"
-        className={classes.avatar}
-      />
+      {profileImg ? (
+        <img
+          src={profileImg}
+          alt="imagem-perfil-utilizador"
+          className={classes.avatar}
+        />
+      ) : (
+        <img
+          src={userIcon}
+          alt="imagem-perfil-utilizador"
+          className={classes.avatar}
+        />
+      )}
       <p className={classes.name}>
         {firstName} {lastName}
       </p>

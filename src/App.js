@@ -24,6 +24,7 @@ import { authActions } from "./store/session/auth";
 import { getUser } from "./services/http";
 import TodasAjudas from "./components/MapComponents/TodasAjudas";
 import classes from "./App.module.css";
+import UserProfile from "./components/Profile/UserProfile";
 
 function App() {
   const dispatch = useDispatch();
@@ -105,6 +106,7 @@ function App() {
         <Route path="/home" render={() => <Home />} />
         <Route path="/faq" render={() => <FAQ />} />
         <Route path="/perfil/:username" render={() => <Profile />} />
+        <Route path="/verperfil/:username" render={() => <UserProfile />} />
         <Route path="/herois/:heroiId" render={() => <HeroisWraper />} />
         <Route path="/contactos" render={() => <Contacts />} />
         <Route path="/recuperarpassword" render={() => <PasswordRecover />} />

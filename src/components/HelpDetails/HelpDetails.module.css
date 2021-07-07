@@ -4,7 +4,6 @@
   width: 100%;
   grid-template-rows: 0.25fr auto;
   grid-auto-columns: 0.4fr auto 0.4fr;
-  display: grid;
   grid-template-areas: ". tt ." ". mc .";
 }
 
@@ -24,6 +23,15 @@
 
 .spinner {
   grid-area: mc;
+  background-color: white;
+  align-self: center;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
 }
 
 .subContainer {

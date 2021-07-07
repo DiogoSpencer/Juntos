@@ -55,6 +55,8 @@
 }
 
 .isLoading {
+  background-color: white;
+  object-fit: cover;
   justify-self: center;
   align-self: center;
   z-index: 5;

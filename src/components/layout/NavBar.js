@@ -8,6 +8,7 @@ import ModalAuth from "../Login/ModalAuth.js";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import { logout } from "../../services/http";
+import userIcon from "../../img/userblue.png"
 
 const NavBar = () => {
   const isLogged = useSelector((state) => state.auth.isLogged);
@@ -134,7 +135,7 @@ const NavBar = () => {
                 className={classes.navLink}
                 to={`/perfil/${username}`}
               >
-                <img src={profileImg} alt="user-profile" className={classes.profileImg}/>
+              {profileImg ? <img src={profileImg} alt="perfil" className={classes.profileImg}/> : <img src={userIcon} alt="perfil" className={classes.profileImg}/>}
               </NavLink>
             </li>
           )}

@@ -56,6 +56,14 @@ export async function getUser(email: string) {
   }
 }
 
+export async function getUserUsername(username: string) {
+  try {
+    return await axios.get(`${url}/rest/user/${username}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
 export async function deleteUser(email: string) {
   try {
     return await axios.delete(`${url}/rest/user/${email}`);
@@ -106,7 +114,7 @@ export async function createMarker(form: FormData) {
 
 export async function markerPage(urlParams: string) {
   try {
-    console.log(urlParams)
+    console.log(urlParams);
     return await axios.get(`${url}/rest/marker${urlParams}`);
   } catch (error) {
     throw error.response;
@@ -115,18 +123,25 @@ export async function markerPage(urlParams: string) {
 
 export async function markerDetails(markerId: string) {
   try {
-    return await axios.get(`${url}/rest/marker/${markerId}`)
+    return await axios.get(`${url}/rest/marker/${markerId}`);
   } catch (error) {
     throw error.response;
   }
 }
 
-export async function getMarkers(centerLat: number, centerLon:number, radius:number) {
+export async function getMarkers(
+  centerLat: number,
+  centerLon: number,
+  radius: number
+) {
   try {
-    return await axios.get(`${url}/rest/marker/area`, {params: {
-      centerLat: centerLat,
-      centerLon: centerLon,
-      radius: radius}});
+    return await axios.get(`${url}/rest/marker/area`, {
+      params: {
+        centerLat: centerLat,
+        centerLon: centerLon,
+        radius: radius,
+      },
+    });
   } catch (error) {
     throw error.response;
   }
@@ -141,8 +156,8 @@ export async function createPath(form: FormData) {
 
 export async function deleteMarker(markerId: string) {
   try {
-    return await axios.delete(`${url}/rest/marker/${markerId}`)
-  } catch(error) {
+    return await axios.delete(`${url}/rest/marker/${markerId}`);
+  } catch (error) {
     throw error.response;
   }
 }
