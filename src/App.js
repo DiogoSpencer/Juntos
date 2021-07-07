@@ -1,30 +1,61 @@
-import { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, Redirect, useLocation } from "react-router-dom";
-import Home from "./components/Home/Home";
-import Profile from "./components/Profile/Profile";
+//import Home from "./components/Home/Home";
+//import Profile from "./components/Profile/Profile";
 import gS from "./services/generalServices.json";
 import jwt_decode from "jwt-decode";
 import Layout from "./components/layout/Layout";
-import NotFound from "./components/NotFound/NotFound";
-import FAQ from "./components/FAQ/FAQ";
-import HeroisWraper from "./components/Herois/HeroisWraper";
-import Contacts from "./components/Contacts/Contacts";
-import PasswordRecover from "./components/Password/PasswordRecover";
-import ChangePassword from "./components/Password/ChangePassword";
-import AppPage from "./components/App/AppPage";
+//import NotFound from "./components/NotFound/NotFound";
+//import FAQ from "./components/FAQ/FAQ";
+//import HeroisWraper from "./components/Herois/HeroisWraper";
+//import Contacts from "./components/Contacts/Contacts";
+//import PasswordRecover from "./components/Password/PasswordRecover";
+//import ChangePassword from "./components/Password/ChangePassword";
+//import AppPage from "./components/App/AppPage";
 import PrivateRoute from "./components/Private/PrivateRoute";
-import MyHelps from "./components/MyHelps/MyHelps";
-import Help from "./components/HelpForms/Help";
-import HelpDetails from "./components/HelpDetails/HelpDetails";
-import ListHelps from "./components/ListHelps/ListHelps";
-import Chat from "./components/Chat/Chat";
-import Conversation from "./components/Chat/Conversation";
+//import MyHelps from "./components/MyHelps/MyHelps";
+//import Help from "./components/HelpForms/Help";
+//import HelpDetails from "./components/HelpDetails/HelpDetails";
+//import ListHelps from "./components/ListHelps/ListHelps";
+//import Chat from "./components/Chat/Chat";
+//import Conversation from "./components/Chat/Conversation";
 import { authActions } from "./store/session/auth";
 import { getUser } from "./services/http";
-import TodasAjudas from "./components/MapComponents/TodasAjudas";
+//import TodasAjudas from "./components/MapComponents/TodasAjudas";
 import classes from "./App.module.css";
-import UserProfile from "./components/Profile/UserProfile";
+import LoadingSpinner from "./components/UI/LoadingSpinner";
+//import UserProfile from "./components/Profile/UserProfile";
+
+const Home = React.lazy(() => import("./components/Home/Home"));
+const Profile = React.lazy(() => import("./components/Profile/Profile"));
+const NotFound = React.lazy(() => import("./components/NotFound/NotFound"));
+const FAQ = React.lazy(() => import("./components/FAQ/FAQ"));
+const HeroisWraper = React.lazy(() =>
+  import("./components/Herois/HeroisWraper")
+);
+const Contacts = React.lazy(() => import("./components/Contacts/Contacts"));
+const PasswordRecover = React.lazy(() =>
+  import("./components/Password/PasswordRecover")
+);
+const ChangePassword = React.lazy(() =>
+  import("./components/Password/ChangePassword")
+);
+const AppPage = React.lazy(() => import("./components/App/AppPage"));
+const MyHelps = React.lazy(() => import("./components/MyHelps/MyHelps"));
+const Help = React.lazy(() => import("./components/HelpForms/Help"));
+const HelpDetails = React.lazy(() =>
+  import("./components/HelpDetails/HelpDetails")
+);
+const ListHelps = React.lazy(() => import("./components/ListHelps/ListHelps"));
+const Chat = React.lazy(() => import("./components/Chat/Chat"));
+const Conversation = React.lazy(() => import("./components/Chat/Conversation"));
+const UserProfile = React.lazy(() =>
+  import("./components/Profile/UserProfile")
+);
+const TodasAjudas = React.lazy(() =>
+  import("./components/MapComponents/TodasAjudas")
+);
 
 function App() {
   const dispatch = useDispatch();
@@ -99,6 +130,7 @@ function App() {
 
   return (
     <Layout>
+      <Suspense fallback={<div className={classes.centered}><LoadingSpinner /></div>}>
       <Switch>
         <Route exact path="/">
           <Redirect to="/home" />
@@ -144,6 +176,7 @@ function App() {
         <PrivateRoute></PrivateRoute>
         <Route path="*" render={() => <NotFound />} />
       </Switch>
+      </Suspense>
     </Layout>
   );
 }

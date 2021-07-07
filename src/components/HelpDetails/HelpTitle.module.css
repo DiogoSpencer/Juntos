@@ -37,7 +37,7 @@
 
 .helpType {
   grid-area: ht;
-  height: 5rem;
+  height: 3.5rem;
   align-self: center;
   justify-self: center;
 }

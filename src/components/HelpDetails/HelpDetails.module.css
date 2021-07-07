@@ -4,6 +4,7 @@
   width: 100%;
   grid-template-rows: 0.25fr auto;
   grid-auto-columns: 0.4fr auto 0.4fr;
+  row-gap: 1rem;
   grid-template-areas: ". tt ." ". mc .";
 }
 
@@ -14,11 +15,12 @@
   color: #e6513e;   
   font-weight: 600;
   font-size: 2rem;
+  margin-bottom: 2rem;
 }
 
 .title img {
   padding-right: 1rem;
-  height: 4rem;
+  height: 3rem;
 }
 
 .spinner {
@@ -38,12 +40,13 @@
   grid-area: mc;
   display: grid;
   grid-template-rows: auto;
-  row-gap: 5rem;
+  row-gap: 3rem;
   grid-template-areas: "mp" "ic" "cc";
 }
 
 .mapContent {
   grid-area: mp;
+  align-self: center;
 }
 
 .commentContent {

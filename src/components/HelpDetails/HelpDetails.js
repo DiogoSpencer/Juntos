@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button from "../UI/Button";
 import CommentList from "./CommentList";
 import HelpTitle from "./HelpTitle";
@@ -18,6 +18,7 @@ import gS from "../../services/generalServices.json";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import { deleteMarker } from "../../services/http";
+import Map from "../Map/Map";
 
 const HelpDetails = (props) => {
   const dispatch = useDispatch();
@@ -25,6 +26,22 @@ const HelpDetails = (props) => {
   const [responseData, setResponseData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+  const [point, setPoint] = useState([]);
+  const center =
+    point.length > 0
+      ? { lat: point[0].lat, lng: point[0].lon }
+      : {
+          lat: 38.7071,
+          lng: -9.13549,
+        };
+  const zoom = 10;
+
+  const pointsCallback = useCallback(
+    (points) => {
+      setPoint(points);
+    },
+    [point]
+  );
 
   const history = useHistory();
   const match = useRouteMatch();
@@ -36,8 +53,12 @@ const HelpDetails = (props) => {
     setIsLoading(true);
     markerDetails(helpId).then(
       (response) => {
-        console.log(response.data);
         setResponseData(response.data);
+        let newVec = {
+          lat: parseFloat(response.data.lat),
+          lon: parseFloat(response.data.lon),
+        };
+        setPoint([newVec]);
       },
       (error) => {
         console.log(error);
@@ -103,7 +124,6 @@ const HelpDetails = (props) => {
     isOwner = true;
   }
 
-  //ir buscar id atraves do url -> fazer pedido ao servidor com esse id
   return (
     <div className={classes.mainContainer}>
       <h1 className={classes.title}>
@@ -116,8 +136,15 @@ const HelpDetails = (props) => {
         </div>
       )}
       <div className={classes.subContainer}>
-        <div className={classes.mapContent} id="MAPA_AQUI">
-          MAPA_AQUI
+        <div className={classes.mapContent}>
+          <Map
+            noAdd
+            noPlaces
+            points={point}
+            center={center}
+            zoom={zoom}
+            callback={pointsCallback}
+          />
         </div>
         <div className={classes.infoContent}>
           <div className={classes.helpTitle}>

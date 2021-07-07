@@ -35,6 +35,7 @@ interface MapProps {
   unique?: boolean;
   noAdd?: boolean;
   noRoute?: boolean;
+  noPlaces?: boolean;
   callback: (points: Point[]) => void;
   callbackC?: (center: Center) => void;
   callbackZ?: (zoom: number) => void;
@@ -139,20 +140,22 @@ function Map(props: MapProps) {
 
   return (
     <div>
-      <Autocomplete
-        apiKey="AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU"
-        style={{ width: "50%" }}
-        onPlaceSelected={(place) => {
-          if (
-            place.geometry?.location?.lat() !== undefined &&
-            place.geometry?.location?.lng() !== undefined
-          )
-            setCenter({
-              lat: place.geometry?.location?.lat(),
-              lng: place.geometry?.location?.lng(),
-            });
-        }}
-      />
+      {!props.noPlaces && (
+        <Autocomplete
+          apiKey="AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU"
+          style={{ width: "50%" }}
+          onPlaceSelected={(place) => {
+            if (
+              place.geometry?.location?.lat() !== undefined &&
+              place.geometry?.location?.lng() !== undefined
+            )
+              setCenter({
+                lat: place.geometry?.location?.lat(),
+                lng: place.geometry?.location?.lng(),
+              });
+          }}
+        />
+      )}
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
