@@ -139,6 +139,14 @@ export async function createPath(form: FormData) {
   }
 }
 
+export async function deleteMarker(markerId: string) {
+  try {
+    return await axios.delete(`${url}/rest/marker/${markerId}`)
+  } catch(error) {
+    throw error.response;
+  }
+}
+
 /*//ir ao store fazer dispatch de logout e apagar local storage
 //dentro de use effect do app -> redux tb nao ha -> /home
 //= a estar a verificar */

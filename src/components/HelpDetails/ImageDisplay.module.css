@@ -1,5 +1,6 @@
 .container {
   display: grid;
+  width: 80rem;
   grid-template-areas: "il";
 }
 
@@ -17,12 +18,14 @@
 
 .imgPreview {
   height: 15rem;
-  object-fit: cover;
+  max-width: 18rem;
+  object-fit: contain;
 }
 
 .volunteer {
-  height: 25rem;
+  height: 18rem;
   display: flex;
   flex-direction: row;
-  padding: 0.3rem;
+  justify-content: space-evenly;
+  margin-left: 8rem;
 }

@@ -3,16 +3,16 @@
   height: 100%;
   width: 100%;
   grid-template-rows: 0.25fr auto;
-  row-gap: 1fr;
+  grid-auto-columns: 0.4fr auto 0.4fr;
   display: grid;
-  grid-template-areas: "tt" "mc";
+  grid-template-areas: ". tt ." ". mc .";
 }
 
 .title {
   grid-area: tt;
   align-self: center;
   justify-self: center;
-  color: #e6513e;
+  color: #e6513e;   
   font-weight: 600;
   font-size: 2rem;
 }
@@ -31,11 +31,11 @@
   display: grid;
   grid-template-rows: auto;
   row-gap: 5rem;
-  grid-template-areas: "mc" "ic" "cc";
+  grid-template-areas: "mp" "ic" "cc";
 }
 
 .mapContent {
-  grid-area: mc;
+  grid-area: mp;
 }
 
 .commentContent {
@@ -48,28 +48,71 @@
   grid-area: ic;
   display: grid;
   row-gap: 1rem;
-  grid-template-rows: .25fr .25fr 1.5fr .5fr .25fr;
-  grid-template-areas: "ht" "ud" "id" "ip" "bd";
+  grid-template-rows: 0.25fr 0.25fr 1.5fr 0.5fr 0.25fr 0.25fr .25fr;
+  grid-template-areas: "ht" "ud" "id" "dp" "ip" "bd" "dr";
 }
 
 .helpTitle {
   grid-area: ht;
+  border-bottom: 1px solid #b9e1ff;
 }
 
 .userDisplay {
   grid-area: ud;
+  border-bottom: 1px solid #b9e1ff;
 }
 
 .imageDisplay {
   grid-area: id;
+  border-bottom: 1px solid #b9e1ff;
+}
+
+.description {
+  grid-auto-columns: dp;
+  border-bottom: 1px solid #b9e1ff;
+  text-align: center;
+  font-size: .9rem;
+  padding-bottom: .5rem;
+  padding-top: .5rem;
+}
+
+.subTitle {
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 1.2rem;
+  padding-bottom: 1.5rem;
 }
 
 .inputPass {
   grid-area: ip;
+  border-bottom: 1px solid #b9e1ff;
 }
 
 .buttonDisplay {
   grid-area: bd;
   align-self: center;
   justify-self: center;
+}
+
+.deleteRequest {
+  grid-area: dr;
+  align-self: center;
+  justify-self: center;
+  margin-top: 3rem;
+  color: #c0392b;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.deleteRequest:hover {
+  text-decoration: underline;
+}
+
+.deleteError {
+  color: #e6513e;
+  font-weight: 400;
+  text-align: center;
+  padding-top: 0.5rem;
+  width: 5rem;
+  font-size: 1rem;
 }

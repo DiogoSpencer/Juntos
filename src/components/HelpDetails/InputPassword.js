@@ -4,7 +4,7 @@ import classes from "./InputPassword.module.css";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
-const InputPassword = () => {
+const InputPassword = (props) => {
   const userEmail = useSelector((state) => state.auth.email);
 
   const {
@@ -41,13 +41,15 @@ const InputPassword = () => {
           onChange={passChangeHandler}
           onBlur={passBlurHandler}
           className={classes.inputPass}
+          disabled={props.isOwner}
         />
         <button
           type="button"
           onClick={passwordSubmitHandler}
           className={classes.buttonPass}
+          disabled={props.isOwner}
         >
-          Submeter
+          Enviar
         </button>
       </form>
       {passHasError && (
