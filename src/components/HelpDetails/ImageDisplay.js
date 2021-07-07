@@ -4,7 +4,7 @@ import volunteersIcon from "../../img/volunteersdonate.jpg";
 const ImageDisplay = (props) => {
   return (
     <div className={classes.container}>
-      {props.images.length > 0 ? (
+      {props.images && props.images.length > 0 ? (
         <ul className={classes.imageList}>
           {props.images.map((image, index) => (
             <li key={index} className={classes.imageItem}>
