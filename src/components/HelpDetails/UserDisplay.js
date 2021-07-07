@@ -10,7 +10,7 @@ const UserDisplay = (props) => {
         <img
           src={avatarIcon}
           alt="imagem-perfil"
-          className={classes.profileImg}
+          className={classes.profileImgAnonimous}
         />
       ) : (
         <Link

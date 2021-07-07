@@ -130,52 +130,58 @@ function App() {
 
   return (
     <Layout>
-      <Suspense fallback={<div className={classes.centered}><LoadingSpinner /></div>}>
-      <Switch>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-        <Route path="/home" render={() => <Home />} />
-        <Route path="/faq" render={() => <FAQ />} />
-        <Route path="/perfil/:username" render={() => <Profile />} />
-        <Route path="/verperfil/:username" render={() => <UserProfile />} />
-        <Route path="/herois/:heroiId" render={() => <HeroisWraper />} />
-        <Route path="/contactos" render={() => <Contacts />} />
-        <Route path="/recuperarpassword" render={() => <PasswordRecover />} />
-        <Route path="/alterarpassword" render={() => <ChangePassword />} />
-        <Route path="/app" render={() => <AppPage />} />
-        <Route exact path="/minhasajudas" render={() => <MyHelps />} />
-        <Route
-          path="/minhasajudas/criadas/:requestId"
-          render={() => <HelpDetails buttonText="Guardar" />}
-        />
-        <Route
-          path="/minhasajudas/participacoes/:participationId"
-          render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
-        />
-        <Route path="/novopedido" render={() => <Help />} />
-        <Route exact path="/ajudas" render={() => <ListHelps />} />
-        <Route
-          path="/ajudas/pedidos/:pedidoId"
-          render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
-        />
-        <Route
-          path="/ajudas/ofertas/:ofertaId"
-          render={() => <HelpDetails buttonText="Pedir Ajuda" />}
-        />
-        <Route exact path="/conversas" render={() => <Chat />} />
-        <Route
-          path="/conversas/pedidos/:pedidoId"
-          render={() => <Conversation />}
-        />
-        <Route
-          path="/conversas/ofertas/:ofertaId"
-          render={() => <Conversation />}
-        />
-        <Route path="/mapa" render={() => <TodasAjudas />} />
-        <PrivateRoute></PrivateRoute>
-        <Route path="*" render={() => <NotFound />} />
-      </Switch>
+      <Suspense
+        fallback={
+          <div className={classes.centered}>
+            <LoadingSpinner />
+          </div>
+        }
+      >
+        <Switch>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+          <Route path="/home" render={() => <Home />} />
+          <Route path="/faq" render={() => <FAQ />} />
+          <Route path="/perfil/:username" render={() => <Profile />} />
+          <Route path="/verperfil/:username" render={() => <UserProfile />} />
+          <Route path="/herois/:heroiId" render={() => <HeroisWraper />} />
+          <Route path="/contactos" render={() => <Contacts />} />
+          <Route path="/recuperarpassword" render={() => <PasswordRecover />} />
+          <Route path="/alterarpassword" render={() => <ChangePassword />} />
+          <Route path="/app" render={() => <AppPage />} />
+          <Route exact path="/minhasajudas" render={() => <MyHelps />} />
+          <Route
+            path="/minhasajudas/criadas/:requestId"
+            render={() => <HelpDetails buttonText="Guardar" />}
+          />
+          <Route
+            path="/minhasajudas/participacoes/:participationId"
+            render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
+          />
+          <Route path="/novopedido" render={() => <Help />} />
+          <Route exact path="/ajudas" render={() => <ListHelps />} />
+          <Route
+            path="/ajudas/pedidos/:pedidoId"
+            render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
+          />
+          <Route
+            path="/ajudas/ofertas/:ofertaId"
+            render={() => <HelpDetails buttonText="Pedir Ajuda" />}
+          />
+          <Route exact path="/conversas" render={() => <Chat />} />
+          <Route
+            path="/conversas/pedidos/:pedidoId"
+            render={() => <Conversation />}
+          />
+          <Route
+            path="/conversas/ofertas/:ofertaId"
+            render={() => <Conversation />}
+          />
+          <Route path="/mapa" render={() => <TodasAjudas />} />
+          <PrivateRoute></PrivateRoute>
+          <Route path="*" render={() => <NotFound />} />
+        </Switch>
       </Suspense>
     </Layout>
   );
