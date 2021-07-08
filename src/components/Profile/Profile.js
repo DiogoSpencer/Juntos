@@ -21,6 +21,8 @@ let firstNameChanged = "";
 let lastNameChanged = "";
 let privacyChanged = "";
 const isNotEmpty = (value) => value.trim() !== "";
+const interests = ["DOAR", "OFERTAS", "PEDIDOS", "ACOES"];
+const showInterest = ["Doações", "Ofertas", "Pedidos", "Ações"];
 
 const Profile = () => {
   const authEmail = useSelector((state) => state.auth.email);
@@ -38,6 +40,9 @@ const Profile = () => {
   const [numHelps, setNumHelps] = useState("0");
   const [creationDate, setCreationDate] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCheckedInterest, setIsCheckedInterest] = useState(
+    new Array(interests.length).fill(false)
+  );
 
   const {
     value: enteredEmail,
@@ -89,7 +94,7 @@ const Profile = () => {
           setNumHelps(response.data.numHelps);
           const date = new Date(response.data.creationDate);
           setCreationDate(
-            `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
+            `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
           );
           if (response.data.profileImg === undefined) {
             setSelectedFile(null);
@@ -196,7 +201,6 @@ const Profile = () => {
         "Tem a certeza que pretende apagar a sua conta? Esta ação é irreversível."
       )
     ) {
-
       setIsLoading(true);
       deleteUser(authEmail).then(
         (response) => {
@@ -213,13 +217,21 @@ const Profile = () => {
             localStorage.removeItem(gS.storage.token);
             history.replace("/home");
           } else {
-            console.log(error )
+            console.log(error);
             setDeleteError(true);
           }
         }
       );
       setIsLoading(false);
     }
+  };
+
+  const checkedInterestHandler = (position) => {
+    const updatedCheckedState = isCheckedInterest.map((interest, index) =>
+      index === position ? !interest : interest
+    );
+
+    setIsCheckedInterest(updatedCheckedState);
   };
 
   const profile = (
@@ -341,6 +353,30 @@ const Profile = () => {
               />
               Privado
             </label>
+          </div>
+          <div className={classes.interestDiv}>
+            <h3 className={classes.subTitle}>Interesses</h3>
+            <ul className={classes.interestList}>
+              {interests.map((interest, index) => {
+                return (
+                  <li key={index}>
+                    <input
+                      type="checkbox"
+                      id={`${showInterest[index]}`}
+                      value={isCheckedInterest[index]}
+                      checked={isCheckedInterest[index]}
+                      onChange={() => checkedInterestHandler(index)}
+                    />
+                    <label
+                      htmlFor={`${showInterest[index]}`}
+                      className={classes.labelForm}
+                    >
+                      {showInterest[index]}
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
           <div className={classes.buttonContainer}>
             <Button disabled={!formIsValid} text="Guardar" />

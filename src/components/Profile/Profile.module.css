@@ -94,13 +94,14 @@
   grid-area: fc;
   display: grid;
   grid-template-columns: 1fr 0.5fr 0.5fr;
-  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 2fr;
+  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 2fr;
   row-gap: 2.5rem;
   column-gap: 3rem;
   grid-template-areas:
     ". un ."
     ". ed pv"
     ". fn ln"
+    "it it it"
     "bt bt bt"
     "ie ie ie";
   align-items: start;
@@ -165,6 +166,39 @@
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-evenly;
+}
+
+.interestDiv {
+  grid-area: it;
+  width: 100%;
+  align-self: center;
+  justify-self: center;
+}
+
+.subTitle {
+  text-align: center;
+  padding-top: 1rem;  
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.interestList {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-evenly;
+  padding-left: 0;
+}
+
+.interestList label {
+  padding-left: .2rem;
+}
+
+.interestDiv input:focus {
+  box-shadow: none;
 }
 
 .buttonContainer {

@@ -69,12 +69,11 @@
   font-size: 0.8rem;
 }
 
-
 .registForm {
   grid-area: mn;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
+  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
   column-gap: 2rem;
   row-gap: 1rem;
   grid-template-areas:
@@ -84,6 +83,7 @@
     "ps cf"
     "fn ln"
     "ed cd"
+    "it it"
     "bt bt"
     "ie ie";
   justify-items: center;
@@ -236,4 +236,33 @@
 
 .buttonDiv {
   grid-area: bt;
+}
+
+.interestDiv {
+  grid-area: it;
+  width: 100%;
+  align-self: center;
+  justify-self: center;
+}
+
+.subTitle {
+  text-align: center;
+  padding-top: 1rem;  
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.interestList {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-evenly;
+  padding-left: 0;
+}
+
+.interestDiv input:focus {
+  box-shadow: none;
 }

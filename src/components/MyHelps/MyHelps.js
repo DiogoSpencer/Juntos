@@ -16,6 +16,7 @@ const ASC = "ASC";
 const DESC = "DESC";
 const OWNER = "owner";
 const DATE = "creationDate";
+const INTEREST = "INTEREST"
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const MS_PER_HOUR = 1000 * 60 * 60;
 const MS_PER_MINUTE = 1000 * 60;
@@ -118,6 +119,8 @@ const MyHelps = () => {
     setDisableSelect(true);
     if (event.target.value === ASC || event.target.value === DESC) {
       setDirParam(event.target.value);
+    } else if (event.target.value === INTEREST) {
+      //TODO set state
     }
   };
 
@@ -134,7 +137,7 @@ const MyHelps = () => {
 
     const diffInDays = Math.floor((nowDate - serverDate) / MS_PER_DAY);
 
-    if (diffInDays <= 1) {
+    if (diffInDays < 1) {
       const hours = Math.abs(now - date) / MS_PER_HOUR;
       const minutes = Math.abs(now - date) / MS_PER_MINUTE;
       const roundedHours = Math.round(hours);
@@ -265,6 +268,7 @@ const MyHelps = () => {
       >
         <option value={DESC}>Mais Recentes</option>
         <option value={ASC}>Mais Antigos</option>
+        <option value={INTEREST}>Meus Interesses</option>
       </select>
     </div>
   );

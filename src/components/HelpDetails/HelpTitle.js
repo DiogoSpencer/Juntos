@@ -21,8 +21,7 @@ const HelpTitle = (props) => {
     );
 
     const diffInDays = Math.floor((nowDate - serverDate) / MS_PER_DAY);
-
-    if (diffInDays <= 1) {
+    if (diffInDays < 1) {
       const hours = Math.abs(now - date) / MS_PER_HOUR;
       const minutes = Math.abs(now - date) / MS_PER_MINUTE;
       const roundedHours = Math.round(hours);

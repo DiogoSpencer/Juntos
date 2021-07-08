@@ -2,39 +2,47 @@ import { useEffect, useRef, useState } from "react";
 import classes from "./MultipleUpload.module.css";
 
 const MultipleUpload = (props) => {
-  const [preview, setPreview] = useState([]);
-  const [images, setImages] = useState([]);
+  const [preview, setPreview] = useState(props.images);
   const fileInputRef = useRef();
 
-  useEffect(() => {
-    setImages(props.images)
-  }, [])
+  const fileChanger = props.fileChangeHandler;
 
   useEffect(() => {
-    setPreview([]);
-    props.fileChangeHandler(images);
-    if (images.length > 0) {
-      images.forEach((image) => {
-        const reader = new FileReader();
+    if (props.images.length > 0) {
+      setPreview([]);
+      for (const image of props.images) {
+        if (image.type) {
+          fileChanger(props.images);
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setPreview((prevState) => prevState.concat(reader.result));
+          };
 
-        reader.onloadend = () => {
-          setPreview((prevState) => prevState.concat(reader.result));
-        };
+          reader.readAsDataURL(image);
+        } else {
+          setPreview((prevState) => prevState.concat(image));
+        }
+      }
+    } else if (props.images === null) {
+      fileChanger(props.images);
 
-        reader.readAsDataURL(image);
-      });
+      setPreview(null);
     }
-  }, [images]);
+  }, [props.images, fileChanger]);
 
   const handleImageChange = (event) => {
     if (event.target.files) {
       const filesArray = Array.from(event.target.files);
-      if (filesArray.length + images.length > 5) {
+      console.log(filesArray);
+      if (filesArray.length + props.images.length > 5) {
         alert("Máximo 5 imagens");
       } else {
         filesArray.forEach((file) => {
           if (file && file.type.substring(0, 5) === "image") {
-            setImages((prevState) => prevState.concat(file));
+            fileChanger((prevState) => {
+              console.log(prevState);
+              return prevState.concat(file);
+            });
           }
         });
       }
@@ -42,9 +50,8 @@ const MultipleUpload = (props) => {
   };
 
   const onRemoveHandler = (event) => {
-    console.log(event.target.id);
-    setImages((prevState) => {
-      let currentState = [...images];
+    fileChanger((prevState) => {
+      let currentState = [...props.images];
       currentState.splice(event.target.id, 1);
       return currentState;
     });
@@ -68,7 +75,7 @@ const MultipleUpload = (props) => {
     <div className={classes.container}>
       <button
         className={classes.imageButton}
-        disabled={images.length >= 5}
+        disabled={props.images.length >= 5}
         onClick={(event) => {
           event.preventDefault();
           fileInputRef.current.click();

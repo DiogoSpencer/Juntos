@@ -6,16 +6,23 @@ import donateIcon from "../../img/volunteersdonate.jpg";
 const Info = (props) => {
   return (
     <div className={classes.container}>
-      <h1 className={classes.title}>
-        <img
-          src={backIcon}
-          alt="página-anterior"
-          className={classes.back}
-          onClick={props.back}
-        />
-        <span className={classes.number}>2</span>
-        <span className={classes.selectedTitle}>{props.selected}</span>
-      </h1>
+      {props.editing ? (
+        <h1 className={classes.title}>
+          <span className={classes.numberEdit}>1</span>
+          <span className={classes.selectedTitle}>{props.selected}</span>
+        </h1>
+      ) : (
+        <h1 className={classes.title}>
+          <img
+            src={backIcon}
+            alt="página-anterior"
+            className={classes.back}
+            onClick={props.back}
+          />
+          <span className={classes.number}>2</span>
+          <span className={classes.selectedTitle}>{props.selected}</span>
+        </h1>
+      )}
       <div className={classes.inputTitle}>
         <label htmlFor="title">Título</label>
         <input
@@ -27,7 +34,9 @@ const Info = (props) => {
           onChange={props.titleChangeHandler}
           onBlur={props.titleBlurHandler}
         />
-        {props.titleHasError && <p className={classes.infoError}>Por favor insira um título.</p>}
+        {props.titleHasError && (
+          <p className={classes.infoError}>Por favor insira um título.</p>
+        )}
       </div>
       <div className={classes.inputPass}>
         <label htmlFor="pass">Define uma Password</label>
@@ -37,12 +46,15 @@ const Info = (props) => {
           value={props.enteredPass}
           onChange={props.passChangeHandler}
           onBlur={props.passBlurHandler}
+          disabled={props.editing}
         />
         <span>
           Dá esta password às pessoas que te ajudarem para que a ajuda conte.
           Não a partilhes antes do final do evento.
         </span>
-        {props.passHasError && <p className={classes.infoError}>Por favor defina uma password</p>}
+        {props.passHasError && (
+          <p className={classes.infoError}>Por favor defina uma password</p>
+        )}
       </div>
       <div className={classes.description}>
         <label htmlFor="help">Descrição</label>
@@ -57,7 +69,9 @@ const Info = (props) => {
         >
           Descrição...
         </textarea>
-        {props.descriptionHasError && <p className={classes.infoError}>Por favor insira uma descrição.</p>}
+        {props.descriptionHasError && (
+          <p className={classes.infoError}>Por favor insira uma descrição.</p>
+        )}
       </div>
       <div className={classes.imageUpload}>
         <div className={classes.multiUpload}>

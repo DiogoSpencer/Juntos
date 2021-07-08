@@ -25,6 +25,7 @@ import { getUser } from "./services/http";
 //import TodasAjudas from "./components/MapComponents/TodasAjudas";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
+//import EditRequest from "./components/HelpForms/EditRequest";
 //import UserProfile from "./components/Profile/UserProfile";
 
 const Home = React.lazy(() => import("./components/Home/Home"));
@@ -55,6 +56,9 @@ const UserProfile = React.lazy(() =>
 );
 const TodasAjudas = React.lazy(() =>
   import("./components/MapComponents/TodasAjudas")
+);
+const EditRequest = React.lazy(() =>
+  import("./components/HelpForms/EditRequest")
 );
 
 function App() {
@@ -179,6 +183,7 @@ function App() {
             render={() => <Conversation />}
           />
           <Route path="/mapa" render={() => <TodasAjudas />} />
+          <Route path="/editar/:requestId" render={() => <EditRequest />} />
           <PrivateRoute></PrivateRoute>
           <Route path="*" render={() => <NotFound />} />
         </Switch>

@@ -1,23 +1,19 @@
-1. NavBar - Imagem de user profile quando logged ou default se nao Imagem
-2. pagina sobre a nossa empresa weHelp
 3. home stats -> operaçao de fetch das estatisticas - nº parceiros registados +
 nº total de pedidos + nº total de utilizadores registados -> fazer isto dentro
 de stats vs dentro de home? -> Mudar no titulo + dentro do texto
 4. home herois -> links dinamicos com id + fetch data dos herois (3 ultimos) 
-+ foto -> talvez slideshow
++ foto
 5. home agradecimentos - fetch dos logos dos parceiros ao server?
-6. footer - link que linka para pagina sobre weHelp
 7. Mudar titulo de contactos
 8. .? perfil e em todos os sitios em que temos fetch data
+9. galeria herois
 11. login e register -> fazer regex de verificaçao de input
 12. verificar se user está a aceder de um mobile e se tiver direcionar
 para pagina de download da app
-13. register -> restringuir tamanho da imagem
+13. register + novopedido -> restringuir tamanho da imagem
 14. faq -> perguntas e respostas + fetch da data
 15. apagar FAQCard
 16. HeroisHome - fetch data dos 3 herois do ultimo mes
-18. Anonimous - ir buscar foto 1º e ultimo nome do user
-19. regist enviar company -> tirar comentario
 20. logout - timeout do botao para nao dar SPAM
 21. Pensar se basta mostrar paginas privadas sem conteudo ou se é melhor restringir acesso e no logout redirecionar para a home (work around novopedido -> refresh -> redirect)
 22. falta verificar os limites quando se submete - titulo + textBox -> quando fizer os regex
@@ -29,9 +25,6 @@ para pagina de download da app
 
 
 server:
-1. mandar foto no login e nº ajudas
-2. herois - fetch info reduzida (foto + titulo + username) etc 
-+ operacao para os 3 herois deste mes + fetch heroi por id 
 3. parceiros - logo + url
 4. faq - perguntas e respostas, hardcoded?
 5. mandar email depois de registo para ativar conta
@@ -40,25 +33,13 @@ server:
 8. minhas ajudas activas e inactivas - listagens
 9. ajudas ativas listagem
 10. chat websockets? - chats de pedidos e de ajudas listagem?
-11. detalhes do pedido, id do pedido? comentarios do pedido?
-12. mandar formulario de ajuda antes do mapa ou com o mapa?
-13. como "verificar" que o pedido foi concluido? - notificaçao? (se nao der chat)
-- ambos confirmam?
 14. thumbs up e thumbs down + reviews no perfil??
 15. backoffice que info?
 16. data das estatisticas front page
 17. formulario de contactos para onde enviar a info?
 18. como registar/fazer um heroi?
-19. mostrar perfis de outras pessoas, precisamos de ter um fetch da info por username
-
-PROBLEMAS:
-1. obrigar pessoas a meterem fotos nos pedidos -> 400
-2. obrigar a ter foto no perfil quando se altera -> 400
-
 
 //Must haves
-1. O registo pode conter atributos de perfil/preferências de utilizadores, podendo estes
-igualmente ser geridos e dinamicamente modificados ao longo do tempo.
 
 2. Criação de Percursos Solidários com composição de Pontos de Ação Solidária, devendo estes ter:
 Título, Descrição ou Caracterização do Percurso e suas Rotas, **// Distância (aproximada), Tópicos,
@@ -79,7 +60,7 @@ inicialmente, como por exemplo, contacto com autoridades e entidades locais, etc
 
 5. Mecanismo para moderação da discussão para evitar SPAM e TROLLS (Web e Móvel).
 
-6. Iniciação do percurso e registo de participação de utilizadores voluntários que o vão realizar
+6. Iniciação do percurso e registo de participação de utilizadores voluntários que o vão realizar ???
  **// conjuntamente e de forma colaborativa (Móvel). //**
 
  7. Dados estatísticos associados ao percurso incluído, **// tempo médio de realização, número de
@@ -92,4 +73,4 @@ aspectos de regulação e gestão de benefícios resultantes do processo de cria
 pela plataforma.
 
 
-//falar sobre o token trazer profileImg e 1º e ultimo nome -> ou return do login?
+//falar sobre o token trazer profileImg e 1º e ultimo nome -> ou return do login?   

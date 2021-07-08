@@ -38,9 +38,12 @@
   justify-self: start;
   display: flex;
   flex-direction: row;
+  color: #3385d9;
+  font-weight: 600;
 }
 
 .numHelps img {
   height: 3rem;
   padding-bottom: 1rem;
+  padding-right: .5rem;
 }

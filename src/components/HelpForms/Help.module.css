@@ -91,7 +91,7 @@
   cursor: pointer;
 }
 
-.next {
+.nextButton {
   grid-area: nx;
   justify-self: start;
 }

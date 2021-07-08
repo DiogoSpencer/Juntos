@@ -12,7 +12,7 @@
   grid-area: tt;
   align-self: center;
   justify-self: center;
-  color: #e6513e;   
+  color: #e6513e;
   font-weight: 600;
   font-size: 2rem;
   margin-bottom: 2rem;
@@ -59,8 +59,8 @@
   grid-area: ic;
   display: grid;
   row-gap: 1rem;
-  grid-template-rows: 0.25fr 0.25fr 1.5fr 0.5fr 0.25fr 0.25fr .25fr;
-  grid-template-areas: "ht" "ud" "id" "dp" "ip" "bd" "dr";
+  grid-template-rows: 0.25fr 0.25fr 1.5fr 0.5fr 0.25fr 0.25fr 0.25fr;
+  grid-template-areas: "ht" "ud" "id" "dp" "ip" "bd" "er" "dr";
 }
 
 .helpTitle {
@@ -82,9 +82,9 @@
   grid-auto-columns: dp;
   border-bottom: 1px solid #b9e1ff;
   text-align: center;
-  font-size: .9rem;
-  padding-bottom: .5rem;
-  padding-top: .5rem;
+  font-size: 0.9rem;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
 }
 
 .subTitle {
@@ -105,18 +105,32 @@
   justify-self: center;
 }
 
+.editRequest {
+  grid-area: er;
+  align-self: center;
+  justify-self: center;
+  text-decoration: none;
+  color: #3385d9;
+  font-weight: 600;
+}
+
+.editRequest:hover {
+  text-decoration: none;
+  color: #3385d9;
+  font-weight: 700;
+}
+
 .deleteRequest {
   grid-area: dr;
   align-self: center;
   justify-self: center;
-  margin-top: 3rem;
   color: #c0392b;
   cursor: pointer;
   font-weight: 600;
 }
 
 .deleteRequest:hover {
-  text-decoration: underline;
+  font-weight: 700;
 }
 
 .deleteError {

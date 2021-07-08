@@ -184,6 +184,11 @@ const HelpDetails = (props) => {
             </div>
           )}
           {isOwner && (
+            <Link to={`/editar/${helpId}`} className={classes.editRequest}>
+                Editar Pedido
+            </Link>
+          )}
+          {isOwner && (
             <div className={classes.deleteRequest}>
               <span
                 onClick={deleteRequestHandler}

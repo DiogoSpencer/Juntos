@@ -11,12 +11,13 @@ const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
 const isProfile = false;
 const isNotEmpty = (value) => value.trim() !== "";
+const interests = ["DOAR", "OFERTAS", "PEDIDOS", "ACOES"];
+const showInterest = ["Doações", "Ofertas", "Pedidos", "Ações"];
 //TODO: #2 fazer os REGEX de verificacao
 //TODO: #3 Verify if image is one of these types
 //TODO: #4 Restrict image size
 
 const Register = (props) => {
-
   //TODO: #2 Fazer useReducer para isto tudo..
   const [invalidInput, setInvalidInput] = useState(false);
   const [emailHasAccount, setEmailHasAccount] = useState(false);
@@ -25,6 +26,9 @@ const Register = (props) => {
   const [concluded, setConcluded] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isCompany, setIsCompany] = useState(false);
+  const [isCheckedInterest, setIsCheckedInterest] = useState(
+    new Array(interests.length).fill(false)
+  );
 
   const {
     value: enteredEmail,
@@ -84,6 +88,14 @@ const Register = (props) => {
 
   const checkChangeHandler = () => {
     setIsCompany((prevState) => !prevState);
+  };
+
+  const checkedInterestHandler = (position) => {
+    const updatedCheckedState = isCheckedInterest.map((interest, index) =>
+      index === position ? !interest : interest
+    );
+
+    setIsCheckedInterest(updatedCheckedState);
   };
 
   let formIsValid = false;
@@ -301,6 +313,30 @@ const Register = (props) => {
           Organização
         </label>
       </div>
+      <div className={classes.interestDiv}>
+        <h3 className={classes.subTitle}>Tens algum interesse?</h3>
+        <ul className={classes.interestList}>
+          {interests.map((interest, index) => {
+            return (
+              <li key={index}>
+                <input
+                  type="checkbox"
+                  id={`${showInterest[index]}`}
+                  value={isCheckedInterest[index]}
+                  checked={isCheckedInterest[index]}
+                  onChange={() => checkedInterestHandler(index)}
+                />
+                <label
+                  htmlFor={`${showInterest[index]}`}
+                  className={classes.labelForm}
+                >
+                  {showInterest[index]}
+                </label>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
       <div className={classes.buttonDiv}>
         <Button disabled={!formIsValid} text="Registar" />
       </div>
@@ -327,7 +363,8 @@ const Register = (props) => {
       </p>
       {isCompany && (
         <p className={classes.organization}>
-          A sua conta organizacional irá ficar pendente de aprovação e verificação.
+          A sua conta organizacional irá ficar pendente de aprovação e
+          verificação.
         </p>
       )}
     </div>

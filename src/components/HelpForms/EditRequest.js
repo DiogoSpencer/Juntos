@@ -4,16 +4,16 @@ import Button from "../UI/Button";
 import backIcon from "../../img/back.png";
 import Anonimous from "./Anonimous";
 import Volunteers from "./Volunteers";
-import { Prompt, useHistory } from "react-router-dom";
-import SelectHelp from "./SelectHelp";
+import { useRouteMatch } from "react-router-dom";
 import Info from "./Info";
-import classes from "./Help.module.css";
-import { createMarker, createPath } from "../../services/http";
+import classes from "./EditRequest.module.css";
+import { changeMarker, createPath } from "../../services/http";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import Map from "../Map/Map";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import { markerDetails } from "../../services/http";
 
 const AJUDAR = "Oferecer Ajuda";
 const PEDIR = "Pedir Ajuda";
@@ -34,35 +34,43 @@ let typeOfHelp;
 const ensureLeave =
   "Tem a certeza que quer sair? Toda a informação inserida irá ser perdida.";
 
-const Help = () => {
-  const [selected, setSelected] = useState("");
+const EditRequest = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [formConcluded, setFormConcluded] = useState(false);
   const [anonimousValue, setAnonimousValue] = useState(false);
   const [volunteersValue, setVolunteersValue] = useState(true);
-  const [isFocused, setIsFocused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState(false);
+  const [responseData, setResponseData] = useState([]);
+
+  const match = useRouteMatch();
+  const helpId = match.params.requestId;
+  const editing = match.path === "/editar/:requestId";
 
   //AjudaMap state
   const [point, setPoint] = useState([]);
+
   const [center, setCenter] = useState({
     lat: 38.7071,
     lng: -9.13549,
   });
+
   const [zoom, setZoom] = useState(10);
+
   const callbackC = useCallback(
     (center) => {
       setCenter(center);
     },
     [center]
   );
+
   const callbackZ = useCallback(
     (zoom) => {
       setZoom(zoom);
     },
     [zoom]
   );
+
   const pointsCallback = useCallback(
     (points) => {
       setPoint(points);
@@ -71,40 +79,41 @@ const Help = () => {
   );
 
   /************/
-  const history = useHistory();
-
   const dispatch = useDispatch();
+
   const ownerEmail = useSelector((state) => state.auth.email);
 
   useEffect(() => {
-    if (status) {
-      setIsLoading(false);
-      history.go(0);
-    }
-  }, [status, history]);
+    setIsLoading(true);
+    markerDetails(helpId).then(
+      (response) => {
+        console.log(response.data);
+        setResponseData(response.data);
+        setTitleValueHandler(response.data.title);
+        setDescriptionValueHandler(response.data.description);
+        setSelectedFiles(response.data.photoGalery);
+        setAnonimousValue(response.data.anonymousOwner);
+        let newVec = {
+          lat: parseFloat(response.data.lat),
+          lon: parseFloat(response.data.lon),
+        };
+        setPoint([newVec]);
+      },
+      (error) => {
+        console.log(error);
+        setIsLoading(false);
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+        }
+      }
+    );
+  }, [helpId]);
 
-  const onSelectChangeHandler = (selectedAction) => {
-    switch (selectedAction) {
-      case AJUDAR:
-        setSelected(AJUDAR);
-        typeOfHelp = "HELP_OFFER";
-        break;
-      case PEDIR:
-        setSelected(PEDIR);
-        typeOfHelp = "HELP_REQUEST";
-        break;
-      case DOAR:
-        setSelected(DOAR);
-        typeOfHelp = "DONATE";
-        break;
-      case ACOES:
-        setSelected(ACOES);
-        typeOfHelp = "ACTION";
-        break;
-      default:
-        setSelected("");
-    }
-  };
+  useEffect(() => {
+    setIsLoading(false);
+  }, [responseData]);
 
   const {
     value: enteredTitle,
@@ -112,6 +121,7 @@ const Help = () => {
     hasError: titleHasError,
     valueChangeHandler: titleChangeHandler,
     inputBlurHandler: titleBlurHandler,
+    setValueHandler: setTitleValueHandler,
   } = useInput(isNotEmpty); //pass func to validate
 
   const {
@@ -120,6 +130,7 @@ const Help = () => {
     hasError: descriptionHasError,
     valueChangeHandler: descriptionChangeHandler,
     inputBlurHandler: descriptionBlurHandler,
+    setValueHandler: setDescriptionValueHandler,
   } = useInput(isNotEmpty); //pass func to validate
 
   const {
@@ -128,6 +139,7 @@ const Help = () => {
     hasError: numberVolunteersHasError,
     valueChangeHandler: numberVolunteersChangeHandler,
     inputBlurHandler: numberVolunteersBlurHandler,
+    setValueHandler: setVolunteersValueHandler,
   } = useInput(isVolunteerNumber);
 
   const {
@@ -136,21 +148,15 @@ const Help = () => {
     hasError: passHasError,
     valueChangeHandler: passChangeHandler,
     inputBlurHandler: passBlurHandler,
+    setValueHandler: setPassValueHandler,
   } = useInput(isNotEmpty); //pass func to validate
 
   const formConcludedHandler = () => {
-    setIsFocused(false);
     setFormConcluded(true);
   };
 
   const backFormConcludedHandler = () => {
-    setIsFocused(false);
     setFormConcluded(false);
-  };
-
-  const backFormHandler = () => {
-    setIsFocused(false); //decidir se vamos usar isto aqui tb
-    setSelected("");
   };
 
   const yesAnonimousHandler = () => {
@@ -174,17 +180,15 @@ const Help = () => {
   let formIsValid = false;
 
   if (
-    selected !== ACOES &&
+    responseData.type !== ACOES &&
     enteredTitleIsValid &&
-    enteredDescriptionIsValid &&
-    enteredPassIsValid
+    enteredDescriptionIsValid
   ) {
     formIsValid = true;
   } else if (
-    selected === ACOES &&
+    responseData.type === ACOES &&
     enteredTitleIsValid &&
-    enteredDescriptionIsValid &&
-    enteredPassIsValid
+    enteredDescriptionIsValid
   ) {
     if (volunteersValue && enteredNumberVolunteersIsValid) {
       formIsValid = true;
@@ -197,6 +201,21 @@ const Help = () => {
 
   if (point.length > 0) {
     pointIsValid = true;
+  }
+
+  let changesMade = false;
+
+  if (
+    responseData.title !== enteredTitle ||
+    responseData.description !== enteredDescription ||
+    JSON.stringify(responseData.photoGalery) !==
+      JSON.stringify(selectedFiles) ||
+    responseData.anonymousOwner !== anonimousValue ||
+    (point.length > 0 &&
+      (parseFloat(responseData.lat) !== point[0].lat ||
+        parseFloat(responseData.lon) !== point[0].lon))
+  ) {
+    changesMade = true;
   }
 
   const formSubmissionHandler = (event) => {
@@ -213,35 +232,27 @@ const Help = () => {
     setIsLoading(true);
 
     const formData = new FormData();
+/*
     if (selectedFiles.length > 0) {
       for (const image of selectedFiles) {
         formData.append("img", image);
       }
     }
-
-    let generalType;
-
-    if (typeOfHelp === "HELP_OFFER" || typeOfHelp === "DONATE") {
-      generalType = "OFFER";
-    } else {
-      generalType = "REQUEST";
-    }
+*/
 
     const formInfo = {
       title: enteredTitle,
       description: enteredDescription,
       lat: point[0].lat,
       lon: point[0].lon,
-      owner: ownerEmail,
       difficulty: "1",
-      type: typeOfHelp,
-      password: enteredPass,
-      anonymousOwner: anonimousValue,
-      generalType,
+      //anonymousOwner: anonimousValue,
+      id: helpId,
     };
 
     const formAcaoInfo = {
       title: enteredTitle,
+      id: helpId,
       description: enteredDescription,
       points: point,
       owner: ownerEmail,
@@ -249,24 +260,25 @@ const Help = () => {
       type: typeOfHelp,
       password: enteredPass,
       anonymousOwner: anonimousValue,
-      generalType,
     };
 
-    if (selected !== ACOES) {
+    if (responseData.type !== ACOES) {
       formData.append(
-        "marker",
+        "info",
         new Blob([JSON.stringify(formInfo)], { type: "application/json" })
       );
-    } else if (selected === ACOES)
+    } else if (responseData.type === ACOES) {
       formData.append(
         "path",
         new Blob([JSON.stringify(formAcaoInfo)], { type: "application/json" })
       );
+    }
 
-    if (selected !== ACOES) {
-      createMarker(formData).then(
+    if (responseData.type !== ACOES) {
+      changeMarker(formData).then(
         (response) => {
           setStatus(true);
+          console.log(response);
         },
         (error) => {
           if (error.status === 401) {
@@ -278,7 +290,7 @@ const Help = () => {
           setIsLoading(false);
         }
       );
-    } else if (selected === ACOES) {
+    } else if (responseData.type === ACOES) {
       createPath(formData).then(
         (response) => {
           setStatus(true);
@@ -299,13 +311,7 @@ const Help = () => {
   //formConcludedHandler
   const renderButtons = (
     <div className={`${classes.buttonContainer} ${classes.formButtons}`}>
-      <img
-        src={backIcon}
-        className={classes.back}
-        onClick={backFormHandler}
-        alt="página-anterior"
-      />
-      <div className={classes.nextButton}>
+      <div className={classes.firstNext}>
         <Button
           type="button"
           disabled={!formIsValid}
@@ -326,9 +332,9 @@ const Help = () => {
       />
       <div className={classes.nextButton}>
         <Button
-          disabled={!pointIsValid}
+          disabled={!pointIsValid || !changesMade}
           onClick={formSubmissionHandler}
-          text="Criar"
+          text="Alterar"
         />
       </div>
     </div>
@@ -344,7 +350,7 @@ const Help = () => {
           onClick={backFormConcludedHandler}
         />
         <span className={classes.number}>3</span>
-        <span className={classes.selectedTitle}>{selected}</span>
+        <span className={classes.selectedTitle}>{enteredTitle}</span>
       </h1>
       <Map
         unique
@@ -368,7 +374,7 @@ const Help = () => {
           onClick={backFormConcludedHandler}
         />
         <span className={classes.number}>3</span>
-        <span className={classes.selectedTitle}>{selected}</span>
+        <span className={classes.selectedTitle}>{enteredTitle}</span>
       </h1>
       <Map
         points={point}
@@ -385,16 +391,12 @@ const Help = () => {
 
   return (
     <div className={classes.mainContainer}>
-      <Prompt when={isFocused} message={(location) => ensureLeave} />
       <form className={classes.formContainer}>
-        {!selected && !formConcluded && (
-          <SelectHelp onSelect={onSelectChangeHandler} />
-        )}
         <div className={classes.subContainer}>
-          {selected && !formConcluded && (
+          {!formConcluded && (
             <div className={classes.infoContainer}>
               <Info
-                selected={selected}
+                selected={enteredTitle}
                 enteredTitle={enteredTitle}
                 titleChangeHandler={titleChangeHandler}
                 titleBlurHandler={titleBlurHandler}
@@ -408,13 +410,13 @@ const Help = () => {
                 descriptionBlurHandler={descriptionBlurHandler}
                 descriptionHasError={descriptionHasError}
                 fileChangeHandler={setSelectedFiles}
-                back={backFormHandler}
                 images={selectedFiles}
                 hasImage={selectedFiles.length <= 0 ? true : false}
+                editing={editing}
               />
             </div>
           )}
-          {selected && selected !== ACOES && !formConcluded && (
+          {responseData.type !== ACOES && !formConcluded && (
             <div className={classes.actionContainer}>
               <Anonimous
                 yesAnonimous={yesAnonimousHandler}
@@ -423,7 +425,7 @@ const Help = () => {
               />
             </div>
           )}
-          {selected === ACOES && !formConcluded && (
+          {responseData.type === ACOES && !formConcluded && (
             <div className={classes.actionContainer}>
               <Volunteers
                 yesVolunteers={yesVolunteersHandler}
@@ -436,12 +438,12 @@ const Help = () => {
               />
             </div>
           )}
-          {selected && !formConcluded && renderButtons}
+          {!formConcluded && renderButtons}
         </div>
       </form>
       <div className={classes.maps}>
-        {selected !== ACOES && formConcluded && ajudaMap}
-        {selected === ACOES && formConcluded && percursoMap}
+        {responseData.type !== ACOES && formConcluded && ajudaMap}
+        {responseData.type === ACOES && formConcluded && percursoMap}
         {formConcluded && renderCompleteButtons}
       </div>
       {isLoading && (
@@ -453,4 +455,4 @@ const Help = () => {
   );
 };
 
-export default Help;
+export default EditRequest;

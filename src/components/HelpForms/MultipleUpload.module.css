@@ -13,14 +13,17 @@
   grid-area: il;
   list-style: none;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-evenly;
   padding: 0.3rem;
 }
 
 .imgPreview {
-  height: 18rem;
-  object-fit: cover;
+  padding-top: 1rem;
+  max-height: 15rem;
+  max-width: 30rem;
+  object-fit: contain;
   cursor: pointer;
 }
 
