@@ -162,12 +162,10 @@ const Help = () => {
   };
 
   const yesVolunteersHandler = (event) => {
-    event.preventDefault();
     setVolunteersValue(true);
   };
 
   const noVolunteersHandler = (event) => {
-    event.preventDefault();
     setVolunteersValue(false);
   };
 
@@ -433,6 +431,7 @@ const Help = () => {
                 onChange={numberVolunteersChangeHandler}
                 onBlur={numberVolunteersBlurHandler}
                 error={numberVolunteersHasError}
+                volunteersValue={volunteersValue}
               />
             </div>
           )}

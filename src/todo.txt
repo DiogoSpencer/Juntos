@@ -72,5 +72,3 @@ qualidade da informação e dados criados utilizadores/ como social players, pod
 aspectos de regulação e gestão de benefícios resultantes do processo de criação de valor promovido
 pela plataforma.
 
-
-//falar sobre o token trazer profileImg e 1º e ultimo nome -> ou return do login?   

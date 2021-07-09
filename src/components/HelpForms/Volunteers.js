@@ -27,6 +27,7 @@ const Volunteers = (props) => {
         button2="Não"
         onClick1={props.yesVolunteers}
         onClick2={props.noVolunteers}
+        isButton1={props.volunteersValue}
       />
       </div>
       {props.volunteersValue && numberVolunteers}
