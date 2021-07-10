@@ -13,28 +13,22 @@ const MapDetails = (props) => {
   return (
     <div>
       <div>
-        <label htmlFor="distance">Distância Total Aproximada:</label>
-        <input
-          type="text"
-          id="distance"
-          value={props.enteredDistance}
-          onChange={props.distanceChangeHandler}
-          onBlur={props.distanceBlurHandler}
-        />
-        {props.distanceHasError && (
-          <p className={classes.infoError}>
-            Por favor insira uma distância total aproximada.
-          </p>
-        )}
+        <p className={classes.subTitle}>
+          Distância Total Aproximada: <span>CALCULAR PELO MAPA</span>
+        </p>
       </div>
-      <div>
-        <label htmlFor="difficulty">Exigência Física:</label>
+      <div className={classes.subContainer}>
+        <label className={classes.subTitle} htmlFor="difficulty">
+          Exigência Física:
+        </label>
         <input
-          type="text"
+          type="number"
           id="difficulty"
           value={props.enteredDifficulty}
           onChange={props.difficultyChangeHandler}
           onBlur={props.difficultyBlurHandler}
+          min="1"
+          max="5"
         />
         {props.difficultyHasError && (
           <p className={classes.infoError}>
@@ -48,3 +42,21 @@ const MapDetails = (props) => {
 };
 
 export default MapDetails;
+
+/*
+        <label htmlFor="distance">Distância Total Aproximada:</label>
+
+        <input
+          type="text"
+          id="distance"
+          value={props.enteredDistance}
+          onChange={props.distanceChangeHandler}
+          onBlur={props.distanceBlurHandler}
+        />
+        {props.distanceHasError && (
+          <p className={classes.infoError}>
+            Por favor insira uma distância total aproximada.
+          </p>
+        )}
+
+*/

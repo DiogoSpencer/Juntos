@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { completeMarker } from "../../services/http";
 import useInput from "../hooks/use-input";
 import classes from "./InputPassword.module.css";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
 const InputPassword = (props) => {
   const userEmail = useSelector((state) => state.auth.email);
   const [rating, setRating] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     value: enteredPass,
@@ -28,10 +31,23 @@ const InputPassword = (props) => {
   const passwordSubmitHandler = (event) => {
     event.preventDefault();
 
-    if (!enteredPassIsValid) {
+    if (!enteredPassIsValid || rating <= 0) {
       return;
     }
-    console.log(enteredPass);
+
+    setIsLoading(true);
+    console.log(enteredPass, rating)
+
+    completeMarker(props.markerId, enteredPass, rating).then(
+      (response) => {
+        console.log(response)
+        setIsLoading(false);
+      },
+      (error) => {
+        setIsLoading(false);
+        console.log(error);
+      }
+    );
     //Mandar pass ao server por email ou username
   };
 
@@ -40,6 +56,11 @@ const InputPassword = (props) => {
       <h6 className={classes.title}>
         Concluiste esta ajuda e tens uma password?
       </h6>
+      {isLoading && (
+        <div>
+          <LoadingSpinner />
+        </div>
+      )}
       <form onSubmit={passwordSubmitHandler} className={classes.passContainer}>
         <label htmlFor="pass" className={classes.labelPass}>
           Insere-a aqui para que conte:
@@ -71,7 +92,7 @@ const InputPassword = (props) => {
           disabled={props.isOwner}
         />
         {timeHasError && (
-          <p className={classes.errorPass}>
+          <p className={classes.errorTime }>
             Por favor insere um tempo médio de conclusão maior que 0
           </p>
         )}

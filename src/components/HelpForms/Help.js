@@ -14,6 +14,7 @@ import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import Map from "../Map/Map";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import MapDetails from "./MapDetails";
 
 const AJUDAR = "Oferecer Ajuda";
 const PEDIR = "Pedir Ajuda";
@@ -22,7 +23,14 @@ const ACOES = "Ações";
 
 const isNotEmpty = (value) => value.trim() !== "";
 const isVolunteerNumber = (value) => {
-  if (value > 0 && value <= 10) {
+  if (value > 0) {
+    return true;
+  } else {
+    return false;
+  }
+};
+const isDifficultyNumber = (value) => {
+  if (value > 0 && value <= 5) {
     return true;
   } else {
     return false;
@@ -138,6 +146,22 @@ const Help = () => {
     inputBlurHandler: passBlurHandler,
   } = useInput(isNotEmpty); //pass func to validate
 
+  const {
+    value: enteredDistance,
+    isValid: enteredDistanceIsValid,
+    hasError: distanceHasError,
+    valueChangeHandler: distanceChangeHandler,
+    inputBlurHandler: distanceBlurHandler,
+  } = useInput(isVolunteerNumber);
+
+  const {
+    value: enteredDifficulty,
+    isValid: enteredDifficultyIsValid,
+    hasError: difficultyHasError,
+    valueChangeHandler: difficultyChangeHandler,
+    inputBlurHandler: difficultyBlurHandler,
+  } = useInput(isDifficultyNumber);
+
   const formConcludedHandler = () => {
     setIsFocused(false);
     setFormConcluded(true);
@@ -194,7 +218,11 @@ const Help = () => {
   let pointIsValid = false;
 
   if (point.length > 0) {
-    pointIsValid = true;
+    if (selected === ACOES && enteredDifficultyIsValid) {
+      pointIsValid = true;
+    } else if (selected !== ACOES) {
+      pointIsValid = true;
+    }
   }
 
   const formSubmissionHandler = (event) => {
@@ -225,73 +253,46 @@ const Help = () => {
       generalType = "REQUEST";
     }
 
-    const formInfo = {
-      title: enteredTitle,
-      description: enteredDescription,
-      lat: point[0].lat,
-      lon: point[0].lon,
-      owner: ownerEmail,
-      difficulty: "1",
-      type: typeOfHelp,
-      password: enteredPass,
-      anonymousOwner: anonimousValue,
-      generalType,
-    };
+    let difficulty = 1;
+    let helpersCapactiy = 1;
 
-    const formAcaoInfo = {
+    if (selected === ACOES) {
+      difficulty = enteredDifficulty;
+      helpersCapactiy = enteredNumberVolunteers;
+    }
+
+    const formInfo = {
       title: enteredTitle,
       description: enteredDescription,
       points: point,
       owner: ownerEmail,
-      difficulty: "1",
       type: typeOfHelp,
       password: enteredPass,
       anonymousOwner: anonimousValue,
       generalType,
+      difficulty: difficulty,
+      helpersCapactiy: helpersCapactiy,
     };
 
-    if (selected !== ACOES) {
-      formData.append(
-        "marker",
-        new Blob([JSON.stringify(formInfo)], { type: "application/json" })
-      );
-    } else if (selected === ACOES)
-      formData.append(
-        "path",
-        new Blob([JSON.stringify(formAcaoInfo)], { type: "application/json" })
-      );
+    formData.append(
+      "marker",
+      new Blob([JSON.stringify(formInfo)], { type: "application/json" })
+    );
 
-    if (selected !== ACOES) {
-      createMarker(formData).then(
-        (response) => {
-          setStatus(true);
-        },
-        (error) => {
-          if (error.status === 401) {
-            alert("Sessão expirou");
-            dispatch(authActions.logout());
-            localStorage.removeItem(gS.storage.token);
-          }
-          console.log(error);
-          setIsLoading(false);
+    createMarker(formData).then(
+      (response) => {
+        setStatus(true);
+      },
+      (error) => {
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
         }
-      );
-    } else if (selected === ACOES) {
-      createPath(formData).then(
-        (response) => {
-          setStatus(true);
-        },
-        (error) => {
-          if (error.status === 401) {
-            alert("Sessão expirou");
-            dispatch(authActions.logout());
-            localStorage.removeItem(gS.storage.token);
-          }
-          console.log(error);
-          setIsLoading(false);
-        }
-      );
-    }
+        console.log(error);
+        setIsLoading(false);
+      }
+    );
   };
 
   //formConcludedHandler
@@ -376,10 +377,16 @@ const Help = () => {
         callbackC={callbackC}
         callbackZ={callbackZ}
       />
+      <div>
+        <MapDetails
+          difficultyChangeHandler={difficultyChangeHandler}
+          enteredDifficulty={enteredDifficulty}
+          difficultyBlurHandler={difficultyBlurHandler}
+          difficultyHasError={difficultyHasError}
+        />
+      </div>
     </div>
   );
-
-  //onFocus={formFocusedHandler}
 
   return (
     <div className={classes.mainContainer}>

@@ -145,7 +145,7 @@ const HelpDetails = (props) => {
             <p>{responseData.description}</p>
           </div>
           <div className={classes.inputPass}>
-            <InputPassword isOwner={isOwner} />
+            <InputPassword isOwner={isOwner} markerId={helpId}/>
           </div>
           {!isOwner && (
             <div className={classes.buttonDisplay}>

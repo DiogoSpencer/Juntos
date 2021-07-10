@@ -18,9 +18,13 @@ import { authActions } from "../../store/session/auth";
 import { deleteMarker } from "../../services/http";
 import Map from "../Map/Map";
 
+const RESQUEST = "REQUEST";
+const OFFER = "OFFER";
+
 const HelpDetailsOwner = () => {
   const dispatch = useDispatch();
 
+  let isOwner = false;
   const [responseData, setResponseData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
@@ -48,9 +52,20 @@ const HelpDetailsOwner = () => {
   const loggedUsername = useSelector((state) => state.auth.username);
 
   useEffect(() => {
+    if (!isOwner) {
+      if (responseData && responseData.generalType === RESQUEST) {
+        history.replace(`/ajudas/pedidos/${helpId}`);
+      } else if (responseData && responseData.generalType === OFFER) {
+        history.replace(`/ajudas/ofertas/${helpId}`);
+      }
+    }
+  }, [isOwner, responseData]);
+
+  useEffect(() => {
     setIsLoading(true);
     markerDetails(helpId).then(
       (response) => {
+        console.log(response.data);
         setResponseData(response.data);
         let newVec = {
           lat: parseFloat(response.data.lat),
@@ -73,6 +88,10 @@ const HelpDetailsOwner = () => {
   useEffect(() => {
     setIsLoading(false);
   }, [responseData]);
+
+  if (responseData && responseData.owner === loggedUsername) {
+    isOwner = true;
+  }
 
   const typeHandler = (type) => {
     switch (type) {
@@ -115,12 +134,6 @@ const HelpDetailsOwner = () => {
       );
     }
   };
-
-  let isOwner = false;
-
-  if (responseData.owner === loggedUsername) {
-    isOwner = true;
-  }
 
   return (
     <div className={classes.mainContainer}>

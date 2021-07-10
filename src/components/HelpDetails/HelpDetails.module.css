@@ -59,7 +59,7 @@
   grid-area: ic;
   display: grid;
   row-gap: 1rem;
-  grid-template-rows: 0.25fr 0.25fr 1.5fr 0.5fr 0.25fr 0.25fr 0.25fr;
+  grid-template-rows: 0.25fr 0.25fr auto 0.5fr auto 0.25fr 0.25fr;
   grid-template-areas: "ht" "ud" "id" "dp" "ip" "bd" "er" "dr";
 }
 

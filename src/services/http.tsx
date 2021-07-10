@@ -170,6 +170,22 @@ export async function changeMarker(form: FormData) {
   }
 }
 
+export async function completeMarker(
+  markerId: string,
+  password: string,
+  rating: number
+) {
+  try {
+    return await axios.put(`${url}/rest/marker/complete`, {
+      markerId: markerId,
+      password: password,
+      rating: rating,
+    });
+  } catch (error) {
+    throw error.response;
+  }
+}
+
 /*//ir ao store fazer dispatch de logout e apagar local storage
 //dentro de use effect do app -> redux tb nao ha -> /home
 //= a estar a verificar */

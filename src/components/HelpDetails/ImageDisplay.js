@@ -19,11 +19,12 @@ const ImageDisplay = (props) => {
       ) : (
         <div className={classes.emptyImageList}>
           {props.owner ? (
-            <span className={classes.imgText}>Este pedido não tem imagens</span>
-          ) : (
             <span className={classes.imgText}>
-              Insere algumas imagens para descrever melhor o teu pedido
+              Clica em Editar e insere algumas imagens para tornar o teu pedido
+              mais apelativo
             </span>
+          ) : (
+            <span className={classes.imgText}>Este pedido não tem imagens</span>
           )}
           <img
             src={volunteersIcon}
