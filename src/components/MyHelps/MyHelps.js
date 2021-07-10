@@ -67,8 +67,6 @@ const MyHelps = () => {
     }
   }, [byParam, orderParam, dirParam, pageNumber, valueParam, isOwnRequest]);
 
-  console.log(hasOwnData);
-
   useEffect(() => {
     setIsLoading(false);
     setDisableSelect(false);

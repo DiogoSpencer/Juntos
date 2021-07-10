@@ -52,11 +52,12 @@ const HelpDetails = (props) => {
     markerDetails(helpId).then(
       (response) => {
         setResponseData(response.data);
-        let newVec = {
-          lat: parseFloat(response.data.lat),
-          lon: parseFloat(response.data.lon),
-        };
-        setPoint([newVec]);
+        let responsePoints = response.data.points;
+        responsePoints.map((point) => {
+          point.lat = parseFloat(point.lat);
+          point.lon = parseFloat(point.lon);
+        });
+        setPoint(responsePoints);
       },
       (error) => {
         console.log(error);
@@ -145,7 +146,7 @@ const HelpDetails = (props) => {
             <p>{responseData.description}</p>
           </div>
           <div className={classes.inputPass}>
-            <InputPassword isOwner={isOwner} markerId={helpId}/>
+            <InputPassword isOwner={isOwner} markerId={helpId} />
           </div>
           {!isOwner && (
             <div className={classes.buttonDisplay}>

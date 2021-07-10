@@ -64,7 +64,6 @@ const HelpDetailsOwner = () => {
     setIsLoading(true);
     markerDetails(helpId).then(
       (response) => {
-        console.log(response.data);
         setResponseData(response.data);
         let responsePoints = response.data.points;
         responsePoints.map((point) => {
@@ -72,7 +71,6 @@ const HelpDetailsOwner = () => {
           point.lon = parseFloat(point.lon);
         });
         setPoint(responsePoints);
-        console.log(response.data);
       },
       (error) => {
         console.log(error);
