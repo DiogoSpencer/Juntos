@@ -17,8 +17,19 @@ const ImageDisplay = (props) => {
           ))}
         </ul>
       ) : (
-        <div className={classes.imageList}>
-          <img src={volunteersIcon} alt="sem-imagens" className={classes.volunteer} />
+        <div className={classes.emptyImageList}>
+          {props.owner ? (
+            <span className={classes.imgText}>Este pedido não tem imagens</span>
+          ) : (
+            <span className={classes.imgText}>
+              Insere algumas imagens para descrever melhor o teu pedido
+            </span>
+          )}
+          <img
+            src={volunteersIcon}
+            alt="sem-imagens"
+            className={classes.volunteer}
+          />
         </div>
       )}
     </div>

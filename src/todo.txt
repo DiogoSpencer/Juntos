@@ -17,6 +17,8 @@ para pagina de download da app
 20. logout - timeout do botao para nao dar SPAM
 21. Pensar se basta mostrar paginas privadas sem conteudo ou se é melhor restringir acesso e no logout redirecionar para a home (work around novopedido -> refresh -> redirect)
 22. falta verificar os limites quando se submete - titulo + textBox -> quando fizer os regex
+23. refresh nas listagens
+24. Modificar o alert depois de inserir mais de 5 imagens
 
 #FF9F36
 #3385D9

@@ -7,6 +7,7 @@ const MapDetails = (props) => {
   - info nos apontadores
   - zonas de risco
   - meter a gestão de estados a nivel do pai
+  - ter dificuldade de 1 a 5
   */
 
   return (
@@ -37,7 +38,7 @@ const MapDetails = (props) => {
         />
         {props.difficultyHasError && (
           <p className={classes.infoError}>
-            Por favor insira um nível de dificuldade de 1 (menos exigente) - 3
+            Por favor insira um nível de dificuldade de 1 (menos exigente) - 5
             (mais exigente).
           </p>
         )}

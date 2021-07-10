@@ -14,6 +14,23 @@
   padding: 0.3rem;
 }
 
+.emptyImageList {
+  grid-area: il;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.3rem;
+}
+
+.imgText {
+  text-align: center;
+  margin-left: 8rem;
+  color: #3385d9;
+  font-weight: 600;
+}
+
 .imgPreview {
   padding-top: 1rem;
   max-height: 15rem;
@@ -24,7 +41,8 @@
 .volunteer {
   height: 18rem;
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  flex-direction: column;
+  justify-content: center;
+  object-fit: contain;
   margin-left: 8rem;
 }

@@ -1,32 +1,14 @@
 import React, { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, Redirect, useLocation } from "react-router-dom";
-//import Home from "./components/Home/Home";
-//import Profile from "./components/Profile/Profile";
 import gS from "./services/generalServices.json";
 import jwt_decode from "jwt-decode";
 import Layout from "./components/layout/Layout";
-//import NotFound from "./components/NotFound/NotFound";
-//import FAQ from "./components/FAQ/FAQ";
-//import HeroisWraper from "./components/Herois/HeroisWraper";
-//import Contacts from "./components/Contacts/Contacts";
-//import PasswordRecover from "./components/Password/PasswordRecover";
-//import ChangePassword from "./components/Password/ChangePassword";
-//import AppPage from "./components/App/AppPage";
 import PrivateRoute from "./components/Private/PrivateRoute";
-//import MyHelps from "./components/MyHelps/MyHelps";
-//import Help from "./components/HelpForms/Help";
-//import HelpDetails from "./components/HelpDetails/HelpDetails";
-//import ListHelps from "./components/ListHelps/ListHelps";
-//import Chat from "./components/Chat/Chat";
-//import Conversation from "./components/Chat/Conversation";
 import { authActions } from "./store/session/auth";
 import { getUser } from "./services/http";
-//import TodasAjudas from "./components/MapComponents/TodasAjudas";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
-//import EditRequest from "./components/HelpForms/EditRequest";
-//import UserProfile from "./components/Profile/UserProfile";
 
 const Home = React.lazy(() => import("./components/Home/Home"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
@@ -47,6 +29,9 @@ const MyHelps = React.lazy(() => import("./components/MyHelps/MyHelps"));
 const Help = React.lazy(() => import("./components/HelpForms/Help"));
 const HelpDetails = React.lazy(() =>
   import("./components/HelpDetails/HelpDetails")
+);
+const HelpDetailsOwner = React.lazy(() =>
+  import("./components/HelpDetails/HelpDetailsOwner")
 );
 const ListHelps = React.lazy(() => import("./components/ListHelps/ListHelps"));
 const Chat = React.lazy(() => import("./components/Chat/Chat"));
@@ -157,20 +142,20 @@ function App() {
           <Route exact path="/minhasajudas" render={() => <MyHelps />} />
           <Route
             path="/minhasajudas/criadas/:requestId"
-            render={() => <HelpDetails buttonText="Guardar" />}
+            render={() => <HelpDetailsOwner />}
           />
           <Route
-            path="/minhasajudas/participacoes/:participationId"
+            path="/minhasajudas/participacoes/:requestId"
             render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
           />
           <Route path="/novopedido" render={() => <Help />} />
           <Route exact path="/ajudas" render={() => <ListHelps />} />
           <Route
-            path="/ajudas/pedidos/:pedidoId"
+            path="/ajudas/pedidos/:requestId"
             render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
           />
           <Route
-            path="/ajudas/ofertas/:ofertaId"
+            path="/ajudas/ofertas/:requestId"
             render={() => <HelpDetails buttonText="Pedir Ajuda" />}
           />
           <Route exact path="/conversas" render={() => <Chat />} />

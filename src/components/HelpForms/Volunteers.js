@@ -12,9 +12,8 @@ const Volunteers = (props) => {
         onChange={props.onChange}
         onBlur={props.onBlur}
         min="1"
-        max="10"
       />
-      {props.error && <p className={classes.inputError}>Por favor insira um número de voluntários entre 1 e 10.</p>}
+      {props.error && <p className={classes.inputError}>Por favor insira um número de voluntários maior que 0</p>}
     </div>
   );
 

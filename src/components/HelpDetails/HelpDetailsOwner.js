@@ -1,29 +1,29 @@
 import { useCallback, useEffect, useState } from "react";
-import Button from "../UI/Button";
 import CommentList from "./CommentList";
 import HelpTitle from "./HelpTitle";
 import ImageDisplay from "./ImageDisplay";
 //import ShareHelp from "./ShareHelp";
 import UserDisplay from "./UserDisplay";
 import { Route, Link, useRouteMatch, useHistory } from "react-router-dom";
-import classes from "./HelpDetails.module.css";
+import classes from "./HelpDetailsOwner.module.css";
 import { markerDetails } from "../../services/http";
 import offerHelpIcon from "../../img/helpIcon.png";
 import requestHelpIcon from "../../img/hand.png";
 import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
-import InputPassword from "./InputPassword";
 import gS from "../../services/generalServices.json";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
+import { deleteMarker } from "../../services/http";
 import Map from "../Map/Map";
 
-const HelpDetails = (props) => {
+const HelpDetailsOwner = () => {
   const dispatch = useDispatch();
 
   const [responseData, setResponseData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState(false);
   const [point, setPoint] = useState([]);
   const center =
     point.length > 0
@@ -87,6 +87,35 @@ const HelpDetails = (props) => {
     }
   };
 
+  const deleteRequestHandler = () => {
+    if (
+      window.confirm(
+        "Tem a certeza que pretende apagar este pedido? Esta ação é irreversível."
+      )
+    ) {
+      setIsLoading(true);
+      deleteMarker(helpId).then(
+        (response) => {
+          setIsLoading(false);
+          history.replace("/minhasajudas");
+        },
+        (error) => {
+          setIsLoading(false);
+          if (error.status === 401) {
+            alert(
+              "Sessão expirou! Efetue login novamente para concluir a operação"
+            );
+            dispatch(authActions.logout());
+            localStorage.removeItem(gS.storage.token);
+          } else {
+            console.log(error);
+            setDeleteError(true);
+          }
+        }
+      );
+    }
+  };
+
   let isOwner = false;
 
   if (responseData.owner === loggedUsername) {
@@ -138,20 +167,28 @@ const HelpDetails = (props) => {
             />
           </div>
           <div className={classes.imageDisplay}>
-            <ImageDisplay images={responseData.photoGalery} />
+            <ImageDisplay images={responseData.photoGalery} owner={isOwner} />
           </div>
           <div className={classes.description}>
             <h6 className={classes.subTitle}>Descrição</h6>
             <p>{responseData.description}</p>
           </div>
-          <div className={classes.inputPass}>
-            <InputPassword isOwner={isOwner} />
+          <Link to={`/editar/${helpId}`} className={classes.editRequest}>
+            Editar Pedido
+          </Link>
+          <div className={classes.deleteRequest}>
+            <span
+              onClick={deleteRequestHandler}
+              className={classes.deleteButton}
+            >
+              Apagar Pedido
+            </span>
+            {deleteError && (
+              <p className={classes.deleteError}>
+                Erro inesperado, por favor tente novamente
+              </p>
+            )}
           </div>
-          {!isOwner && (
-            <div className={classes.buttonDisplay}>
-              <Button text={props.buttonText} />
-            </div>
-          )}
         </div>
         <div className={classes.commentContent}>
           <Route path={match.path} exact>
@@ -168,7 +205,7 @@ const HelpDetails = (props) => {
   );
 };
 
-export default HelpDetails;
+export default HelpDetailsOwner;
 //estamos a carregar comments dentro de uma route para nao termos que os ter la diretamente
 //assim so carregamos se user quiser ver os comments, salva-nos um pedido ao server que ate
 //podera ser enorme.
