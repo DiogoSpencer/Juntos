@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import CommentList from "./CommentList";
 import HelpTitle from "./HelpTitle";
 import ImageDisplay from "./ImageDisplay";
-//import ShareHelp from "./ShareHelp";
 import UserDisplay from "./UserDisplay";
 import { Route, Link, useRouteMatch, useHistory } from "react-router-dom";
 import classes from "./HelpDetailsOwner.module.css";
@@ -67,11 +66,13 @@ const HelpDetailsOwner = () => {
       (response) => {
         console.log(response.data);
         setResponseData(response.data);
-        let newVec = {
-          lat: parseFloat(response.data.lat),
-          lon: parseFloat(response.data.lon),
-        };
-        setPoint([newVec]);
+        let responsePoints = response.data.points;
+        responsePoints.map((point) => {
+          point.lat = parseFloat(point.lat);
+          point.lon = parseFloat(point.lon);
+        });
+        setPoint(responsePoints);
+        console.log(response.data);
       },
       (error) => {
         console.log(error);
