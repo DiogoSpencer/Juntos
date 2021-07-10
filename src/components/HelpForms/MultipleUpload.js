@@ -71,8 +71,15 @@ const MultipleUpload = (props) => {
     );
   });
 
+  const textClass = props.images.length > 0 ? classes.addImageTextInactive : classes.addImageText;
+
   return (
     <div className={classes.container}>
+      <h5
+        className={`${textClass}`}
+      >
+        Adiciona imagens e torna o teu pedido mais apelativo!
+      </h5>
       <button
         className={classes.imageButton}
         disabled={props.images.length >= 5}

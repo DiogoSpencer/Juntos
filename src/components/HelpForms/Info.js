@@ -38,24 +38,26 @@ const Info = (props) => {
           <p className={classes.infoError}>Por favor insira um título.</p>
         )}
       </div>
-      <div className={classes.inputPass}>
-        <label htmlFor="pass">Define uma Password</label>
-        <input
-          type="text"
-          id="pass"
-          value={props.enteredPass}
-          onChange={props.passChangeHandler}
-          onBlur={props.passBlurHandler}
-          disabled={props.editing}
-        />
-        <span>
-          Dá esta password às pessoas que te ajudarem para que a ajuda conte.
-          Não a partilhes antes do final do evento.
-        </span>
-        {props.passHasError && (
-          <p className={classes.infoError}>Por favor defina uma password</p>
-        )}
-      </div>
+      {!props.editing && (
+        <div className={classes.inputPass}>
+          <label htmlFor="pass">Define uma Password</label>
+          <input
+            type="text"
+            id="pass"
+            value={props.enteredPass}
+            onChange={props.passChangeHandler}
+            onBlur={props.passBlurHandler}
+            disabled={props.editing}
+          />
+          <span>
+            Dá esta password às pessoas que te ajudarem para que a ajuda conte.
+            Não a partilhes antes do final do evento.
+          </span>
+          {props.passHasError && (
+            <p className={classes.infoError}>Por favor defina uma password</p>
+          )}
+        </div>
+      )}
       <div className={classes.description}>
         <label htmlFor="help">Descrição</label>
         <textarea

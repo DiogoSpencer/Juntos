@@ -2,11 +2,25 @@
   height: 15rem;
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows: .25fr auto;
+  grid-template-rows: .1fr .5fr auto;
   row-gap: .5rem;
   grid-template-areas:
+    "it"
     "ib"
     "il";
+}
+
+.addImageText {
+  grid-area: it;
+  justify-self: center;
+  align-self: start;
+  color: #3385d9;
+  font-weight: 600;
+}
+
+
+.addImageTextInactive {
+  display: none;
 }
 
 .imageList {
@@ -68,7 +82,5 @@
   border-radius: 5px;
   border: 1px solid #3385d9;
   background-color: transparent;
-  background-image: url("../../img/foto.png");
-  background-repeat: no-repeat;
   background-size: 5rem;
 }

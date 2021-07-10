@@ -1,7 +1,7 @@
 .container {
   display: grid;
   grid-template-columns: 0.5fr 5fr;
-  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.2fr 3.5fr;
+  grid-template-rows: 0.5fr 0.5fr auto 0.5fr 0.2fr 3.5fr;
   row-gap: 0.5rem;
   grid-template-areas:
     "tt tt"
@@ -143,7 +143,7 @@
   padding-top: 2rem;
   align-self: center;
   justify-self: center;
-  height: 30rem;
+  height: 25rem;
   margin-bottom: 2rem;
 }
 

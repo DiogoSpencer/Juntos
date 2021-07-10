@@ -8,7 +8,7 @@ import { Prompt, useHistory } from "react-router-dom";
 import SelectHelp from "./SelectHelp";
 import Info from "./Info";
 import classes from "./Help.module.css";
-import { createMarker, createPath } from "../../services/http";
+import { createMarker } from "../../services/http";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
@@ -58,19 +58,23 @@ const Help = () => {
     lat: 38.7071,
     lng: -9.13549,
   });
+
   const [zoom, setZoom] = useState(10);
+
   const callbackC = useCallback(
     (center) => {
       setCenter(center);
     },
     [center]
   );
+
   const callbackZ = useCallback(
     (zoom) => {
       setZoom(zoom);
     },
     [zoom]
   );
+
   const pointsCallback = useCallback(
     (points) => {
       setPoint(points);
@@ -82,6 +86,7 @@ const Help = () => {
   const history = useHistory();
 
   const dispatch = useDispatch();
+
   const ownerEmail = useSelector((state) => state.auth.email);
 
   useEffect(() => {
@@ -147,14 +152,6 @@ const Help = () => {
   } = useInput(isNotEmpty); //pass func to validate
 
   const {
-    value: enteredDistance,
-    isValid: enteredDistanceIsValid,
-    hasError: distanceHasError,
-    valueChangeHandler: distanceChangeHandler,
-    inputBlurHandler: distanceBlurHandler,
-  } = useInput(isVolunteerNumber);
-
-  const {
     value: enteredDifficulty,
     isValid: enteredDifficultyIsValid,
     hasError: difficultyHasError,
@@ -217,8 +214,8 @@ const Help = () => {
 
   let pointIsValid = false;
 
-  if (point.length > 0) {
-    if (selected === ACOES && enteredDifficultyIsValid) {
+  if (point.length > 0 && point !== []) {
+    if (selected === ACOES && point.length >= 2 && enteredDifficultyIsValid) {
       pointIsValid = true;
     } else if (selected !== ACOES) {
       pointIsValid = true;
@@ -271,7 +268,7 @@ const Help = () => {
       anonymousOwner: anonimousValue,
       generalType,
       difficulty: difficulty,
-      helpersCapactiy: helpersCapactiy,
+      helpersCapacity: helpersCapactiy,
     };
 
     formData.append(

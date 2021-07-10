@@ -4,22 +4,21 @@ import Button from "../UI/Button";
 import backIcon from "../../img/back.png";
 import Anonimous from "./Anonimous";
 import Volunteers from "./Volunteers";
-import { useRouteMatch } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import Info from "./Info";
 import classes from "./EditRequest.module.css";
-import { changeMarker, createPath } from "../../services/http";
+import { changeMarker } from "../../services/http";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import Map from "../Map/Map";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { markerDetails } from "../../services/http";
+import MapDetails from "./MapDetails";
 
-const AJUDAR = "Oferecer Ajuda";
-const PEDIR = "Pedir Ajuda";
-const DOAR = "Doar";
-const ACOES = "Ações";
+const ACTION = "ACTION";
 
+let initialPoints = [];
 const isNotEmpty = (value) => value.trim() !== "";
 const isVolunteerNumber = (value) => {
   if (value > 0 && value <= 10) {
@@ -28,11 +27,13 @@ const isVolunteerNumber = (value) => {
     return false;
   }
 };
-
-let typeOfHelp;
-
-const ensureLeave =
-  "Tem a certeza que quer sair? Toda a informação inserida irá ser perdida.";
+const isDifficultyNumber = (value) => {
+  if (value > 0 && value <= 5) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 const EditRequest = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -43,13 +44,13 @@ const EditRequest = () => {
   const [status, setStatus] = useState(false);
   const [responseData, setResponseData] = useState([]);
 
+  const history = useHistory();
   const match = useRouteMatch();
   const helpId = match.params.requestId;
   const editing = match.path === "/editar/:requestId";
 
   //AjudaMap state
   const [point, setPoint] = useState([]);
-
   const [center, setCenter] = useState({
     lat: 38.7071,
     lng: -9.13549,
@@ -81,8 +82,6 @@ const EditRequest = () => {
   /************/
   const dispatch = useDispatch();
 
-  const ownerEmail = useSelector((state) => state.auth.email);
-
   useEffect(() => {
     setIsLoading(true);
     markerDetails(helpId).then(
@@ -93,11 +92,15 @@ const EditRequest = () => {
         setDescriptionValueHandler(response.data.description);
         setSelectedFiles(response.data.photoGalery);
         setAnonimousValue(response.data.anonymousOwner);
-        let newVec = {
-          lat: parseFloat(response.data.lat),
-          lon: parseFloat(response.data.lon),
-        };
-        setPoint([newVec]);
+        let responsePoints = response.data.points;
+        responsePoints.map((point) => {
+          point.lat = parseFloat(point.lat);
+          point.lon = parseFloat(point.lon);
+        });
+        initialPoints = responsePoints;
+        setPoint(responsePoints);
+        setVolunteersValueHandler(response.data.helpersCapacity);
+        setDifficultyValueHandler(response.data.difficulty);
       },
       (error) => {
         console.log(error);
@@ -113,7 +116,10 @@ const EditRequest = () => {
 
   useEffect(() => {
     setIsLoading(false);
-  }, [responseData]);
+    if (status) {
+      history.replace(`/minhasajudas/criadas/${helpId}`);
+    }
+  }, [responseData, status]);
 
   const {
     value: enteredTitle,
@@ -143,13 +149,13 @@ const EditRequest = () => {
   } = useInput(isVolunteerNumber);
 
   const {
-    value: enteredPass,
-    isValid: enteredPassIsValid,
-    hasError: passHasError,
-    valueChangeHandler: passChangeHandler,
-    inputBlurHandler: passBlurHandler,
-    setValueHandler: setPassValueHandler,
-  } = useInput(isNotEmpty); //pass func to validate
+    value: enteredDifficulty,
+    isValid: enteredDifficultyIsValid,
+    hasError: difficultyHasError,
+    valueChangeHandler: difficultyChangeHandler,
+    inputBlurHandler: difficultyBlurHandler,
+    setValueHandler: setDifficultyValueHandler,
+  } = useInput(isDifficultyNumber);
 
   const formConcludedHandler = () => {
     setFormConcluded(true);
@@ -167,26 +173,24 @@ const EditRequest = () => {
     setAnonimousValue(false);
   };
 
-  const yesVolunteersHandler = (event) => {
-    event.preventDefault();
+  const yesVolunteersHandler = () => {
     setVolunteersValue(true);
   };
 
-  const noVolunteersHandler = (event) => {
-    event.preventDefault();
+  const noVolunteersHandler = () => {
     setVolunteersValue(false);
   };
 
   let formIsValid = false;
 
   if (
-    responseData.type !== ACOES &&
+    responseData.type !== ACTION &&
     enteredTitleIsValid &&
     enteredDescriptionIsValid
   ) {
     formIsValid = true;
   } else if (
-    responseData.type === ACOES &&
+    responseData.type === ACTION &&
     enteredTitleIsValid &&
     enteredDescriptionIsValid
   ) {
@@ -199,8 +203,16 @@ const EditRequest = () => {
 
   let pointIsValid = false;
 
-  if (point.length > 0) {
-    pointIsValid = true;
+  if (point.length > 0 && point !== []) {
+    if (
+      responseData.type === ACTION &&
+      point.length >= 2 &&
+      enteredDifficultyIsValid
+    ) {
+      pointIsValid = true;
+    } else if (responseData.type !== ACTION) {
+      pointIsValid = true;
+    }
   }
 
   let changesMade = false;
@@ -211,9 +223,10 @@ const EditRequest = () => {
     JSON.stringify(responseData.photoGalery) !==
       JSON.stringify(selectedFiles) ||
     responseData.anonymousOwner !== anonimousValue ||
+    responseData.helpersCapacity !== enteredNumberVolunteers ||
+    responseData.difficulty !== enteredDifficulty ||
     (point.length > 0 &&
-      (parseFloat(responseData.lat) !== point[0].lat ||
-        parseFloat(responseData.lon) !== point[0].lon))
+      JSON.stringify(initialPoints) !== JSON.stringify(point))
   ) {
     changesMade = true;
   }
@@ -232,80 +245,48 @@ const EditRequest = () => {
     setIsLoading(true);
 
     const formData = new FormData();
-/*
-    if (selectedFiles.length > 0) {
+
+    if (
+      selectedFiles.length > 0 &&
+      JSON.stringify(responseData.photoGalery) !== JSON.stringify(selectedFiles)
+    ) {
       for (const image of selectedFiles) {
-        formData.append("img", image);
+        if (image.type) {
+          console.log(image)
+          formData.append("img", image);
+        }
       }
     }
-*/
 
     const formInfo = {
-      title: enteredTitle,
-      description: enteredDescription,
-      lat: point[0].lat,
-      lon: point[0].lon,
-      difficulty: "1",
-      //anonymousOwner: anonimousValue,
-      id: helpId,
-    };
-
-    const formAcaoInfo = {
       title: enteredTitle,
       id: helpId,
       description: enteredDescription,
       points: point,
-      owner: ownerEmail,
       difficulty: "1",
-      type: typeOfHelp,
-      password: enteredPass,
       anonymousOwner: anonimousValue,
     };
 
-    if (responseData.type !== ACOES) {
-      formData.append(
-        "info",
-        new Blob([JSON.stringify(formInfo)], { type: "application/json" })
-      );
-    } else if (responseData.type === ACOES) {
-      formData.append(
-        "path",
-        new Blob([JSON.stringify(formAcaoInfo)], { type: "application/json" })
-      );
-    }
+    formData.append(
+      "info",
+      new Blob([JSON.stringify(formInfo)], { type: "application/json" })
+    );
 
-    if (responseData.type !== ACOES) {
-      changeMarker(formData).then(
-        (response) => {
-          setStatus(true);
-          console.log(response);
-        },
-        (error) => {
-          if (error.status === 401) {
-            alert("Sessão expirou");
-            dispatch(authActions.logout());
-            localStorage.removeItem(gS.storage.token);
-          }
-          console.log(error);
-          setIsLoading(false);
+    changeMarker(formData).then(
+      (response) => {
+        setStatus(true);
+        console.log(response);
+      },
+      (error) => {
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
         }
-      );
-    } else if (responseData.type === ACOES) {
-      createPath(formData).then(
-        (response) => {
-          setStatus(true);
-        },
-        (error) => {
-          if (error.status === 401) {
-            alert("Sessão expirou");
-            dispatch(authActions.logout());
-            localStorage.removeItem(gS.storage.token);
-          }
-          console.log(error);
-          setIsLoading(false);
-        }
-      );
-    }
+        console.log(error);
+        setIsLoading(false);
+      }
+    );
   };
 
   //formConcludedHandler
@@ -384,6 +365,14 @@ const EditRequest = () => {
         callbackC={callbackC}
         callbackZ={callbackZ}
       />
+      <div>
+        <MapDetails
+          difficultyChangeHandler={difficultyChangeHandler}
+          enteredDifficulty={enteredDifficulty}
+          difficultyBlurHandler={difficultyBlurHandler}
+          difficultyHasError={difficultyHasError}
+        />
+      </div>
     </div>
   );
 
@@ -401,10 +390,6 @@ const EditRequest = () => {
                 titleChangeHandler={titleChangeHandler}
                 titleBlurHandler={titleBlurHandler}
                 titleHasError={titleHasError}
-                enteredPass={enteredPass}
-                passChangeHandler={passChangeHandler}
-                passBlurHandler={passBlurHandler}
-                passHasError={passHasError}
                 enteredDescription={enteredDescription}
                 descriptionChangeHandler={descriptionChangeHandler}
                 descriptionBlurHandler={descriptionBlurHandler}
@@ -416,7 +401,7 @@ const EditRequest = () => {
               />
             </div>
           )}
-          {responseData.type !== ACOES && !formConcluded && (
+          {responseData.type !== ACTION && !formConcluded && (
             <div className={classes.actionContainer}>
               <Anonimous
                 yesAnonimous={yesAnonimousHandler}
@@ -425,7 +410,7 @@ const EditRequest = () => {
               />
             </div>
           )}
-          {responseData.type === ACOES && !formConcluded && (
+          {responseData.type === ACTION && !formConcluded && (
             <div className={classes.actionContainer}>
               <Volunteers
                 yesVolunteers={yesVolunteersHandler}
@@ -442,8 +427,8 @@ const EditRequest = () => {
         </div>
       </form>
       <div className={classes.maps}>
-        {responseData.type !== ACOES && formConcluded && ajudaMap}
-        {responseData.type === ACOES && formConcluded && percursoMap}
+        {responseData.type !== ACTION && formConcluded && ajudaMap}
+        {responseData.type === ACTION && formConcluded && percursoMap}
         {formConcluded && renderCompleteButtons}
       </div>
       {isLoading && (
