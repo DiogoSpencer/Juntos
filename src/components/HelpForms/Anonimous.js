@@ -50,7 +50,7 @@ const Anonimous = (props) => {
           button2="Não"
           onClick1={props.yesAnonimous}
           onClick2={props.noAnonimous}
-          isButton1={props.anonimous ? true : false}
+          isButton1={props.anonimous}
         />
       </div>
       {props.anonimous && showAnonimous}

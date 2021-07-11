@@ -14,7 +14,7 @@ const MapDetails = (props) => {
     <div>
       <div>
         <p className={classes.subTitle}>
-          Distância Total Aproximada: <span>CALCULAR PELO MAPA</span>
+          Distância Total Aproximada: <span>{props.distance / 1000} KM</span>
         </p>
       </div>
       <div className={classes.subContainer}>

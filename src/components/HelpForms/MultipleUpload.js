@@ -7,24 +7,45 @@ const MultipleUpload = (props) => {
 
   const fileChanger = props.fileChangeHandler;
 
+  const textClass = props.images.length > 0 ? classes.addImageTextInactive : "";
+  const text = props.comment ? "Inserir Imagens" : "Adiciona imagens e torna o teu pedido mais apelativo!"
+  const buttonClass = props.comment ? classes.smallButton : classes.imageButton;
+  const imageClass = props.comment ? classes.imgPreviewSmall : classes.imgPreview;
+  const textSmallClass = props.comment ? classes.addText : classes.addImageText;
+  const containerClass = props.comment? classes.containerSmall : classes.container;
+
+
   useEffect(() => {
     if (props.images.length > 0) {
       setPreview([]);
-      for (const image of props.images) {
-        if (image.type) {
-          fileChanger(props.images);
+    
+      let toLoad = props.images.length;
+      let loadedImages = [];
+
+      const synchronizedPreview = (ordinal, image) => {
+        loadedImages[ordinal] = image;
+        if (--toLoad > 0) return;
+        for (const loadedImage of loadedImages) {
+          setPreview((prevState) => prevState.concat(loadedImage));
+        }
+      };
+    
+      for (let i = 0; i < props.images.length; i++) {
+        if (props.images[i].type) {
+          //fileChanger(props.images);
           const reader = new FileReader();
           reader.onloadend = () => {
-            setPreview((prevState) => prevState.concat(reader.result));
+            synchronizedPreview(i, reader.result);
           };
 
-          reader.readAsDataURL(image);
+          reader.readAsDataURL(props.images[i]);
         } else {
-          setPreview((prevState) => prevState.concat(image));
+          synchronizedPreview(i, props.images[i]);
         }
       }
+
     } else if (props.images === null) {
-      fileChanger(props.images);
+      //fileChanger(props.images);
 
       setPreview(null);
     }
@@ -33,14 +54,12 @@ const MultipleUpload = (props) => {
   const handleImageChange = (event) => {
     if (event.target.files) {
       const filesArray = Array.from(event.target.files);
-      console.log(filesArray);
       if (filesArray.length + props.images.length > 5) {
         alert("Máximo 5 imagens");
       } else {
         filesArray.forEach((file) => {
           if (file && file.type.substring(0, 5) === "image") {
             fileChanger((prevState) => {
-              console.log(prevState);
               return prevState.concat(file);
             });
           }
@@ -64,24 +83,22 @@ const MultipleUpload = (props) => {
           src={photo}
           alt={`foto-${index}`}
           onClick={onRemoveHandler}
-          className={classes.imgPreview}
+          className={imageClass}
           id={index}
         />
       </li>
     );
   });
 
-  const textClass = props.images.length > 0 ? classes.addImageTextInactive : classes.addImageText;
-
   return (
-    <div className={classes.container}>
+    <div className={containerClass}>
       <h5
-        className={`${textClass}`}
+        className={`${textClass} ${textSmallClass}`}
       >
-        Adiciona imagens e torna o teu pedido mais apelativo!
+        {text}
       </h5>
       <button
-        className={classes.imageButton}
+        className={buttonClass}
         disabled={props.images.length >= 5}
         onClick={(event) => {
           event.preventDefault();

@@ -1,0 +1,91 @@
+.container {
+  display: grid;
+  width: 50rem;
+  grid-template-columns: 0.4fr 2fr 0.5fr;
+  grid-template-areas:
+    "pi nc ."
+    "nm nc cb"
+    "iu iu iu";
+}
+
+.profileImg {
+  grid-area: pi;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.name {
+  grid-area: nm;
+  color: #3385d9;
+  font-weight: 600;
+  align-self: center;
+}
+
+.newComment {
+  grid-area: nc;
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+  box-shadow: 1px 1px 1px #999;
+}
+
+.newComment:focus {
+  outline: none;
+  box-shadow: 0 0 10px #719ece;
+}
+
+.commentButton {
+  grid-area: cb;
+  align-self: end;
+  justify-self: end;
+  width: 8rem;
+  margin-left: 1rem;
+  background-color: transparent;
+  border-radius: 25px;
+  border: 1px solid #3385d9;
+  color: #3385d9;
+  font-weight: 600;
+}
+
+.commentButton:hover {
+  color: white;
+  background-color: #3385d9;
+  box-shadow: 0 0 10px #719ece;
+}
+
+.commentButton:disabled {
+  cursor: not-allowed;
+}
+
+.commentButton:disabled:hover {
+  border: 1px solid #3385d9;
+  color: #3385d9;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.imageUpload {
+  grid-area: iu;
+  align-self: start;
+  display: grid;
+  height: 12rem;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  grid-template-areas: "mu";
+}
+
+.multiUpload {
+  padding-top: 1rem;
+  grid-area: mu;
+  justify-self: center;
+}
+
+.donateImage {
+  grid-area: mu;
+  padding-top: 2rem;
+  align-self: center;
+  justify-self: center;
+  height: 10rem;
+  margin-top: 3rem;
+}

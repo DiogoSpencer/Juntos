@@ -8,7 +8,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import Info from "./Info";
 import classes from "./EditRequest.module.css";
 import { changeMarker } from "../../services/http";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import Map from "../Map/Map";
@@ -86,7 +86,6 @@ const EditRequest = () => {
     setIsLoading(true);
     markerDetails(helpId).then(
       (response) => {
-        console.log(response.data);
         setResponseData(response.data);
         setTitleValueHandler(response.data.title);
         setDescriptionValueHandler(response.data.description);
@@ -252,18 +251,28 @@ const EditRequest = () => {
     ) {
       for (const image of selectedFiles) {
         if (image.type) {
-          console.log(image)
-          formData.append("img", image);
+          formData.append("Imgs", image);
         }
       }
     }
+
+    let difficulty = 1;
+    
+    if (responseData.type === ACTION) {
+      difficulty = enteredDifficulty;
+    }
+
+    let toRemove = responseData.photoGalery.filter(
+      (photo) => !selectedFiles.includes(photo)
+    );
 
     const formInfo = {
       title: enteredTitle,
       id: helpId,
       description: enteredDescription,
       points: point,
-      difficulty: "1",
+      difficulty: difficulty,
+      imgsToDelete: toRemove,
       anonymousOwner: anonimousValue,
     };
 
@@ -275,7 +284,6 @@ const EditRequest = () => {
     changeMarker(formData).then(
       (response) => {
         setStatus(true);
-        console.log(response);
       },
       (error) => {
         if (error.status === 401) {
@@ -380,6 +388,9 @@ const EditRequest = () => {
 
   return (
     <div className={classes.mainContainer}>
+      {isLoading && <div className={classes.spinner}>
+        <LoadingSpinner/>
+      </div>}
       <form className={classes.formContainer}>
         <div className={classes.subContainer}>
           {!formConcluded && (

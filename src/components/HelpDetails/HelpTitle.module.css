@@ -1,17 +1,17 @@
 .container {
   display: grid;
-  grid-template-columns: 0.4fr 1fr 1.5fr 1fr;
+  grid-template-columns: 0.4fr 1fr 0.75fr 0.75fr 1fr;
   grid-template-rows: 1fr 0.5fr;
   grid-template-areas:
-    ". tt . ht"
-    ". rc . ht";
+    ". tt vc ef ht"
+    ". rc vc ef ht";
 }
 
 .title {
   grid-area: tt;
   align-self: center;
   justify-self: start;
-  color: #e6513e;   
+  color: #e6513e;
   font-weight: 600;
   font-size: 1.5rem;
 }
@@ -20,19 +20,41 @@
   grid-area: rc;
   align-self: center;
   display: grid;
-  grid-template-columns: 0.5fr 0.2fr 0.5fr;
+  grid-template-columns: 0.4fr 0.1fr 0.5fr;
   grid-template-areas: "ty . cd";
+}
+
+.volunteersContainer {
+  grid-area: vc;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.difficultyContainer {
+  grid-area: ef;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.number {
+  text-align: center;
+  color: #ff9f36;
+  font-weight: 600;
 }
 
 .type {
   grid-area: ty;
-  color: #3385D9;   
+  color: #3385d9;
   font-weight: 600;
 }
 
 .creationDate {
   grid-area: cd;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 .helpType {

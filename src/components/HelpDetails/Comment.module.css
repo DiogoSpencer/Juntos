@@ -1,0 +1,55 @@
+.container {
+  display: grid;
+  grid-template-columns: 0.6fr 2.5fr;
+  padding-top: 1rem;
+  margin-bottom: 2rem;
+  grid-template-areas:
+    "pi tx"
+    "nm tx"
+    "dt tx"
+    "im im";
+  border-bottom: 1px solid #3385d9;
+}
+
+.profileImg {
+  grid-area: pi;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.name {
+  grid-area: nm;
+  color: #3385d9;
+  font-weight: 600;
+  align-self: center;
+}
+
+.date {
+  grid-area: dt;
+  color: #3385d9;
+  align-self: center;
+}
+
+.text {
+  grid-area: tx;
+  align-self: start;
+  justify-self: center;
+  border-radius: 25px;
+  border: 1px solid #3385d9;
+  box-shadow: 1px 1px 1px #999;
+}
+
+.imageList {
+  grid-area: im;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  align-content: space-evenly;
+}
+
+.imageComment {
+  max-height: 10rem;
+  max-width: 10rem;
+}

@@ -1,4 +1,4 @@
-import classes from "./HelpTitle.module.css"
+import classes from "./HelpTitle.module.css";
 import offerHelpIcon from "../../img/helpIcon.png";
 import requestHelpIcon from "../../img/hand.png";
 import donateIcon from "../../img/box.png";
@@ -82,7 +82,23 @@ const HelpTitle = (props) => {
         <p className={classes.type}>{typeHandler(props.helpType)}</p>
         <p className={classes.creationDate}>{formatDate(props.creationDate)}</p>
       </div>
-      <img src={typeIconHandler(props.helpType)} alt={typeHandler(props.helpType)}  className={classes.helpType} />
+      {props.helpType === "ACTION" && (
+        <div className={classes.volunteersContainer}>
+          <p className={classes.type}>Voluntários Necessários:</p>
+          <p className={classes.number}>{props.volunteers}</p>
+        </div>
+      )}
+      {props.helpType === "ACTION" && (
+        <div className={classes.difficultyContainer}>
+          <p className={classes.type}>Exigência Física:</p>
+          <p className={classes.number}>{props.difficulty}</p>
+        </div>
+      )}
+      <img
+        src={typeIconHandler(props.helpType)}
+        alt={typeHandler(props.helpType)}
+        className={classes.helpType}
+      />
     </div>
   );
 };

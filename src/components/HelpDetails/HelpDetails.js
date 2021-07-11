@@ -51,6 +51,7 @@ const HelpDetails = (props) => {
     setIsLoading(true);
     markerDetails(helpId).then(
       (response) => {
+        console.log(response);
         setResponseData(response.data);
         let responsePoints = response.data.points;
         responsePoints.map((point) => {
@@ -122,6 +123,8 @@ const HelpDetails = (props) => {
               title={responseData.title}
               helpType={responseData.type}
               creationDate={responseData.creationDate}
+              volunteers={responseData.helpersCapacity}
+              difficulty={responseData.difficulty}
             />
           </div>
           <div className={classes.userDisplay}>
@@ -161,7 +164,7 @@ const HelpDetails = (props) => {
             </div>
           </Route>
           <Route path={`${match.path}/comentarios`}>
-            <CommentList />
+            <CommentList isOwner={isOwner}/>
           </Route>
         </div>
       </div>

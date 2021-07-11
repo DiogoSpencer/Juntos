@@ -25,6 +25,19 @@ para pagina de download da app
 #e6513e
 #B9E1FF
 
+  const buttonClass = props.comment ? classes.smallButton : classes.imageButton;
+  const smallPreview = props.comment ? classes.smallPreview : classes.imgPreview;
+
+
+      const commentTextClass =
+      props.images.length > 0
+        ? classes.addImageTextInactive
+        : classes.addImageText;
+
+
+      {props.comment && <p className={commentTextClass}>Adicionar Imagens</p>}
+
+
 
 server:
 3. parceiros - logo + url

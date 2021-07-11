@@ -1,28 +1,55 @@
-//get AuthedUser so that we can create a new comment
+import classes from "./NewComment.module.css";
 import { useSelector } from "react-redux";
+import MultipleUpload from "../HelpForms/MultipleUpload";
+import donateIcon from "../../img/volunteersdonate.jpg";
 
 //set the text of the new comment
 const NewComment = (props) => {
-  const authUsername = useSelector((state) => state.auth.username)
-  //const [commentText, setCommentText] = useState("");
-
-  const commentTextHandler = (event) => {
-    props.onChange(event.target.value);
-  };
+  const authFirstName = useSelector((state) => state.auth.firstName);
+  const authLastName = useSelector((state) => state.auth.lastName);
+  const authImg = useSelector((state) => state.auth.profileImg);
 
   return (
-    <form onSubmit={props.newCommentHandler}>
-      <img src="" alt="user-profile" />
-      <p>{authUsername}</p>
+    <form onSubmit={props.newCommentHandler} className={classes.container}>
+      <img src={authImg} alt="foto-perfil" className={classes.profileImg} />
+      <p className={classes.name}>
+        {authFirstName} {authLastName}
+      </p>
       <label htmlFor="new-comment" />
       <textarea
         id="new-comment"
         name="newComment"
         placeholder="Escrever comentário..."
-        value={props.text}
-        onChange={commentTextHandler}
+        value={props.enteredDescription}
+        onChange={props.onChange}
+        className={classes.newComment}
+        rows="3"
+        minLength="10"
+        maxLength="1000"
       />
-      <button>Comentar</button>
+      <div className={classes.imageUpload}>
+        <div className={classes.multiUpload}>
+          <MultipleUpload
+            fileChangeHandler={props.fileChangeHandler}
+            images={props.images}
+            comment={true}
+          />
+        </div>
+        {props.images.length <= 0 && (
+          <img
+            src={donateIcon}
+            alt="Adicionar-Imagens"
+            className={classes.donateImage}
+          />
+        )}
+      </div>
+      <button
+        disabled={!props.isValid}
+        onClick={props.newCommentHandler}
+        className={classes.commentButton}
+      >
+        Comentar
+      </button>
     </form>
   );
 };

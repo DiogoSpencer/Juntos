@@ -54,6 +54,7 @@ const Help = () => {
 
   //AjudaMap state
   const [point, setPoint] = useState([]);
+  const [distance, setDistance] = useState(0);
   const [center, setCenter] = useState({
     lat: 38.7071,
     lng: -9.13549,
@@ -81,6 +82,13 @@ const Help = () => {
     },
     [point]
   );
+
+  const distanceCallback = useCallback(
+    (distance) => {
+      setDistance(distance);
+    },
+    [distance]
+);
 
   /************/
   const history = useHistory();
@@ -373,6 +381,7 @@ const Help = () => {
         center={center}
         callbackC={callbackC}
         callbackZ={callbackZ}
+        callbackD={distanceCallback}
       />
       <div>
         <MapDetails
@@ -380,6 +389,7 @@ const Help = () => {
           enteredDifficulty={enteredDifficulty}
           difficultyBlurHandler={difficultyBlurHandler}
           difficultyHasError={difficultyHasError}
+          distance={distance}
         />
       </div>
     </div>
@@ -388,6 +398,11 @@ const Help = () => {
   return (
     <div className={classes.mainContainer}>
       <Prompt when={isFocused} message={(location) => ensureLeave} />
+      {isLoading && (
+        <div className={classes.spinner}>
+          <LoadingSpinner />
+        </div>
+      )}
       <form className={classes.formContainer}>
         {!selected && !formConcluded && (
           <SelectHelp onSelect={onSelectChangeHandler} />
@@ -447,11 +462,6 @@ const Help = () => {
         {selected === ACOES && formConcluded && percursoMap}
         {formConcluded && renderCompleteButtons}
       </div>
-      {isLoading && (
-        <div className={classes.spinner}>
-          <LoadingSpinner />
-        </div>
-      )}
     </div>
   );
 };

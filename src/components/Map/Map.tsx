@@ -6,6 +6,11 @@ import {
   InfoWindow,
 } from "@react-google-maps/api";
 import Autocomplete from "react-google-autocomplete";
+import { Link, useRouteMatch } from "react-router-dom";
+import HelpListItem from "../ListHelps/HelpListItem";
+import HelpAnonimousItem from "../ListHelps/HelpAnonimousItem";
+import classes from "../FAQ/Faq.module.css";
+import Button from "../UI/Button";
 
 const containerStyle = {
   width: "100%",
@@ -27,8 +32,17 @@ export interface Point {
   lon: number;
   description?: string;
   title?: string;
+  date?: string;
+  anonimous?: boolean;
   difficulty?: number;
+  picture?: string;
   type?: string;
+  id?: string;
+  helps?: number;
+  generalType?: string;
+  location?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 interface MapProps {
@@ -39,6 +53,7 @@ interface MapProps {
   callback: (points: Point[]) => void;
   callbackC?: (center: Center) => void;
   callbackZ?: (zoom: number) => void;
+  callbackD?: (distance: number) => void;
   points: Point[];
   center: Center;
   zoom: number;
@@ -125,10 +140,21 @@ function Map(props: MapProps) {
           waypoints: wayPoints(),
         },
         (result, status) => {
-          if (status === google.maps.DirectionsStatus.OK) setDirections(result);
-          else console.log(status);
+          if (status === google.maps.DirectionsStatus.OK) {
+            setDirections(result);
+            let distance = 0;
+            if (result?.routes[0].legs !== undefined) {
+              for (let i = 0; i < result?.routes[0].legs.length; i++)
+                if (result?.routes[0].legs[i].distance !== undefined) {
+                  // @ts-ignore
+                  distance += result?.routes[0].legs[i].distance.value;
+                }
+              if (props.callbackD) props.callbackD(distance);
+            }
+          } else console.log(status);
         }
       );
+    else setDirections(null);
   }, [points]);
 
   const clickMarker = (index: number) => {
@@ -137,6 +163,7 @@ function Map(props: MapProps) {
   function handleLoad(map: any) {
     mapRef.current = map;
   }
+  const match = useRouteMatch();
 
   return (
     <div>
@@ -170,7 +197,7 @@ function Map(props: MapProps) {
           /* Child components, such as markers, info windows, etc. */
           points.map(
             (point: Point, index: number) =>
-              point.type === props.typeSelected && (
+              point.generalType === props.typeSelected && (
                 <Marker
                   position={{ lat: point.lat, lng: point.lon }}
                   onRightClick={() => onRightClick(index)}
@@ -184,11 +211,28 @@ function Map(props: MapProps) {
                       }
                     >
                       <div className="info-wrapper">
-                        <>
-                          <span className="info-title-wrapper">
-                            {point.title}
-                          </span>
-                        </>
+                        <span className="info-title-wrapper">
+                          {point.title}
+                        </span>
+                        <span className="text-wrapper">
+                          {point.description}
+                        </span>
+                        {point.generalType === "REQUEST" && (
+                          <Link
+                            to={`${match.path}/pedidos/${point.id}`}
+                            className={classes.linkContacts}
+                          >
+                            <Button text="Detalhes" />
+                          </Link>
+                        )}
+                        {point.generalType === "OFFER" && (
+                          <Link
+                            to={`${match.path}/ofertas/${point.id}`}
+                            className={classes.linkContacts}
+                          >
+                            <Button text="Detalhes" />
+                          </Link>
+                        )}
                       </div>
                     </InfoWindow>
                   ) : (
