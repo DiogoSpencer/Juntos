@@ -58,6 +58,14 @@ const EditRequest = () => {
 
   const [zoom, setZoom] = useState(10);
 
+  const [distance, setDistance] = useState(0);
+  const distanceCallback = useCallback(
+    (distance) => {
+      setDistance(distance);
+    },
+    [distance]
+  );
+
   const callbackC = useCallback(
     (center) => {
       setCenter(center);
@@ -257,7 +265,7 @@ const EditRequest = () => {
     }
 
     let difficulty = 1;
-    
+
     if (responseData.type === ACTION) {
       difficulty = enteredDifficulty;
     }
@@ -372,6 +380,7 @@ const EditRequest = () => {
         center={center}
         callbackC={callbackC}
         callbackZ={callbackZ}
+        callbackD={distanceCallback}
       />
       <div>
         <MapDetails
@@ -379,6 +388,7 @@ const EditRequest = () => {
           enteredDifficulty={enteredDifficulty}
           difficultyBlurHandler={difficultyBlurHandler}
           difficultyHasError={difficultyHasError}
+          distance={distance}
         />
       </div>
     </div>
@@ -388,9 +398,11 @@ const EditRequest = () => {
 
   return (
     <div className={classes.mainContainer}>
-      {isLoading && <div className={classes.spinner}>
-        <LoadingSpinner/>
-      </div>}
+      {isLoading && (
+        <div className={classes.spinner}>
+          <LoadingSpinner />
+        </div>
+      )}
       <form className={classes.formContainer}>
         <div className={classes.subContainer}>
           {!formConcluded && (

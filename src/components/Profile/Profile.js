@@ -20,9 +20,10 @@ const isProfile = true;
 let firstNameChanged = "";
 let lastNameChanged = "";
 let privacyChanged = "";
+let initialTopics = [];
 const isNotEmpty = (value) => value.trim() !== "";
-const interests = ["DOAR", "OFERTAS", "PEDIDOS", "ACOES"];
-const showInterest = ["Doações", "Ofertas", "Pedidos", "Ações"];
+const interests = ["HELP_OFFER", "HELP_REQUEST", "DONATE", "ACTION"];
+const showInterest = ["Ofertas Ajuda", "Pedidos Ajuda", "Doações", "Ações"];
 
 const Profile = () => {
   const authEmail = useSelector((state) => state.auth.email);
@@ -103,6 +104,12 @@ const Profile = () => {
             setSelectedFile(response.data.profileImg);
             setOriginalFile(response.data.profileImg);
           }
+          initialTopics = new Array(interests.length).fill(false);
+          response.data.favTopics &&
+            response.data.favTopics.forEach((interest) => {
+              initialTopics[interests.indexOf(interest)] = true;
+            });
+          setIsCheckedInterest(initialTopics);
         },
         (error) => {
           if (error.status === 401) {
@@ -126,7 +133,8 @@ const Profile = () => {
     (enteredFirstName !== firstNameChanged ||
       enteredLastName !== lastNameChanged ||
       privacy !== privacyChanged ||
-      selectedFile !== origionalFile)
+      selectedFile !== origionalFile ||
+      JSON.stringify(initialTopics) !== JSON.stringify(isCheckedInterest))
   ) {
     formIsValid = true;
   }
@@ -147,10 +155,19 @@ const Profile = () => {
       formData.append("profileImg", selectedFile);
     }
 
+    let topics = [];
+
+    for (let i = 0; i < isCheckedInterest.length; i++) {
+      if (isCheckedInterest[i]) {
+        topics.push(interests[i]);
+      }
+    }
+
     const userInfo = {
       firstName: enteredFirstName,
       lastName: enteredLastName,
       privacy,
+      favTopics: topics,
     };
 
     formData.append(

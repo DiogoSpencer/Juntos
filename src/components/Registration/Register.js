@@ -11,8 +11,8 @@ const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
 const isProfile = false;
 const isNotEmpty = (value) => value.trim() !== "";
-const interests = ["DOAR", "OFERTAS", "PEDIDOS", "ACOES"];
-const showInterest = ["Doações", "Ofertas", "Pedidos", "Ações"];
+const interests = ["HELP_OFFER", "HELP_REQUEST", "DONATE", "ACTION"];
+const showInterest = ["Ofertas Ajuda", "Pedidos Ajuda", "Doações", "Ações"];
 //TODO: #2 fazer os REGEX de verificacao
 //TODO: #3 Verify if image is one of these types
 //TODO: #4 Restrict image size
@@ -118,6 +118,14 @@ const Register = (props) => {
     formIsValid = true;
   }
 
+  let topics = [];
+
+  for (let i = 0; i < isCheckedInterest.length; i++ ) {
+    if (isCheckedInterest[i]) {
+      topics.push(interests[i])
+    }
+  }
+
   const formSubmissionHandler = (event) => {
     event.preventDefault();
 
@@ -145,6 +153,7 @@ const Register = (props) => {
       lastName: enteredLastName,
       privacy,
       isCompany,
+      favTopics: topics,
     };
 
     formData.append(

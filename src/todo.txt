@@ -19,6 +19,7 @@ para pagina de download da app
 22. falta verificar os limites quando se submete - titulo + textBox -> quando fizer os regex
 23. refresh nas listagens
 24. Modificar o alert depois de inserir mais de 5 imagens
+25. ACTIVE MARKER - listagens e restringir operações + adicionar ativar
 
 #FF9F36
 #3385D9

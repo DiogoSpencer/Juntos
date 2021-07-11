@@ -132,44 +132,48 @@ function App() {
           </Route>
           <Route path="/home" render={() => <Home />} />
           <Route path="/faq" render={() => <FAQ />} />
-          <Route path="/perfil/:username" render={() => <Profile />} />
           <Route path="/verperfil/:username" render={() => <UserProfile />} />
           <Route path="/herois/:heroiId" render={() => <HeroisWraper />} />
           <Route path="/contactos" render={() => <Contacts />} />
-          <Route path="/recuperarpassword" render={() => <PasswordRecover />} />
-          <Route path="/alterarpassword" render={() => <ChangePassword />} />
           <Route path="/app" render={() => <AppPage />} />
-          <Route exact path="/minhasajudas" render={() => <MyHelps />} />
-          <Route
-            path="/minhasajudas/criadas/:requestId"
-            render={() => <HelpDetailsOwner />}
-          />
-          <Route
-            path="/minhasajudas/participacoes/:requestId"
-            render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
-          />
-          <Route path="/novopedido" render={() => <Help />} />
-          <Route exact path="/ajudas" render={() => <ListHelps />} />
-          <Route
-            path="/ajudas/pedidos/:requestId"
-            render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
-          />
-          <Route
-            path="/ajudas/ofertas/:requestId"
-            render={() => <HelpDetails buttonText="Pedir Ajuda" />}
-          />
-          <Route exact path="/conversas" render={() => <Chat />} />
-          <Route
-            path="/conversas/pedidos/:pedidoId"
-            render={() => <Conversation />}
-          />
-          <Route
-            path="/conversas/ofertas/:ofertaId"
-            render={() => <Conversation />}
-          />
-          <Route path="/mapa" render={() => <TodasAjudas />} />
-          <Route path="/editar/:requestId" render={() => <EditRequest />} />
-          <PrivateRoute></PrivateRoute>
+          <PrivateRoute>
+            <Route
+              path="/recuperarpassword"
+              render={() => <PasswordRecover />}
+            />
+            <Route path="/alterarpassword" render={() => <ChangePassword />} />
+            <Route path="/perfil/:username" render={() => <Profile />} />
+            <Route exact path="/minhasajudas" render={() => <MyHelps />} />
+            <Route
+              path="/minhasajudas/criadas/:requestId"
+              render={() => <HelpDetailsOwner />}
+            />
+            <Route
+              path="/minhasajudas/participacoes/:requestId"
+              render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
+            />
+            <Route path="/novopedido" render={() => <Help />} />
+            <Route exact path="/ajudas" render={() => <ListHelps />} />
+            <Route
+              path="/ajudas/pedidos/:requestId"
+              render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
+            />
+            <Route
+              path="/ajudas/ofertas/:requestId"
+              render={() => <HelpDetails buttonText="Pedir Ajuda" />}
+            />
+            <Route exact path="/conversas" render={() => <Chat />} />
+            <Route
+              path="/conversas/pedidos/:pedidoId"
+              render={() => <Conversation />}
+            />
+            <Route
+              path="/conversas/ofertas/:ofertaId"
+              render={() => <Conversation />}
+            />
+            <Route path="/mapa" render={() => <TodasAjudas />} />
+            <Route path="/editar/:requestId" render={() => <EditRequest />} />
+          </PrivateRoute>
           <Route path="*" render={() => <NotFound />} />
         </Switch>
       </Suspense>
