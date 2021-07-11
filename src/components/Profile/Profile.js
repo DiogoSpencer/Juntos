@@ -13,13 +13,11 @@ import ImageUpload from "../Registration/ImageUpload";
 import logoIcon from "../../img/logo.png";
 import PassModal from "./PassModal";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import verifiedIcon from "../../img/verified.png";
 
 const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
 const isProfile = true;
-let firstNameChanged = "";
-let lastNameChanged = "";
-let privacyChanged = "";
 let initialTopics = [];
 const isNotEmpty = (value) => value.trim() !== "";
 const interests = ["HELP_OFFER", "HELP_REQUEST", "DONATE", "ACTION"];
@@ -31,12 +29,12 @@ const Profile = () => {
   const history = useHistory();
   //const match = useRouteMatch();
 
+  const [responseData, setResponseData] = useState([]);
   const [invalidInput, setInvalidInput] = useState(false);
   const [error, setError] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [origionalFile, setOriginalFile] = useState(null);
   const [privacy, setPrivacy] = useState(PUBLIC);
   const [numHelps, setNumHelps] = useState("0");
   const [creationDate, setCreationDate] = useState("");
@@ -84,14 +82,13 @@ const Profile = () => {
 
       getUser(authEmail).then(
         (response) => {
+          console.log(response.data);
+          setResponseData(response.data);
           setUsernameValueHandler(response.data.username);
           setEmailValueHandler(response.data.email);
           setLastNameValueHandler(response.data.lastName);
-          lastNameChanged = response.data.lastName;
           setFirstNameValueHandler(response.data.firstName);
-          firstNameChanged = response.data.firstName;
           setPrivacy(response.data.privacy);
-          privacyChanged = response.data.privacy;
           setNumHelps(response.data.numHelps);
           const date = new Date(response.data.creationDate);
           setCreationDate(
@@ -99,10 +96,8 @@ const Profile = () => {
           );
           if (response.data.profileImg === undefined) {
             setSelectedFile(null);
-            setOriginalFile(null);
           } else {
             setSelectedFile(response.data.profileImg);
-            setOriginalFile(response.data.profileImg);
           }
           initialTopics = new Array(interests.length).fill(false);
           response.data.favTopics &&
@@ -130,10 +125,10 @@ const Profile = () => {
   if (
     enteredFirstNameIsValid &&
     enteredLastNameIsValid &&
-    (enteredFirstName !== firstNameChanged ||
-      enteredLastName !== lastNameChanged ||
-      privacy !== privacyChanged ||
-      selectedFile !== origionalFile ||
+    (enteredFirstName !== responseData.firstName ||
+      enteredLastName !== responseData.lastName ||
+      privacy !== responseData.privacy ||
+      selectedFile !== responseData.profileImg ||
       JSON.stringify(initialTopics) !== JSON.stringify(isCheckedInterest))
   ) {
     formIsValid = true;
@@ -177,13 +172,8 @@ const Profile = () => {
 
     changeCreds(formData).then(
       (response) => {
-        //profilePic: data
-        firstNameChanged = enteredFirstName;
-        lastNameChanged = enteredLastName;
-        privacyChanged = privacy;
         initialTopics = isCheckedInterest;
 
-        setOriginalFile(selectedFile);
         setIsLoading(false);
       },
       (error) => {
@@ -275,6 +265,16 @@ const Profile = () => {
           <p>
             <span className={classes.juntos}>juntos</span> desde: {creationDate}
           </p>
+          {responseData.company && (
+            <p>
+              <img
+                src={verifiedIcon}
+                alt="organizacao-verificada"
+                className={classes.verified}
+              />
+              Organização Verificada
+            </p>
+          )}
         </div>
         <div className={classes.passLink}>
           <div>

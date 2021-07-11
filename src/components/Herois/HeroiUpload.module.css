@@ -1,0 +1,45 @@
+.imageButton {
+  width: 20rem;
+  height: 20rem;
+  border-radius: 25px;
+  border-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  background-image: url("../../img/herois.jpg");
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.imageButton:hover {
+  box-shadow: 0 0 10px #719ece;
+}
+
+.insert {
+    margin-top: 12rem;
+    color: #3385d9;
+    font-weight: 600;
+}
+
+.imageInput {
+  display: none;
+}
+
+.imgPreview {
+  width: 20rem;
+  height: 20rem;
+  border-radius: 25px;
+  object-fit: contain;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.isLoading {
+  background-color: white;
+  object-fit: cover;
+  justify-self: center;
+  align-self: center;
+  z-index: 5;
+}

@@ -45,6 +45,7 @@ const TodasAjudas = React.lazy(() =>
 const EditRequest = React.lazy(() =>
   import("./components/HelpForms/EditRequest")
 );
+const HeroiForm = React.lazy(() => import("./components/Herois/HeroiForm"))
 
 function App() {
   const dispatch = useDispatch();
@@ -136,6 +137,7 @@ function App() {
           <Route path="/herois/:heroiId" render={() => <HeroisWraper />} />
           <Route path="/contactos" render={() => <Contacts />} />
           <Route path="/app" render={() => <AppPage />} />
+          <Route path="/heroiForm" render={() => <HeroiForm />} />
           <PrivateRoute>
             <Route
               path="/recuperarpassword"

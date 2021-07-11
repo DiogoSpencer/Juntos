@@ -8,6 +8,7 @@ import classes from "./UserProfile.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import userIcon from "../../img/userblue.png";
 import logoHelps from "../../img/logo.png";
+import verifiedIcon from "../../img/verified.png";
 
 const UserProfile = () => {
   const [responseData, setResponseData] = useState([]);
@@ -81,6 +82,16 @@ const UserProfile = () => {
             <span className={classes.juntos}>juntos</span> desde:
             {formatDate(responseData.creationDate)}
           </p>
+          {responseData.company && (
+            <p>
+              <img
+                src={verifiedIcon}
+                alt="organizacao-verificada"
+                className={classes.verified}
+              />
+              Organização Verificada
+            </p>
+          )}
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ import ImageDisplay from "./ImageDisplay";
 import UserDisplay from "./UserDisplay";
 import { Route, Link, useRouteMatch, useHistory } from "react-router-dom";
 import classes from "./HelpDetails.module.css";
-import { markerDetails } from "../../services/http";
+import { joinMarker, markerDetails } from "../../services/http";
 import offerHelpIcon from "../../img/helpIcon.png";
 import requestHelpIcon from "../../img/hand.png";
 import donateIcon from "../../img/box.png";
@@ -19,12 +19,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import Map from "../Map/Map";
 
+let text = "";
+
 const HelpDetails = (props) => {
   const dispatch = useDispatch();
 
   const [responseData, setResponseData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [point, setPoint] = useState([]);
+  const [isHelper, setIsHelper] = useState(false);
+
   const center =
     point.length > 0
       ? { lat: point[0].lat, lng: point[0].lon }
@@ -51,7 +55,7 @@ const HelpDetails = (props) => {
     setIsLoading(true);
     markerDetails(helpId).then(
       (response) => {
-        console.log(response);
+        console.log(response.data);
         setResponseData(response.data);
         let responsePoints = response.data.points;
         responsePoints.map((point) => {
@@ -59,6 +63,10 @@ const HelpDetails = (props) => {
           point.lon = parseFloat(point.lon);
         });
         setPoint(responsePoints);
+        if (response.data.helperUsernames.includes(loggedUsername)) {
+          setIsHelper(true);
+        }
+        typeHandler(response.data.type)
       },
       (error) => {
         console.log(error);
@@ -79,12 +87,16 @@ const HelpDetails = (props) => {
   const typeHandler = (type) => {
     switch (type) {
       case "HELP_OFFER":
+        text = "Aceitar Ajuda";
         return offerHelpIcon;
       case "HELP_REQUEST":
+        text = "Oferecer Ajuda";
         return requestHelpIcon;
       case "DONATE":
+        text = "Aceitar Doação";
         return donateIcon;
       case "ACTION":
+        text = "Participar";
         return actionIcon;
     }
   };
@@ -94,6 +106,23 @@ const HelpDetails = (props) => {
   if (responseData.owner === loggedUsername) {
     isOwner = true;
   }
+
+  const joinHelpHandler = () => {
+    setIsLoading(true);
+    joinMarker(helpId).then(
+      (response) => {
+        setIsLoading(false);
+        setIsHelper(true);
+        console.log(response);
+      },
+      (error) => {
+        setIsLoading(false);
+        console.log(error);
+      }
+    );
+  };
+
+  const onGiveUpHandler = () => {};
 
   return (
     <div className={classes.mainContainer}>
@@ -153,7 +182,19 @@ const HelpDetails = (props) => {
           </div>
           {!isOwner && (
             <div className={classes.buttonDisplay}>
-              <Button text={props.buttonText} />
+              <Button
+                text={text}
+                onClick={joinHelpHandler}
+                disabled={isHelper}
+              />
+              {isHelper && (
+                <span
+                  className={classes.participating}
+                  onClick={onGiveUpHandler}
+                >
+                  Estás a participar! Clica aqui para desistir.
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -164,7 +205,7 @@ const HelpDetails = (props) => {
             </div>
           </Route>
           <Route path={`${match.path}/comentarios`}>
-            <CommentList isOwner={isOwner}/>
+            <CommentList isOwner={isOwner} />
           </Route>
         </div>
       </div>

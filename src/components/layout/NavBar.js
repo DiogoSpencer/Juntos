@@ -8,12 +8,13 @@ import ModalAuth from "../Login/ModalAuth.js";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import { logout } from "../../services/http";
-import userIcon from "../../img/userblue.png"
+import userIcon from "../../img/userblue.png";
 
 const NavBar = () => {
+  const [disabledButton, setDisabledButton] = useState(false);
   const isLogged = useSelector((state) => state.auth.isLogged);
   const username = useSelector((state) => state.auth.username);
-  const profileImg = useSelector((state) => state.auth.profileImg)
+  const profileImg = useSelector((state) => state.auth.profileImg);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -28,19 +29,25 @@ const NavBar = () => {
   };
 
   const logoutHandler = () => {
-    logout().then(
-      (response) => {
-        dispatch(authActions.logout());
-        localStorage.removeItem(gS.storage.token);
-        history.go(0)
-      },
-      (error) => {
-        //logout anyways
-        dispatch(authActions.logout());
-        localStorage.removeItem(gS.storage.token);
-        history.go(0)
-      }
-    );
+    setDisabledButton(true);
+    setTimeout(() => {
+      setDisabledButton(() => false);
+    }, 2000);
+    if (!disabledButton) {
+      logout().then(
+        (response) => {
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+          history.go(0);
+        },
+        (error) => {
+          //logout anyways
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+          history.go(0);
+        }
+      );
+    }
   };
 
   return (
@@ -135,7 +142,19 @@ const NavBar = () => {
                 className={classes.navLink}
                 to={`/perfil/${username}`}
               >
-              {profileImg ? <img src={profileImg} alt="perfil" className={classes.profileImg}/> : <img src={userIcon} alt="perfil" className={classes.profileImg}/>}
+                {profileImg ? (
+                  <img
+                    src={profileImg}
+                    alt="perfil"
+                    className={classes.profileImg}
+                  />
+                ) : (
+                  <img
+                    src={userIcon}
+                    alt="perfil"
+                    className={classes.profileImg}
+                  />
+                )}
               </NavLink>
             </li>
           )}

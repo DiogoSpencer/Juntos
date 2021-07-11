@@ -105,6 +105,17 @@
   justify-self: center;
 }
 
+.participating {
+  color: #e6513e;
+  font-weight: 400;
+  padding-top: 1rem;
+}
+
+.participating:hover {
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .editRequest {
   grid-area: er;
   align-self: center;

@@ -8,7 +8,6 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 const isNotEmpty = (value) => value.trim() !== "";
 
 const InputPassword = (props) => {
-  const userEmail = useSelector((state) => state.auth.email);
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,11 +35,9 @@ const InputPassword = (props) => {
     }
 
     setIsLoading(true);
-    console.log(enteredPass, rating)
 
     completeMarker(props.markerId, enteredPass, rating).then(
       (response) => {
-        console.log(response)
         setIsLoading(false);
       },
       (error) => {
@@ -57,7 +54,7 @@ const InputPassword = (props) => {
         Concluiste esta ajuda e tens uma password?
       </h6>
       {isLoading && (
-        <div>
+        <div className={classes.spinner}>
           <LoadingSpinner />
         </div>
       )}

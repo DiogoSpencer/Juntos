@@ -21,7 +21,7 @@
 .profileContainer {
   grid-area: mf;
   display: grid;
-  grid-template-rows: .25fr auto;
+  grid-template-rows: 0.25fr auto;
   row-gap: 3rem;
   grid-template-areas: "tt" "id";
 }
@@ -52,6 +52,12 @@
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 2rem;
+}
+
+.verified {
+  height: 3rem;
+  width: 4rem;
+  padding-right: 1rem;
 }
 
 .logo {

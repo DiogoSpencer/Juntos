@@ -64,6 +64,7 @@ const HelpDetailsOwner = () => {
     setIsLoading(true);
     markerDetails(helpId).then(
       (response) => {
+        console.log(response.data)
         setResponseData(response.data);
         let responsePoints = response.data.points;
         responsePoints.map((point) => {

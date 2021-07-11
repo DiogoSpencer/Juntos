@@ -30,7 +30,7 @@ const MyHelps = () => {
   // !!! fazer um novo estado para mudar paginas quando e participacao
   const [search, setSearch] = useState("");
   const [isOwnRequest, setIsOwnRequest] = useState(true); //mostrar as ativas
-  const [hasOwnData, setHasOwnData] = useState([]); //assumindo que nao ha data de pedidos ativos no inicio - antes de fetch -fazer set no fetch se return > 0
+  const [responseData, setResponseData] = useState([]); //assumindo que nao ha data de pedidos ativos no inicio - antes de fetch -fazer set no fetch se return > 0
   const [hasPaticipationData, setHasParticipationData] = useState(null); //assumindo que nao ha data de pedidos inativas no inicio - antes de fetch
   const [byParam, setByParam] = useState(OWNER);
   const [orderParam, setOrderParam] = useState(DATE);
@@ -53,7 +53,8 @@ const MyHelps = () => {
           `?by=${byParam}&value=${valueParam}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${5}`
         ).then(
           (response) => {
-            setHasOwnData(response.data.content);
+            console.log(response.data)
+            setResponseData(response.data.content);
           },
           (error) => {
             console.log(error);
@@ -70,7 +71,7 @@ const MyHelps = () => {
   useEffect(() => {
     setIsLoading(false);
     setDisableSelect(false);
-  }, [hasOwnData]);
+  }, [responseData]);
 
   const changeByHandler = (byValue) => {
     setByParam(byValue);
@@ -86,7 +87,7 @@ const MyHelps = () => {
 
   const nextPageHandler = () => {
     setPageNumber((prevState) => {
-      if (hasOwnData.length === PAGE_SIZE) {
+      if (responseData.length === PAGE_SIZE) {
         return prevState + 1;
       } else {
         return prevState;
@@ -166,7 +167,7 @@ const MyHelps = () => {
   //lista de ajudas ativas -> mapear da data que se recebe
   const ownRequests = (
     <Fragment>
-      {hasOwnData.length <= 0 && (
+      {responseData.length <= 0 && (
         <Fragment>
           <img
             src={volunteersIcon}
@@ -179,10 +180,10 @@ const MyHelps = () => {
         </Fragment>
       )}
 
-      {hasOwnData.length > 0 && (
+      {responseData.length > 0 && (
         <Fragment>
           <ul>
-            {hasOwnData.map((request) => (
+            {responseData.map((request) => (
               <li key={request.id}>
                 <Link
                   to={`${match.path}/criadas/${request.id}`}
@@ -312,7 +313,7 @@ const MyHelps = () => {
             button2="Paticipações"
             onClick1={activeHandler}
             onClick2={inactiveHandler}
-            isButton1={hasOwnData}
+            isButton1={responseData}
           />
         </div>
         <div className={classes.requestContainer}>

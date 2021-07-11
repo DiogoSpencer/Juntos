@@ -55,6 +55,12 @@
   margin-left: 2rem;
 }
 
+.verified {
+  height: 3rem;
+  width: 4rem;
+  padding-right: 1rem;
+}
+
 .passLink {
   margin-left: 4rem;
   grid-area: pl;

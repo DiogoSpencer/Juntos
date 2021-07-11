@@ -6,6 +6,7 @@ import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
 import classes from "./RequestCardOwner.module.css";
 import userIcon from "../../img/userblue.png";
+import verifiedIcon from "../../img/verified.png";
 
 const RequestCardOwner = (props) => {
   const typeHandler = (type) => {
@@ -45,6 +46,16 @@ const RequestCardOwner = (props) => {
           <img src={helpIcon} alt="número-ajudas" />
           {props.numHelps}
         </p>
+        {props.company && (
+          <p>
+            <img
+              src={verifiedIcon}
+              alt="organizacao-verificada"
+              className={classes.verified}
+            />
+            Organização Verificada
+          </p>
+        )}
       </div>
       <h3 className={classes.title}>{props.title}</h3>
       <div className={classes.markerInfo}>
