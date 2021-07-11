@@ -181,6 +181,7 @@ const Profile = () => {
         firstNameChanged = enteredFirstName;
         lastNameChanged = enteredLastName;
         privacyChanged = privacy;
+        initialTopics = isCheckedInterest;
 
         setOriginalFile(selectedFile);
         setIsLoading(false);
