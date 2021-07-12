@@ -9,7 +9,7 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 const isNotEmpty = (value) => value.trim() !== "";
 
 const HeroiForm = () => {
-  const [selectedFile, setSelectedFile] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const firstName = useSelector((state) => state.auth.firstName);
   const lastName = useSelector((state) => state.auth.lastName);
@@ -34,11 +34,13 @@ const HeroiForm = () => {
 
   let formIsValid = false;
 
-  if (enteredNameIsValid && enteredDescriptionIsValid) {
+  if (enteredNameIsValid && enteredDescriptionIsValid && selectedFile) {
     formIsValid = true;
   }
 
-  const heroiSubmissionHandler = () => {
+  const heroiSubmissionHandler = (event) => {
+    event.preventDefault();
+    
     if (!formIsValid) {
       return;
     }
@@ -52,7 +54,7 @@ const HeroiForm = () => {
       <h1 className={classes.heroiTitle}>Parabéns Herói {firstName}!</h1>
       <p className={classes.heroiInstructions}>
         Escolhe um dos teus pedidos favoritos de entre todos os que participaste
-        e preenche este formulário com uma foto e uma pequena descrição a
+        e preenche este formulário com uma foto <br/> e uma pequena descrição a
         explicar porque este pedido foi tão especial para ti
       </p>
       {isLoading && (

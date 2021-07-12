@@ -54,6 +54,9 @@ const Help = () => {
 
   //AjudaMap state
   const [point, setPoint] = useState([]);
+  const [interestPoints, setInterestPoints] = useState([]);
+  const [dangerPoints, setDangerPoints] = useState([]);
+
   const [distance, setDistance] = useState(0);
   const [center, setCenter] = useState({
     lat: 38.7071,
@@ -277,6 +280,8 @@ const Help = () => {
       generalType,
       difficulty: difficulty,
       helpersCapacity: helpersCapactiy,
+      interests: interestPoints,
+      dangers: dangerPoints,
     };
 
     formData.append(
@@ -390,6 +395,10 @@ const Help = () => {
           difficultyBlurHandler={difficultyBlurHandler}
           difficultyHasError={difficultyHasError}
           distance={distance}
+          interests={interestPoints}
+          interestsHandler={setInterestPoints}
+          dangers={dangerPoints}
+          dangersHandler={setDangerPoints}
         />
       </div>
     </div>

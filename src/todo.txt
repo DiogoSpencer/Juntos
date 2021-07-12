@@ -19,6 +19,8 @@ para pagina de download da app
 24. Modificar o alert depois de inserir mais de 5 imagens
 25. ACTIVE MARKER - listagens e restringir operações + adicionar ativar
 
+//amanha -> listagem de todos + lista de participacao
+
 eu ainda me falta fazer a listagem que vai ter a barra de localização (tenho que falar com o palma)
 atualizar as query todas
 media query para o css

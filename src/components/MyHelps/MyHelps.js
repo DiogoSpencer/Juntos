@@ -16,7 +16,7 @@ const ASC = "ASC";
 const DESC = "DESC";
 const OWNER = "owner";
 const DATE = "creationDate";
-const INTEREST = "INTEREST"
+const INTEREST = "INTEREST";
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const MS_PER_HOUR = 1000 * 60 * 60;
 const MS_PER_MINUTE = 1000 * 60;
@@ -53,7 +53,7 @@ const MyHelps = () => {
           `?by=${byParam}&value=${valueParam}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${5}`
         ).then(
           (response) => {
-            console.log(response.data)
+            console.log(response.data);
             setResponseData(response.data.content);
           },
           (error) => {
@@ -63,8 +63,9 @@ const MyHelps = () => {
           }
         );
         setDisableSelect(false);
+      } else {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
   }, [byParam, orderParam, dirParam, pageNumber, valueParam, isOwnRequest]);
 
