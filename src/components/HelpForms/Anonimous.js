@@ -1,4 +1,4 @@
-import SideButtons from "../UI/SideButtons";
+import SideButtons from "../UI/SIdeButtons";
 import classes from "./Anonimous.module.css";
 import avatarIcon from "../../img/userblue.png";
 import helpIcon from "../../img/logo.png";

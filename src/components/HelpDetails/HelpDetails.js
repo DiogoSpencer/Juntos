@@ -27,6 +27,8 @@ const HelpDetails = (props) => {
   const [responseData, setResponseData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [point, setPoint] = useState([]);
+  const [dangerPoint, setDangerPoint] = useState([]);
+  const [interestPoint, setInterestPoint] = useState([]);
   const [isHelper, setIsHelper] = useState(false);
 
   const center =
@@ -36,8 +38,12 @@ const HelpDetails = (props) => {
           lat: 38.7071,
           lng: -9.13549,
         };
-  const zoom = 10;
-
+    const bounds = {
+        latLower: 38.575291199755526,
+        lngLower: -9.428419410934456,
+        latTop: 38.83652687020928,
+        lngTop: -8.84256058906556,
+    };
   const pointsCallback = useCallback(
     (points) => {
       setPoint(points);
@@ -62,6 +68,21 @@ const HelpDetails = (props) => {
           point.lon = parseFloat(point.lon);
         });
         setPoint(responsePoints);
+
+
+        let responseDanger = response.data.dangers
+        responseDanger.map((point) => {
+          point.lat = parseFloat(point.lat)
+          point.lon = parseFloat(point.lon)
+        });
+        setDangerPoint(responseDanger)
+
+        let responseInterest = response.data.interests
+        responseInterest.map((point) => {
+          point.lat = parseFloat(point.lat)
+          point.lon = parseFloat(point.lon)
+        });
+        setInterestPoint(responseInterest)
         if (response.data.helperUsernames.includes(loggedUsername)) {
           setIsHelper(true);
         }
@@ -151,11 +172,13 @@ const HelpDetails = (props) => {
         <div className={classes.mapContent}>
           <Map
             noAdd
+            bounds={bounds}
             noPlaces
             points={point}
-            center={center}
-            zoom={zoom}
+            dangerPoints={dangerPoint}
+            interestPoints={interestPoint}
             callback={pointsCallback}
+            center={center}
           />
         </div>
         <div className={classes.infoContent}>

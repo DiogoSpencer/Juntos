@@ -19,6 +19,8 @@ import MapDetails from "./MapDetails";
 const ACTION = "ACTION";
 
 let initialPoints = [];
+let initialDangers = [];
+let initialInterests = [];
 const isNotEmpty = (value) => value.trim() !== "";
 const isVolunteerNumber = (value) => {
   if (value > 0 && value <= 10) {
@@ -49,14 +51,28 @@ const EditRequest = () => {
   const helpId = match.params.requestId;
   const editing = match.path === "/editar/:requestId";
 
+  const [marker, setMarker] = useState("MARKER");
+
   //AjudaMap state
   const [point, setPoint] = useState([]);
+  const [dangerPoint, setDangerPoint] = useState([]);
+  const [interestPoint, setInterestPoint] = useState([]);
+
   const [center, setCenter] = useState({
     lat: 38.7071,
     lng: -9.13549,
   });
 
-  const [zoom, setZoom] = useState(10);
+  const bounds = {
+    latLower: 38.575291199755526,
+    lngLower: -9.428419410934456,
+    latTop: 38.83652687020928,
+    lngTop: -8.84256058906556,
+  };
+
+  const handleClick = (event) => {
+    setMarker(event.target.value);
+  }
 
   const [distance, setDistance] = useState(0);
   const distanceCallback = useCallback(
@@ -73,18 +89,25 @@ const EditRequest = () => {
     [center]
   );
 
-  const callbackZ = useCallback(
-    (zoom) => {
-      setZoom(zoom);
-    },
-    [zoom]
-  );
 
   const pointsCallback = useCallback(
     (points) => {
       setPoint(points);
     },
     [point]
+  );
+
+  const dangerPointsCallback = useCallback(
+      (points) => {
+        setDangerPoint(points);
+      },
+      [dangerPoint]
+  );
+  const interestPointsCallback = useCallback(
+      (points) => {
+        setInterestPoint(points);
+      },
+      [interestPoint]
   );
 
   /************/
@@ -106,6 +129,23 @@ const EditRequest = () => {
         });
         initialPoints = responsePoints;
         setPoint(responsePoints);
+
+        let responseDanger = response.data.dangers
+        responseDanger.map((point) => {
+          point.lat = parseFloat(point.lat)
+          point.lon = parseFloat(point.lon)
+        });
+        setDangerPoint(responseDanger)
+        initialDangers = responseDanger
+
+        let responseInterest = response.data.interests
+        responseInterest.map((point) => {
+          point.lat = parseFloat(point.lat)
+          point.lon = parseFloat(point.lon)
+        });
+        setInterestPoint(responseInterest)
+        initialInterests = responseInterest
+
         setVolunteersValueHandler(response.data.helpersCapacity);
         setDifficultyValueHandler(response.data.difficulty);
       },
@@ -234,7 +274,13 @@ const EditRequest = () => {
     responseData.difficulty !== enteredDifficulty ||
     (point.length > 0 &&
       JSON.stringify(initialPoints) !== JSON.stringify(point))
-  ) {
+      ||
+      (dangerPoint.length > 0 &&
+          JSON.stringify(initialDangers) !== JSON.stringify(dangerPoint))
+      ||
+      (interestPoint.length > 0 &&
+          JSON.stringify(initialInterests) !== JSON.stringify(interestPoint ))
+  )  {
     changesMade = true;
   }
 
@@ -283,6 +329,10 @@ const EditRequest = () => {
       imgsToDelete: toRemove,
       anonymousOwner: anonimousValue,
     };
+    if(responseData.type !== ACTION) {
+      formInfo.dangers = [];
+      formInfo.interests = [];
+    }
 
     formData.append(
       "info",
@@ -350,13 +400,15 @@ const EditRequest = () => {
         <span className={classes.selectedTitle}>{enteredTitle}</span>
       </h1>
       <Map
-        unique
-        zoom={zoom}
-        center={center}
-        points={point.length <= 0 ? [] : [point[0]]}
-        callback={pointsCallback}
-        callbackC={callbackC}
-        callbackZ={callbackZ}
+          unique
+          center={center}
+          bounds={bounds}
+          points={point.length <= 0 ? [] : [point[0]]}
+          dangerPoints={[]}
+          interestPoints={[]}
+          callback={pointsCallback}
+          callbackC={callbackC}
+          markerTypeSelected={"MARKER"}
       />
     </div>
   );
@@ -374,14 +426,30 @@ const EditRequest = () => {
         <span className={classes.selectedTitle}>{enteredTitle}</span>
       </h1>
       <Map
-        points={point}
-        callback={pointsCallback}
-        zoom={zoom}
-        center={center}
-        callbackC={callbackC}
-        callbackZ={callbackZ}
-        callbackD={distanceCallback}
+          points={point}
+          remove
+          bounds={bounds}
+          edit
+          dangerPoints={dangerPoint}
+          interestPoints={interestPoint}
+          callback={pointsCallback}
+          center={center}
+          callbackC={callbackC}
+          callbackD={distanceCallback}
+          callbackDanger={dangerPointsCallback}
+          callbackInterest={interestPointsCallback}
+          markerTypeSelected={marker}
       />
+      <div>
+        <label>
+          Select your marker option:
+          <select value={marker} onChange={handleClick}>
+            <option value="MARKER">Marker</option>
+            <option value="DANGER">Danger Zone</option>
+            <option value="INTEREST">Interest Point</option>
+          </select>
+        </label>
+      </div>
       <div>
         <MapDetails
           difficultyChangeHandler={difficultyChangeHandler}

@@ -12,7 +12,7 @@ import { createMarker } from "../../services/http";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
-import Map from "../Map/Map";
+import Map, {Bounds} from "../Map/Map";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import MapDetails from "./MapDetails";
 
@@ -51,11 +51,19 @@ const Help = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState(false);
+  const bounds = {
+    latLower: 38.575291199755526,
+    lngLower: -9.428419410934456,
+    latTop: 38.83652687020928,
+    lngTop: -8.84256058906556,
+  };
+
+  const [marker, setMarker] = useState("MARKER");
 
   //AjudaMap state
   const [point, setPoint] = useState([]);
-  const [interestPoints, setInterestPoints] = useState([]);
-  const [dangerPoints, setDangerPoints] = useState([]);
+  const [dangerPoint, setDangerPoint] = useState([]);
+  const [interestPoint, setInterestPoint] = useState([]);
 
   const [distance, setDistance] = useState(0);
   const [center, setCenter] = useState({
@@ -63,7 +71,10 @@ const Help = () => {
     lng: -9.13549,
   });
 
-  const [zoom, setZoom] = useState(10);
+
+  const handleClick = (event) => {
+    setMarker(event.target.value);
+  }
 
   const callbackC = useCallback(
     (center) => {
@@ -72,18 +83,26 @@ const Help = () => {
     [center]
   );
 
-  const callbackZ = useCallback(
-    (zoom) => {
-      setZoom(zoom);
-    },
-    [zoom]
-  );
+
 
   const pointsCallback = useCallback(
     (points) => {
       setPoint(points);
     },
     [point]
+  );
+
+  const dangerPointsCallback = useCallback(
+      (points) => {
+        setDangerPoint(points);
+      },
+      [dangerPoint]
+  );
+  const interestPointsCallback = useCallback(
+      (points) => {
+        setInterestPoint(points);
+      },
+      [interestPoint]
   );
 
   const distanceCallback = useCallback(
@@ -183,6 +202,7 @@ const Help = () => {
   const backFormHandler = () => {
     setIsFocused(false); //decidir se vamos usar isto aqui tb
     setSelected("");
+
   };
 
   const yesAnonimousHandler = () => {
@@ -280,15 +300,18 @@ const Help = () => {
       generalType,
       difficulty: difficulty,
       helpersCapacity: helpersCapactiy,
-      interests: interestPoints,
-      dangers: dangerPoints,
+      interests: interestPoint,
+      dangers: dangerPoint,
     };
-
+    if(selected !== ACOES) {
+      formInfo.dangers = [];
+      formInfo.interests = [];
+    }
+    console.log(formInfo)
     formData.append(
       "marker",
       new Blob([JSON.stringify(formInfo)], { type: "application/json" })
     );
-
     createMarker(formData).then(
       (response) => {
         setStatus(true);
@@ -356,13 +379,15 @@ const Help = () => {
         <span className={classes.selectedTitle}>{selected}</span>
       </h1>
       <Map
-        unique
-        zoom={zoom}
-        center={center}
-        points={point.length <= 0 ? [] : [point[0]]}
-        callback={pointsCallback}
-        callbackC={callbackC}
-        callbackZ={callbackZ}
+          unique
+          center={center}
+          bounds={bounds}
+          points={point.length <= 0 ? [] : [point[0]]}
+          dangerPoints={[]}
+          interestPoints={[]}
+          callback={pointsCallback}
+          callbackC={callbackC}
+          markerTypeSelected={"MARKER"}
       />
     </div>
   );
@@ -380,14 +405,30 @@ const Help = () => {
         <span className={classes.selectedTitle}>{selected}</span>
       </h1>
       <Map
-        points={point}
-        callback={pointsCallback}
-        zoom={zoom}
-        center={center}
-        callbackC={callbackC}
-        callbackZ={callbackZ}
-        callbackD={distanceCallback}
+          points={point}
+          remove
+          edit
+          bounds={bounds}
+          dangerPoints={dangerPoint}
+          interestPoints={interestPoint}
+          callback={pointsCallback}
+          center={center}
+          callbackC={callbackC}
+          callbackD={distanceCallback}
+          callbackDanger={dangerPointsCallback}
+          callbackInterest={interestPointsCallback}
+          markerTypeSelected={marker}
       />
+      <div>
+        <label>
+          Select your marker option:
+          <select value={marker} onChange={handleClick}>
+            <option value="MARKER">Marker</option>
+            <option value="DANGER">Danger Zone</option>
+            <option value="INTEREST">Interest Point</option>
+          </select>
+        </label>
+      </div>
       <div>
         <MapDetails
           difficultyChangeHandler={difficultyChangeHandler}
@@ -395,10 +436,10 @@ const Help = () => {
           difficultyBlurHandler={difficultyBlurHandler}
           difficultyHasError={difficultyHasError}
           distance={distance}
-          interests={interestPoints}
-          interestsHandler={setInterestPoints}
-          dangers={dangerPoints}
-          dangersHandler={setDangerPoints}
+          interests={interestPoint}
+          interestsHandler={setInterestPoint}
+          dangers={dangerPoint}
+          dangersHandler={setDangerPoint}
         />
       </div>
     </div>

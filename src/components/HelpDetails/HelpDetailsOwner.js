@@ -26,6 +26,8 @@ const HelpDetailsOwner = () => {
   let isOwner = false;
   const [responseData, setResponseData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [dangerPoint, setDangerPoint] = useState([]);
+  const [interestPoint, setInterestPoint] = useState([]);
   const [deleteError, setDeleteError] = useState(false);
   const [point, setPoint] = useState([]);
   const center =
@@ -35,8 +37,12 @@ const HelpDetailsOwner = () => {
           lat: 38.7071,
           lng: -9.13549,
         };
-  const zoom = 10;
-
+  const bounds = {
+    latLower: 38.575291199755526,
+    lngLower: -9.428419410934456,
+    latTop: 38.83652687020928,
+    lngTop: -8.84256058906556,
+  };
   const pointsCallback = useCallback(
     (points) => {
       setPoint(points);
@@ -72,6 +78,20 @@ const HelpDetailsOwner = () => {
           point.lon = parseFloat(point.lon);
         });
         setPoint(responsePoints);
+
+        let responseDanger = response.data.dangers
+        responseDanger.map((point) => {
+          point.lat = parseFloat(point.lat)
+          point.lon = parseFloat(point.lon)
+        });
+        setDangerPoint(responseDanger)
+
+        let responseInterest = response.data.interests
+        responseInterest.map((point) => {
+          point.lat = parseFloat(point.lat)
+          point.lon = parseFloat(point.lon)
+        });
+        setInterestPoint(responseInterest)
       },
       (error) => {
         console.log(error);
@@ -149,12 +169,14 @@ const HelpDetailsOwner = () => {
       <div className={classes.subContainer}>
         <div className={classes.mapContent}>
           <Map
-            noAdd
-            noPlaces
-            points={point}
-            center={center}
-            zoom={zoom}
-            callback={pointsCallback}
+              noAdd
+              bounds={bounds}
+              noPlaces
+              points={point}
+              dangerPoints={dangerPoint}
+              interestPoints={interestPoint}
+              callback={pointsCallback}
+              center={center}
           />
         </div>
         <div className={classes.infoContent}>
