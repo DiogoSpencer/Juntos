@@ -47,7 +47,14 @@ const UserDisplay = (props) => {
         <img src={helpIcon} alt="número-ajudas" />
         <p>{props.numHelps}</p>
         {props.company && (
-          <img src={verifiedIcon} alt="organizacao-verificada" className={classes.verified}/>
+          <p className={classes.verified}>
+            <img
+              src={verifiedIcon}
+              alt="organizacao-verificada"
+              className={classes.verifiedIcon}
+            />
+            Organização Verificada
+          </p>
         )}
       </div>
     </div>

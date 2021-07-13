@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { completeMarker } from "../../services/http";
 import useInput from "../hooks/use-input";
 import classes from "./InputPassword.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import { authActions } from "../../store/session/auth";
+import gS from "../../services/generalServices.json";
+import { useDispatch } from "react-redux";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
 const InputPassword = (props) => {
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const {
     value: enteredPass,
@@ -41,8 +44,13 @@ const InputPassword = (props) => {
         setIsLoading(false);
       },
       (error) => {
-        setIsLoading(false);
         console.log(error);
+        setIsLoading(false);
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+        }
       }
     );
     //Mandar pass ao server por email ou username
@@ -89,7 +97,7 @@ const InputPassword = (props) => {
           disabled={props.isOwner}
         />
         {timeHasError && (
-          <p className={classes.errorTime }>
+          <p className={classes.errorTime}>
             Por favor insere um tempo médio de conclusão maior que 0
           </p>
         )}

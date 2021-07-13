@@ -38,12 +38,12 @@ const HelpDetails = (props) => {
           lat: 38.7071,
           lng: -9.13549,
         };
-    const bounds = {
-        latLower: 38.575291199755526,
-        lngLower: -9.428419410934456,
-        latTop: 38.83652687020928,
-        lngTop: -8.84256058906556,
-    };
+  const bounds = {
+    latLower: 38.575291199755526,
+    lngLower: -9.428419410934456,
+    latTop: 38.83652687020928,
+    lngTop: -8.84256058906556,
+  };
   const pointsCallback = useCallback(
     (points) => {
       setPoint(points);
@@ -69,33 +69,32 @@ const HelpDetails = (props) => {
         });
         setPoint(responsePoints);
 
-
-        let responseDanger = response.data.dangers
+        let responseDanger = response.data.dangers;
         responseDanger.map((point) => {
-          point.lat = parseFloat(point.lat)
-          point.lon = parseFloat(point.lon)
+          point.lat = parseFloat(point.lat);
+          point.lon = parseFloat(point.lon);
         });
-        setDangerPoint(responseDanger)
+        setDangerPoint(responseDanger);
 
-        let responseInterest = response.data.interests
+        let responseInterest = response.data.interests;
         responseInterest.map((point) => {
-          point.lat = parseFloat(point.lat)
-          point.lon = parseFloat(point.lon)
+          point.lat = parseFloat(point.lat);
+          point.lon = parseFloat(point.lon);
         });
-        setInterestPoint(responseInterest)
+        setInterestPoint(responseInterest);
         if (response.data.helperUsernames.includes(loggedUsername)) {
           setIsHelper(true);
         }
         typeHandler(response.data.type);
       },
       (error) => {
-        console.log(error);
+        /*console.log(error);
         setIsLoading(false);
         if (error.status === 401) {
           alert("Sessão expirou");
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
-        }
+        }*/
       }
     );
   }, [helpId]);
@@ -136,8 +135,13 @@ const HelpDetails = (props) => {
         console.log(response);
       },
       (error) => {
+        /*console.log(error);
         setIsLoading(false);
-        console.log(error);
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+        }*/
       }
     );
   };
@@ -151,8 +155,13 @@ const HelpDetails = (props) => {
         console.log(response);
       },
       (error) => {
+        /*console.log(error);
         setIsLoading(false);
-        console.log(error);
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+        }*/
       }
     );
   };

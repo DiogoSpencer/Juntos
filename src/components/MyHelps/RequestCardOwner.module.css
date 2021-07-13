@@ -25,10 +25,11 @@
   object-fit: cover;
 }
 
-.verified {
+.verifiedIcon {
   height: 3rem;
   width: 4rem;
   padding-right: 1rem;
+  object-fit: contain;
 }
 
 .userInfo {

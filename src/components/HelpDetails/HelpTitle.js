@@ -84,8 +84,8 @@ const HelpTitle = (props) => {
       </div>
       {props.helpType === "ACTION" && (
         <div className={classes.volunteersContainer}>
-          <p className={classes.type}>Voluntários Necessários:</p>
-          <p className={classes.number}>{props.volunteers}</p>
+          <p className={classes.type}>Voluntários:</p>
+          <p className={classes.number}>{props.currentHelpers} de {props.volunteers}</p>
         </div>
       )}
       {props.helpType === "ACTION" && (

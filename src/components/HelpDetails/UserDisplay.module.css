@@ -1,6 +1,6 @@
 .container {
   display: grid;
-  grid-template-columns: 0.4fr 0.4fr 0.9fr 2.6fr;
+  grid-template-columns: 0.4fr 0.4fr 1.5fr 2.0fr;
   grid-template-rows: 1fr 0.5fr;
   grid-template-areas: ". pi sc ." ". pi nh .";
 }
@@ -27,9 +27,16 @@
 }
 
 .verified {
-  height: 3rem;
-  width: 4rem;
-  padding-right: 1rem;
+  display: flex;
+  flex-direction: row;
+  padding-left: 1rem;
+  font-size: .8rem;
+}
+
+.verifiedIcon {
+  object-fit: cover;
+  height: 3.5rem;
+  width: 3.5rem;
 }
 
 .nameContainer {

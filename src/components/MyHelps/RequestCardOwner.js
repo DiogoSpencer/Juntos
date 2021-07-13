@@ -45,17 +45,12 @@ const RequestCardOwner = (props) => {
         <p>
           <img src={helpIcon} alt="número-ajudas" />
           {props.numHelps}
+          {props.company && <img
+            src={verifiedIcon}
+            alt="organizacao-verificada"
+            className={classes.verifiedIcon}
+          />}
         </p>
-        {props.company && (
-          <p>
-            <img
-              src={verifiedIcon}
-              alt="organizacao-verificada"
-              className={classes.verified}
-            />
-            Organização Verificada
-          </p>
-        )}
       </div>
       <h3 className={classes.title}>{props.title}</h3>
       <div className={classes.markerInfo}>

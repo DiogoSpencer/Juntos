@@ -1,133 +1,260 @@
 .mainContainer {
-    display: grid;
-    height: 100%;
-    width: 100%;
-    grid-template-rows: 0.25fr auto;
-    grid-auto-columns: 0.4fr auto 0.4fr;
-    row-gap: 1rem;
-    grid-template-areas: ". tt ." ". mc .";
-  }
-  
-  .title {
-    grid-area: tt;
-    align-self: center;
-    justify-self: center;
-    color: #e6513e;
-    font-weight: 600;
-    font-size: 2rem;
-    margin-bottom: 2rem;
-  }
-  
-  .title img {
-    padding-right: 1rem;
-    height: 3rem;
-  }
-  
-  .spinner {
-    grid-area: mc;
-    background-color: white;
-    align-self: center;
-    justify-self: center;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 5;
-  }
-  
-  .subContainer {
-    grid-area: mc;
-    display: grid;
-    grid-template-rows: auto;
-    row-gap: 3rem;
-    grid-template-areas: "mp" "ic" "cc";
-  }
-  
-  .mapContent {
-    grid-area: mp;
-    align-self: center;
-  }
-  
-  .commentContent {
-    grid-area: cc;
-    align-self: center;
-    justify-self: center;
-  }
-  
-  .infoContent {
-    grid-area: ic;
-    display: grid;
-    row-gap: 1rem;
-    grid-template-rows: 0.25fr 0.25fr 1.5fr 0.25fr 0.25fr;
-    grid-template-areas: "ht" "ud" "id" "dp" "er" "dr";
-  }
-  
-  .helpTitle {
-    grid-area: ht;
-    border-bottom: 1px solid #b9e1ff;
-  }
-  
-  .userDisplay {
-    grid-area: ud;
-    border-bottom: 1px solid #b9e1ff;
-  }
-  
-  .imageDisplay {
-    grid-area: id;
-    border-bottom: 1px solid #b9e1ff;
-  }
-  
-  .description {
-    grid-auto-columns: dp;
-    border-bottom: 1px solid #b9e1ff;
-    text-align: center;
-    font-size: 0.9rem;
-    padding-bottom: 0.5rem;
-    padding-top: 0.5rem;
-  }
-  
-  .subTitle {
-    color: #e6513e;
-    font-weight: 600;
-    font-size: 1.2rem;
-    padding-bottom: 1.5rem;
-  }
-  
-  .editRequest {
-    grid-area: er;
-    align-self: center;
-    justify-self: center;
-    text-decoration: none;
-    color: #3385d9;
-    font-weight: 600;
-  }
-  
-  .editRequest:hover {
-    text-decoration: none;
-    color: #3385d9;
-    font-weight: 700;
-  }
-  
-  .deleteRequest {
-    grid-area: dr;
-    align-self: center;
-    justify-self: center;
-    color: #c0392b;
-    cursor: pointer;
-    font-weight: 600;
-  }
-  
-  .deleteRequest:hover {
-    font-weight: 700;
-  }
-  
-  .deleteError {
-    color: #e6513e;
-    font-weight: 400;
-    text-align: center;
-    padding-top: 0.5rem;
-    width: 5rem;
-    font-size: 1rem;
-  }
-  
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-rows: 0.25fr auto;
+  grid-auto-columns: 0.4fr auto 0.4fr;
+  row-gap: 1rem;
+  grid-template-areas: ". tt ." ". mc .";
+}
+
+.title {
+  grid-area: tt;
+  align-self: center;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.title img {
+  padding-right: 1rem;
+  height: 3rem;
+}
+
+.spinner {
+  grid-area: mc;
+  background-color: white;
+  align-self: center;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.completeDiv {
+  grid-area: mc;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  display: grid;
+  grid-template-areas:
+    "tl"
+    "lg";
+  row-gap: 3rem;
+  z-index: 5;
+}
+
+.completeTitle {
+  grid-area: tl;
+  padding-top: 1rem;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.completeImg {
+  height: 18rem;
+  grid-area: lg;
+  justify-self: center;
+  align-self: center;
+}
+
+.subContainer {
+  grid-area: mc;
+  display: grid;
+  grid-template-rows: auto;
+  row-gap: 3rem;
+  grid-template-areas: "mp" "ic" "cc";
+}
+
+.mapContent {
+  grid-area: mp;
+  align-self: center;
+}
+
+.commentContent {
+  grid-area: cc;
+  align-self: center;
+  justify-self: center;
+}
+
+.infoContent {
+  grid-area: ic;
+  display: grid;
+  row-gap: 1rem;
+  grid-template-rows: 0.25fr 0.25fr 1.5fr 1fr 0.25fr 0.25fr;
+  grid-template-areas: "ht" "ud" "id" "dp" "sa" "er" "dr";
+}
+
+.helpTitle {
+  grid-area: ht;
+  border-bottom: 1px solid #b9e1ff;
+}
+
+.userDisplay {
+  grid-area: ud;
+  border-bottom: 1px solid #b9e1ff;
+}
+
+.imageDisplay {
+  grid-area: id;
+  border-bottom: 1px solid #b9e1ff;
+}
+
+.description {
+  grid-auto-columns: dp;
+  border-bottom: 1px solid #b9e1ff;
+  text-align: center;
+  font-size: 0.9rem;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.subTitle {
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 1.2rem;
+  padding-bottom: 1.5rem;
+}
+
+.startAction {
+  grid-area: sa;
+  width: 12.5rem;
+  height: 2.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  background-color: #3385d9;
+  color: white;
+  border: 1px solid #3385d9;
+  align-self: center;
+  justify-self: center;
+}
+
+.startAction:hover {
+  background-color: transparent;
+  color: #3385d9;
+  border: 1px solid #3385d9;
+}
+
+.passForm {
+  grid-area: sa;
+  justify-self: center;
+  display: grid;
+  row-gap: 1rem;
+  grid-template-areas: "lp" "ip" "bt" "ep";
+  border-bottom: 1px solid #3385d9;
+  padding-bottom: 1rem;
+}
+
+.labelPass {
+  grid-area: lp;
+  justify-self: end;
+  padding-right: 1rem;
+  color: #3385d9;
+  align-self: center;
+  justify-self: center;
+}
+
+.inputPass {
+  grid-area: ip;
+  width: 20rem;
+  justify-self: end;
+  border: 1px solid #3385d9;
+  box-shadow: 0 4px 5px 0 rgba(65, 132, 234, 0.585);
+  border-radius: 10px;
+  width: 15rem;
+  padding: 0.3rem;
+  align-self: center;
+  justify-self: center;
+}
+
+.inputPass:focus,
+.inputPass:active {
+  outline: none;
+}
+
+.inputPass:disabled {
+  cursor: not-allowed;
+}
+
+.errorPass {
+  grid-area: ep;
+  align-self: center;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.reactivate {
+  grid-area: bt;
+  width: 12.5rem;
+  height: 2.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  background-color: transparent;
+  color: #3385d9;
+  border: 1px solid #3385d9;
+  align-self: center;
+  justify-self: center;
+}
+
+.reactivate:hover {
+  background-color: #3385d9;
+  color: white;
+  border: 1px solid #3385d9;
+}
+
+.reactivate:disabled {
+  cursor: not-allowed;
+}
+
+.reactivate:hover:disabled {
+  background-color: transparent;
+  color: #3385d9;
+  border: 1px solid #3385d9;
+  cursor: not-allowed;
+}
+
+.editRequest {
+  grid-area: er;
+  align-self: center;
+  justify-self: center;
+  text-decoration: none;
+  color: #3385d9;
+  font-weight: 600;
+}
+
+.editRequest:hover {
+  text-decoration: none;
+  color: #3385d9;
+  font-weight: 800;
+}
+
+.deleteRequest {
+  grid-area: dr;
+  align-self: center;
+  justify-self: center;
+  color: #c0392b;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.deleteRequest:hover {
+  font-weight: 800;
+}
+
+.deleteError {
+  color: #e6513e;
+  font-weight: 400;
+  text-align: center;
+  padding-top: 0.5rem;
+  width: 5rem;
+  font-size: 1rem;
+}
