@@ -66,6 +66,7 @@ const Help = () => {
   const [interestPoint, setInterestPoint] = useState([]);
 
   const [distance, setDistance] = useState(0);
+  const [location, setLocation] = useState('');
   const [center, setCenter] = useState({
     lat: 38.7071,
     lng: -9.13549,
@@ -82,8 +83,6 @@ const Help = () => {
     },
     [center]
   );
-
-
 
   const pointsCallback = useCallback(
     (points) => {
@@ -111,6 +110,12 @@ const Help = () => {
     },
     [distance]
 );
+  const locationCallback = useCallback(
+      (location) => {
+        setLocation(location);
+      },
+      [location]
+  );
 
   /************/
   const history = useHistory();
@@ -288,7 +293,6 @@ const Help = () => {
       difficulty = enteredDifficulty;
       helpersCapactiy = enteredNumberVolunteers;
     }
-
     const formInfo = {
       title: enteredTitle,
       description: enteredDescription,
@@ -302,6 +306,7 @@ const Help = () => {
       helpersCapacity: helpersCapactiy,
       interests: interestPoint,
       dangers: dangerPoint,
+      location: location
     };
     if(selected !== ACOES) {
       formInfo.dangers = [];
@@ -312,20 +317,21 @@ const Help = () => {
       "marker",
       new Blob([JSON.stringify(formInfo)], { type: "application/json" })
     );
-    createMarker(formData).then(
-      (response) => {
-        setStatus(true);
-      },
-      (error) => {
-        if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
-        }
-        console.log(error);
-        setIsLoading(false);
-      }
-    );
+      createMarker(formData).then(
+          (response) => {
+            setStatus(true);
+          },
+          (error) => {
+            if (error.status === 401) {
+              alert("Sessão expirou");
+              dispatch(authActions.logout());
+              localStorage.removeItem(gS.storage.token);
+            }
+            console.log(error);
+            setIsLoading(false);
+          }
+      );
+
   };
 
   //formConcludedHandler
@@ -387,6 +393,7 @@ const Help = () => {
           interestPoints={[]}
           callback={pointsCallback}
           callbackC={callbackC}
+          callbackLo={locationCallback}
           markerTypeSelected={"MARKER"}
       />
     </div>
@@ -414,6 +421,7 @@ const Help = () => {
           callback={pointsCallback}
           center={center}
           callbackC={callbackC}
+          callbackLo={locationCallback}
           callbackD={distanceCallback}
           callbackDanger={dangerPointsCallback}
           callbackInterest={interestPointsCallback}

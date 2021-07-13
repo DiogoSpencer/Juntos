@@ -46,7 +46,7 @@ function TodasAjudas() {
   );
   useEffect(() => {
     setIsLoading(true);
-    getMarkers(center.lat, center.lng, 10).then(
+    getMarkers(bounds.latLower, bounds.lngLower, bounds.latTop, bounds.lngTop).then(
         (response) => {
           let newVec: Point[] = response.data;
           for (let i = 0; i < newVec.length; i++) {

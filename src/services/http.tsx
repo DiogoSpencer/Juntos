@@ -129,16 +129,18 @@ export async function markerDetails(markerId: string) {
 }
 
 export async function getMarkers(
-  centerLat: number,
-  centerLon: number,
-  radius: number
+    SWlat: number,
+    SWlon: number,
+    NElat: number,
+    NElon: number
 ) {
   try {
-    return await axios.get(`${url}/rest/marker/area`, {
+    return await axios.get(`${url}/rest/marker/box`, {
       params: {
-        centerLat: centerLat,
-        centerLon: centerLon,
-        radius: radius,
+        SWlat: SWlat,
+        SWlon: SWlon,
+        NElat: NElat,
+        NElon: NElon,
       },
     });
   } catch (error) {

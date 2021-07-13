@@ -11,7 +11,6 @@ import {Link, useRouteMatch} from "react-router-dom";
 import classes from "../FAQ/Faq.module.css";
 import Button from "../UI/Button";
 import Form from 'react-bootstrap/Form';
-import {forEach} from "@react-google-maps/api/dist/utils/foreach";
 
 const containerStyle = {
   width: "100%",
@@ -57,6 +56,7 @@ interface MapProps {
   callbackBounds?: (bounds: Bounds) => void;
   callbackC?: (center: Center) => void;
   callbackD?: (distance: number) => void;
+  callbackLo?: (location: string) => void;
   points: Point[];
   dangerPoints: Point[];
   interestPoints: Point[];
@@ -209,8 +209,9 @@ function Map(props: MapProps) {
         let res = response.results.filter(
             res => res.types.includes(admin)
         )
-        if(res.length > 0)
-        console.log(res[0].address_components[0].long_name)
+        if(res.length > 0 && props.callbackLo) {
+          props.callbackLo(res[0].address_components[0].long_name)
+        }
       })
     }
     if (points.length > 1 && !props.noRoute)
@@ -288,7 +289,8 @@ function Map(props: MapProps) {
                       lat: place.geometry?.location?.lat(),
                       lng: place.geometry?.location?.lng(),
                     });
-
+                  if(place.address_components !== undefined)
+                 console.log(place.address_components[0].long_name)
                 }}
             />
         )}
