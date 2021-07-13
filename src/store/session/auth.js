@@ -35,7 +35,8 @@ const authenticationSlice = createSlice({
       state.numHelps = 0;
     },
     resetToken(state, action) {
-      state.token = action.payload.token;
+      state.token = action.payload;
+      console.log("store " + action.payload)
     },
   },
 });

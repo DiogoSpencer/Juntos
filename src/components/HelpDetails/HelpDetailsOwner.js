@@ -5,7 +5,7 @@ import ImageDisplay from "./ImageDisplay";
 import UserDisplay from "./UserDisplay";
 import { Route, Link, useRouteMatch, useHistory } from "react-router-dom";
 import classes from "./HelpDetailsOwner.module.css";
-import { markerDetails } from "../../services/http";
+import { markerDetails, restartMarker, startMarker } from "../../services/http";
 import offerHelpIcon from "../../img/helpIcon.png";
 import requestHelpIcon from "../../img/hand.png";
 import donateIcon from "../../img/box.png";
@@ -16,6 +16,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import { deleteMarker } from "../../services/http";
 import Map from "../Map/Map";
+import juntosIcon from "../../img/logo.png";
+import useInput from "../hooks/use-input";
+
+const isNotEmpty = (value) => value.trim() !== "";
 
 const RESQUEST = "REQUEST";
 const OFFER = "OFFER";
@@ -30,6 +34,8 @@ const HelpDetailsOwner = () => {
   const [interestPoint, setInterestPoint] = useState([]);
   const [deleteError, setDeleteError] = useState(false);
   const [point, setPoint] = useState([]);
+  const [beginAction, setBeginAction] = useState(false);
+
   const center =
     point.length > 0
       ? { lat: point[0].lat, lng: point[0].lon }
@@ -56,6 +62,14 @@ const HelpDetailsOwner = () => {
 
   const loggedUsername = useSelector((state) => state.auth.username);
 
+  const {
+    value: enteredPass,
+    isValid: enteredPassIsValid,
+    hasError: passHasError,
+    valueChangeHandler: passChangeHandler,
+    inputBlurHandler: passBlurHandler,
+  } = useInput(isNotEmpty); //pass func to validate
+
   useEffect(() => {
     if (!isOwner) {
       if (responseData && responseData.generalType === RESQUEST) {
@@ -70,7 +84,7 @@ const HelpDetailsOwner = () => {
     setIsLoading(true);
     markerDetails(helpId).then(
       (response) => {
-        console.log(response.data)
+        console.log(response.data);
         setResponseData(response.data);
         let responsePoints = response.data.points;
         responsePoints.map((point) => {
@@ -79,19 +93,19 @@ const HelpDetailsOwner = () => {
         });
         setPoint(responsePoints);
 
-        let responseDanger = response.data.dangers
+        let responseDanger = response.data.dangers;
         responseDanger.map((point) => {
-          point.lat = parseFloat(point.lat)
-          point.lon = parseFloat(point.lon)
+          point.lat = parseFloat(point.lat);
+          point.lon = parseFloat(point.lon);
         });
-        setDangerPoint(responseDanger)
+        setDangerPoint(responseDanger);
 
-        let responseInterest = response.data.interests
+        let responseInterest = response.data.interests;
         responseInterest.map((point) => {
-          point.lat = parseFloat(point.lat)
-          point.lon = parseFloat(point.lon)
+          point.lat = parseFloat(point.lat);
+          point.lon = parseFloat(point.lon);
         });
-        setInterestPoint(responseInterest)
+        setInterestPoint(responseInterest);
       },
       (error) => {
         console.log(error);
@@ -155,6 +169,55 @@ const HelpDetailsOwner = () => {
     }
   };
 
+  const beginActionHandler = () => {
+    setIsLoading(true);
+    startMarker(helpId).then(
+      (response) => {
+        setBeginAction(true);
+        setIsLoading(false);
+      },
+      (error) => {
+        setIsLoading(false);
+        if (error.status === 401) {
+          alert(
+            "Sessão expirou! Efetue login novamente para concluir a operação"
+          );
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+        }
+        console.log(error);
+      }
+    );
+  };
+
+  const reActivateRequest = () => {
+    setIsLoading(true);
+    restartMarker(helpId, enteredPass).then(
+      (response) => {
+        setIsLoading(false);
+        history.go(0);
+      },
+      (error) => {
+        setIsLoading(false);
+        if (error.status === 401) {
+          alert(
+            "Sessão expirou! Efetue login novamente para concluir a operação"
+          );
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+        }
+        console.log(error);
+      }
+    );
+  };
+
+  const showBeginAction = (
+    <div className={classes.completeDiv}>
+      <h1 className={classes.completeTitle}>Ação Iniciada!</h1>
+      <img src={juntosIcon} alt="juntos-icon" className={classes.completeImg} />
+    </div>
+  );
+
   return (
     <div className={classes.mainContainer}>
       <h1 className={classes.title}>
@@ -166,17 +229,18 @@ const HelpDetailsOwner = () => {
           <LoadingSpinner />
         </div>
       )}
+      {!isLoading && beginAction && showBeginAction}
       <div className={classes.subContainer}>
         <div className={classes.mapContent}>
           <Map
-              noAdd
-              bounds={bounds}
-              noPlaces
-              points={point}
-              dangerPoints={dangerPoint}
-              interestPoints={interestPoint}
-              callback={pointsCallback}
-              center={center}
+            noAdd
+            bounds={bounds}
+            noPlaces
+            points={point}
+            dangerPoints={dangerPoint}
+            interestPoints={interestPoint}
+            callback={pointsCallback}
+            center={center}
           />
         </div>
         <div className={classes.infoContent}>
@@ -187,6 +251,7 @@ const HelpDetailsOwner = () => {
               creationDate={responseData.creationDate}
               volunteers={responseData.helpersCapacity}
               difficulty={responseData.difficulty}
+              currentHelpers={responseData.currentHelpers}
             />
           </div>
           <div className={classes.userDisplay}>
@@ -210,6 +275,45 @@ const HelpDetailsOwner = () => {
             <h6 className={classes.subTitle}>Descrição</h6>
             <p>{responseData.description}</p>
           </div>
+          {responseData.activeMarker &&
+            responseData.currentHelpers > 0 &&
+            responseData.type === "ACTION" && (
+              <button
+                type="button"
+                onClick={beginActionHandler}
+                className={classes.startAction}
+              >
+                Iniciar Ação
+              </button>
+            )}
+          {!responseData.activeMarker && (
+            <form onSubmit={reActivateRequest} className={classes.passForm}>
+              <label htmlFor="pass" className={classes.labelPass}>
+                Insira uma nova password para re-activar:
+              </label>
+              <input
+                type="text"
+                id="pass"
+                value={enteredPass}
+                onChange={passChangeHandler}
+                onBlur={passBlurHandler}
+                className={classes.inputPass}
+              />
+              {passHasError && (
+                <p className={classes.errorPass}>
+                  Por favor insere uma password válida
+                </p>
+              )}
+              <button
+                type="button"
+                onClick={reActivateRequest}
+                className={classes.reactivate}
+                disabled={!enteredPassIsValid}
+              >
+                Re-Activar
+              </button>
+            </form>
+          )}
           <Link to={`/editar/${helpId}`} className={classes.editRequest}>
             Editar Pedido
           </Link>
@@ -234,7 +338,7 @@ const HelpDetailsOwner = () => {
             </div>
           </Route>
           <Route path={`${match.path}/comentarios`}>
-            <CommentList isOwner={isOwner}/>
+            <CommentList isOwner={isOwner} />
           </Route>
         </div>
       </div>
