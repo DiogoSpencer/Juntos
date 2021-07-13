@@ -1,6 +1,6 @@
 
 import { Fragment, useState } from "react";
-import SideButtons from "../UI/SIdeButtons";
+import SideButtons from "../UI/SideButtons";
 import HelpListItem from "./HelpListItem";
 import HelpAnonimousItem from "./HelpAnonimousItem";
 
