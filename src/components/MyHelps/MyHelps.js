@@ -229,6 +229,7 @@ const MyHelps = () => {
                       isActive={request.activeMaker}
                       profileImg={request.profileImg}
                       numHelps={request.numHelps}
+                      company={request.company}
                     />
                   )}
                 </Link>
@@ -294,6 +295,7 @@ const MyHelps = () => {
                       isActive={request.activeMaker}
                       profileImg={request.profileImg}
                       numHelps={request.numHelps}
+                      company={request.company}
                     />
                   )}
                 </Link>
