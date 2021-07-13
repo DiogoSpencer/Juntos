@@ -69,6 +69,7 @@ const MyHelps = () => {
     ).then(
       (response) => {
         setResponseData(response.data.content);
+        setIsLoading(false);
         setDisableSelect(false);
       },
       (error) => {
@@ -78,11 +79,6 @@ const MyHelps = () => {
       }
     );
   }, [byParam, orderParam, dirParam, pageNumber, search, isFirst, pageSize]);
-
-  useEffect(() => {
-    setIsLoading(false);
-    setDisableSelect(false);
-  }, [responseData]);
 
   useEffect(() => {
     setPageNumber(0);
