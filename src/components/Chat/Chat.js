@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import RequestChatList from "./ResquestChatList";
 import OfferChatList from './OfferChatList'
-import SideButtons from "../UI/SideButtons";
+import SideButtons from "../UI/SIdeButtons";
 
 const Chat = () => {
   const [showPedido, setShowPedido] = useState(true);

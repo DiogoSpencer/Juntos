@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import SideButtons from "../UI/SideButtons";
+import SideButtons from "../UI/SIdeButtons";
 import HelpListItem from "./HelpListItem";
 import HelpAnonimousItem from "./HelpAnonimousItem";
 import { Link, useRouteMatch } from "react-router-dom";
