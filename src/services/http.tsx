@@ -193,6 +193,41 @@ export async function joinMarker(markerId: string) {
   }
 }
 
+export async function leaveMarker(markerId: string) {
+  try {
+    return await axios.put(`${url}/rest/marker/leave/${markerId}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function startMarker(markerId: string) {
+  try {
+    return await axios.put(`${url}/rest/marker/start/${markerId}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function restartMarker(markerId: string, password: string) {
+  try {
+    return await axios.put(`${url}/rest/marker/restart/`, {
+      markerId: markerId,
+      password: password,
+    });
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function listMarker(urlParams: string) {
+  try {
+    return await axios.get(`${url}/rest/marker/list${urlParams}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
 /*//ir ao store fazer dispatch de logout e apagar local storage
 //dentro de use effect do app -> redux tb nao ha -> /home
 //= a estar a verificar */

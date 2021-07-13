@@ -2,8 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import SearchBar from "../UI/SearchBar";
 import SideButtons from "../UI/SIdeButtons";
 import classes from "./MyHelps.module.css";
-import { markerPage } from "../../services/http";
-import { useSelector } from "react-redux";
+import { listMarker } from "../../services/http";
 import leftArrowIcon from "../../img/leftArrow.png";
 import rightArrowIcon from "../../img/rightArrow.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
@@ -14,81 +13,84 @@ import { Link, useRouteMatch } from "react-router-dom";
 
 const ASC = "ASC";
 const DESC = "DESC";
-const OWNER = "owner";
 const DATE = "creationDate";
-const INTEREST = "INTEREST";
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const MS_PER_HOUR = 1000 * 60 * 60;
 const MS_PER_MINUTE = 1000 * 60;
-const PAGE_SIZE = 5;
+let ALL = "";
+let TITLE = "";
+let TOPICS = "";
+let mainTitle = "";
+let firstButton = "";
+let secondButton = "";
+let pathFirstArg = "";
+let pathSecondArg = "";
 
 const MyHelps = () => {
   const match = useRouteMatch();
 
-  const ownerUsername = useSelector((state) => state.auth.username);
+  if (match.path === "/ajudas") {
+    ALL = "all";
+    TITLE = "title";
+    TOPICS = "topics";
+    mainTitle = "Ajudas";
+    firstButton = "Pedidos";
+    secondButton = "Ofertas";
+    pathFirstArg = "pedidos";
+    pathSecondArg = "ofertas";
+  } else {
+    ALL = "myAll";
+    TITLE = "myTitle";
+    TOPICS = "myTopics";
+    mainTitle = "As Minhas Ajudas";
+    firstButton = "Criadas";
+    secondButton = "Participações";
+    pathFirstArg = "criadas";
+    pathSecondArg = "participacoes";
+  }
 
   // !!! fazer um novo estado para mudar paginas quando e participacao
   const [search, setSearch] = useState("");
-  const [isOwnRequest, setIsOwnRequest] = useState(true); //mostrar as ativas
+  const [isFirst, setIsFirst] = useState(true); //mostrar as ativas
   const [responseData, setResponseData] = useState([]); //assumindo que nao ha data de pedidos ativos no inicio - antes de fetch -fazer set no fetch se return > 0
-  const [hasPaticipationData, setHasParticipationData] = useState(null); //assumindo que nao ha data de pedidos inativas no inicio - antes de fetch
-  const [byParam, setByParam] = useState(OWNER);
-  const [orderParam, setOrderParam] = useState(DATE);
+  const [byParam, setByParam] = useState(ALL);
+  const [orderParam, setOrderParam] = useState(DATE); //neste momento so suporta creationDate
   const [dirParam, setDirParam] = useState(DESC);
-  const [valueParam, setValueParam] = useState("");
   const [pageNumber, setPageNumber] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState(DESC);
   const [disableSelect, setDisableSelect] = useState(false);
+  const [pageSize, setPageSize] = useState(5);
 
   useEffect(() => {
-    setValueParam(ownerUsername);
-  }, [ownerUsername]);
+    setIsLoading(true);
 
-  useEffect(() => {
-    if (valueParam !== "") {
-      setIsLoading(true);
-      if (isOwnRequest) {
-        markerPage(
-          `?by=${byParam}&value=${valueParam}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${5}`
-        ).then(
-          (response) => {
-            console.log(response.data);
-            setResponseData(response.data.content);
-          },
-          (error) => {
-            console.log(error);
-            setIsLoading(false);
-            setDisableSelect(false);
-          }
-        );
-        setDisableSelect(false);
-      } else {
+    listMarker(
+      `?by=${byParam}&value=${search}&order=${orderParam}&isFirst=${isFirst}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+    ).then(
+      (response) => {
+        setResponseData(response.data.content);
         setIsLoading(false);
+        setDisableSelect(false);
+      },
+      (error) => {
+        console.log(error);
+        setIsLoading(false);
+        setDisableSelect(false);
       }
-    }
-  }, [byParam, orderParam, dirParam, pageNumber, valueParam, isOwnRequest]);
+    );
+  }, [byParam, orderParam, dirParam, pageNumber, search, isFirst, pageSize]);
 
   useEffect(() => {
-    setIsLoading(false);
-    setDisableSelect(false);
-  }, [responseData]);
+    setPageNumber(0);
+  }, [isFirst]);
 
-  const changeByHandler = (byValue) => {
-    setByParam(byValue);
-  };
-
-  const changeOrderParam = (orderValue) => {
-    setOrderParam(orderValue);
-  };
-
-  const changeValueParam = (valueValue) => {
-    setValueParam(valueValue);
-  };
+  useEffect(() => {
+    setSearch("");
+  }, [byParam]);
 
   const nextPageHandler = () => {
     setPageNumber((prevState) => {
-      if (responseData.length === PAGE_SIZE) {
+      if (responseData.length === pageSize) {
         return prevState + 1;
       } else {
         return prevState;
@@ -106,22 +108,27 @@ const MyHelps = () => {
     });
   };
 
-  const activeHandler = () => {
-    setIsOwnRequest(true);
+  const isOwnerHandler = () => {
+    setIsFirst(true);
   };
 
-  const inactiveHandler = () => {
-    setIsOwnRequest(false);
+  const isParticipationHandler = () => {
+    setIsFirst(false);
   };
 
   const changeFilterHandler = (event) => {
-    setCurrentFilter(event.target.value);
+    setByParam(event.target.value);
     setDisableSelect(true);
-    if (event.target.value === ASC || event.target.value === DESC) {
-      setDirParam(event.target.value);
-    } else if (event.target.value === INTEREST) {
-      //TODO set state
-    }
+  };
+
+  const changeOrderHandler = (event) => {
+    setDirParam(event.target.value);
+    setDisableSelect(true);
+  };
+
+  const changePageSizeHandler = (event) => {
+    setPageSize(event.target.value);
+    setDisableSelect(true);
   };
 
   const formatDate = (longDate) => {
@@ -165,6 +172,9 @@ const MyHelps = () => {
     }
   };
 
+  const searchBarClass =
+    byParam === TITLE ? classes.searchBar : classes.searchBarHidden;
+
   //lista de ajudas ativas -> mapear da data que se recebe
   const ownRequests = (
     <Fragment>
@@ -187,7 +197,7 @@ const MyHelps = () => {
             {responseData.map((request) => (
               <li key={request.id}>
                 <Link
-                  to={`${match.path}/criadas/${request.id}`}
+                  to={`${match.path}/${pathFirstArg}/${request.id}`}
                   className={classes.requestLink}
                 >
                   {request.anonymousOwner ? (
@@ -233,7 +243,7 @@ const MyHelps = () => {
   //lista de ajudas concluidas (inativas) -> mapear do que se recebe
   const participations = (
     <Fragment>
-      {!hasPaticipationData && (
+      {responseData.length <= 0 && (
         <Fragment>
           <img
             src={volunteersIcon}
@@ -246,10 +256,49 @@ const MyHelps = () => {
         </Fragment>
       )}
 
-      {hasPaticipationData && (
+      {responseData.length > 0 && (
         <Fragment>
           <ul>
-            <li></li>
+            {responseData.map((request) => (
+              <li key={request.id}>
+                <Link
+                  to={`${match.path}/${pathSecondArg}/${request.id}`}
+                  className={classes.requestLink}
+                >
+                  {request.anonymousOwner ? (
+                    <AnonimousCard
+                      id={request.id}
+                      creationDate={formatDate(request.creationDate)}
+                      difficulty={request.difficulty}
+                      lat={request.lat}
+                      lon={request.lon}
+                      title={request.title}
+                      firstName={request.firstName}
+                      type={request.type}
+                      isActive={request.activeMaker}
+                      numHelps={request.numHelps}
+                    />
+                  ) : (
+                    <RequestCardOwner
+                      id={request.id}
+                      creationDate={formatDate(request.creationDate)}
+                      difficulty={request.difficulty}
+                      lat={request.lat}
+                      lon={request.lon}
+                      owner={request.owner}
+                      title={request.title}
+                      username={request.owner}
+                      firstName={request.firstName}
+                      lastName={request.lastName}
+                      type={request.type}
+                      isActive={request.activeMaker}
+                      profileImg={request.profileImg}
+                      numHelps={request.numHelps}
+                    />
+                  )}
+                </Link>
+              </li>
+            ))}
           </ul>
         </Fragment>
       )}
@@ -261,14 +310,47 @@ const MyHelps = () => {
       <label htmlFor="filters">Filtrar</label>
       <select
         id="filters"
-        value={currentFilter}
+        value={byParam}
         onChange={changeFilterHandler}
+        className={classes.selectSub}
+        disabled={disableSelect}
+      >
+        <option value={ALL}>Mostrar Tudo</option>
+        <option value={TOPICS}>Meus Interesses</option>{" "}
+        <option value={TITLE}>Título</option>
+      </select>
+    </div>
+  );
+
+  const orderButtons = (
+    <div className={classes.orderButtons}>
+      <label htmlFor="order">Ordenar</label>
+      <select
+        id="order"
+        value={dirParam}
+        onChange={changeOrderHandler}
         className={classes.selectSub}
         disabled={disableSelect}
       >
         <option value={DESC}>Mais Recentes</option>
         <option value={ASC}>Mais Antigos</option>
-        <option value={INTEREST}>Meus Interesses</option>
+      </select>
+    </div>
+  );
+
+  const sizeButtons = (
+    <div className={classes.sizeButtons}>
+      <label htmlFor="size">Ver</label>
+      <select
+        id="size"
+        value={pageSize}
+        onChange={changePageSizeHandler}
+        className={classes.selectSub}
+        disabled={disableSelect}
+      >
+        <option value={5}>5</option>
+        <option value={10}>10</option>
+        <option value={15}>15</option>
       </select>
     </div>
   );
@@ -293,7 +375,7 @@ const MyHelps = () => {
 
   return (
     <div className={classes.mainContainer}>
-      <h1 className={classes.title}>As Minhas Ajudas</h1>
+      <h1 className={classes.title}>{mainTitle}</h1>
       {isLoading && (
         <div className={classes.spinner}>
           <LoadingSpinner />
@@ -301,7 +383,8 @@ const MyHelps = () => {
       )}
       <div className={classes.subContainer}>
         {filterButtons}
-        <div className={classes.searchBar}>
+        {orderButtons}
+        <div className={searchBarClass}>
           <SearchBar
             input={search}
             setInput={setSearch}
@@ -310,18 +393,19 @@ const MyHelps = () => {
         </div>
         <div className={classes.sideButtons}>
           <SideButtons
-            button1="Criadas"
-            button2="Paticipações"
-            onClick1={activeHandler}
-            onClick2={inactiveHandler}
-            isButton1={responseData}
+            button1={firstButton}
+            button2={secondButton}
+            onClick1={isOwnerHandler}
+            onClick2={isParticipationHandler}
+            isButton1={isFirst}
           />
         </div>
         <div className={classes.requestContainer}>
-          {isOwnRequest && ownRequests}
-          {!isOwnRequest && participations}
+          {isFirst && ownRequests}
+          {!isFirst && participations}
         </div>
         {navPageButtons}
+        {sizeButtons}
       </div>
     </div>
   );

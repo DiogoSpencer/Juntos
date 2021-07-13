@@ -155,7 +155,7 @@ function App() {
               render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
             />
             <Route path="/novopedido" render={() => <Help />} />
-            <Route exact path="/ajudas" render={() => <ListHelps />} />
+            <Route exact path="/ajudas" render={() => <MyHelps />} />
             <Route
               path="/ajudas/pedidos/:requestId"
               render={() => <HelpDetails buttonText="Oferecer Ajuda" />}

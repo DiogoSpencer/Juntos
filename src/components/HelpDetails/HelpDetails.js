@@ -5,9 +5,9 @@ import HelpTitle from "./HelpTitle";
 import ImageDisplay from "./ImageDisplay";
 //import ShareHelp from "./ShareHelp";
 import UserDisplay from "./UserDisplay";
-import { Route, Link, useRouteMatch, useHistory } from "react-router-dom";
+import { Route, Link, useRouteMatch } from "react-router-dom";
 import classes from "./HelpDetails.module.css";
-import { joinMarker, markerDetails } from "../../services/http";
+import { joinMarker, leaveMarker, markerDetails } from "../../services/http";
 import offerHelpIcon from "../../img/helpIcon.png";
 import requestHelpIcon from "../../img/hand.png";
 import donateIcon from "../../img/box.png";
@@ -51,7 +51,6 @@ const HelpDetails = (props) => {
     [point]
   );
 
-  const history = useHistory();
   const match = useRouteMatch();
   const helpId = match.params.requestId;
 
@@ -87,7 +86,7 @@ const HelpDetails = (props) => {
         if (response.data.helperUsernames.includes(loggedUsername)) {
           setIsHelper(true);
         }
-        typeHandler(response.data.type)
+        typeHandler(response.data.type);
       },
       (error) => {
         console.log(error);
@@ -143,7 +142,20 @@ const HelpDetails = (props) => {
     );
   };
 
-  const onGiveUpHandler = () => {};
+  const onLeaveHandler = () => {
+    setIsLoading(true);
+    leaveMarker(helpId).then(
+      (response) => {
+        setIsLoading(false);
+        setIsHelper(false);
+        console.log(response);
+      },
+      (error) => {
+        setIsLoading(false);
+        console.log(error);
+      }
+    );
+  };
 
   return (
     <div className={classes.mainContainer}>
@@ -191,6 +203,7 @@ const HelpDetails = (props) => {
               }
               numHelps={responseData.numHelps}
               isAnonimous={responseData.anonymousOwner}
+              company={responseData.company}
             />
           </div>
           <div className={classes.imageDisplay}>
@@ -213,7 +226,7 @@ const HelpDetails = (props) => {
               {isHelper && (
                 <span
                   className={classes.participating}
-                  onClick={onGiveUpHandler}
+                  onClick={onLeaveHandler}
                 >
                   Estás a participar! Clica aqui para desistir.
                 </span>
