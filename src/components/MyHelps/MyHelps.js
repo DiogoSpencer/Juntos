@@ -73,9 +73,14 @@ const MyHelps = () => {
         setDisableSelect(false);
       },
       (error) => {
+        setDisableSelect(false);
         console.log(error);
         setIsLoading(false);
-        setDisableSelect(false);
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+        }
       }
     );
   }, [byParam, orderParam, dirParam, pageNumber, search, isFirst, pageSize]);

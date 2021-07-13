@@ -1,4 +1,3 @@
-
 import { Fragment, useEffect, useState } from "react";
 import SideButtons from "../UI/SideButtons";
 import HelpListItem from "./HelpListItem";
@@ -29,7 +28,6 @@ const PAGE_SIZE = 5;
 const ListHelps = () => {
   const match = useRouteMatch();
 
-  
   const [search, setSearch] = useState("");
   const [isOwner, setIsOwner] = useState(true); //mostrar as ativas
   const [responseData, setResponseData] = useState([]); //assumindo que nao ha data de pedidos ativos no inicio - antes de fetch -fazer set no fetch se return > 0
@@ -53,23 +51,25 @@ const ListHelps = () => {
       },
       (error) => {
         console.log(error);
-        setIsLoading(false);
         setDisableSelect(false);
+        setIsLoading(false);
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+        }
       }
     );
   }, [byParam, orderParam, dirParam, pageNumber, search, isOwner, pageSize]);
-
 
   useEffect(() => {
     setIsLoading(false);
     setDisableSelect(false);
   }, [responseData]);
 
-  const pedidosHandler = () => {
-  };
+  const pedidosHandler = () => {};
 
-  const ofertasHandler = () => {
-  };
+  const ofertasHandler = () => {};
 
   const nextPageHandler = () => {
     setPageNumber((prevState) => {

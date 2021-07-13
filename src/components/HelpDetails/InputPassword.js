@@ -41,8 +41,13 @@ const InputPassword = (props) => {
         setIsLoading(false);
       },
       (error) => {
-        setIsLoading(false);
         console.log(error);
+        setIsLoading(false);
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+        }
       }
     );
     //Mandar pass ao server por email ou username
@@ -89,7 +94,7 @@ const InputPassword = (props) => {
           disabled={props.isOwner}
         />
         {timeHasError && (
-          <p className={classes.errorTime }>
+          <p className={classes.errorTime}>
             Por favor insere um tempo médio de conclusão maior que 0
           </p>
         )}
