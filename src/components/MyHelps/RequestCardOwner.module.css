@@ -64,7 +64,7 @@
 .markerInfo {
   grid-area: mi;
   align-self: center;
-  justify-self: center;
+  justify-self: start;
   display: flex;
   align-items: center;
   justify-items: center;

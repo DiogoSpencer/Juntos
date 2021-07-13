@@ -55,7 +55,7 @@ const RequestCardOwner = (props) => {
       <h3 className={classes.title}>{props.title}</h3>
       <div className={classes.markerInfo}>
         <img src={markerIcon} />
-        <p>Distancia-aqui</p>
+        <p>{props.location}</p>
       </div>
       <div className={classes.requestInfo}>
         <p>{props.creationDate}</p>

@@ -237,6 +237,7 @@ const MyHelps = () => {
                       type={request.type}
                       isActive={request.activeMaker}
                       numHelps={request.numHelps}
+                      location={request.location}
                     />
                   ) : (
                     <RequestCardOwner
@@ -255,6 +256,7 @@ const MyHelps = () => {
                       profileImg={request.profileImg}
                       numHelps={request.numHelps}
                       company={request.company}
+                      location={request.location}
                     />
                   )}
                 </Link>
@@ -303,6 +305,7 @@ const MyHelps = () => {
                       type={request.type}
                       isActive={request.activeMaker}
                       numHelps={request.numHelps}
+                      location={request.location}
                     />
                   ) : (
                     <RequestCardOwner
@@ -321,6 +324,7 @@ const MyHelps = () => {
                       profileImg={request.profileImg}
                       numHelps={request.numHelps}
                       company={request.company}
+                      location={request.location}
                     />
                   )}
                 </Link>
