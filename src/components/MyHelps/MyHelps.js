@@ -10,6 +10,9 @@ import RequestCardOwner from "./RequestCardOwner";
 import AnonimousCard from "./AnonimousCard";
 import volunteersIcon from "../../img/volunteersdonate.jpg";
 import { Link, useRouteMatch } from "react-router-dom";
+import { authActions } from "../../store/session/auth";
+import gS from "../../services/generalServices.json";
+import { useDispatch } from "react-redux";
 
 const ASC = "ASC";
 const DESC = "DESC";
@@ -28,6 +31,7 @@ let pathSecondArg = "";
 
 const MyHelps = () => {
   const match = useRouteMatch();
+  const dispatch = useDispatch();
 
   if (match.path === "/ajudas") {
     ALL = "all";

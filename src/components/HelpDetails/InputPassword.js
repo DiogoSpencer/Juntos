@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { completeMarker } from "../../services/http";
 import useInput from "../hooks/use-input";
 import classes from "./InputPassword.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import { authActions } from "../../store/session/auth";
+import gS from "../../services/generalServices.json";
+import { useDispatch } from "react-redux";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
 const InputPassword = (props) => {
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const {
     value: enteredPass,

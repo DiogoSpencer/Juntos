@@ -1,8 +1,8 @@
 import { Fragment, useEffect, useState } from "react";
 import SideButtons from "../UI/SideButtons";
-import HelpListItem from "./HelpListItem";
-import HelpAnonimousItem from "./HelpAnonimousItem";
-
+import { authActions } from "../../store/session/auth";
+import gS from "../../services/generalServices.json";
+import { useDispatch } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
 import classes from "./ListHelps.module.css";
 import volunteersIcon from "../../img/volunteersdonate.jpg";
@@ -27,6 +27,7 @@ const PAGE_SIZE = 5;
 
 const ListHelps = () => {
   const match = useRouteMatch();
+  const dispatch = useDispatch();
 
   const [search, setSearch] = useState("");
   const [isOwner, setIsOwner] = useState(true); //mostrar as ativas
