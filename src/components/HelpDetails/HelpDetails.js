@@ -88,13 +88,13 @@ const HelpDetails = (props) => {
         typeHandler(response.data.type);
       },
       (error) => {
-        console.log(error);
+        /*console.log(error);
         setIsLoading(false);
         if (error.status === 401) {
           alert("Sessão expirou");
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
-        }
+        }*/
       }
     );
   }, [helpId]);
@@ -135,13 +135,13 @@ const HelpDetails = (props) => {
         console.log(response);
       },
       (error) => {
-        console.log(error);
+        /*console.log(error);
         setIsLoading(false);
         if (error.status === 401) {
           alert("Sessão expirou");
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
-        }
+        }*/
       }
     );
   };
@@ -155,13 +155,13 @@ const HelpDetails = (props) => {
         console.log(response);
       },
       (error) => {
-        console.log(error);
+        /*console.log(error);
         setIsLoading(false);
         if (error.status === 401) {
           alert("Sessão expirou");
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
-        }
+        }*/
       }
     );
   };

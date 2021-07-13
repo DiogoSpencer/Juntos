@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import { resetToken } from "../store/session/actions";
 import store from "../store/newStore";
 import { authActions } from "../store/session/auth";
+import gS from "./generalServices.json";
 
 const url = "https://juntos-318522.appspot.com";
 
@@ -10,7 +10,6 @@ axios.interceptors.request.use(
     let token = store.getState().auth.token;
     if (token) {
       c.headers["Authorization"] = token;
-      console.log("header " + token);
     }
     return c;
   },
@@ -24,11 +23,15 @@ axios.interceptors.response.use(
     if (store.getState().auth.token !== "") {
       store.dispatch(authActions.resetToken(response.headers["authorization"]));
       localStorage.setItem("token", response.headers["authorization"]);
-      console.log("response " + response.headers["authorization"]);
     }
     return response;
   },
   function (error: any) {
+    if (error.status === 401) {
+      store.dispatch(authActions.logout());
+      localStorage.removeItem(gS.storage.token);
+      window.stop();
+    }
     return Promise.reject(error);
   }
 );

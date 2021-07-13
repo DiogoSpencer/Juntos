@@ -303,10 +303,12 @@ const Help = () => {
       interests: interestPoint,
       dangers: dangerPoint,
     };
+
     if(selected !== ACOES) {
       formInfo.dangers = [];
       formInfo.interests = [];
     }
+    
     console.log(formInfo)
     formData.append(
       "marker",

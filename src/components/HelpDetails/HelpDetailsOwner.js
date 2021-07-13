@@ -108,13 +108,13 @@ const HelpDetailsOwner = () => {
         setInterestPoint(responseInterest);
       },
       (error) => {
-        console.log(error);
+        /*console.log(error);
         setIsLoading(false);
         if (error.status === 401) {
           alert("Sessão expirou");
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
-        }
+        }*/
       }
     );
   }, [helpId]);
@@ -153,7 +153,7 @@ const HelpDetailsOwner = () => {
           history.replace("/minhasajudas");
         },
         (error) => {
-          setIsLoading(false);
+          /*setIsLoading(false);
           if (error.status === 401) {
             alert(
               "Sessão expirou! Efetue login novamente para concluir a operação"
@@ -163,7 +163,7 @@ const HelpDetailsOwner = () => {
           } else {
             console.log(error);
             setDeleteError(true);
-          }
+          }*/
         }
       );
     }

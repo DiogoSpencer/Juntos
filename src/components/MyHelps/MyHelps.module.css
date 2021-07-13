@@ -85,6 +85,16 @@
   display: none;
 }
 
+.autoComplete {
+  grid-area: sc;
+  align-self: center;
+  justify-self: start;
+}
+
+.autoCompleteHidden {
+  display: none;
+}
+
 .requestContainer {
   grid-area: rc;
   align-self: start;
@@ -147,6 +157,7 @@
   color: #3385d9;
   padding-right: 0.5rem;
 }
+
 .filterButtons input {
   border-radius: 5px;
   border: 1px solid #3385d9;
@@ -161,6 +172,7 @@
   color: #3385d9;
   padding-right: 0.5rem;
 }
+
 .orderButtons input {
   border-radius: 5px;
   border: 1px solid #3385d9;
@@ -175,6 +187,7 @@
   color: #3385d9;
   padding-right: 0.5rem;
 }
+
 .sizeButtons input {
   border-radius: 5px;
   border: 1px solid #3385d9;

@@ -13,6 +13,7 @@ import { Link, useRouteMatch } from "react-router-dom";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import { useDispatch } from "react-redux";
+import Autocomplete from "react-google-autocomplete";
 
 const ASC = "ASC";
 const DESC = "DESC";
@@ -28,6 +29,7 @@ let firstButton = "";
 let secondButton = "";
 let pathFirstArg = "";
 let pathSecondArg = "";
+let location = "";
 
 const MyHelps = () => {
   const match = useRouteMatch();
@@ -42,10 +44,12 @@ const MyHelps = () => {
     secondButton = "Ofertas";
     pathFirstArg = "pedidos";
     pathSecondArg = "ofertas";
+    location = "location";
   } else {
     ALL = "myAll";
     TITLE = "myTitle";
     TOPICS = "myTopics";
+    location = "myLocation";
     mainTitle = "As Minhas Ajudas";
     firstButton = "Criadas";
     secondButton = "Participações";
@@ -66,27 +70,36 @@ const MyHelps = () => {
   const [pageSize, setPageSize] = useState(5);
 
   useEffect(() => {
-    setIsLoading(true);
+    setDisableSelect(false);
 
-    listMarker(
-      `?by=${byParam}&value=${search}&order=${orderParam}&isFirst=${isFirst}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
-    ).then(
-      (response) => {
-        setResponseData(response.data.content);
-        setIsLoading(false);
-        setDisableSelect(false);
-      },
-      (error) => {
-        setDisableSelect(false);
-        console.log(error);
-        setIsLoading(false);
-        if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
+    if (
+      byParam === ALL ||
+      byParam === TOPICS ||
+      (byParam === TITLE && search !== "") ||
+      (byParam === location && search !== "")
+    ) {
+      setIsLoading(true);
+
+      listMarker(
+        `?by=${byParam}&value=${search}&order=${orderParam}&isFirst=${isFirst}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+      ).then(
+        (response) => {
+          setResponseData(response.data.content);
+          setIsLoading(false);
+          setDisableSelect(false);
+        },
+        (error) => {
+          setDisableSelect(false);
+          console.log(error);
+          setIsLoading(false);
+          if (error.status === 401) {
+            alert("Sessão expirou");
+            dispatch(authActions.logout());
+            localStorage.removeItem(gS.storage.token);
+          }
         }
-      }
-    );
+      );
+    }
   }, [byParam, orderParam, dirParam, pageNumber, search, isFirst, pageSize]);
 
   useEffect(() => {
@@ -183,6 +196,9 @@ const MyHelps = () => {
 
   const searchBarClass =
     byParam === TITLE ? classes.searchBar : classes.searchBarHidden;
+
+  const autoComplete =
+    byParam === location ? classes.autoComplete : classes.autoCompleteHidden;
 
   //lista de ajudas ativas -> mapear da data que se recebe
   const ownRequests = (
@@ -327,8 +343,9 @@ const MyHelps = () => {
         disabled={disableSelect}
       >
         <option value={ALL}>Mostrar Tudo</option>
-        <option value={TOPICS}>Meus Interesses</option>{" "}
+        <option value={TOPICS}>Meus Interesses</option>
         <option value={TITLE}>Título</option>
+        <option value={location}>Distrito</option>
       </select>
     </div>
   );
@@ -400,6 +417,17 @@ const MyHelps = () => {
             input={search}
             setInput={setSearch}
             placeholder="Procurar..."
+          />
+        </div>
+        <div className={autoComplete}>
+          <Autocomplete
+            style={{ width: "15rem" }}
+            apiKey="AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU"
+            onPlaceSelected={(place) => {
+              if (place.address_components !== undefined) {
+                setSearch(place.address_components[0].long_name);
+              }
+            }}
           />
         </div>
         <div className={classes.sideButtons}>
