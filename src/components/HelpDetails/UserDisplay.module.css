@@ -26,6 +26,12 @@
   object-fit: cover;
 }
 
+.verified {
+  height: 3rem;
+  width: 4rem;
+  padding-right: 1rem;
+}
+
 .nameContainer {
   grid-area: sc;
   align-self: center;
@@ -47,5 +53,5 @@
 .numHelps img {
   height: 3rem;
   padding-bottom: 1rem;
-  padding-right: .5rem;
+  padding-right: 0.5rem;
 }

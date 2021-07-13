@@ -2,6 +2,7 @@ import classes from "./UserDisplay.module.css";
 import helpIcon from "../../img/logo.png";
 import avatarIcon from "../../img/userblue.png";
 import { Link } from "react-router-dom";
+import verifiedIcon from "../../img/verified.png";
 
 const UserDisplay = (props) => {
   return (
@@ -45,6 +46,9 @@ const UserDisplay = (props) => {
       <div className={classes.numHelps}>
         <img src={helpIcon} alt="número-ajudas" />
         <p>{props.numHelps}</p>
+        {props.company && (
+          <img src={verifiedIcon} alt="organizacao-verificada" className={classes.verified}/>
+        )}
       </div>
     </div>
   );
