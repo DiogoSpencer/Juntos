@@ -1,22 +1,18 @@
 import { Fragment, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import gS from "../../services/generalServices.json";
 
 const PrivateRoute = (props) => {
-  const isLogged = useSelector((state) => state.auth.isLogged);
+  const role = useSelector((state) => state.auth.role);
   const history = useHistory();
 
   useEffect(() => {
-    const token = localStorage.getItem(gS.storage.token);
-
-    if (!token) {
-      history.push("/home");
+    if (role === "USER" || role === "PARTNER") {
+      history.goBack();
     }
-  }, [isLogged]);
+  }, [role]);
 
   return <Fragment>{props.children}</Fragment>;
 };
 
 export default PrivateRoute;
-//isLogged ? props.children : <Redirect to="/home" />

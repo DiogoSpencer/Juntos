@@ -9,6 +9,8 @@ import { authActions } from "./store/session/auth";
 import { getUser } from "./services/http";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
+import BackOfficeRoute from "./components/Private/BackOfficeRoute";
+import PrivateBackOfficeRoute from "./components/Private/PrivateBackOfficeRoute";
 
 const Home = React.lazy(() => import("./components/Home/Home"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
@@ -45,7 +47,16 @@ const TodasAjudas = React.lazy(() =>
 const EditRequest = React.lazy(() =>
   import("./components/HelpForms/EditRequest")
 );
-const HeroiForm = React.lazy(() => import("./components/Herois/HeroiForm"))
+const HeroiForm = React.lazy(() => import("./components/Herois/HeroiForm"));
+const BackOfficeHome = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeHome")
+);
+const BackOfficeUsers = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeUsers")
+);
+const BackOfficeRequests = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeRequests")
+);
 
 function App() {
   const dispatch = useDispatch();
@@ -175,6 +186,19 @@ function App() {
             />
             <Route path="/mapa" render={() => <TodasAjudas />} />
             <Route path="/editar/:requestId" render={() => <EditRequest />} />
+            <BackOfficeRoute>
+              <Route exact path="/backoffice" render={() => <BackOfficeHome />} />
+              <PrivateBackOfficeRoute>
+                <Route
+                  path="/backoffice/utilizadores"
+                  render={() => <BackOfficeUsers />}
+                />
+                <Route
+                  path="/backoffice/pedidos"
+                  render={() => <BackOfficeRequests />}
+                />
+              </PrivateBackOfficeRoute>
+            </BackOfficeRoute>
           </PrivateRoute>
           <Route path="*" render={() => <NotFound />} />
         </Switch>

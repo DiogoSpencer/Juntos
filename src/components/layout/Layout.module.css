@@ -25,3 +25,9 @@
 .mainFooter {
   grid-area: ft;
 }
+
+.backOfficeSideBar {
+  position: fixed;
+  right: 0;
+  margin-right: 10rem;
+}

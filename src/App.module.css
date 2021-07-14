@@ -8,7 +8,7 @@
 
 :global(html) {
   /*82.5%*/
-  font-size: 0.85vw;
+  font-size: .85vw;
   scrollbar-color: #3385d9 white;
   scrollbar-width: thin;
 }
@@ -35,4 +35,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media all and (max-width: 60em) {
+  body {
+    font-size: 1.5rem;
+  }
+}
+
+@media all and (max-width: 40em) {
+  body {
+    font-size: 2rem;
+  }
 }

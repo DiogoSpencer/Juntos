@@ -306,7 +306,7 @@ const Help = () => {
       helpersCapacity: helpersCapactiy,
       interests: interestPoint,
       dangers: dangerPoint,
-      location: location
+      location: location,
     };
 
     if(selected !== ACOES) {

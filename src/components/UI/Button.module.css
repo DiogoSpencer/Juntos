@@ -1,5 +1,5 @@
 .buttonCustom {
-  width: 15rem;
+  width: 15em;
   font-weight: 600;
   color: #fff;
   cursor: pointer;
@@ -21,7 +21,7 @@
 
 .buttonCustom:hover {
   background-position: 100% 0;
-  transition: all .4s ease-in-out;
+  transition: all 0.4s ease-in-out;
   text-decoration: none;
 }
 
@@ -37,5 +37,5 @@
 }
 
 .buttonText {
-  font-size: 1.1rem;
+  font-size: 1.1em;
 }

@@ -4,6 +4,10 @@ import notificationsIcon from "../../img/notifications.png";
 import pointsIcon from "../../img/points.png";
 import usersIcon from "../../img/users.png";
 import classes from "./OfficeBar.module.css"
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { Fragment } from "react";
 
 const OfficeBar = () => {
   const userRole = useSelector((state) => state.auth.role);
@@ -24,7 +28,7 @@ const OfficeBar = () => {
     <nav className={classes.nav}>
       <ul className={classes.navList}>
         <li className={classes.navItem}>
-          <Link to="/backoffice/home">
+          <Link to="/backoffice">
             <img src={homeIcon} alt="home" className={classes.navIcon} />
           </Link>
         </li>

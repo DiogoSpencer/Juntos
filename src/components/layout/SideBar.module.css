@@ -1,5 +1,5 @@
 .navigation {
-  padding-top: 2rem;
+  padding-top: 2em;
   position: fixed;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -10,7 +10,7 @@
 }
 
 .iconList {
-  height: 4rem;
+  height: 4em;
   grid-area: ic;
   z-index: 200;
   align-self: center;
@@ -33,11 +33,11 @@
 .navList {
   list-style: none;
   padding: 0;
-  padding-top: 1rem;
+  padding-top: 1em;
 }
 
 .navItem {
-    padding: 1rem;
+    padding: 1em;
 }
 
 .navItem:hover {
@@ -46,5 +46,19 @@
 }
 
 .navIcon {
-    height: 4rem;
+    height: 4em;
+}
+
+@media all and (max-width: 60em) {
+  .navigation {
+    margin-top: 2em;
+  }
+
+  .iconList {
+    height: 5em;
+  }
+
+  .navIcon {
+    height: 5em;
+  }
 }
