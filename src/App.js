@@ -35,7 +35,6 @@ const HelpDetails = React.lazy(() =>
 const HelpDetailsOwner = React.lazy(() =>
   import("./components/HelpDetails/HelpDetailsOwner")
 );
-const ListHelps = React.lazy(() => import("./components/ListHelps/ListHelps"));
 const Chat = React.lazy(() => import("./components/Chat/Chat"));
 const Conversation = React.lazy(() => import("./components/Chat/Conversation"));
 const UserProfile = React.lazy(() =>

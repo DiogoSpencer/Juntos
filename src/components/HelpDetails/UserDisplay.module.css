@@ -9,8 +9,8 @@
   grid-area: pi;
   align-self: center;
   justify-self: start;
-  height: 5rem;
-  width: 5rem;
+  height: 5em;
+  width: 5em;
   border-radius: 50%;
   cursor: pointer;
   object-fit: cover;
@@ -20,8 +20,8 @@
   grid-area: pi;
   align-self: center;
   justify-self: start;
-  height: 5rem;
-  width: 5rem;
+  height: 5em;
+  width: 5em;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -29,14 +29,14 @@
 .verified {
   display: flex;
   flex-direction: row;
-  padding-left: 1rem;
-  font-size: .8rem;
+  padding-left: 1em;
+  font-size: .8em;
 }
 
 .verifiedIcon {
   object-fit: cover;
-  height: 3.5rem;
-  width: 3.5rem;
+  height: 3.5em;
+  width: 3.5em;
 }
 
 .nameContainer {
@@ -58,7 +58,7 @@
 }
 
 .numHelps img {
-  height: 3rem;
-  padding-bottom: 1rem;
-  padding-right: 0.5rem;
+  height: 3em;
+  padding-bottom: 1em;
+  padding-right: 0.5em;
 }

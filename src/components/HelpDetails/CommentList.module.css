@@ -1,8 +1,8 @@
 .mainContainer {
   display: grid;
-  width: 50rem;
+  width: 50em;
   grid-template-rows: auto 0.25fr;
-  row-gap: 2rem;
+  row-gap: 2em;
   grid-template-areas:
     "nc"
     "rf"
@@ -16,7 +16,7 @@
 
 .refresh {
   grid-area: rf;
-  height: 3rem;
+  height: 3em;
   align-self: center;
   justify-self: end;
   cursor: pointer;

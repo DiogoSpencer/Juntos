@@ -1,6 +1,6 @@
 .imageButton {
-  width: 12rem;
-  height: 12rem;
+  width: 12em;
+  height: 12em;
   border-radius: 50%;
   border-style: none;
   cursor: pointer;
@@ -14,8 +14,8 @@
 }
 
 .imageButtonRegist {
-  width: 8rem;
-  height: 8rem;
+  width: 8em;
+  height: 8em;
   border-radius: 50%;
   border-style: none;
   cursor: pointer;
@@ -37,8 +37,8 @@
 }
 
 .imgPreview {
-  width: 12rem;
-  height: 12rem;
+  width: 12em;
+  height: 12em;
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;
@@ -46,8 +46,8 @@
 }
 
 .imgPreviewRegist {
-  width: 8rem;
-  height: 8rem;
+  width: 8em;
+  height: 8em;
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;

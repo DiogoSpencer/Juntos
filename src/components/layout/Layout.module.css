@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: grid;
   grid-template-columns: 20% auto;
-  grid-template-rows: 5rem 1fr auto;
+  grid-template-rows: 5em 1fr auto;
   grid-template-areas:
     "hd hd"
     "mc mc"
@@ -29,5 +29,5 @@
 .backOfficeSideBar {
   position: fixed;
   right: 0;
-  margin-right: 10rem;
+  margin-right: 10em;
 }

@@ -1,9 +1,9 @@
 .container {
-  height: 15rem;
+  height: 15em;
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: 0.1fr 0.5fr auto;
-  row-gap: 0.5rem;
+  row-gap: 0.5em;
   grid-template-areas:
     "it"
     "ib"
@@ -11,12 +11,12 @@
 }
 
 .containerSmall {
-  height: 10rem;
-  width: 50rem;
+  height: 10em;
+  width: 50em;
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: 0.1fr 0.5fr auto;
-  row-gap: 0.5rem;
+  row-gap: 0.5em;
   grid-template-areas:
     "it"
     "ib"
@@ -37,7 +37,7 @@
   align-self: start;
   color: #3385d9;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.9em;
 }
 
 .addImageTextInactive {
@@ -51,21 +51,21 @@
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-evenly;
-  padding: 0.3rem;
+  padding: 0.3em;
 }
 
 .imgPreview {
-  padding-top: 1rem;
-  max-height: 15rem;
-  max-width: 30rem;
+  padding-top: 1em;
+  max-height: 15em;
+  max-width: 30em;
   object-fit: contain;
   cursor: pointer;
 }
 
 .imgPreviewSmall {
-  padding-top: 1rem;
-  max-height: 8rem;
-  max-width: 8rem;
+  padding-top: 1em;
+  max-height: 8em;
+  max-width: 8em;
   object-fit: contain;
   cursor: pointer;
 }
@@ -74,8 +74,8 @@
   grid-area: ib;
   align-self: center;
   justify-self: center;
-  width: 5rem;
-  height: 5rem;
+  width: 5em;
+  height: 5em;
   border-radius: 50%;
   border-style: none;
   cursor: pointer;
@@ -102,8 +102,8 @@
   grid-area: ib;
   align-self: center;
   justify-self: center;
-  width: 3rem;
-  height: 3rem;
+  width: 3em;
+  height: 3em;
   border-radius: 50%;
   border-style: none;
   cursor: pointer;
@@ -134,10 +134,10 @@
   grid-area: il;
   align-self: center;
   justify-self: center;
-  width: 10rem;
-  height: 10rem;
+  width: 10em;
+  height: 10em;
   border-radius: 5px;
   border: 1px solid #3385d9;
   background-color: transparent;
-  background-size: 5rem;
+  background-size: 5em;
 }

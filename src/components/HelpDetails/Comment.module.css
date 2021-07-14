@@ -1,8 +1,8 @@
 .container {
   display: grid;
   grid-template-columns: 0.6fr 2.5fr;
-  padding-top: 1rem;
-  margin-bottom: 2rem;
+  padding-top: 1em;
+  margin-bottom: 2em;
   grid-template-areas:
     "pi tx"
     "nm tx"
@@ -13,8 +13,8 @@
 
 .profileImg {
   grid-area: pi;
-  width: 4rem;
-  height: 4rem;
+  width: 4em;
+  height: 4em;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -50,6 +50,6 @@
 }
 
 .imageComment {
-  max-height: 10rem;
-  max-width: 10rem;
+  max-height: 10em;
+  max-width: 10em;
 }

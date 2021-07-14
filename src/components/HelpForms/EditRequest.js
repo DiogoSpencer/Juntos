@@ -51,7 +51,7 @@ const EditRequest = () => {
   const helpId = match.params.requestId;
   const editing = match.path === "/editar/:requestId";
 
-  const [marker, setMarker] = useState("MARKER");
+  const [markerType, setMarker] = useState("MARKER");
 
   //AjudaMap state
   const [point, setPoint] = useState([]);
@@ -70,7 +70,7 @@ const EditRequest = () => {
     lngTop: -8.84256058906556,
   };
 
-  const handleClick = (event) => {
+  const handleMarkerChange = (event) => {
     setMarker(event.target.value);
   }
 
@@ -396,7 +396,7 @@ const EditRequest = () => {
           className={classes.back}
           onClick={backFormConcludedHandler}
         />
-        <span className={classes.number}>3</span>
+        <span className={classes.number}>2</span>
         <span className={classes.selectedTitle}>{enteredTitle}</span>
       </h1>
       <Map
@@ -422,7 +422,7 @@ const EditRequest = () => {
           className={classes.back}
           onClick={backFormConcludedHandler}
         />
-        <span className={classes.number}>3</span>
+        <span className={classes.number}>2</span>
         <span className={classes.selectedTitle}>{enteredTitle}</span>
       </h1>
       <Map
@@ -438,20 +438,12 @@ const EditRequest = () => {
           callbackD={distanceCallback}
           callbackDanger={dangerPointsCallback}
           callbackInterest={interestPointsCallback}
-          markerTypeSelected={marker}
+          markerTypeSelected={markerType}
       />
       <div>
-        <label>
-          Select your marker option:
-          <select value={marker} onChange={handleClick}>
-            <option value="MARKER">Marker</option>
-            <option value="DANGER">Danger Zone</option>
-            <option value="INTEREST">Interest Point</option>
-          </select>
-        </label>
-      </div>
-      <div>
         <MapDetails
+          markerType={markerType}
+          handleMarkerChange={handleMarkerChange}
           difficultyChangeHandler={difficultyChangeHandler}
           enteredDifficulty={enteredDifficulty}
           difficultyBlurHandler={difficultyBlurHandler}

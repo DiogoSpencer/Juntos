@@ -13,7 +13,7 @@
   justify-self: start;
   color: #e6513e;
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 
 .requestContainer {
@@ -54,12 +54,12 @@
 
 .creationDate {
   grid-area: cd;
-  font-size: 0.8rem;
+  font-size: 0.8em;
 }
 
 .helpType {
   grid-area: ht;
-  height: 3.5rem;
+  height: 3.5em;
   align-self: center;
   justify-self: center;
 }

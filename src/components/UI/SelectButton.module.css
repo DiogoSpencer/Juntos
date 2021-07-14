@@ -7,11 +7,11 @@
     /*border: 1px solid #3385D9;*/
     background-color: white;
     border-radius: 100px;
-    width: 20rem;
-    height: 6rem;
+    width: 20em;
+    height: 6em;
     color:#3385D9;
     font-weight: 700;
-    line-height: 1.5rem;
+    line-height: 1.5em;
     border-color: transparent;
     -o-transition: all .4s ease-in-out;
     -webkit-transition: all .4s ease-in-out;
@@ -19,12 +19,12 @@
 }
 
 .iconText {
-    margin-top: 1rem;
+    margin-top: 1em;
 }
 
 .iconImage {
-    padding: .2rem;
-    height: 4rem;
+    padding: .2em;
+    height: 4em;
 }
 
 .iconBtn:hover {

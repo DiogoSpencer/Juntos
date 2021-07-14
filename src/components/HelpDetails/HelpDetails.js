@@ -14,9 +14,7 @@ import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import InputPassword from "./InputPassword";
-import gS from "../../services/generalServices.json";
 import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "../../store/session/auth";
 import Map from "../Map/Map";
 
 let text = "";

@@ -8,12 +8,12 @@
 }
 
 .closeIcon {
-  height: 2.5rem;
+  height: 2.5em;
   cursor: pointer;
   grid-area: ci;
   justify-self: end;
   align-self: center;
-  padding-right: 1rem;
+  padding-right: 1em;
 }
 
 .spinner {

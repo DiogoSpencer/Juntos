@@ -29,21 +29,21 @@
     "lg"
     "pc"
     "io";
-  row-gap: 3rem;
+  row-gap: 3em;
   z-index: 5;
 }
 
 .completeTitle {
   grid-area: tl;
-  padding-top: 1rem;
+  padding-top: 1em;
   justify-self: center;
   color: #e6513e;
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 2em;
 }
 
 .completeImg {
-  height: 18rem;
+  height: 18em;
   grid-area: lg;
   justify-self: center;
   align-self: center;
@@ -55,7 +55,7 @@
   align-self: center;
   font-weight: 600;
   color: #3385d9;
-  font-size: 1.1rem;
+  font-size: 1.1em;
 }
 
 .organization {
@@ -65,8 +65,8 @@
   color: #e6513e;
   font-weight: 400;
   text-align: center;
-  width: 15rem;
-  font-size: 0.8rem;
+  width: 15em;
+  font-size: 0.8em;
 }
 
 .registForm {
@@ -74,8 +74,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
-  column-gap: 2rem;
-  row-gap: 1rem;
+  column-gap: 2em;
+  row-gap: 1em;
   grid-template-areas:
     "tt tt"
     "iu iu"
@@ -95,19 +95,19 @@
 }
 
 .registTitle {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 1em;
+  padding-bottom: 1em;
   grid-area: tt;
   justify-self: center;
   color: #e6513e;
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 2em;
 }
 
 .labelForm {
   color: rgb(51, 133, 217);
   font-weight: 700;
-  padding-left: 1rem;
+  padding-left: 1em;
   font-family: inherit;
   font-size: inherit;
 }
@@ -122,8 +122,8 @@
   border: 1px solid #3385d9;
   box-shadow: 1px 2px 2px rgba(65, 132, 234, 0.585);
   border-radius: 10px;
-  width: 15rem;
-  padding: 0.3rem;
+  width: 15em;
+  padding: 0.3em;
 }
 
 .registForm input:focus {
@@ -135,9 +135,9 @@
   color: #e6513e;
   font-weight: 400;
   text-align: center;
-  padding-top: 0.5rem;
-  width: 15rem;
-  font-size: 0.8rem;
+  padding-top: 0.5em;
+  width: 15em;
+  font-size: 0.8em;
 }
 
 .invalidError {
@@ -145,10 +145,10 @@
   color: #e6513e;
   font-weight: 400;
   text-align: center;
-  padding-top: 0.5rem;
-  width: 15rem;
-  font-size: 1rem;
-  padding-top: 1rem;
+  padding-top: 0.5em;
+  width: 15em;
+  font-size: 1em;
+  padding-top: 1em;
 }
 
 .imageUploadDiv {
@@ -224,8 +224,8 @@
 .companyDiv label {
   color: #3385d9;
   font-weight: 700;
-  padding-left: 0.5rem;
-  padding-top: 0.5rem;
+  padding-left: 0.5em;
+  padding-top: 0.5em;
   font-family: inherit;
   font-size: inherit;
 }
@@ -247,11 +247,11 @@
 
 .subTitle {
   text-align: center;
-  padding-top: 1rem;  
+  padding-top: 1em;  
   color: #e6513e;
   font-weight: 600;
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
+  font-size: 1.2em;
+  margin-bottom: 2em;
 }
 
 .interestList {
