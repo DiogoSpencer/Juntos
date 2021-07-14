@@ -54,6 +54,10 @@
   justify-self: center;
 }
 
+.navLinkHidden {
+  display: none;
+}
+
 @media (min-width: 60em) {
   .containerDiv {
     display: grid;
@@ -95,5 +99,20 @@
 
   .mainImageDiv {
     padding-top: 5em;
+  }
+
+  .navLinkHidden,
+  .navLinkHidden:hover {
+    text-decoration: none;
+    color: #ff9f36;
+  }
+
+  .navLinkHidden {
+    padding-left: 15em;
+    font-weight: 600;
+    position: fixed;
+    z-index: 10000;
+    display: block;
+    color: #ff9f36;
   }
 }

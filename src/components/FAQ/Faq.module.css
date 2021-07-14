@@ -2,7 +2,7 @@
   height: 100%;
   padding-top: 2em;
   background: url("../../img/faqquestion.jpg");
-  background-size: 40vw auto;
+  background-size: 30vw auto;
   background-position: 51vw bottom;
   background-repeat: no-repeat;
   display: grid;
@@ -43,7 +43,7 @@
     grid-template-columns: auto;
     grid-template-rows: 0.1fr auto;
     row-gap: 0.5em;
-    background-size: 35vw auto;
+    background-size: 30vw auto;
     background-position: 60vw 50vh;
     grid-template-areas:
       " . . ."
