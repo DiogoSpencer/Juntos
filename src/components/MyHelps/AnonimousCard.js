@@ -6,6 +6,8 @@ import requestHelpIcon from "../../img/hand.png";
 import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
 import classes from "./AnonimousCard.module.css";
+import greenCircle from "../../img/green-circle.png";
+import redCircle from "../../img/red-circle.png";
 
 const AnonimousCard = (props) => {
   const typeHandler = (type) => {
@@ -44,6 +46,21 @@ const AnonimousCard = (props) => {
       <div className={classes.markerInfo}>
         <img src={markerIcon} />
         <p>{props.location}</p>
+      </div>
+      <div className={classes.activeInfo}>
+        {props.isActive ? (
+          <img
+            src={greenCircle}
+            className={classes.requestCircle}
+            alt="pedido-activo"
+          />
+        ) : (
+          <img
+            src={redCircle}
+            className={classes.requestCircle}
+            alt="pedido-inactivo"
+          />
+        )}
       </div>
       <div className={classes.requestInfo}>
         <p>{props.creationDate}</p>

@@ -220,7 +220,7 @@ export async function startMarker(markerId: string) {
 
 export async function restartMarker(markerId: string, password: string) {
   try {
-    return await axios.put(`${url}/rest/marker/restart/`, {
+    return await axios.put(`${url}/rest/marker/restart`, {
       markerId: markerId,
       password: password,
     });

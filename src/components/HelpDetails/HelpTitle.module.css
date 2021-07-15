@@ -1,10 +1,10 @@
 .container {
   display: grid;
-  grid-template-columns: 0.4fr 1fr 0.75fr 0.75fr 1fr;
+  grid-template-columns: 0.4fr 1fr 0.5fr 0.75fr 0.75fr 1fr;
   grid-template-rows: 1fr 0.5fr;
   grid-template-areas:
-    ". tt vc ef ht"
-    ". rc vc ef ht";
+    ". tt ai vc ef ht"
+    ". rc . vc ef ht";
 }
 
 .title {
@@ -14,6 +14,27 @@
   color: #e6513e;
   font-weight: 600;
   font-size: 1.5em;
+}
+
+.activeInfo {
+  grid-area: ai;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+}
+
+.requestCircle {
+  height: 1.2rem;
+  padding-right: 1em;
+  padding-top: .5em;
+}
+
+.activeText {
+  color: #52CC99;
+}
+
+.inactiveText {
+  color: #DD2E44;
 }
 
 .requestContainer {

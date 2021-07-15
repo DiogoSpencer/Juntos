@@ -252,6 +252,7 @@ const HelpDetailsOwner = () => {
               volunteers={responseData.helpersCapacity}
               difficulty={responseData.difficulty}
               currentHelpers={responseData.currentHelpers}
+              isActive={responseData.activeMarker}
             />
           </div>
           <div className={classes.userDisplay}>

@@ -9,7 +9,8 @@ const SearchBar = (props) => {
     setInputSearch(event.target.value);
   };
 
-  const searchHandler = () => {
+  const searchHandler = (event) => {
+    event.preventDefault();
     props.setInput(inputSearch);
   };
 

@@ -20,8 +20,6 @@ import Map from "../Map/Map";
 let text = "";
 
 const HelpDetails = (props) => {
-  const dispatch = useDispatch();
-
   const [responseData, setResponseData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [point, setPoint] = useState([]);
@@ -196,6 +194,7 @@ const HelpDetails = (props) => {
               creationDate={responseData.creationDate}
               volunteers={responseData.helpersCapacity}
               difficulty={responseData.difficulty}
+              isActive = {responseData.activeMarker}
             />
           </div>
           <div className={classes.userDisplay}>
@@ -228,7 +227,7 @@ const HelpDetails = (props) => {
               <Button
                 text={text}
                 onClick={joinHelpHandler}
-                disabled={isHelper}
+                disabled={isHelper || !responseData.activeMarker}
               />
               {isHelper && (
                 <span

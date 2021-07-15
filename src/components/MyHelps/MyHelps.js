@@ -200,6 +200,7 @@ const MyHelps = () => {
   const autoComplete =
     byParam === location ? classes.autoComplete : classes.autoCompleteHidden;
 
+    console.log(responseData)
   //lista de ajudas ativas -> mapear da data que se recebe
   const ownRequests = (
     <Fragment>
@@ -235,7 +236,7 @@ const MyHelps = () => {
                       title={request.title}
                       firstName={request.firstName}
                       type={request.type}
-                      isActive={request.activeMaker}
+                      isActive={request.activeMarker}
                       numHelps={request.numHelps}
                       location={request.location}
                     />
@@ -252,7 +253,7 @@ const MyHelps = () => {
                       firstName={request.firstName}
                       lastName={request.lastName}
                       type={request.type}
-                      isActive={request.activeMaker}
+                      isActive={request.activeMarker}
                       profileImg={request.profileImg}
                       numHelps={request.numHelps}
                       company={request.company}
@@ -303,7 +304,7 @@ const MyHelps = () => {
                       title={request.title}
                       firstName={request.firstName}
                       type={request.type}
-                      isActive={request.activeMaker}
+                      isActive={request.activeMarker}
                       numHelps={request.numHelps}
                       location={request.location}
                     />
@@ -320,7 +321,7 @@ const MyHelps = () => {
                       firstName={request.firstName}
                       lastName={request.lastName}
                       type={request.type}
-                      isActive={request.activeMaker}
+                      isActive={request.activeMarker}
                       profileImg={request.profileImg}
                       numHelps={request.numHelps}
                       company={request.company}
