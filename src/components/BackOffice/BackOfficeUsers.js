@@ -238,7 +238,7 @@ const BackOfficeUsers = () => {
     setIsEditing(false);
   };
 
-  const onDeleteUserHandler = (userRole, userEmail) => {
+  const onDeleteUserHandler = (userRole, userUsername) => {
     if (
       userRole === USER ||
       (userRole === PARTNER && enableMod) ||
@@ -252,7 +252,7 @@ const BackOfficeUsers = () => {
         setDeletedUser(true);
         setIsLoading(true);
 
-        deleteUser(userEmail).then(
+        deleteUser(userUsername).then(
           (response) => {
             setIsLoading(false);
             setDeletedUser(false);
@@ -427,7 +427,7 @@ const BackOfficeUsers = () => {
                         alt="apagar"
                         className={classes.iconRow}
                         onClick={() =>
-                          onDeleteUserHandler(user.role, user.email)
+                          onDeleteUserHandler(user.role, user.username)
                         }
                       />
                     </td>

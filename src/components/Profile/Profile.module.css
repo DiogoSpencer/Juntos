@@ -101,11 +101,10 @@
   grid-area: fc;
   display: grid;
   grid-template-columns: 1fr 0.5fr 0.5fr;
-  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 2fr;
+  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 2fr;
   row-gap: 2.5em;
   column-gap: 3em;
   grid-template-areas:
-    ". un ."
     ". ed pv"
     ". fn ln"
     "it it it"
@@ -145,12 +144,6 @@
   display: flex;
   flex-direction: column;
   justify-self: start;
-}
-
-.usernameDiv {
-  grid-area: un;
-  display: flex;
-  flex-direction: column;
 }
 
 .firstNameDiv {

@@ -12,6 +12,7 @@ const isNotEmpty = (value) => value.trim() !== "";
 const InputPassword = (props) => {
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
 
   const {
@@ -38,6 +39,7 @@ const InputPassword = (props) => {
     }
 
     setIsLoading(true);
+    setError(null);
 
     completeMarker(props.markerId, enteredPass, rating).then(
       (response) => {
@@ -50,6 +52,8 @@ const InputPassword = (props) => {
           alert("Sessão expirou");
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
+        } else if (error.status === 403) {
+          setError("Não podes completar um evento do qual não fizeste parte.");
         }
       }
     );
@@ -125,6 +129,7 @@ const InputPassword = (props) => {
         >
           Enviar
         </button>
+        {error && <p className={classes.errorClass}>{error}</p>}
       </form>
     </div>
   );
