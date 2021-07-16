@@ -126,6 +126,8 @@ const Help = () => {
 
   const dispatch = useDispatch();
 
+  const ownerEmail = useSelector((state) => state.auth.email);
+
   useEffect(() => {
     if (status) {
       setIsLoading(false);
@@ -298,6 +300,7 @@ const Help = () => {
       title: enteredTitle,
       description: enteredDescription,
       points: point,
+      owner: ownerEmail,
       type: typeOfHelp,
       password: enteredPass,
       anonymousOwner: anonimousValue,

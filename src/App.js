@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import Layout from "./components/layout/Layout";
 import PrivateRoute from "./components/Private/PrivateRoute";
 import { authActions } from "./store/session/auth";
-import { getUserUsername } from "./services/http";
+import { getUser } from "./services/http";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
 import BackOfficeRoute from "./components/Private/BackOfficeRoute";
@@ -78,7 +78,7 @@ function App() {
           })
         );
       } else {
-        getUserUsername(parsedToken.username).then(
+        getUser(parsedToken.email).then(
           (response) => {
             dispatch(
               authActions.login({
