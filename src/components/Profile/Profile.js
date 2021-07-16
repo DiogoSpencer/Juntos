@@ -3,7 +3,7 @@ import useInput from "../hooks/use-input";
 import Button from "..//UI/Button";
 import { useDispatch, useSelector } from "react-redux";
 //import { useRouteMatch } from "react-router";
-import { getUser, changeCreds, deleteUser } from "../../services/http";
+import { changeCreds, deleteUser, getUserUsername } from "../../services/http";
 import keyIcon from "../../img/key.png";
 import classes from "./Profile.module.css";
 import { authActions } from "../../store/session/auth";
@@ -19,12 +19,15 @@ const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
 const isProfile = true;
 let initialTopics = [];
+let firstNameChanged = "";
+let lastNameChanged = "";
+let privacyChanged = "";
 const isNotEmpty = (value) => value.trim() !== "";
 const interests = ["HELP_OFFER", "HELP_REQUEST", "DONATE", "ACTION"];
 const showInterest = ["Ofertas Ajuda", "Pedidos Ajuda", "Doações", "Ações"];
 
 const Profile = () => {
-  const authEmail = useSelector((state) => state.auth.email);
+  const authUsername = useSelector((state) => state.auth.username);
   const dispatch = useDispatch();
   const history = useHistory();
   //const match = useRouteMatch();
@@ -35,6 +38,7 @@ const Profile = () => {
   const [deleteError, setDeleteError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [originalFile, setOriginalFile] = useState(null);
   const [privacy, setPrivacy] = useState(PUBLIC);
   const [numHelps, setNumHelps] = useState("0");
   const [creationDate, setCreationDate] = useState("");
@@ -67,28 +71,24 @@ const Profile = () => {
     setValueHandler: setLastNameValueHandler,
   } = useInput(isNotEmpty);
 
-  const {
-    value: enteredUsername,
-    hasError: usernameHasError,
-    setValueHandler: setUsernameValueHandler,
-  } = useInput(isNotEmpty);
-
   //const userId = match.params.username;
 
   //queremos so fazer useEffect onMount -> []
   useEffect(() => {
-    if (authEmail !== "") {
+    if (authUsername !== "") {
       setIsLoading(true);
 
-      getUser(authEmail).then(
+      getUserUsername(authUsername).then(
         (response) => {
           console.log(response.data);
           setResponseData(response.data);
-          setUsernameValueHandler(response.data.username);
           setEmailValueHandler(response.data.email);
           setLastNameValueHandler(response.data.lastName);
+          lastNameChanged = response.data.lastName;
           setFirstNameValueHandler(response.data.firstName);
+          firstNameChanged = response.data.firstName;
           setPrivacy(response.data.privacy);
+          privacyChanged = response.data.privacy;
           setNumHelps(response.data.numHelps);
           const date = new Date(response.data.creationDate);
           setCreationDate(
@@ -96,9 +96,12 @@ const Profile = () => {
           );
           if (response.data.profileImg === undefined) {
             setSelectedFile(null);
+            setOriginalFile(null);
           } else {
             setSelectedFile(response.data.profileImg);
+            setOriginalFile(response.data.profileImg);
           }
+          setOriginalFile(response.data.profileImg);
           initialTopics = new Array(interests.length).fill(false);
           response.data.favTopics &&
             response.data.favTopics.forEach((interest) => {
@@ -118,17 +121,17 @@ const Profile = () => {
       setIsLoading(false);
     }
     // eslint-disable-next-line
-  }, [authEmail]);
+  }, [authUsername]);
 
   let formIsValid = false;
 
   if (
     enteredFirstNameIsValid &&
     enteredLastNameIsValid &&
-    (enteredFirstName !== responseData.firstName ||
-      enteredLastName !== responseData.lastName ||
-      privacy !== responseData.privacy ||
-      selectedFile !== responseData.profileImg ||
+    (enteredFirstName !== firstNameChanged ||
+      enteredLastName !== lastNameChanged ||
+      privacy !== privacyChanged ||
+      selectedFile !== originalFile ||
       JSON.stringify(initialTopics) !== JSON.stringify(isCheckedInterest))
   ) {
     formIsValid = true;
@@ -172,8 +175,12 @@ const Profile = () => {
 
     changeCreds(formData).then(
       (response) => {
+        formIsValid = false;
         initialTopics = isCheckedInterest;
-
+        privacyChanged = privacy;
+        firstNameChanged = enteredFirstName;
+        lastNameChanged = enteredLastName;
+        setOriginalFile(selectedFile);
         setIsLoading(false);
       },
       (error) => {
@@ -210,7 +217,7 @@ const Profile = () => {
       )
     ) {
       setIsLoading(true);
-      deleteUser(authEmail).then(
+      deleteUser(authUsername).then(
         (response) => {
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
@@ -316,18 +323,6 @@ const Profile = () => {
             />
             {emailHasError && <p>Por favor insira um e-mail.</p>}
           </div>
-          <div className={classes.usernameDiv}>
-            <label htmlFor="username">Nome de Utilizador</label>
-            <input
-              readOnly
-              disabled
-              type="text"
-              id="username"
-              value={enteredUsername}
-            />
-            {usernameHasError && <p>Por favor insira um nome de utilizador.</p>}
-          </div>
-
           <div className={classes.firstNameDiv}>
             <label htmlFor="firstName">Nome</label>
             <input

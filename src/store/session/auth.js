@@ -6,6 +6,10 @@ const initialState = {
   username: "",
   role: "",
   email: "",
+  firstName: "",
+  lastName: "",
+  profileImg: "",
+  numHelps: 0,
 };
 
 const authenticationSlice = createSlice({
