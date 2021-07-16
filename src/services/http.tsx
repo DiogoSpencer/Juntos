@@ -55,6 +55,14 @@ export async function login(email: string, password: string) {
   }
 }
 
+export async function getUser(email: string) {
+  try {
+    return await axios.get(`${url}/rest/user/opt/${email}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
 export async function getAllUsers(urlParams: string) {
   try {
     return await axios.get(`${url}/rest/user${urlParams}`);
@@ -62,6 +70,7 @@ export async function getAllUsers(urlParams: string) {
     throw error.response;
   }
 }
+
 
 export async function getUserUsername(username: string) {
   try {
@@ -71,9 +80,9 @@ export async function getUserUsername(username: string) {
   }
 }
 
-export async function deleteUser(username: string) {
+export async function deleteUser(email: string) {
   try {
-    return await axios.delete(`${url}/rest/user/${username}`);
+    return await axios.delete(`${url}/rest/user/${email}`);
   } catch (error) {
     throw error.response;
   }

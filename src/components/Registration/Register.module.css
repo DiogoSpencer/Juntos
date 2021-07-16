@@ -79,10 +79,10 @@
   grid-template-areas:
     "tt tt"
     "iu iu"
-    "ed ed"
+    "un pv"
     "ps cf"
     "fn ln"
-    "pv cd"
+    "ed cd"
     "it it"
     "bt bt"
     "ie ie";
@@ -154,6 +154,13 @@
 .imageUploadDiv {
   grid-area: iu;
   justify-self: center;
+  align-self: center;
+}
+
+.usernameDiv {
+  grid-area: un;
+  display: flex;
+  flex-direction: column;
   align-self: center;
 }
 

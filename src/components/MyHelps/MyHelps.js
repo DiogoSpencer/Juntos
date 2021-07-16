@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import SearchBar from "../UI/SearchBar";
-import SideButtons from "../UI/SideButtons";
+import SideButtons from "../UI/SIdeButtons";
 import classes from "./MyHelps.module.css";
 import { listMarker } from "../../services/http";
 import leftArrowIcon from "../../img/leftArrow.png";
@@ -84,7 +84,6 @@ const MyHelps = () => {
         `?by=${byParam}&value=${search}&order=${orderParam}&isFirst=${isFirst}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
       ).then(
         (response) => {
-          console.log(response)
           setResponseData(response.data.content);
           setIsLoading(false);
         },

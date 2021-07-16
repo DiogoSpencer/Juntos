@@ -59,7 +59,8 @@ const Help = () => {
     lngTop: -8.84256058906556,
   };
 
-  const [markerType, setMarker] = useState("MARKER");
+  const [marker, setMarker] = useState("MARKER");
+  const [move, setMove] = useState("WALKING");
 
   //AjudaMap state
   const [point, setPoint] = useState([]);
@@ -75,7 +76,10 @@ const Help = () => {
 
   const handleMarkerChange = (event) => {
     setMarker(event.target.value);
-  };
+  }
+  const handleMove = (event) => {
+    setMove(event.target.value)
+  }
 
   const callbackC = useCallback(
     (center) => {
@@ -121,6 +125,8 @@ const Help = () => {
   const history = useHistory();
 
   const dispatch = useDispatch();
+
+  const ownerEmail = useSelector((state) => state.auth.email);
 
   useEffect(() => {
     if (status) {
@@ -294,6 +300,7 @@ const Help = () => {
       title: enteredTitle,
       description: enteredDescription,
       points: point,
+      owner: ownerEmail,
       type: typeOfHelp,
       password: enteredPass,
       anonymousOwner: anonimousValue,
@@ -409,24 +416,44 @@ const Help = () => {
         <span className={classes.selectedTitle}>{selected}</span>
       </h1>
       <Map
-        points={point}
-        remove
-        edit
-        bounds={bounds}
-        dangerPoints={dangerPoint}
-        interestPoints={interestPoint}
-        callback={pointsCallback}
-        center={center}
-        callbackC={callbackC}
-        callbackLo={locationCallback}
-        callbackD={distanceCallback}
-        callbackDanger={dangerPointsCallback}
-        callbackInterest={interestPointsCallback}
-        markerTypeSelected={markerType}
+          points={point}
+          remove
+          edit
+          bounds={bounds}
+          dangerPoints={dangerPoint}
+          interestPoints={interestPoint}
+          callback={pointsCallback}
+          center={center}
+          callbackC={callbackC}
+          callbackLo={locationCallback}
+          callbackD={distanceCallback}
+          callbackDanger={dangerPointsCallback}
+          callbackInterest={interestPointsCallback}
+          markerTypeSelected={marker}
+          moveTypeSelected = {move}
       />
       <div>
+        <label>
+          Seleciona o tipo de ponto:
+          <select value={marker} onChange={handleMarkerChange}>
+            <option value="MARKER">Ponto do Percurso</option>
+            <option value="DANGER">Ponto de Perigo</option>
+            <option value="INTEREST">Ponto de Interesse</option>
+          </select>
+        </label>
+      </div>
+      <div>
+        <label>
+          Seleciona como se deslocar:
+          <select value={move} onChange={handleMove}>
+            <option value="WALKING">Andar</option>
+            <option value="DRIVING">Conduzir</option>
+          </select>
+        </label>
+      </div>
+      <div>
         <MapDetails
-          markerType = {markerType}
+          markerType = {marker}
           handleMarkerChange = {handleMarkerChange}
           difficultyChangeHandler={difficultyChangeHandler}
           enteredDifficulty={enteredDifficulty}

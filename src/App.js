@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import Layout from "./components/layout/Layout";
 import PrivateRoute from "./components/Private/PrivateRoute";
 import { authActions } from "./store/session/auth";
-import { getUserUsername } from "./services/http";
+import { getUser } from "./services/http";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
 import BackOfficeRoute from "./components/Private/BackOfficeRoute";
@@ -78,7 +78,7 @@ function App() {
           })
         );
       } else {
-        getUserUsername(parsedToken.username).then(
+        getUser(parsedToken.email).then(
           (response) => {
             dispatch(
               authActions.login({
@@ -202,24 +202,3 @@ function App() {
 }
 
 export default App;
-//npm i recharts
-
-//pensar na pagina de editar pedido para o utilizador que o criou - apagar pedido, editar pedido, concluir pedido? e depois perguntar quem ajudou -
-//ver quem clicou em ajudar e dar a escolher da lista?
-//falta pensar na pagina de chat.. -> da para marcar pedido concluido so atraves do chat?
-//possibilidade de reactivar pedido quando este esta inactivo por ja ter sido concluido?
-//Adicionar butao de reload as listagens para fazer novo pedido http para atualizar os pedidos
-
-//TODO: Construir uma pagina /herois que e uma galeria de todos os herois mensais
-//que ja tivemos
-
-/*const language = localStorage.getItem(gS.storage.languageCode);
-    if (language !== null)
-      Props.changeLanguage(require(`./assets/languages/${language}.json`));
-    const token = localStorage.getItem(gS.storage.token);
-    if (token?.localeCompare(Props.token)) { //0 -> they are equal -> is false in JS -> so true they are different
-      //log user out -> attempt to change token detected
-      Props.logout();
-      localStorage.removeItem(gS.storage.token);
-    }
-    */
