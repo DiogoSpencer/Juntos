@@ -435,7 +435,7 @@ const Help = () => {
       <div>
         <label>
           Seleciona o tipo de ponto:
-          <select value={marker} onChange={handleClick}>
+          <select value={marker} onChange={handleMarkerChange}>
             <option value="MARKER">Ponto do Percurso</option>
             <option value="DANGER">Ponto de Perigo</option>
             <option value="INTEREST">Ponto de Interesse</option>
@@ -453,7 +453,7 @@ const Help = () => {
       </div>
       <div>
         <MapDetails
-          markerType = {markerType}
+          markerType = {marker}
           handleMarkerChange = {handleMarkerChange}
           difficultyChangeHandler={difficultyChangeHandler}
           enteredDifficulty={enteredDifficulty}
