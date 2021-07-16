@@ -70,14 +70,6 @@ const Register = (props) => {
     inputBlurHandler: lastNameBlurHandler,
   } = useInput(isNotEmpty);
 
-  const {
-    value: enteredUsername,
-    isValid: enteredUsernameIsValid,
-    hasError: usernameHasError,
-    valueChangeHandler: usernameChangeHandler,
-    inputBlurHandler: usernameBlurHandler,
-  } = useInput(isNotEmpty);
-
   const privacyChangeHandler = () => {
     if (privacy === PUBLIC) {
       setPrivacy(PRIVATE);
@@ -109,7 +101,6 @@ const Register = (props) => {
   if (
     enteredEmailIsValid &&
     enteredPasswordIsValid &&
-    enteredUsernameIsValid &&
     enteredConfirmationIsValid &&
     enteredFirstNameIsValid &&
     enteredLastNameIsValid &&
@@ -148,7 +139,6 @@ const Register = (props) => {
       email: enteredEmail,
       password: enteredPassword,
       confirmation: enteredConfirmation,
-      username: enteredUsername,
       firstName: enteredFirstName,
       lastName: enteredLastName,
       privacy,
@@ -189,23 +179,6 @@ const Register = (props) => {
           fileChangeHandler={setSelectedFile}
           isProfile={isProfile}
         />
-      </div>
-      <div className={classes.usernameDiv}>
-        <label htmlFor="username" className={classes.labelForm}>
-          Nome de Utilizador
-        </label>
-        <input
-          type="text"
-          id="username"
-          value={enteredUsername}
-          onChange={usernameChangeHandler}
-          onBlur={usernameBlurHandler}
-        />
-        {usernameHasError && (
-          <p className={classes.registError}>
-            Por favor insira um nome de utilizador.
-          </p>
-        )}
       </div>
       <div className={classes.privacyDiv}>
         <label htmlFor="public" className={classes.radioLabel}>
