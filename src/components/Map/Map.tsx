@@ -64,6 +64,7 @@ interface MapProps {
   bounds: Bounds;
   typeSelected?: string;
   markerTypeSelected?: string;
+  moveTypeSelected?: string;
   cluster?: boolean;
 }
 
@@ -202,6 +203,9 @@ function Map(props: MapProps) {
     return waypoints;
   };
   useEffect(() => {
+    let move = google.maps.TravelMode.WALKING;
+    if(props.moveTypeSelected === 'DRIVING')
+      move = google.maps.TravelMode.DRIVING
     if (points.length > 0) {
       let locationPo = new google.maps.LatLng(points[0].lat, points[0].lon)
       let admin = "administrative_area_level_1"
@@ -222,7 +226,7 @@ function Map(props: MapProps) {
                 points[points.length - 1].lat,
                 points[points.length - 1].lon
             ),
-            travelMode: google.maps.TravelMode.DRIVING,
+            travelMode: move,
             waypoints: wayPoints(),
           },
           (result, status) => {
@@ -244,7 +248,7 @@ function Map(props: MapProps) {
       )
     else
       setDirections(null);
-  }, [points]);
+  }, [points, props.moveTypeSelected]);
 
   const clickMarker = (index: number) => {
     setOpen({ index: index, openIn: true });
@@ -303,7 +307,7 @@ function Map(props: MapProps) {
             onCenterChanged={handleCenterChanged}
             onZoomChanged={handleZoomChanged}
         >
-          {directions !== null && <DirectionsRenderer directions={directions} />}
+          {directions !== null && <DirectionsRenderer directions={directions} options = {{suppressMarkers : true}} />}
             /* Child components, such as markers, info windows, etc. */
           {props.cluster ?
             <MarkerClusterer options={options}>

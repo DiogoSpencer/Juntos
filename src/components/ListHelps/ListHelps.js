@@ -1,6 +1,6 @@
 
 import { Fragment, useEffect, useState } from "react";
-import SideButtons from "../UI/SideButtons";
+import SideButtons from "../UI/SIdeButtons";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import { useDispatch } from "react-redux";

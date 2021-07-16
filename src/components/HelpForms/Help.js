@@ -59,6 +59,7 @@ const Help = () => {
   };
 
   const [marker, setMarker] = useState("MARKER");
+  const [move, setMove] = useState("WALKING");
 
   //AjudaMap state
   const [point, setPoint] = useState([]);
@@ -75,6 +76,9 @@ const Help = () => {
 
   const handleClick = (event) => {
     setMarker(event.target.value);
+  }
+  const handleMove = (event) => {
+    setMove(event.target.value)
   }
 
   const callbackC = useCallback(
@@ -313,8 +317,6 @@ const Help = () => {
       formInfo.dangers = [];
       formInfo.interests = [];
     }
-    
-    console.log(formInfo)
     formData.append(
       "marker",
       new Blob([JSON.stringify(formInfo)], { type: "application/json" })
@@ -333,6 +335,7 @@ const Help = () => {
             setIsLoading(false);
           }
       );
+
 
   };
 
@@ -428,14 +431,24 @@ const Help = () => {
           callbackDanger={dangerPointsCallback}
           callbackInterest={interestPointsCallback}
           markerTypeSelected={marker}
+          moveTypeSelected = {move}
       />
       <div>
         <label>
-          Select your marker option:
+          Seleciona o tipo de ponto:
           <select value={marker} onChange={handleClick}>
-            <option value="MARKER">Marker</option>
-            <option value="DANGER">Danger Zone</option>
-            <option value="INTEREST">Interest Point</option>
+            <option value="MARKER">Ponto do Percurso</option>
+            <option value="DANGER">Ponto de Perigo</option>
+            <option value="INTEREST">Ponto de Interesse</option>
+          </select>
+        </label>
+      </div>
+      <div>
+        <label>
+          Seleciona como se deslocar:
+          <select value={move} onChange={handleMove}>
+            <option value="WALKING">Andar</option>
+            <option value="DRIVING">Conduzir</option>
           </select>
         </label>
       </div>
