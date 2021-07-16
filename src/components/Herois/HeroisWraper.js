@@ -1,7 +1,7 @@
 import { useRouteMatch } from "react-router";
-import Heroi from "./Heroi";
-import Slides from "./Slides";
 import classes from "./HeroisWrapper.module.css";
+import volunteer1 from "../../img/boxesVolunteer.jpg";
+import Button from "../UI/Button";
 
 //ir buscar todos aqui ou em slides?
 //ir buscar o do endereço por id
@@ -22,15 +22,12 @@ const HeroisWraper = () => {
   return (
     <div className={classes.container}>
       <div className={classes.heroiContainer}>
-        <Heroi
-          img={dummy.img}
-          alt={dummy.alt}
-          title={dummy.title}
-          text={dummy.text}
-        />
+        <h1 className={classes.title}>{dummy.title}</h1>
+        <p className={classes.info}>{dummy.text}</p>
+        <img src={volunteer1} alt={dummy.alt} className={classes.image} />
       </div>
       <div className={classes.slidesContainer}>
-        <Slides />
+        <Button className={classes.seeOthers} text="Ver Outros Heróis" />
       </div>
     </div>
   );

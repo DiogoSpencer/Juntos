@@ -1,12 +1,12 @@
 .container {
-  height: 4rem;
+  height: 4em;
   display: grid;
-  grid-template-columns: 0.8fr 0.8fr 2fr 0.8fr 0.8fr;
-  grid-template-areas: "pi ui tt mi ri";
+  grid-template-columns: 0.8fr 0.8fr 2fr 0.8fr 0.2fr 0.8fr;
+  grid-template-areas: "pi ui tt mi ai ri";
   column-gap: 0.5fr;
   border-bottom: 1.5px solid #addbff;
   border-radius: 25px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.5em;
   box-shadow: #dbebf7 0px 5px 8px;
 }
 
@@ -19,16 +19,16 @@
   grid-area: pi;
   align-self: center;
   justify-self: center;
-  height: 3rem;
-  width: 3rem;
+  height: 3em;
+  width: 3em;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .verifiedIcon {
-  height: 3rem;
-  width: 4rem;
-  padding-right: 1rem;
+  height: 3em;
+  width: 4em;
+  padding-right: 1em;
   object-fit: contain;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .userInfo img {
-  height: 2rem;
+  height: 2em;
 }
 
 .title {
@@ -57,14 +57,14 @@
   justify-self: center;
   text-align: center;
   color: #3385d9;
-  font-size: 1rem;
+  font-size: 1em;
   font-weight: 600;
 }
 
 .markerInfo {
   grid-area: mi;
   align-self: center;
-  justify-self: center;
+  justify-self: start;
   display: flex;
   align-items: center;
   justify-items: center;
@@ -75,8 +75,18 @@
   font-weight: 600;
 }
 
-.markerInfo img {
-  height: 3rem;
+.markerInfoImg {
+  height: 3em;
+}
+
+.activeInfo {
+  grid-area: ai;
+  align-self: center;
+  justify-self: center;
+}
+
+.requestCircle {
+  height: 1rem;
 }
 
 .requestInfo {
@@ -95,5 +105,12 @@
 }
 
 .requestInfo img {
-  height: 2rem;
+  height: 2em;
+}
+
+@media all and (max-width: 40em) {
+  .container {
+    height: 6em;
+  }
+
 }

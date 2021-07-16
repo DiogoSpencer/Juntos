@@ -2,7 +2,7 @@
   display: grid;
   height: 100%;
   width: 100%;
-  grid-template-areas: "mf"
+  grid-template-areas: "mf";
 }
 
 .formContainer {
@@ -20,7 +20,7 @@
 .map {
   grid-area: mp;
   display: flex;
-  width: 70rem;
+  width: 70em;
   flex-direction: column;
   justify-content: center;
   align-content: flex-start;
@@ -35,7 +35,7 @@
 .title {
   color: #e6513e;
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 2em;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -43,8 +43,8 @@
 }
 
 .back {
-  padding-bottom: 0.5rem;
-  height: 5rem;
+  padding-bottom: 0.5em;
+  height: 5em;
   cursor: pointer;
 }
 
@@ -52,10 +52,12 @@
   border-radius: 50%;
   background-color: #3385d9;
   color: white;
-  margin: 1rem;
-  padding-top: 0.2rem;
-  padding-left: 0.9rem;
-  padding-right: 0.9rem;
+  margin: 1em;
+  margin-top: 1.8em;
+  height: 1.5em;
+  padding-top: 0.1em;
+  padding-left: 0.4em;
+  padding-right: 0.4em;
 }
 
 .selectedTitle {
@@ -76,9 +78,9 @@
 }
 
 .buttonContainer {
-  margin-left: 2rem;
+  margin-left: 2em;
   display: grid;
-  grid-template-columns: .7fr 1fr;
+  grid-template-columns: 0.7fr 1fr;
   grid-template-rows: auto;
   grid-template-areas: "bk nx";
   align-items: center;
@@ -87,12 +89,34 @@
 .back {
   grid-area: bk;
   justify-self: end;
-  padding-top: 1.5rem;
-  height: 5rem;
+  padding-top: 1.5em;
+  height: 5em;
   cursor: pointer;
 }
 
 .nextButton {
   grid-area: nx;
   justify-self: start;
+}
+
+@media all and (max-width: 60em) {
+  .map {
+    grid-area: mp;
+    display: flex;
+    width: 60em;
+    flex-direction: column;
+    justify-content: center;
+    align-content: flex-start;
+  }
+}
+
+@media all and (max-width: 40em) {
+  .map {
+    grid-area: mp;
+    display: flex;
+    width: 40em;
+    flex-direction: column;
+    justify-content: center;
+    align-content: flex-start;
+  }
 }

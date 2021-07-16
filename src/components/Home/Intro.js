@@ -1,8 +1,12 @@
+import { Link } from "react-router-dom";
 import classes from "./Intro.module.css";
 
 const Intro = () => {
   return (
     <div className={classes.containerDiv}>
+      <Link className={classes.navLinkHidden} to="/home#app">
+        Olá, estás num telemóvel? Faz aqui download da nossa App!
+      </Link>
       <div className={classes.mainImageDiv}>
         <div className={classes.hDiv}>
           <h1 className={classes.hFirst}>Temos um longo caminho pela frente</h1>

@@ -86,10 +86,8 @@ const MyHelps = () => {
         (response) => {
           setResponseData(response.data.content);
           setIsLoading(false);
-          setDisableSelect(false);
         },
         (error) => {
-          setDisableSelect(false);
           console.log(error);
           setIsLoading(false);
           if (error.status === 401) {
@@ -149,7 +147,7 @@ const MyHelps = () => {
   };
 
   const changePageSizeHandler = (event) => {
-    setPageSize(event.target.value);
+    setPageSize(parseInt(event.target.value));
     setDisableSelect(true);
   };
 
@@ -235,8 +233,9 @@ const MyHelps = () => {
                       title={request.title}
                       firstName={request.firstName}
                       type={request.type}
-                      isActive={request.activeMaker}
+                      isActive={request.activeMarker}
                       numHelps={request.numHelps}
+                      location={request.location}
                     />
                   ) : (
                     <RequestCardOwner
@@ -251,10 +250,11 @@ const MyHelps = () => {
                       firstName={request.firstName}
                       lastName={request.lastName}
                       type={request.type}
-                      isActive={request.activeMaker}
+                      isActive={request.activeMarker}
                       profileImg={request.profileImg}
                       numHelps={request.numHelps}
                       company={request.company}
+                      location={request.location}
                     />
                   )}
                 </Link>
@@ -301,8 +301,9 @@ const MyHelps = () => {
                       title={request.title}
                       firstName={request.firstName}
                       type={request.type}
-                      isActive={request.activeMaker}
+                      isActive={request.activeMarker}
                       numHelps={request.numHelps}
+                      location={request.location}
                     />
                   ) : (
                     <RequestCardOwner
@@ -317,10 +318,11 @@ const MyHelps = () => {
                       firstName={request.firstName}
                       lastName={request.lastName}
                       type={request.type}
-                      isActive={request.activeMaker}
+                      isActive={request.activeMarker}
                       profileImg={request.profileImg}
                       numHelps={request.numHelps}
                       company={request.company}
+                      location={request.location}
                     />
                   )}
                 </Link>

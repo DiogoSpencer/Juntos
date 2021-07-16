@@ -1,0 +1,19 @@
+.navList {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+}
+
+.navItem {
+  padding: 1em;
+}
+
+.navItem:hover {
+  background-color: #e4efff;
+  border-radius: 50%;
+}
+
+.navIcon {
+  height: 3em;
+}

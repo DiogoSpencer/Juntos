@@ -1,13 +1,3 @@
-.containerDiv {
-  display: grid;
-  grid-template-columns: auto;
-  grid-template-rows: auto 1fr 1fr;
-  grid-template-areas:
-    "im"
-    "ct"
-    "vd";
-}
-
 .mainImageDiv {
   background-image: url("../../img/sourcegif.gif");
   background-size: cover;
@@ -62,4 +52,67 @@
   grid-area: vd;
   align-self: center;
   justify-self: center;
+}
+
+.navLinkHidden {
+  display: none;
+}
+
+@media (min-width: 60em) {
+  .containerDiv {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto 1fr 1fr;
+    grid-template-areas:
+      "im"
+      "ct"
+      "vd";
+  }
+}
+
+@media all and (max-width: 60em) {
+  .containerDiv {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto 1fr 1fr;
+    grid-template-areas:
+      "im"
+      "ct"
+      "vd";
+  }
+
+  .mainImageDiv {
+    padding-top: 5em;
+  }
+}
+
+@media all and (max-width: 40em) {
+  .containerDiv {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto 1fr 1fr;
+    grid-template-areas:
+      "im"
+      "ct"
+      "vd";
+  }
+
+  .mainImageDiv {
+    padding-top: 5em;
+  }
+
+  .navLinkHidden,
+  .navLinkHidden:hover {
+    text-decoration: none;
+    color: #ff9f36;
+  }
+
+  .navLinkHidden {
+    padding-left: 15em;
+    font-weight: 600;
+    position: fixed;
+    z-index: 10000;
+    display: block;
+    color: #ff9f36;
+  }
 }

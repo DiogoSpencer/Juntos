@@ -64,7 +64,7 @@ const SideBar = () => {
         </li>
         {checkRole(userRole) && (
           <li className={classes.navItem}>
-            <Link to="/home">
+            <Link to="/backoffice">
               <img
                 src={backofficeIcon}
                 alt="backend"

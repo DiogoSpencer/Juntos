@@ -3,6 +3,9 @@ import offerHelpIcon from "../../img/helpIcon.png";
 import requestHelpIcon from "../../img/hand.png";
 import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
+import { Fragment } from "react";
+import greenCircle from "../../img/green-circle.png";
+import redCircle from "../../img/red-circle.png";
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const MS_PER_HOUR = 1000 * 60 * 60;
@@ -78,6 +81,27 @@ const HelpTitle = (props) => {
   return (
     <div className={classes.container}>
       <h3 className={classes.title}>{props.title}</h3>
+      <div className={classes.activeInfo}>
+        {props.isActive ? (
+          <Fragment>
+            <img
+              src={greenCircle}
+              className={classes.requestCircle}
+              alt="pedido-activo"
+            />
+            <p className={classes.activeText}>Activo</p>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <img
+              src={redCircle}
+              className={classes.requestCircle}
+              alt="pedido-inactivo"
+            />
+            <p className={classes.inactiveText}>Inactivo</p>
+          </Fragment>
+        )}
+      </div>
       <div className={classes.requestContainer}>
         <p className={classes.type}>{typeHandler(props.helpType)}</p>
         <p className={classes.creationDate}>{formatDate(props.creationDate)}</p>
@@ -85,7 +109,9 @@ const HelpTitle = (props) => {
       {props.helpType === "ACTION" && (
         <div className={classes.volunteersContainer}>
           <p className={classes.type}>Voluntários:</p>
-          <p className={classes.number}>{props.currentHelpers} de {props.volunteers}</p>
+          <p className={classes.number}>
+            {props.currentHelpers} de {props.volunteers}
+          </p>
         </div>
       )}
       {props.helpType === "ACTION" && (

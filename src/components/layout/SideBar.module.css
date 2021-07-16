@@ -1,16 +1,16 @@
 .navigation {
-  padding-top: 2rem;
+  padding-top: 2em;
   position: fixed;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 0.5fr 5fr;
   grid-template-areas:
     " . ic . "
-    " nv nv nv"
+    " nv nv nv";
 }
 
 .iconList {
-  height: 4rem;
+  height: 4em;
   grid-area: ic;
   z-index: 200;
   align-self: center;
@@ -24,6 +24,7 @@
   justify-self: center;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   align-content: space-between;
@@ -33,18 +34,55 @@
 .navList {
   list-style: none;
   padding: 0;
-  padding-top: 1rem;
+  padding-top: 1em;
 }
 
 .navItem {
-    padding: 1rem;
+  padding: 1em;
 }
 
 .navItem:hover {
-    background-color: #E4EFFF;
-    border-radius: 50%;
+  background-color: #e4efff;
+  border-radius: 50%;
 }
 
 .navIcon {
-    height: 4rem;
+  height: 4em;
+}
+
+@media all and (max-width: 60em) {
+  .navigation {
+    font-size: 1.2em;
+    margin-top: 1em;
+  }
+
+  .iconList {
+    height: 4em;
+  }
+
+  .navIcon {
+    height: 4em;
+  }
+}
+
+@media all and (max-width: 40em) {
+  .navigation {
+    font-size: 1em;
+    margin-top: 2em;
+  }
+}
+
+@media all and (max-width: 60em) and (orientation: landscape) {
+  .navigation {
+    font-size: 1.2em;
+    margin-top: 1.2em;
+  }
+
+  .iconList {
+    height: 2.4em;
+  }
+
+  .navIcon {
+    height: 2.4em;
+  }
 }

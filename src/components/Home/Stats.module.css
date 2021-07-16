@@ -1,15 +1,3 @@
-.mainStats {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 0.5fr 1fr 6fr;
-  row-gap: 2rem;
-  column-gap: 4rem;
-  grid-template-areas:
-    ". . . . ."
-    "tt tt tt tt tt"
-    " . ps as hs . ";
-}
-
 .mainTitleStats {
   grid-area: tt;
   justify-self: center;
@@ -38,7 +26,6 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-
 }
 
 .heroisStats {
@@ -53,13 +40,13 @@
 .numberStats {
   color: #e6513e;
   font-weight: 700;
-  font-size: 4rem;
+  font-size: 4em;
 }
 
 .titleStats {
   color: #3385d9;
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 2em;
 }
 
 .textStats {
@@ -68,4 +55,40 @@
 
 .juntos {
   color: #ff9f36;
+}
+
+@media (min-width: 60em) {
+  .mainStats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 0.5fr 1fr 6fr;
+    row-gap: 2em;
+    column-gap: 4em;
+    grid-template-areas:
+      ". . . . ."
+      "tt tt tt tt tt"
+      " . ps as hs . ";
+  }
+}
+
+@media all and (max-width: 60em) {
+  .mainStats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 0.5fr 1fr repeat(3, 2fr);
+    row-gap: 2em;
+    column-gap: 4em;
+    grid-template-areas:
+      ". . ."
+      "tt tt tt"
+      " . ps . "
+      ". as ."
+      ". hs .";
+      align-content: center;
+      justify-content: center;
+  }
+
+  .mainTitleStats {
+    font-size: 4.5rem;
+  }
 }

@@ -19,8 +19,7 @@
     ". lg1 . lg2 ."
     ". . og . ."
     ". . . jn ."
-    ". . . . ."
-    ;
+    ". . . . .";
 }
 
 .mainTitle {
@@ -29,7 +28,7 @@
   justify-self: center;
   text-align: center;
   font-weight: 700;
-  font-size: 3rem;
+  font-size: 3em;
 }
 
 .descriptionTextParceiros {
@@ -38,7 +37,7 @@
   justify-self: center;
   text-align: center;
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 
 .juntos {
@@ -61,11 +60,8 @@
   flex-direction: column;
 }
 
-.logo {
-}
-
 .logoImg {
-  height: 8rem;
+  height: 8em;
 }
 
 .thanks {
@@ -75,11 +71,11 @@
 }
 
 .thanksText {
-    display: inline-block;
+  display: inline-block;
 }
 
 .heartImg {
-  height: 5rem;
+  height: 5em;
 }
 
 .joinLink {
@@ -88,11 +84,17 @@
   justify-self: center;
   text-decoration: none;
   color: white;
-  font-size: 1.2rem;
-  padding-bottom: 2rem;
+  font-size: 1.2em;
+  padding-bottom: 2em;
 }
 
 .joinLink:hover {
-    text-decoration: none;
-    color: #3385d9;
+  text-decoration: none;
+  color: #3385d9;
+}
+
+@media all and (max-width: 60em) {
+  .mainParceiros {
+    background-position: 40% 0%;
+  }
 }

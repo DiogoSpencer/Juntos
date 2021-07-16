@@ -1,6 +1,6 @@
 .imageButton {
-  width: 20rem;
-  height: 20rem;
+  width: 20em;
+  height: 20em;
   border-radius: 25px;
   border-style: none;
   cursor: pointer;
@@ -18,7 +18,7 @@
 }
 
 .insert {
-    margin-top: 12rem;
+    margin-top: 12em;
     color: #3385d9;
     font-weight: 600;
 }
@@ -28,8 +28,8 @@
 }
 
 .imgPreview {
-  width: 20rem;
-  height: 20rem;
+  width: 20em;
+  height: 20em;
   border-radius: 25px;
   object-fit: contain;
   cursor: pointer;

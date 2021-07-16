@@ -4,21 +4,18 @@ import { useHistory } from "react-router";
 import gS from "../../services/generalServices.json";
 
 const PrivateRoute = (props) => {
-  const isLogged = useSelector((state) => state.auth.isLogged)
+  const isLogged = useSelector((state) => state.auth.isLogged);
   const history = useHistory();
 
   useEffect(() => {
     const token = localStorage.getItem(gS.storage.token);
-    
+
     if (!token) {
-      history.push("/home")
+      history.push("/home");
     }
+  }, [isLogged]);
 
-  }, [isLogged])
-
-  return (
-    <Fragment>{ props.children }</Fragment>
-  );
+  return <Fragment>{props.children}</Fragment>;
 };
 
 export default PrivateRoute;

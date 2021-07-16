@@ -1,5 +1,6 @@
 .mainContainer {
   height: 100%;
+  width: 100%;
   display: grid;
   grid-template-areas: "mn";
 }
@@ -27,7 +28,7 @@
   display: grid;
   grid-template-columns: 1fr 0.5fr 0.2fr 1fr;
   grid-template-rows: 0.2fr 0.5fr 0.5fr;
-  row-gap: 1rem;
+  row-gap: 1em;
   grid-template-areas:
     "tt tt tt tt"
     ". fc . iu"
@@ -40,7 +41,7 @@
   justify-self: center;
   color: #e6513e;
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 2em;
 }
 
 .imageDiv {
@@ -52,33 +53,33 @@
   text-align: center;
   font-weight: 600;
   color: #3385d9;
-  margin-left: 2rem;
+  margin-left: 2em;
 }
 
 .verified {
-  height: 3rem;
-  width: 4rem;
-  padding-right: 1rem;
+  height: 3em;
+  width: 4em;
+  padding-right: 1em;
 }
 
 .passLink {
-  margin-left: 4rem;
+  margin-left: 4em;
   grid-area: pl;
-  font-size: 0.9rem;
+  font-size: 0.9em;
 }
 
 .keyIcon {
-  height: 4rem;
+  height: 4em;
   cursor: pointer;
-  margin-left: 1.5rem;
-  margin-bottom: 3rem;
+  margin-left: 1.5em;
+  margin-bottom: 3em;
 }
 
 .deleteButton {
-  margin-top: 5rem;
+  margin-top: 5em;
   color: #c0392b;
   cursor: pointer;
-  padding-left: .5rem;
+  padding-left: 0.5em;
   font-weight: 600;
 }
 
@@ -88,12 +89,12 @@
 
 .deleteError {
   color: #e6513e;
-  padding-left: 1.5rem;
+  padding-left: 1.5em;
   font-weight: 400;
   text-align: center;
-  padding-top: 0.5rem;
-  width: 5rem;
-  font-size: 1rem;
+  padding-top: 0.5em;
+  width: 5em;
+  font-size: 1em;
 }
 
 .formContainer {
@@ -101,8 +102,8 @@
   display: grid;
   grid-template-columns: 1fr 0.5fr 0.5fr;
   grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 2fr;
-  row-gap: 2.5rem;
-  column-gap: 3rem;
+  row-gap: 2.5em;
+  column-gap: 3em;
   grid-template-areas:
     ". un ."
     ". ed pv"
@@ -117,8 +118,8 @@
   border: 1px solid #3385d9;
   box-shadow: 1px 2px 2px rgba(65, 132, 234, 0.585);
   border-radius: 10px;
-  width: 15rem;
-  padding: 0.3rem;
+  width: 15em;
+  padding: 0.3em;
   justify-items: center;
 }
 
@@ -131,7 +132,7 @@
 }
 
 .radioLabel input {
-  margin-right: 0.2rem;
+  margin-right: 0.2em;
 }
 
 .juntos {
@@ -183,11 +184,11 @@
 
 .subTitle {
   text-align: center;
-  padding-top: 1rem;  
+  padding-top: 1rem;
   color: #e6513e;
   font-weight: 600;
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
+  font-size: 1.2em;
+  margin-bottom: 2em;
 }
 
 .interestList {
@@ -200,7 +201,7 @@
 }
 
 .interestList label {
-  padding-left: .2rem;
+  padding-left: 0.2em;
 }
 
 .interestDiv input:focus {
@@ -217,16 +218,16 @@
   color: #e6513e;
   font-weight: 400;
   text-align: center;
-  padding-top: 0.5rem;
-  width: 15rem;
-  font-size: 1rem;
+  padding-top: 0.5em;
+  width: 15em;
+  font-size: 1em;
   justify-self: center;
 }
 
 .logo {
-  height: 2.5rem;
-  margin-right: 0.5rem;
-  margin-top: 0.5rem;
+  height: 2.5em;
+  margin-right: 0.5em;
+  margin-top: 0.5em;
 }
 
 .profileContainer input:focus {
@@ -235,4 +236,163 @@
 
 input:disabled {
   cursor: not-allowed;
+}
+
+@media all and (max-width: 60em) {
+  .profileContainer {
+    margin-top: 4em;
+    grid-area: mn;
+    background-image: url("../../img/togetherapart.jpg");
+    height: 100%;
+    width: 100%;
+    background-size: 27vw auto;
+    background-position: 33.5vw bottom;
+    background-repeat: no-repeat;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.1fr 0.2fr 0.5fr 0.1fr;
+    row-gap: 1em;
+    grid-template-areas:
+      "tt"
+      "iu"
+      "fc"
+      "pl";
+  }
+
+  .imageDiv {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .formContainer {
+    justify-self: center;
+    margin-right: 18em;
+    grid-area: fc;
+    display: grid;
+    grid-template-columns: 1fr 0.5fr 0.5fr;
+    grid-template-rows: repeat(6, 0.5fr);
+    row-gap: 2.5em;
+    column-gap: 3em;
+    grid-template-areas:
+      ". un ."
+      ". ed pv"
+      ". fn ln"
+      "it it it"
+      "bt bt bt"
+      "ie ie ie";
+    align-items: start;
+  }
+
+  .interestDiv {
+    margin-left: 18em;
+  }
+
+  .buttonContainer {
+    padding-left: 18em;
+  }
+
+  .passLink {
+    justify-self: center;
+    align-self: start;
+  }
+}
+
+@media all and (max-width: 60em) {
+  .profileContainer {
+    margin-top: 4em;
+    grid-area: mn;
+    background-image: url("../../img/togetherapart.jpg");
+    height: 100%;
+    width: 100%;
+    background-size: 20vw auto;
+    background-position: 39vw 110vh;
+    background-repeat: no-repeat;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.1fr 0.2fr 0.5fr 0.1fr;
+    row-gap: 1em;
+    grid-template-areas:
+      "tt"
+      "iu"
+      "fc"
+      "pl";
+  }
+
+  .imageDiv {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .formContainer {
+    justify-self: center;
+    margin-right: 12em;
+    grid-area: fc;
+    display: grid;
+    grid-template-columns: 1fr 0.5fr 0.5fr;
+    grid-template-rows: repeat(6, 0.5fr);
+    row-gap: 2.5em;
+    column-gap: 3em;
+    grid-template-areas:
+      ". un ."
+      ". ed pv"
+      ". fn ln"
+      "it it it"
+      "bt bt bt"
+      "ie ie ie";
+    align-items: start;
+  }
+
+  .interestDiv {
+    margin-left: 12em;
+  }
+
+  .buttonContainer {
+    padding-left: 12em;
+  }
+
+  .passLink {
+    padding-right: 4em;
+    justify-self: center;
+    align-self: start;
+  }
+}
+
+@media all and (max-width: 40em) {
+  .profileContainer {
+    margin-top: 4em;
+    grid-area: mn;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.1fr 0.2fr 0.5fr 0.1fr;
+    row-gap: 1em;
+    grid-template-areas:
+      "tt"
+      "iu"
+      "fc"
+      "pl";
+  }
+}
+
+@media all and (max-width: 40em) and (orientation: landscape) {
+  .profileContainer {
+    margin-top: 4em;
+    grid-area: mn;
+    background-image: url("../../img/togetherapart.jpg");
+    height: 100%;
+    width: 100%;
+    background-size: 40vw auto;
+    background-position: 28vw 70vh;
+    background-repeat: no-repeat;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.1fr 0.2fr 0.5fr 0.1fr;
+    row-gap: 1em;
+    grid-template-areas:
+      "tt"
+      "iu"
+      "fc"
+      "pl";
+  }
 }

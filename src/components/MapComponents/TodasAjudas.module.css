@@ -1,10 +1,9 @@
 .mainContainer {
-  font-size: 0.8rem;
   display: grid;
   height: 100%;
   width: 100%;
   grid-template-rows: 0.25fr auto;
-  row-gap: 2rem;
+  row-gap: 2em;
   grid-template-areas: "tt" "mf";
 }
 
@@ -14,7 +13,7 @@
   justify-self: center;
   color: #e6513e;
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 2em;
 }
 
 .spinner {
@@ -35,8 +34,8 @@
   display: grid;
   grid-template-rows: 1fr auto;
   grid-template-columns: auto;
-  column-gap: 1rem;
-  row-gap: 1rem;
+  column-gap: 1em;
+  row-gap: 1em;
   grid-template-areas:
     "sb"
     "mp";
@@ -50,8 +49,22 @@
 
 .map {
   grid-area: mp;
-  height: 50rem;
-  width: 70rem;
+  height: 50em;
+  width: 70em;
   align-self: center;
   justify-self: center;
+}
+
+@media all and (max-width: 60em) {
+  .mainContainer {
+    padding-top: 2em;
+  }
+
+  .sideButtons {
+    font-size: 1.5em;
+  }
+  
+  .subContainer {
+    font-size: .8em;
+  }
 }

@@ -14,7 +14,7 @@ import Form from 'react-bootstrap/Form';
 
 const containerStyle = {
   width: "100%",
-  height: "40rem",
+  height: "40em",
 };
 
 export interface Center {

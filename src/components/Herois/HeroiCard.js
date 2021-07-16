@@ -1,5 +1,3 @@
-//import classes from './slideshow.module.css'
-
 import { Link } from "react-router-dom"
 
 const HeroiCard = (props) => {

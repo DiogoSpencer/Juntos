@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 0.5fr 0.5fr 0.5fr 0.5fr 2fr;
-  row-gap: 1rem;
+  row-gap: 1em;
   grid-template-areas:
     "tt tt tt"
     ". hp ."
@@ -14,21 +14,23 @@
 }
 
 .title {
+    padding-top: 2em;
+    padding-bottom: 2em;
     grid-area: tt;
     align-self: center;
     justify-self: center;
     color: #e6513e;
     font-weight: 600;
-    font-size: 2rem;
+    font-size: 2em;
 }
 
 .number {
     border-radius: 50%;
     background-color: #3385D9;
     color: white;
-    margin: 1rem;
-    padding-left: .8rem;
-    padding-right: .8rem;
+    margin: 1em;
+    padding-left: .4em;
+    padding-right: .4em;
 }
 
 .help {

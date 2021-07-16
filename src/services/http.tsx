@@ -63,6 +63,15 @@ export async function getUser(email: string) {
   }
 }
 
+export async function getAllUsers(urlParams: string) {
+  try {
+    return await axios.get(`${url}/rest/user${urlParams}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+
 export async function getUserUsername(username: string) {
   try {
     return await axios.get(`${url}/rest/user/${username}`);
@@ -220,7 +229,7 @@ export async function startMarker(markerId: string) {
 
 export async function restartMarker(markerId: string, password: string) {
   try {
-    return await axios.put(`${url}/rest/marker/restart/`, {
+    return await axios.put(`${url}/rest/marker/restart`, {
       markerId: markerId,
       password: password,
     });

@@ -4,7 +4,7 @@
   width: 100%;
   grid-template-rows: 0.25fr auto;
   grid-auto-columns: 0.4fr auto 0.4fr;
-  row-gap: 1rem;
+  row-gap: 1em;
   grid-template-areas: ". tt ." ". mc .";
 }
 
@@ -14,13 +14,13 @@
   justify-self: center;
   color: #e6513e;
   font-weight: 600;
-  font-size: 2rem;
-  margin-bottom: 2rem;
+  font-size: 2em;
+  margin-bottom: 2em;
 }
 
 .title img {
-  padding-right: 1rem;
-  height: 3rem;
+  padding-right: 1em;
+  height: 3em;
 }
 
 .spinner {
@@ -40,7 +40,7 @@
   grid-area: mc;
   display: grid;
   grid-template-rows: auto;
-  row-gap: 3rem;
+  row-gap: 3em;
   grid-template-areas: "mp" "ic" "cc";
 }
 
@@ -58,7 +58,7 @@
 .infoContent {
   grid-area: ic;
   display: grid;
-  row-gap: 1rem;
+  row-gap: 1em;
   grid-template-rows: 0.25fr 0.25fr auto 0.5fr auto 0.25fr 0.25fr;
   grid-template-areas: "ht" "ud" "id" "dp" "ip" "bd" "er" "dr";
 }
@@ -82,16 +82,16 @@
   grid-auto-columns: dp;
   border-bottom: 1px solid #b9e1ff;
   text-align: center;
-  font-size: 0.9rem;
-  padding-bottom: 0.5rem;
-  padding-top: 0.5rem;
+  font-size: 0.9em;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
 }
 
 .subTitle {
   color: #e6513e;
   font-weight: 600;
-  font-size: 1.2rem;
-  padding-bottom: 1.5rem;
+  font-size: 1.2em;
+  padding-bottom: 1.5em;
 }
 
 .inputPass {
@@ -108,7 +108,7 @@
 .participating {
   color: #e6513e;
   font-weight: 400;
-  padding-top: 1rem;
+  padding-top: 1em;
 }
 
 .participating:hover {
@@ -148,7 +148,7 @@
   color: #e6513e;
   font-weight: 400;
   text-align: center;
-  padding-top: 0.5rem;
-  width: 5rem;
-  font-size: 1rem;
+  padding-top: 0.5em;
+  width: 5em;
+  font-size: 1em;
 }

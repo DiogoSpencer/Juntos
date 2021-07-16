@@ -32,7 +32,6 @@ import MyHelps from "./components/MyHelps/MyHelps";
 import Register from "./components/Registration/Register";
 import Help from "./components/HelpForms/Help";
 import HelpDetails from "./components/HelpDetails/HelpDetails"
-import ListHelps from "./components/ListHelps/ListHelps";
 import Chat from './components/Chat/Chat'
 import Conversation from './components/Chat/Conversation'
 
@@ -111,7 +110,6 @@ function App(Props: FullRouteProps) {
         <Route path="/app" render={() => <AppPage />} />
         <Route path="/minhasajudas" render={() => <MyHelps/>}/>
         <Route path="/novopedido" render={() => <Help/>}/>
-        <Route exact path="/ajudas" render={() => <ListHelps />}/>
         <Route path="/ajudas/pedidos/:pedidoId" render={() => <HelpDetails buttonText="Oferecer Ajuda" />}/>
         <Route path="/ajudas/ofertas/:ofertaId" render={() => <HelpDetails buttonText="Pedir Ajuda" />}/>
         <Route exact path="/conversas" render={() => <Chat />} />

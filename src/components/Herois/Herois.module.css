@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: 2fr 0.3fr 1fr;
   grid-template-rows: 1fr auto;
-  row-gap: 3rem;
+  row-gap: 3em;
   grid-template-areas:
     "tl tl tl"
     "if . im"
@@ -13,7 +13,7 @@
     grid-area: tl;
     color: #e6513e;
     font-weight: 700;
-    font-size: 2rem;
+    font-size: 2em;
     align-self: center;
     justify-self: center;
 }
@@ -21,7 +21,7 @@
 .info {
     grid-area: if;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 1.1em;
 }
 
 .image {

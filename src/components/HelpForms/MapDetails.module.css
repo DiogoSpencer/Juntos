@@ -1,16 +1,17 @@
 .subTitle {
   color: #3385d9;
   font-weight: 600;
-  padding-right: .5rem;
-  padding-top: .5rem;
+  padding-right: 0.5em;
+  padding-top: 0.5em;
+  padding-top: 1.5em;
 }
 
 .subContainer input {
-  width: 4rem;
+  width: 4em;
   border: 1px solid #3385d9;
   box-shadow: 1px 2px 2px rgba(65, 132, 234, 0.585);
   border-radius: 10px;
-  padding: 0.3rem;
+  padding: 0.3em;
 }
 
 .subContainer input:focus {
@@ -22,7 +23,32 @@
   color: #e6513e;
   font-weight: 400;
   text-align: center;
-  font-size: 0.8rem;
-  padding-top: 0.5rem;
-  width: 15rem;
+  font-size: 0.8em;
+  padding-top: 0.5em;
+  width: 15em;
+}
+
+.subject {
+  padding-top: 2em;
+  display: flex;
+  flex-direction: column;
+}
+
+.selectSub {
+  margin-left: .5em;
+  width: 10em;
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+  box-shadow: 1px 1px 1px #999;
+}
+
+.selectSub:focus {
+  outline: none;
+  box-shadow: 0 0 10px #719ece;
+}
+
+@media all and (max-width: 60em) {
+  .subContainer input {
+    width: 8em;
+  }
 }

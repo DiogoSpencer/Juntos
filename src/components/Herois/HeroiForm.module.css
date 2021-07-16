@@ -12,7 +12,7 @@
   grid-area: tt;
   color: #e6513e;
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 2em;
   justify-self: center;
 }
 
@@ -43,7 +43,7 @@
 .subContainer {
   grid-area: sc;
   display: grid;
-  row-gap: 1rem;
+  row-gap: 1em;
   grid-template-rows: 0.25fr 0.25fr 0.25fr;
   grid-template-areas:
     "at iu"
@@ -109,8 +109,8 @@
 .formError {
   color: #e6513e;
   font-weight: 600;
-  font-size: 0.8rem;
-  padding-top: 0.5rem;
-  width: 15rem;
+  font-size: 0.8em;
+  padding-top: 0.5em;
+  width: 15em;
   margin: 0;
 }

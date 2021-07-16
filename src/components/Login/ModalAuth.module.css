@@ -9,12 +9,12 @@
 }
 
 .closeIcon {
-  height: 2.5rem;
+  height: 2.5em;
   cursor: pointer;
   grid-area: ci;
   justify-self: end;
   align-self: center;
-  padding-right: 1rem;
+  padding-right: 1em;
 }
 
 .buttonDiv {
@@ -26,7 +26,7 @@
 }
 
 .modalButton {
-  width: 12rem;
+  width: 12em;
   color: #3385d9;
   font-weight: 700;
   background: transparent;
@@ -35,8 +35,8 @@
   text-align: center;
   cursor: pointer;
   text-decoration: none;
-  padding: 0.3rem;
-  margin: 0.5rem;
+  padding: 0.3em;
+  margin: 0.5em;
   outline: none;
   transition: background-color 0.2s ease-out, color 0.2s ease-out;
 }
@@ -50,7 +50,7 @@
 }
 
 .modalButtonActive {
-  width: 12rem;
+  width: 12em;
   color: white;
   font-weight: 700;
   background-color: #e6513e;
@@ -59,8 +59,8 @@
   text-align: center;
   cursor: pointer;
   text-decoration: none;
-  padding: 0.3rem;
-  margin: 0.5rem;
+  padding: 0.3em;
+  margin: 0.5em;
   outline: none;
 }
 

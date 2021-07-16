@@ -8,8 +8,6 @@ de stats vs dentro de home? -> Mudar no titulo + dentro do texto
 8. .? perfil e em todos os sitios em que temos fetch data
 9. galeria herois
 11. login e register -> fazer regex de verificaçao de input
-12. verificar se user está a aceder de um mobile e se tiver direcionar
-para pagina de download da app
 13. register + novopedido -> restringuir tamanho da imagem
 14. faq -> perguntas e respostas
 16. HeroisHome - fetch data dos 3 herois do ultimo mes
@@ -17,13 +15,9 @@ para pagina de download da app
 22. falta verificar os limites quando se submete - titulo + textBox -> quando fizer os regex
 23. refresh nas listagens
 24. Modificar o alert depois de inserir mais de 5 imagens
-25. ACTIVE MARKER - listagens e restringir operações + adicionar ativar
 
 //amanha -> listagem de todos + lista de participacao
 
-eu ainda me falta fazer a listagem que vai ter a barra de localização (tenho que falar com o palma)
-atualizar as query todas
-media query para o css
 acabar os comentários
 meter as regex
 meter a cena dos herois+parceiros na front page

@@ -12,7 +12,7 @@ import { createMarker } from "../../services/http";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
-import Map, {Bounds} from "../Map/Map";
+import Map, { Bounds } from "../Map/Map";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import MapDetails from "./MapDetails";
 
@@ -29,6 +29,7 @@ const isVolunteerNumber = (value) => {
     return false;
   }
 };
+
 const isDifficultyNumber = (value) => {
   if (value > 0 && value <= 5) {
     return true;
@@ -67,14 +68,13 @@ const Help = () => {
   const [interestPoint, setInterestPoint] = useState([]);
 
   const [distance, setDistance] = useState(0);
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState("");
   const [center, setCenter] = useState({
     lat: 38.7071,
     lng: -9.13549,
   });
 
-
-  const handleClick = (event) => {
+  const handleMarkerChange = (event) => {
     setMarker(event.target.value);
   }
   const handleMove = (event) => {
@@ -96,16 +96,16 @@ const Help = () => {
   );
 
   const dangerPointsCallback = useCallback(
-      (points) => {
-        setDangerPoint(points);
-      },
-      [dangerPoint]
+    (points) => {
+      setDangerPoint(points);
+    },
+    [dangerPoint]
   );
   const interestPointsCallback = useCallback(
-      (points) => {
-        setInterestPoint(points);
-      },
-      [interestPoint]
+    (points) => {
+      setInterestPoint(points);
+    },
+    [interestPoint]
   );
 
   const distanceCallback = useCallback(
@@ -113,12 +113,12 @@ const Help = () => {
       setDistance(distance);
     },
     [distance]
-);
+  );
   const locationCallback = useCallback(
-      (location) => {
-        setLocation(location);
-      },
-      [location]
+    (location) => {
+      setLocation(location);
+    },
+    [location]
   );
 
   /************/
@@ -211,7 +211,6 @@ const Help = () => {
   const backFormHandler = () => {
     setIsFocused(false); //decidir se vamos usar isto aqui tb
     setSelected("");
-
   };
 
   const yesAnonimousHandler = () => {
@@ -310,33 +309,33 @@ const Help = () => {
       helpersCapacity: helpersCapactiy,
       interests: interestPoint,
       dangers: dangerPoint,
-      location: location
+      location: location,
     };
 
-    if(selected !== ACOES) {
+    if (selected !== ACOES) {
       formInfo.dangers = [];
       formInfo.interests = [];
     }
+
+    console.log(formInfo);
     formData.append(
       "marker",
       new Blob([JSON.stringify(formInfo)], { type: "application/json" })
     );
-      createMarker(formData).then(
-          (response) => {
-            setStatus(true);
-          },
-          (error) => {
-            if (error.status === 401) {
-              alert("Sessão expirou");
-              dispatch(authActions.logout());
-              localStorage.removeItem(gS.storage.token);
-            }
-            console.log(error);
-            setIsLoading(false);
-          }
-      );
-
-
+    createMarker(formData).then(
+      (response) => {
+        setStatus(true);
+      },
+      (error) => {
+        if (error.status === 401) {
+          alert("Sessão expirou");
+          dispatch(authActions.logout());
+          localStorage.removeItem(gS.storage.token);
+        }
+        console.log(error);
+        setIsLoading(false);
+      }
+    );
   };
 
   //formConcludedHandler
@@ -390,16 +389,16 @@ const Help = () => {
         <span className={classes.selectedTitle}>{selected}</span>
       </h1>
       <Map
-          unique
-          center={center}
-          bounds={bounds}
-          points={point.length <= 0 ? [] : [point[0]]}
-          dangerPoints={[]}
-          interestPoints={[]}
-          callback={pointsCallback}
-          callbackC={callbackC}
-          callbackLo={locationCallback}
-          markerTypeSelected={"MARKER"}
+        unique
+        center={center}
+        bounds={bounds}
+        points={point.length <= 0 ? [] : [point[0]]}
+        dangerPoints={[]}
+        interestPoints={[]}
+        callback={pointsCallback}
+        callbackC={callbackC}
+        callbackLo={locationCallback}
+        markerTypeSelected={"MARKER"}
       />
     </div>
   );
@@ -454,6 +453,8 @@ const Help = () => {
       </div>
       <div>
         <MapDetails
+          markerType = {markerType}
+          handleMarkerChange = {handleMarkerChange}
           difficultyChangeHandler={difficultyChangeHandler}
           enteredDifficulty={enteredDifficulty}
           difficultyBlurHandler={difficultyBlurHandler}

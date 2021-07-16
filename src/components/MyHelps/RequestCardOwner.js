@@ -7,6 +7,8 @@ import actionIcon from "../../img/walk.png";
 import classes from "./RequestCardOwner.module.css";
 import userIcon from "../../img/userblue.png";
 import verifiedIcon from "../../img/verified.png";
+import greenCircle from "../../img/green-circle.png";
+import redCircle from "../../img/red-circle.png";
 
 const RequestCardOwner = (props) => {
   const typeHandler = (type) => {
@@ -45,17 +47,38 @@ const RequestCardOwner = (props) => {
         <p>
           <img src={helpIcon} alt="número-ajudas" />
           {props.numHelps}
-          {props.company && <img
-            src={verifiedIcon}
-            alt="organizacao-verificada"
-            className={classes.verifiedIcon}
-          />}
+          {props.company && (
+            <img
+              src={verifiedIcon}
+              alt="organizacao-verificada"
+              className={classes.verifiedIcon}
+            />
+          )}
         </p>
       </div>
       <h3 className={classes.title}>{props.title}</h3>
       <div className={classes.markerInfo}>
-        <img src={markerIcon} />
-        <p>Distancia-aqui</p>
+        <img
+          src={markerIcon}
+          className={classes.markerInfoImg}
+          alt="localizacao"
+        />
+        <p>{props.location}</p>
+      </div>
+      <div className={classes.activeInfo}>
+        {props.isActive ? (
+          <img
+            src={greenCircle}
+            className={classes.requestCircle}
+            alt="pedido-activo"
+          />
+        ) : (
+          <img
+            src={redCircle}
+            className={classes.requestCircle}
+            alt="pedido-inactivo"
+          />
+        )}
       </div>
       <div className={classes.requestInfo}>
         <p>{props.creationDate}</p>

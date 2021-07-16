@@ -1,17 +1,79 @@
 .container {
   display: grid;
-  grid-template-columns: .3fr 5fr .5fr;
-  grid-template-rows: 1fr 0.2fr;
-  row-gap: 2rem;
+  grid-template-columns: 0.3fr 5fr 0.5fr;
+  grid-template-rows: auto 0.2fr;
+  row-gap: 4em;
   grid-template-areas:
     ". hc ."
     ". sc .";
 }
 
 .heroiContainer {
-    grid-area: hc;
+  grid-area: hc;
+  display: grid;
+  row-gap: 2em;
+  column-gap: 4em;
+  grid-template-columns: 3fr 1fr;
+  grid-template-areas:
+    "tt tt"
+    "if im";
+}
+
+.title {
+  grid-area: tt;
+  align-self: start;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 700;
+  font-size: 2em;
+  justify-self: center;
+}
+
+.info {
+  grid-area: if;
+  text-align: center;
+  justify-self: center;
+  align-self: center;
+}
+
+.image {
+  grid-area: im;
+  max-width: 45em;
+  max-height: 30em;
+  justify-self: center;
+  align-self: center;
 }
 
 .slidesContainer {
-    grid-area: sc;
+  grid-area: sc;
+  justify-self: center;
+  align-self: center;
+}
+
+@media all and (max-width: 60em) {
+  .container {
+    font-size: 2.5rem;
+    display: grid;
+    row-gap: 4em;
+    grid-template-columns: .5fr 1fr .5fr;
+    grid-template-areas:
+      ". hc ."
+      ". sc .";
+  }
+
+  .heroiContainer {
+    padding-top: 2em;
+    grid-area: hc;
+    align-self: center;
+    justify-self: center;
+    display: grid;
+    row-gap: 2em;
+    column-gap: 4em;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 3fr 4fr;
+    grid-template-areas:
+      "tt"
+      "if"
+      "im";
+  }
 }

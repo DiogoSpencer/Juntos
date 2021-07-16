@@ -1,65 +1,87 @@
-.mainHeroisHome {
-    background-color: #322f2f;
-    display: grid;
-    grid-template-columns: .15fr 1fr 1fr 1fr .15fr;
-    grid-template-rows: .5fr 1fr 6fr .5fr;
-    row-gap: 2rem;
-    column-gap: 2rem;
-    grid-template-areas:
-      ". . . . ."
-      ". tt tt tt ."
-      ". h1 h2 h3 ."
-      ". . . . .";
-}
-
 .mainHeroisTitle {
-    grid-area: tt;
-    align-self: center;
-    justify-self: center;
-    color: #e6513e;
-    font-weight: 600;
+  grid-area: tt;
+  align-self: center;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
 }
 
 .linkHerois1 {
-    grid-area: h1;
-    align-self: center;
-    justify-self: center;
-    text-align: center;
-    color: white;
-    font-weight: 700;
+  grid-area: h1;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+  color: white;
+  font-weight: 700;
 }
 
 .linkHerois2 {
-    grid-area: h2;
-    align-self: center;
-    justify-self: center;
-    text-align: center;
-    color: white;
-    font-weight: 700;
+  grid-area: h2;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+  color: white;
+  font-weight: 700;
 }
 
 .linkHerois3 {
-    grid-area: h3;
-    align-self: center;
-    justify-self: center;
-    text-align: center;
-    color: white;
-    font-weight: 700;
+  grid-area: h3;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+  color: white;
+  font-weight: 700;
 }
 
 .linkHerois1:hover,
 .linkHerois2:hover,
 .linkHerois3:hover {
-    text-decoration: none;
-    color: #e6513e;
+  text-decoration: none;
+  color: #e6513e;
 }
 
 .heroisImg {
-    height: 25rem;
-    padding-bottom: 1rem;
+  height: 25em;
+  padding-bottom: 1em;
 }
 
 .heroisName:hover {
-    text-decoration: none;
-    color: #e6513e;
+  text-decoration: none;
+  color: #e6513e;
+}
+
+@media (min-width: 60em) {
+  .mainHeroisHome {
+    background-color: #322f2f;
+    display: grid;
+    grid-template-columns: 0.15fr repeat(3, 1fr) 0.15fr;
+    grid-template-rows: 0.5fr 1fr 6fr 0.5fr;
+    row-gap: 2em;
+    column-gap: 2em;
+    grid-template-areas:
+      ". . . . ."
+      ". tt tt tt ."
+      ". h1 h2 h3 ."
+      ". . . . .";
+  }
+}
+
+@media all and (max-width: 60em) {
+  .mainHeroisHome {
+    background-color: #322f2f;
+    display: grid;
+    grid-template-rows: 1fr repeat(3, 2fr) 0.5fr;
+    row-gap: 2em;
+    column-gap: 2em;
+    grid-template-areas:
+      "tt"
+      "h1"
+      "h2"
+      "h3"
+      " . ";
+  }
+
+  .mainHeroisTitle {
+      font-size: 4rem;
+  }
 }
