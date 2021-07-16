@@ -186,7 +186,7 @@ const BackOfficeUsers = () => {
 
   useEffect(() => {
     if (isEditing) {
-      responseData.map((user) => {
+      for (const user of responseData) {
         if (user.username === isEditing) {
           setFirstNameValueHandler(user.firstName);
           setLastNameValueHandler(user.lastName);
@@ -195,8 +195,9 @@ const BackOfficeUsers = () => {
           setEnteredPrivacy(user.privacy);
           setEnteredRole(user.role);
           checkRoleHandler();
+          break;
         }
-      });
+      }
     }
   }, [isEditing]);
 

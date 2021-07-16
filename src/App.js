@@ -60,7 +60,7 @@ const BackOfficeRequests = React.lazy(() =>
 function App() {
   const dispatch = useDispatch();
   const isLogged = useSelector((state) => state.auth.isLogged);
-
+  const location = useLocation();
   //verificar aqui se tokens sao iguais - redux e localstorage -> se nao for -> logout
   //isto faz re render sempre que fazemos mount de um componente
   useEffect(() => {
@@ -184,19 +184,15 @@ function App() {
             />
             <Route path="/mapa" render={() => <TodasAjudas />} />
             <Route path="/editar/:requestId" render={() => <EditRequest />} />
-            <BackOfficeRoute>
-              <Route exact path="/backoffice" render={() => <BackOfficeHome />} />
-              <PrivateBackOfficeRoute>
-                <Route
-                  path="/backoffice/utilizadores"
-                  render={() => <BackOfficeUsers />}
-                />
-                <Route
-                  path="/backoffice/pedidos"
-                  render={() => <BackOfficeRequests />}
-                />
-              </PrivateBackOfficeRoute>
-            </BackOfficeRoute>
+            <Route exact path="/backoffice" render={() => <BackOfficeHome />} />
+            <Route
+              path="/backoffice/utilizadores"
+              render={() => <BackOfficeUsers />}
+            />
+            <Route
+              path="/backoffice/pedidos"
+              render={() => <BackOfficeRequests />}
+            />
           </PrivateRoute>
           <Route path="*" render={() => <NotFound />} />
         </Switch>
