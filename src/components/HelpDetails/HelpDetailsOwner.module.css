@@ -41,6 +41,7 @@
   width: 100%;
   background-color: white;
   display: grid;
+  grid-template-rows: .5fr auto;
   grid-template-areas:
     "tl"
     "lg";
@@ -52,6 +53,7 @@
   grid-area: tl;
   padding-top: 1rem;
   justify-self: center;
+  align-self: end;
   color: #e6513e;
   font-weight: 600;
   font-size: 2em;
@@ -61,7 +63,7 @@
   height: 18em;
   grid-area: lg;
   justify-self: center;
-  align-self: center;
+  align-self: start;
 }
 
 .subContainer {

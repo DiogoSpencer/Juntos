@@ -3,7 +3,6 @@ import Button from "../UI/Button";
 import CommentList from "./CommentList";
 import HelpTitle from "./HelpTitle";
 import ImageDisplay from "./ImageDisplay";
-//import ShareHelp from "./ShareHelp";
 import UserDisplay from "./UserDisplay";
 import { Route, Link, useRouteMatch } from "react-router-dom";
 import classes from "./HelpDetails.module.css";
@@ -14,7 +13,7 @@ import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import InputPassword from "./InputPassword";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Map from "../Map/Map";
 
 let text = "";
@@ -26,6 +25,7 @@ const HelpDetails = (props) => {
   const [dangerPoint, setDangerPoint] = useState([]);
   const [interestPoint, setInterestPoint] = useState([]);
   const [isHelper, setIsHelper] = useState(false);
+  const [hasChanges, setHasChanges] = useState(true);
 
   const center =
     point.length > 0
@@ -53,47 +53,50 @@ const HelpDetails = (props) => {
   const loggedUsername = useSelector((state) => state.auth.username);
 
   useEffect(() => {
-    setIsLoading(true);
-    markerDetails(helpId).then(
-      (response) => {
-        console.log(response.data);
-        setResponseData(response.data);
-        let responsePoints = response.data.points;
-        responsePoints.map((point) => {
-          point.lat = parseFloat(point.lat);
-          point.lon = parseFloat(point.lon);
-        });
-        setPoint(responsePoints);
+    if (hasChanges) {
+      setIsLoading(true);
+      markerDetails(helpId).then(
+        (response) => {
+          setHasChanges(false);
+          console.log(response.data);
+          setResponseData(response.data);
+          let responsePoints = response.data.points;
+          responsePoints.map((point) => {
+            point.lat = parseFloat(point.lat);
+            point.lon = parseFloat(point.lon);
+          });
+          setPoint(responsePoints);
 
-        let responseDanger = response.data.dangers;
-        responseDanger.map((point) => {
-          point.lat = parseFloat(point.lat);
-          point.lon = parseFloat(point.lon);
-        });
-        setDangerPoint(responseDanger);
+          let responseDanger = response.data.dangers;
+          responseDanger.map((point) => {
+            point.lat = parseFloat(point.lat);
+            point.lon = parseFloat(point.lon);
+          });
+          setDangerPoint(responseDanger);
 
-        let responseInterest = response.data.interests;
-        responseInterest.map((point) => {
-          point.lat = parseFloat(point.lat);
-          point.lon = parseFloat(point.lon);
-        });
-        setInterestPoint(responseInterest);
-        if (response.data.helperUsernames.includes(loggedUsername)) {
-          setIsHelper(true);
-        }
-        typeHandler(response.data.type);
-      },
-      (error) => {
-        /*console.log(error);
+          let responseInterest = response.data.interests;
+          responseInterest.map((point) => {
+            point.lat = parseFloat(point.lat);
+            point.lon = parseFloat(point.lon);
+          });
+          setInterestPoint(responseInterest);
+          if (response.data.helperUsernames.includes(loggedUsername)) {
+            setIsHelper(true);
+          }
+          typeHandler(response.data.type);
+        },
+        (error) => {
+          /*console.log(error);
         setIsLoading(false);
         if (error.status === 401) {
           alert("Sessão expirou");
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
         }*/
-      }
-    );
-  }, [helpId]);
+        }
+      );
+    }
+  }, [helpId, hasChanges]);
 
   useEffect(() => {
     setIsLoading(false);
@@ -126,6 +129,7 @@ const HelpDetails = (props) => {
     setIsLoading(true);
     joinMarker(helpId).then(
       (response) => {
+        setHasChanges(true);
         setIsLoading(false);
         setIsHelper(true);
         console.log(response);
@@ -146,6 +150,7 @@ const HelpDetails = (props) => {
     setIsLoading(true);
     leaveMarker(helpId).then(
       (response) => {
+        setHasChanges(true);
         setIsLoading(false);
         setIsHelper(false);
         console.log(response);
@@ -194,7 +199,8 @@ const HelpDetails = (props) => {
               creationDate={responseData.creationDate}
               volunteers={responseData.helpersCapacity}
               difficulty={responseData.difficulty}
-              isActive = {responseData.activeMarker}
+              isActive={responseData.activeMarker}
+              currentHelpers={responseData.currentHelpers}
             />
           </div>
           <div className={classes.userDisplay}>

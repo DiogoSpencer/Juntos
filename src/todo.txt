@@ -15,7 +15,6 @@ de stats vs dentro de home? -> Mudar no titulo + dentro do texto
 22. falta verificar os limites quando se submete - titulo + textBox -> quando fizer os regex
 23. refresh nas listagens
 24. Modificar o alert depois de inserir mais de 5 imagens
-25. ACTIVE MARKER - listagens e restringir operações + adicionar ativar
 
 //amanha -> listagem de todos + lista de participacao
 

@@ -60,7 +60,6 @@ const BackOfficeRequests = React.lazy(() =>
 function App() {
   const dispatch = useDispatch();
   const isLogged = useSelector((state) => state.auth.isLogged);
-  const prevToken = useSelector((state) => state.auth.token);
 
   //verificar aqui se tokens sao iguais - redux e localstorage -> se nao for -> logout
   //isto faz re render sempre que fazemos mount de um componente

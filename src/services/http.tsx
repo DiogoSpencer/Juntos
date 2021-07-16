@@ -63,6 +63,15 @@ export async function getUser(email: string) {
   }
 }
 
+export async function getAllUsers(urlParams: string) {
+  try {
+    return await axios.get(`${url}/rest/user${urlParams}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+
 export async function getUserUsername(username: string) {
   try {
     return await axios.get(`${url}/rest/user/${username}`);

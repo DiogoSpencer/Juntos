@@ -86,10 +86,8 @@ const MyHelps = () => {
         (response) => {
           setResponseData(response.data.content);
           setIsLoading(false);
-          setDisableSelect(false);
         },
         (error) => {
-          setDisableSelect(false);
           console.log(error);
           setIsLoading(false);
           if (error.status === 401) {
@@ -149,7 +147,7 @@ const MyHelps = () => {
   };
 
   const changePageSizeHandler = (event) => {
-    setPageSize(event.target.value);
+    setPageSize(parseInt(event.target.value));
     setDisableSelect(true);
   };
 
@@ -200,7 +198,6 @@ const MyHelps = () => {
   const autoComplete =
     byParam === location ? classes.autoComplete : classes.autoCompleteHidden;
 
-    console.log(responseData)
   //lista de ajudas ativas -> mapear da data que se recebe
   const ownRequests = (
     <Fragment>

@@ -29,6 +29,7 @@ const isVolunteerNumber = (value) => {
     return false;
   }
 };
+
 const isDifficultyNumber = (value) => {
   if (value > 0 && value <= 5) {
     return true;
