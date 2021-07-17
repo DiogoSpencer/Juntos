@@ -13,6 +13,7 @@ import { Link, useRouteMatch } from "react-router-dom";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import { useDispatch } from "react-redux";
+import refreshIcon from "../../img/refresh.png";
 import Autocomplete from "react-google-autocomplete";
 
 const ASC = "ASC";
@@ -68,15 +69,17 @@ const MyHelps = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [disableSelect, setDisableSelect] = useState(false);
   const [pageSize, setPageSize] = useState(5);
+  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
     setDisableSelect(false);
 
     if (
-      byParam === ALL ||
-      byParam === TOPICS ||
-      (byParam === TITLE && search !== "") ||
-      (byParam === location && search !== "")
+      refresh &&
+      (byParam === ALL ||
+        byParam === TOPICS ||
+        (byParam === TITLE && search !== "") ||
+        (byParam === location && search !== ""))
     ) {
       setIsLoading(true);
 
@@ -86,10 +89,12 @@ const MyHelps = () => {
         (response) => {
           setResponseData(response.data.content);
           setIsLoading(false);
+          setRefresh(false);
         },
         (error) => {
           console.log(error);
           setIsLoading(false);
+          setRefresh(false);
           if (error.status === 401) {
             alert("Sessão expirou");
             dispatch(authActions.logout());
@@ -98,7 +103,7 @@ const MyHelps = () => {
         }
       );
     }
-  }, [byParam, orderParam, dirParam, pageNumber, search, isFirst, pageSize]);
+  }, [byParam, orderParam, dirParam, pageNumber, search, isFirst, pageSize, refresh]);
 
   useEffect(() => {
     setPageNumber(0);
@@ -111,6 +116,7 @@ const MyHelps = () => {
   const nextPageHandler = () => {
     setPageNumber((prevState) => {
       if (responseData.length === pageSize) {
+        setRefresh(true);
         return prevState + 1;
       } else {
         return prevState;
@@ -121,6 +127,7 @@ const MyHelps = () => {
   const prevPageHandler = () => {
     setPageNumber((prevState) => {
       if (prevState > 0) {
+        setRefresh(true);
         return prevState - 1;
       } else {
         return prevState;
@@ -129,26 +136,35 @@ const MyHelps = () => {
   };
 
   const isOwnerHandler = () => {
+    setRefresh(true);
     setIsFirst(true);
   };
 
   const isParticipationHandler = () => {
+    setRefresh(true);
     setIsFirst(false);
   };
 
   const changeFilterHandler = (event) => {
     setByParam(event.target.value);
     setDisableSelect(true);
+    setRefresh(true);
   };
 
   const changeOrderHandler = (event) => {
     setDirParam(event.target.value);
     setDisableSelect(true);
+    setRefresh(true);
   };
 
   const changePageSizeHandler = (event) => {
     setPageSize(parseInt(event.target.value));
     setDisableSelect(true);
+    setRefresh(true);
+  };
+
+  const onRefreshHandler = () => {
+    setRefresh(true);
   };
 
   const formatDate = (longDate) => {
@@ -414,6 +430,12 @@ const MyHelps = () => {
       <div className={classes.subContainer}>
         {filterButtons}
         {orderButtons}
+        <img
+          src={refreshIcon}
+          alt="Atualizar"
+          onClick={onRefreshHandler}
+          className={classes.refresh}
+        />
         <div className={searchBarClass}>
           <SearchBar
             input={search}

@@ -10,7 +10,10 @@ import closeIcon from "../../img/closered.png";
 import checkIcon from "../../img/check.png";
 import useInput from "../hooks/use-input";
 import { useSelector } from "react-redux";
+import refreshIcon from "../../img/refresh.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import { Link } from "react-router-dom";
+import shareIcon from "../../img/share.png";
 
 const ASC = "ASC";
 const DESC = "DESC";
@@ -56,60 +59,65 @@ const BackOfficeRequests = () => {
   const [isEditing, setIsEditing] = useState("");
   const [deleteImage, setDeleteImage] = useState(false);
   const [isCompany, setIsCompany] = useState(false);
-  const [enteredPrivacy, setEnteredPrivacy] = useState("");
+  const [enteredType, setEnteredType] = useState("");
   const [enteredRole, setEnteredRole] = useState("");
   const [enteredState, setEnteredState] = useState("");
   const [enableAdmin, setEnableAdmin] = useState(false);
   const [enableMod, setEnableMod] = useState(false);
   const [enablePartner, setEnablePartner] = useState(false);
   const [deletedUser, setDeletedUser] = useState(false);
-  const [isFirst, setIsFirst] = useState(true); //mostrar as ativas
+  const [refresh, setRefresh] = useState(true);
+  const [isFirst, setIsFirst] = useState(true);
+  const [isActive, setIsActive] = useState(false);
+  const [isAnonimous, setIsAnonimous] = useState(false);
 
   const authRole = useSelector((state) => state.auth.role);
 
   useEffect(() => {
     setDisableSelect(false);
-    if (!isEditing || !deletedUser) {
-      if (
-        byParam === ALL ||
+    if (
+      refresh &&
+      (byParam === ALL ||
         byParam === TOPICS ||
         (byParam === TITLE && search !== "") ||
-        (byParam === location && search !== "")
-      ) {
-        setIsLoading(true);
-        listMarker(
-          `?by=${byParam}&value=${search}&order=${orderParam}&isFirst=${isFirst}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
-        ).then(
-          (response) => {
-            setIsLoading(false);
-            console.log(response.data);
-            setResponseData(response.data.content);
-          },
-          (error) => {
-            setIsLoading(false);
-            console.log(error);
-          }
-        );
-      }
+        (byParam === location && search !== ""))
+    ) {
+      setIsLoading(true);
+
+      listMarker(
+        `?by=${byParam}&value=${search}&order=${orderParam}&isFirst=${isFirst}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+      ).then(
+        (response) => {
+          setIsLoading(false);
+          setRefresh(false);
+          console.log(response.data);
+          setResponseData(response.data.content);
+        },
+        (error) => {
+          setIsLoading(false);
+          setRefresh(false);
+          console.log(error);
+        }
+      );
     }
   }, [
-    isEditing,
-    deletedUser,
     pageNumber,
     byParam,
     orderParam,
     dirParam,
     pageNumber,
     pageSize,
+    refresh,
+    isFirst,
   ]);
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, [responseData]);
 
   useEffect(() => {
     setPageNumber(0);
   }, [isFirst]);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [responseData]);
 
   useEffect(() => {
     setSearch("");
@@ -118,21 +126,25 @@ const BackOfficeRequests = () => {
   const changeFilterHandler = (event) => {
     setByParam(event.target.value);
     setDisableSelect(true);
+    setRefresh(true);
   };
 
   const changeOrderHandler = (event) => {
     setDirParam(event.target.value);
     setDisableSelect(true);
+    setRefresh(true);
   };
 
   const changePageSizeHandler = (event) => {
     setPageSize(parseInt(event.target.value));
     setDisableSelect(true);
+    setRefresh(true);
   };
 
   const nextPageHandler = () => {
     setPageNumber((prevState) => {
       if (responseData.length === pageSize) {
+        setRefresh(true);
         return prevState + 1;
       } else {
         return prevState;
@@ -143,6 +155,7 @@ const BackOfficeRequests = () => {
   const prevPageHandler = () => {
     setPageNumber((prevState) => {
       if (prevState > 0) {
+        setRefresh(true);
         return prevState - 1;
       } else {
         return prevState;
@@ -212,18 +225,19 @@ const BackOfficeRequests = () => {
   };
 
   useEffect(() => {
-    if (isEditing) {
-      responseData.map((user) => {
+    if (isEditing != "") {
+      for (const user of responseData) {
         if (user.username === isEditing) {
           setFirstNameValueHandler(user.firstName);
           setLastNameValueHandler(user.lastName);
           setIsCompany(user.company);
           setHelpsValueHandler(user.numHelps);
-          setEnteredPrivacy(user.privacy);
+          setEnteredType(user.privacy);
           setEnteredRole(user.role);
           checkRoleHandler();
+          break;
         }
-      });
+      }
     }
   }, [isEditing]);
 
@@ -231,16 +245,24 @@ const BackOfficeRequests = () => {
     setIsCompany(event.target.value);
   };
 
-  const privacyHandler = (event) => {
-    setEnteredPrivacy(event.target.value);
+  const isAnonimousHandler = (event) => {
+    setIsAnonimous(event.target.value);
   };
 
-  const roleHandler = (event) => {
-    setEnteredRole(event.target.value);
+  const typeHandler = (event) => {
+    setEnteredType(event.target.value);
+  };
+
+  const isActiveHandler = (event) => {
+    setIsActive(event.target.value);
   };
 
   const stateHandler = (event) => {
     setEnteredState(event.target.value);
+  };
+
+  const onRefreshHandler = () => {
+    setRefresh(true);
   };
 
   let formIsValid = false;
@@ -261,35 +283,29 @@ const BackOfficeRequests = () => {
     setIsLoading(true);
 
     //mandar ao servidor mudanças
-
-    setIsEditing(false);
+    setRefresh(true);
+    setIsLoading(false);
+    setIsEditing("");
   };
 
-  const onDeleteUserHandler = (userRole, userEmail) => {
+  const onDeleteRequestHandler = (requestID) => {
     if (
-      userRole === USER ||
-      (userRole === PARTNER && enableMod) ||
-      (userRole === MOD && enableAdmin)
+      window.confirm(
+        "Tem a certeza que pretende apagar esta conta? Esta ação é irreversível."
+      )
     ) {
-      if (
-        window.confirm(
-          "Tem a certeza que pretende apagar esta conta? Esta ação é irreversível."
-        )
-      ) {
-        setDeletedUser(true);
-        setIsLoading(true);
+      setIsLoading(true);
 
-        deleteUser(userEmail).then(
-          (response) => {
-            setIsLoading(false);
-            setDeletedUser(false);
-          },
-          (error) => {
-            setIsLoading(false);
-            console.log(error);
-          }
-        );
-      }
+      deleteUser(requestID).then(
+        (response) => {
+          setIsLoading(false);
+          setRefresh(true);
+        },
+        (error) => {
+          setIsLoading(false);
+          console.log(error);
+        }
+      );
     } else {
       return;
     }
@@ -367,18 +383,22 @@ const BackOfficeRequests = () => {
   const tableHead = (
     <thead>
       <tr className={classes.topicsContainer}>
-        <th className={classes.imgContainer}>Fotos</th>
-        <th className={classes.emailContainer}>E-mail</th>
-        <th className={classes.usernameContainer}>Username</th>
-        <th className={classes.nameContainer}>Nome</th>
-        <th className={classes.lastNameContainer}>Apelido</th>
+        <th className={classes.idContainer}>ID</th>
+        <th className={classes.activeContainer}>Activo</th>
         <th className={classes.orgContainer}>Organização</th>
-        <th className={classes.dateContainer}>Data de Criação</th>
-        <th className={classes.prefContainer}>Preferências</th>
-        <th className={classes.numContainer}>Nº Ajudas</th>
-        <th className={classes.privacyContainer}>Privacidade</th>
-        <th className={classes.roleContainer}>Role</th>
-        <th className={classes.stateContainer}>Estado</th>
+        <th className={classes.usernameContainer}>Criador</th>
+        <th className={classes.anonimousContainer}>Anónimo</th>
+        <th className={classes.typeContainer}>Tipo</th>
+        <th className={classes.generalContainer}>Tipo Geral</th>
+        <th className={classes.titleContainer}>Título</th>
+        <th className={classes.descriptionContainer}>Descrição</th>
+        <th className={classes.numContainer}>Total Voluntários</th>
+        <th className={classes.helpersContainer}>Total Inscritos</th>
+        <th className={classes.helperUserContainer}>Inscritos</th>
+        <th className={classes.localContainer}>Localização</th>
+        <th className={classes.difficultyContainer}>Dificuldade</th>
+        <th className={classes.dateContainer}>Data Criação</th>
+        <th className={classes.imgContainer}>Imagens</th>
         <th>Ações</th>
       </tr>
     </thead>
@@ -395,107 +415,156 @@ const BackOfficeRequests = () => {
       <div className={classes.mainSubContainer}>
         {filterButtons}
         {orderButtons}
+        <img
+          src={refreshIcon}
+          alt="Atualizar"
+          onClick={onRefreshHandler}
+          className={classes.refresh}
+        />
         <table className={classes.subContainer}>
           {tableHead}
           <tbody>
             {responseData &&
-              responseData.map((user) =>
-                isEditing !== user.username ? (
-                  <tr key={user.username} className={classes.topicsContainer}>
-                    <td className={classes.imgContainer}>
-                      {user.profileImg ? (
-                        <img
-                          src={user.profileImg}
-                          alt="foto-perfil"
-                          className={classes.profileImg}
-                        />
-                      ) : (
-                        <img
-                          src={userIcon}
-                          alt="foto-perfil"
-                          className={classes.profileImg}
-                        />
-                      )}
-                    </td>
-                    <td className={classes.emailContainer}>{user.email}</td>
-                    <td className={classes.usernameContainer}>
-                      {user.username}
-                    </td>
-                    <td className={classes.nameContainer}>{user.firstName}</td>
-                    <td className={classes.lastNameContainer}>
-                      {user.lastName}
+              responseData.map((request) =>
+                isEditing !== request.id ? (
+                  <tr key={request.id} className={classes.topicsContainer}>
+                    <td className={classes.idContainer}>{request.id}</td>
+                    <td className={classes.activeContainer}>
+                      {request.activeMarker ? "True" : "False"}
                     </td>
                     <td className={classes.orgContainer}>
-                      {user.company ? "True" : "False"}
+                      {request.company ? "True" : "False"}
                     </td>
-                    <td className={classes.dateContainer}>
-                      {formatDate(user.creationDate)}
+                    <td className={classes.usernameContainer}>
+                      {request.owner}
                     </td>
-                    <td className={classes.prefContainer}>
+                    <td className={classes.anonimousContainer}>
+                      {request.anonymousOwner ? "True" : "False"}
+                    </td>
+                    <td className={classes.typeContainer}>{request.type}</td>
+                    <td className={classes.generalContainer}>
+                      {request.generalType}
+                    </td>
+                    <td className={classes.title}>{request.title}</td>
+                    <td className={classes.descriptionContainer}>
+                      {request.description}
+                    </td>
+                    <td className={classes.numContainer}>
+                      {request.helpersCapacity}
+                    </td>
+                    <td className={classes.helpersContainer}>
+                      {request.currentHelpers}
+                    </td>
+                    <td className={classes.helperUserContainer}>
                       <ul>
-                        {user.favTopics.map((favTopic, idx) => (
-                          <li key={idx}>{favTopic}</li>
-                        ))}
+                        {request.helperUsernames &&
+                          request.helperUsernames.map((user, idx) => (
+                            <li key={idx}>
+                              <Link to={`/perfil/${user}`}>{user}</Link>
+                            </li>
+                          ))}
                       </ul>
                     </td>
-                    <td className={classes.numContainer}>{user.numHelps}</td>
-                    <td className={classes.privacyContainer}>{user.privacy}</td>
-                    <td className={classes.roleContainer}>{user.role}</td>
-                    <td className={classes.stateContainer}>{user.state}</td>
+                    <td className={classes.localContainer}>
+                      {request.location}
+                    </td>
+                    <td className={classes.difficultyContainer}>
+                      {request.difficulty}
+                    </td>
+                    <td className={classes.dateContainer}>
+                      {formatDate(request.creationDate)}
+                    </td>
+                    <td className={classes.imgContainer}>
+                      <ul>
+                        {request.photoGalery &&
+                          request.photoGalery.map((img, index) => {
+                            <li key={index}>
+                              <img
+                                src={img}
+                                alt={`foto-pedido-${index}`}
+                                className={classes.requestImg}
+                              />
+                            </li>;
+                          })}
+                      </ul>
+                    </td>
                     <td className={classes.iconsContainer}>
                       <img
                         src={editIcon}
                         alt="editar"
                         className={classes.iconRow}
-                        onClick={() => editUserHandler(user.username)}
+                        onClick={() => editUserHandler(request.id)}
                       />
                       <img
                         src={binIcon}
                         alt="apagar"
                         className={classes.iconRow}
-                        onClick={() =>
-                          onDeleteUserHandler(user.role, user.email)
-                        }
+                        onClick={() => onDeleteRequestHandler(request.id)}
                       />
+                      <Link to={`/editar/${request.id}`}>
+                        <img
+                          src={shareIcon}
+                          alt="link-perfil"
+                          className={classes.iconRow}
+                        />
+                      </Link>
                     </td>
                   </tr>
                 ) : (
-                  <tr key={user.username} className={classes.topicsContainer}>
-                    <td className={classes.imgContainer}>
-                      {user.profileImg ? (
-                        !deleteImage ? (
-                          <Fragment>
-                            <img
-                              src={user.profileImg}
-                              alt="foto-perfil"
-                              className={classes.profileImg}
-                            />
-                            <img
-                              src={closeIcon}
-                              alt="apagar-imagem"
-                              className={classes.iconRow}
-                              onClick={deleteImageHandler}
-                            />
-                          </Fragment>
-                        ) : (
-                          <img
-                            src={userIcon}
-                            alt="foto-perfil"
-                            className={classes.profileImg}
-                          />
-                        )
-                      ) : (
-                        <img
-                          src={userIcon}
-                          alt="foto-perfil"
-                          className={classes.profileImg}
-                        />
-                      )}
+                  <tr key={request.id} className={classes.topicsContainer}>
+                    <td className={classes.idContainer}>{request.id}</td>
+                    <td className={classes.activeContainer}>
+                      <select
+                        id="active"
+                        value={isActive}
+                        onChange={isActiveHandler}
+                        className={classes.selectSub}
+                      >
+                        <option value={true}>True</option>
+                        <option value={false}>False</option>
+                      </select>
                     </td>
-                    <td className={classes.emailContainer}>{user.email}</td>
+                    <td className={classes.orgContainer}>
+                      <select
+                        id="company"
+                        value={isCompany}
+                        onChange={isCompanyHandler}
+                        className={classes.selectSub}
+                      >
+                        <option value={true}>True</option>
+                        <option value={false}>False</option>
+                      </select>
+                    </td>
                     <td className={classes.usernameContainer}>
-                      {user.username}
+                      {request.owner}
                     </td>
+                    <td className={classes.anonimousContainer}>
+                      <select
+                        id="anonimous"
+                        value={isAnonimous}
+                        onChange={isAnonimousHandler}
+                        className={classes.selectSub}
+                      >
+                        <option value={true}>True</option>
+                        <option value={false}>False</option>
+                      </select>
+                    </td>
+                    <td className={classes.typeContainer}>
+                      <select
+                        id="type"
+                        value={enteredType}
+                        onChange={typeHandler}
+                        className={classes.selectSub}
+                      >
+                        <option value={USER}>USER</option>
+                        {enablePartner && (
+                          <option value={PARTNER}>PARTNER</option>
+                        )}
+                        {enableMod && <option value={MOD}>MOD</option>}
+                        {enableAdmin && <option value={ADMIN}>ADMIN</option>}
+                      </select>
+                    </td>
+
                     <td className={classes.nameContainer}>
                       <input
                         type="text"
@@ -528,14 +597,7 @@ const BackOfficeRequests = () => {
                       </select>
                     </td>
                     <td className={classes.dateContainer}>
-                      {formatDate(user.creationDate)}
-                    </td>
-                    <td className={classes.prefContainer}>
-                      <ul>
-                        {user.favTopics.map((favTopic, idx) => (
-                          <li key={idx}>{favTopic}</li>
-                        ))}
-                      </ul>
+                      {formatDate(request.creationDate)}
                     </td>
                     <td className={classes.numContainer}>
                       <input
@@ -551,43 +613,6 @@ const BackOfficeRequests = () => {
                           Por favor insira um número de ajudas
                         </p>
                       )}
-                    </td>
-                    <td className={classes.privacyContainer}>
-                      <select
-                        id="privacy"
-                        value={enteredPrivacy}
-                        onChange={privacyHandler}
-                        className={classes.selectSub}
-                      >
-                        <option value={PUBLIC}>PUBLIC</option>
-                        <option value={PRIVATE}>PRIVATE</option>
-                      </select>
-                    </td>
-                    <td className={classes.roleContainer}>
-                      <select
-                        id="role"
-                        value={enteredRole}
-                        onChange={roleHandler}
-                        className={classes.selectSub}
-                      >
-                        <option value={USER}>USER</option>
-                        {enablePartner && (
-                          <option value={PARTNER}>PARTNER</option>
-                        )}
-                        {enableMod && <option value={MOD}>MOD</option>}
-                        {enableAdmin && <option value={ADMIN}>ADMIN</option>}
-                      </select>
-                    </td>
-                    <td className={classes.stateContainer}>
-                      <select
-                        id="state"
-                        value={enteredState}
-                        onChange={stateHandler}
-                        className={classes.selectSub}
-                      >
-                        <option value={ENABLE}>ENABLED</option>
-                        <option value={DISABLE}>DISABLED</option>
-                      </select>
                     </td>
                     <td className={classes.iconsContainer}>
                       <img
