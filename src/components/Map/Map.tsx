@@ -11,6 +11,7 @@ import {Link, useRouteMatch} from "react-router-dom";
 import classes from "../FAQ/Faq.module.css";
 import Button from "../UI/Button";
 import Form from 'react-bootstrap/Form';
+import pin from "../../img/pin.png";
 
 const containerStyle = {
   width: "100%",
@@ -41,6 +42,7 @@ export interface Point {
   description?: string;
   id?: string;
   generalType?: string;
+  type?: string
 }
 
 interface MapProps {
@@ -69,6 +71,7 @@ interface MapProps {
 }
 
 function Map(props: MapProps) {
+
   const mapRef = useRef<any>(null);
   const [points, setPoints] = useState<Point[]>(props.points);
   const [dangerPoint, setDangerPoints] = useState<Point[]>(props.dangerPoints);
@@ -132,9 +135,9 @@ function Map(props: MapProps) {
           lng: mapRef.current.getCenter().toJSON().lng,
         });
         props.callbackBounds({
-          latLower: mapRef.current.getBounds().mc.g,
+          latLower: mapRef.current.getBounds().lc.g,
           lngLower: mapRef.current.getBounds().Eb.g,
-          latTop: mapRef.current.getBounds().mc.i,
+          latTop: mapRef.current.getBounds().lc.i,
           lngTop: mapRef.current.getBounds().Eb.i
         })
       }
@@ -143,11 +146,13 @@ function Map(props: MapProps) {
   const handleZoomChanged = () => {
     if (mapRef.current !== null && props.callbackBounds) {
       props.callbackBounds({
-        latLower: mapRef.current.getBounds().mc.g,
+        latLower: mapRef.current.getBounds().lc.g,
         lngLower: mapRef.current.getBounds().Eb.g,
-        latTop: mapRef.current.getBounds().mc.i,
+        latTop: mapRef.current.getBounds().lc.i,
         lngTop: mapRef.current.getBounds().Eb.i
       })
+
+
     }
   };
 
@@ -321,6 +326,8 @@ function Map(props: MapProps) {
                                   onClick={() => clickMarker(index)}
                                   key={index}
                                   clusterer={clusterer}
+                                  icon={point.type === "HELP_REQUEST" ? "" : point.type === "HELP_OFFER"
+                                  ? "" : point.type === "DONATE" ? "" : point.type === "ACTION" ? "" : undefined}
                               >
                                 {open.openIn && open.index === index ? (
                                     <InfoWindow
@@ -404,6 +411,7 @@ function Map(props: MapProps) {
                         onRightClick={() => onRightClickDanger(index)}
                         onClick={() => clickMarkerDanger(index)}
                         key={index}
+                        icon={pin}
                     >
                       {openDanger.openIn && openDanger.index === index ? (
                           <InfoWindow
@@ -439,6 +447,7 @@ function Map(props: MapProps) {
                       onClick={() => clickMarkerInterest(index)}
                       key={index}
                   >
+
                     {openInterest.openIn && openInterest.index === index ? (
                         <InfoWindow
                             onCloseClick={() =>

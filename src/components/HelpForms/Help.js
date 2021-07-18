@@ -434,16 +434,6 @@ const Help = () => {
       />
       <div>
         <label>
-          Seleciona o tipo de ponto:
-          <select value={marker} onChange={handleMarkerChange}>
-            <option value="MARKER">Ponto do Percurso</option>
-            <option value="DANGER">Ponto de Perigo</option>
-            <option value="INTEREST">Ponto de Interesse</option>
-          </select>
-        </label>
-      </div>
-      <div>
-        <label>
           Seleciona como se deslocar:
           <select value={move} onChange={handleMove}>
             <option value="WALKING">Andar</option>
