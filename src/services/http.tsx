@@ -254,6 +254,13 @@ export async function listMarker(urlParams: string) {
   }
 }
 
+export async function officeDetail() {
+  try {
+    return await axios.get(`${url}/rest/office/details`);
+  } catch (error) {
+    throw error.response;
+  }
+}
 export async function listComments(urlParams: string) {
   try {
     return await axios.get(`${url}/rest/comments${urlParams}`);
@@ -261,6 +268,13 @@ export async function listComments(urlParams: string) {
     throw error.response;
   }
 }
+export async function officeDetailTable() {
+  try {
+    return await axios.get(`${url}/rest/office/`);}
+    catch (error) {
+      throw error.response;
+    }
+  }
 
 export async function createComment(form: FormData) {
   try {

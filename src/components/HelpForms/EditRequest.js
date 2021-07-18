@@ -55,6 +55,8 @@ const EditRequest = () => {
   const editing = match.path === "/editar/:requestId";
 
   const [markerType, setMarker] = useState("MARKER");
+  const [move, setMove] = useState("WALKING");
+  const [moveChange, setMoveChange] = useState(false);
 
   //AjudaMap state
   const [point, setPoint] = useState([]);
@@ -75,7 +77,11 @@ const EditRequest = () => {
 
   const handleMarkerChange = (event) => {
     setMarker(event.target.value);
-  };
+  }
+  const handleMove = (event) => {
+    setMove(event.target.value)
+    setMoveChange(true)
+  }
 
   const [distance, setDistance] = useState(0);
   const distanceCallback = useCallback(
@@ -291,6 +297,7 @@ const EditRequest = () => {
 
   if (
     responseData.title !== enteredTitle ||
+      moveChange ||
     responseData.description !== enteredDescription ||
     JSON.stringify(responseData.photoGalery) !==
       JSON.stringify(selectedFiles) ||
@@ -352,9 +359,9 @@ const EditRequest = () => {
       imgsToDelete: toRemove,
       anonymousOwner: anonimousValue,
     };
-    if (responseData.type !== ACTION) {
-      formInfo.dangers = [];
-      formInfo.interests = [];
+    if(responseData.type !== ACTION) {
+      formInfo.dangers = dangerPoint;
+      formInfo.interests = interestPoint;
     }
 
     formData.append(
@@ -449,19 +456,20 @@ const EditRequest = () => {
         <span className={classes.selectedTitle}>{enteredTitle}</span>
       </h1>
       <Map
-        points={point}
-        remove
-        bounds={bounds}
-        edit
-        dangerPoints={dangerPoint}
-        interestPoints={interestPoint}
-        callback={pointsCallback}
-        center={center}
-        callbackC={callbackC}
-        callbackD={distanceCallback}
-        callbackDanger={dangerPointsCallback}
-        callbackInterest={interestPointsCallback}
-        markerTypeSelected={markerType}
+          points={point}
+          remove
+          bounds={bounds}
+          edit
+          showDelete
+          dangerPoints={dangerPoint}
+          interestPoints={interestPoint}
+          callback={pointsCallback}
+          center={center}
+          callbackC={callbackC}
+          callbackD={distanceCallback}
+          callbackDanger={dangerPointsCallback}
+          callbackInterest={interestPointsCallback}
+          markerTypeSelected={markerType}
       />
       <div>
         <MapDetails

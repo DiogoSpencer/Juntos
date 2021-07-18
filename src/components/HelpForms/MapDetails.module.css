@@ -6,6 +6,7 @@
   padding-top: 1.5em;
 }
 
+
 .subContainer input {
   width: 4em;
   border: 1px solid #3385d9;
@@ -46,6 +47,7 @@
   outline: none;
   box-shadow: 0 0 10px #719ece;
 }
+
 
 @media all and (max-width: 60em) {
   .subContainer input {

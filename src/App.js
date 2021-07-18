@@ -9,6 +9,10 @@ import { authActions } from "./store/session/auth";
 import { getUserUsername } from "./services/http";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
+import BackOfficeRoute from "./components/Private/BackOfficeRoute";
+import PrivateBackOfficeRoute from "./components/Private/PrivateBackOfficeRoute";
+import BackOfficeStats from "./components/BackOffice/BackOfficeStats";
+import BackOfficeTable from "./components/BackOffice/BackOfficeTable";
 
 const USER = "USER";
 const MOD = "MOD";
@@ -163,6 +167,12 @@ function App() {
             </Route>
             <Route path="/recuperarpassword">
               <PasswordRecover />
+            </Route>
+            <Route exact path="/office">
+              <BackOfficeStats />
+            </Route>
+            <Route exact path="/office/table">
+              <BackOfficeTable />
             </Route>
             <Route path="/alterarpassword">
               <ChangePassword />

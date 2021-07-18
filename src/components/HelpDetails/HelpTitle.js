@@ -82,7 +82,19 @@ const HelpTitle = (props) => {
 
   return (
     <div className={classes.container}>
-      <h3 className={classes.title}>{props.title}</h3>
+      <div className={classes.titleContainer}>
+      <h3 className={classes.title}>{props.title} </h3>
+        {props.helpType === "ACTION" &&
+        <div>
+          <select value={props.move}
+                  onChange={props.handleMove}
+                  className = {classes.selectButton}>
+            <option value="WALKING">Andar</option>
+            <option value="DRIVING">Conduzir</option>
+          </select>
+        </div>
+        }
+      </div>
       <div className={classes.activeInfo}>
         {props.isActive ? (
           <Fragment>
@@ -92,6 +104,7 @@ const HelpTitle = (props) => {
               alt="pedido-activo"
             />
             <p className={classes.activeText}>Activo</p>
+
           </Fragment>
         ) : (
           <Fragment>
@@ -103,18 +116,23 @@ const HelpTitle = (props) => {
             <p className={classes.inactiveText}>Inactivo</p>
           </Fragment>
         )}
+
       </div>
       <div className={classes.requestContainer}>
         <p className={classes.type}>{typeHandler(props.helpType)}</p>
         <p className={classes.creationDate}>{formatDate(props.creationDate)}</p>
       </div>
+      <div className={classes.moveContainer}>
+
+      </div>
+
       {props.helpType === "ACTION" && (
-        <div className={classes.volunteersContainer}>
-          <p className={classes.type}>Voluntários:</p>
-          <p className={classes.number}>
-            {props.currentHelpers} de {props.volunteers}
-          </p>
-        </div>
+          <div className={classes.volunteersContainer}>
+            <p className={classes.type}>Voluntários:</p>
+            <p className={classes.number}>
+              {props.currentHelpers} de {props.volunteers}
+            </p>
+          </div>
       )}
       {props.helpType === "ACTION" && (
         <div className={classes.difficultyContainer}>

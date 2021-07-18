@@ -421,31 +421,21 @@ const Help = () => {
         <span className={classes.selectedTitle}>{selected}</span>
       </h1>
       <Map
-        points={point}
-        remove
-        edit
-        bounds={bounds}
-        dangerPoints={dangerPoint}
-        interestPoints={interestPoint}
-        callback={pointsCallback}
-        center={center}
-        callbackC={callbackC}
-        callbackLo={locationCallback}
-        callbackD={distanceCallback}
-        callbackDanger={dangerPointsCallback}
-        callbackInterest={interestPointsCallback}
-        markerTypeSelected={marker}
-        moveTypeSelected={move}
+          points={point}
+          remove
+          edit
+          bounds={bounds}
+          dangerPoints={dangerPoint}
+          interestPoints={interestPoint}
+          callback={pointsCallback}
+          center={center}
+          callbackC={callbackC}
+          callbackLo={locationCallback}
+          callbackD={distanceCallback}
+          callbackDanger={dangerPointsCallback}
+          callbackInterest={interestPointsCallback}
+          markerTypeSelected={marker}
       />
-      <div>
-        <label>
-          Seleciona como se deslocar:
-          <select value={move} onChange={handleMove}>
-            <option value="WALKING">Andar</option>
-            <option value="DRIVING">Conduzir</option>
-          </select>
-        </label>
-      </div>
       <div>
         <MapDetails
           markerType={marker}

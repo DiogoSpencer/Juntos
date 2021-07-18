@@ -12,6 +12,7 @@ import classes from "../FAQ/Faq.module.css";
 import Button from "../UI/Button";
 import Form from "react-bootstrap/Form";
 import pin from "../../img/pin.png";
+import interest from "../../img/interest.png";
 
 const containerStyle = {
   width: "100%",
@@ -67,6 +68,7 @@ interface MapProps {
   markerTypeSelected?: string;
   moveTypeSelected?: string;
   cluster?: boolean;
+  showDelete?:boolean;
 }
 
 function Map(props: MapProps) {
@@ -107,7 +109,6 @@ function Map(props: MapProps) {
           props.callback([{ lat: ev.latLng.lat(), lon: ev.latLng.lng() }]);
         }
       }
-
       if (props.markerTypeSelected === "DANGER" && props.callbackDanger) {
         props.callbackDanger([
           ...dangerPoint,
@@ -257,6 +258,14 @@ function Map(props: MapProps) {
   const clickMarkerInterest = (index: number) => {
     setOpenInterest({ index: index, openIn: true });
   };
+
+  const clickDelete = () => {
+    props.callback([]);
+    if(props.callbackDanger)
+    props.callbackDanger([]);
+    if(props.callbackInterest)
+    props.callbackInterest([]);
+  }
   const handleLoad = (map: any) => {
     mapRef.current = map;
   };
@@ -277,8 +286,8 @@ function Map(props: MapProps) {
   };
 
   return (
-    <div>
-      {!props.noPlaces && (
+    <div> 
+{!props.noPlaces && (
         <Autocomplete
           apiKey="AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU"
           style={{ width: "50%" }}
@@ -296,138 +305,103 @@ function Map(props: MapProps) {
           }}
         />
       )}
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={10}
-        onLoad={handleLoad}
-        onClick={onClick}
-        onCenterChanged={handleCenterChanged}
-        onZoomChanged={handleZoomChanged}
-      >
-        {directions !== null && (
-          <DirectionsRenderer
-            directions={directions}
-            options={{ suppressMarkers: true }}
-          />
-        )}
-        /* Child components, such as markers, info windows, etc. */
-        {props.cluster ? (
-          <MarkerClusterer options={options}>
-            {(clusterer) =>
-              points.map(
-                (point: Point, index: number) =>
-                  point.generalType === props.typeSelected && (
-                    <Marker
-                      position={{ lat: point.lat, lng: point.lon }}
-                      onRightClick={() => onRightClick(index)}
-                      onClick={() => clickMarker(index)}
-                      key={index}
-                      clusterer={clusterer}
-                      icon={
-                        point.type === "HELP_REQUEST"
-                          ? ""
-                          : point.type === "HELP_OFFER"
-                          ? ""
-                          : point.type === "DONATE"
-                          ? ""
-                          : point.type === "ACTION"
-                          ? ""
-                          : undefined
-                      }
-                    >
-                      {open.openIn && open.index === index ? (
-                        <InfoWindow
-                          onCloseClick={() =>
-                            setOpen({ index: index, openIn: false })
-                          }
-                        >
-                          <div className="info-wrapper">
-                            <span className="info-title-wrapper">
-                              {point.title}
-                            </span>
-                            <br />
-                            <span className="info-footer">
-                              lat: {point.lat} <br /> lon: {point.lon}
-                            </span>
-                            <br />
-                            {point.generalType === "REQUEST" && (
-                              <Link
-                                to={`ajudas/pedidos/${point.id}`}
-                                className={classes.linkContacts}
+<GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={10}
+            onLoad={handleLoad}
+            onClick={onClick}
+            onCenterChanged={handleCenterChanged}
+            onZoomChanged={handleZoomChanged}
+        >
+          {directions !== null && <DirectionsRenderer directions={directions} options = {{suppressMarkers : true}} />}
+            /* Child components, such as markers, info windows, etc. */
+          {props.cluster ?
+            <MarkerClusterer options={options}>
+              {(clusterer) =>
+                  points.map(
+                      (point: Point, index: number) =>
+                          point.generalType === props.typeSelected && (
+                              <Marker
+                                  position={{lat: point.lat, lng: point.lon}}
+                                  onRightClick={() => onRightClick(index)}
+                                  onClick={() => clickMarker(index)}
+                                  key={index}
+                                  clusterer={clusterer}
+                                  icon={point.type === "HELP_REQUEST" ? "" : point.type === "HELP_OFFER"
+                                  ? "" : point.type === "DONATE" ? "" : point.type === "ACTION" ? "" : undefined}
                               >
-                                <Button text="Detalhes" />
-                              </Link>
-                            )}
-                            {point.generalType === "OFFER" && (
-                              <Link
-                                to={`ajudas/ofertas/${point.id}`}
-                                className={classes.linkContacts}
-                              >
-                                <Button text="Detalhes" />
-                              </Link>
-                            )}
-                          </div>
-                        </InfoWindow>
-                      ) : (
-                        <div></div>
-                      )}
-                    </Marker>
+                                {open.openIn && open.index === index ? (
+                                    <InfoWindow
+                                        onCloseClick={() =>
+                                            setOpen({index: index, openIn: false})
+                                        }
+                                    >
+                                      <div className='info-wrapper'>
+                                        <span className='info-title-wrapper'>{point.title}</span>
+                                        <br/>
+                                        <span className='info-footer'>lat: {point.lat} <br/> lon: {point.lon}</span>
+                                        <br/>
+                                        {point.generalType === 'REQUEST' &&
+                                        <Link to={`ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
+                                          <Button text="Detalhes"/>
+                                        </Link>
+                                        }
+                                        {point.generalType === 'OFFER' &&
+                                        <Link to={`ajudas/ofertas/${point.id}`} className={classes.linkContacts}>
+                                          <Button text="Detalhes"/>
+                                        </Link>
+                                        }
+                                      </div>
+                                    </InfoWindow>
+                                ) : (
+                                    <div></div>
+                                )}
+                              </Marker>
+                          )
                   )
-              )
-            }
-          </MarkerClusterer>
-        ) : (
-          points.map(
-            (point: Point, index: number) =>
-              point.generalType === props.typeSelected && (
-                <Marker
-                  position={{ lat: point.lat, lng: point.lon }}
-                  onRightClick={() => onRightClick(index)}
-                  onClick={() => clickMarker(index)}
-                  key={index}
-                >
-                  {open.openIn && open.index === index ? (
-                    <InfoWindow
-                      onCloseClick={() =>
-                        setOpen({ index: index, openIn: false })
-                      }
-                    >
-                      <div className="info-wrapper">
-                        <span className="info-title-wrapper">
-                          {point.title}
-                        </span>
-                        <br />
-                        <span className="info-footer">
-                          lat: {point.lat} <br /> lon: {point.lon}
-                        </span>
-                        <br />
-                        {point.generalType === "REQUEST" && (
-                          <Link
-                            to={`ajudas/pedidos/${point.id}`}
-                            className={classes.linkContacts}
+              }
+            </MarkerClusterer>
+              : points.map(
+                  (point: Point, index: number) =>
+                      point.generalType === props.typeSelected && (
+                          <Marker
+                              position={{lat: point.lat, lng: point.lon}}
+                              onRightClick={() => onRightClick(index)}
+                              onClick={() => clickMarker(index)}
+                              key={index}
                           >
-                            <Button text="Detalhes" />
-                          </Link>
-                        )}
-                        {point.generalType === "OFFER" && (
-                          <Link
-                            to={`ajudas/ofertas/${point.id}`}
-                            className={classes.linkContacts}
-                          >
-                            <Button text="Detalhes" />
-                          </Link>
-                        )}
-                      </div>
-                    </InfoWindow>
-                  ) : (
-                    <div></div>
-                  )}
-                </Marker>
+                            {open.openIn && open.index === index ? (
+                                <InfoWindow
+                                    onCloseClick={() =>
+                                        setOpen({index: index, openIn: false})
+                                    }
+                                >
+                                  <div className='info-wrapper'>
+                                    <span className='info-title-wrapper'>{point.title}</span>
+                                    <br/>
+                                    <span className='info-footer'>lat: {point.lat} <br/> lon: {point.lon}</span>
+                                    <br/>
+                                    {point.generalType === 'REQUEST' &&
+                                    <Link to={`ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
+                                      <Button text="Detalhes"/>
+                                    </Link>
+                                    }
+                                    {point.generalType === 'OFFER' &&
+                                    <Link to={`ajudas/ofertas/${point.id}`} className={classes.linkContacts}>
+                                      <Button text="Detalhes"/>
+                                    </Link>
+                                    }
+                                  </div>
+                                </InfoWindow>
+                            ) : (
+                                <div></div>
+                            )}
+                          </Marker>
+                      )
               )
-          )
-        )}
-        {dangerPoint.map((point: Point, index: number) => (
+          }
+	{dangerPoint.map((point: Point, index: number) => (
           <Marker
             position={{ lat: point.lat, lng: point.lon }}
             onRightClick={() => onRightClickDanger(index)}
@@ -471,7 +445,7 @@ function Map(props: MapProps) {
             )}
           </Marker>
         ))}
-        {interestPoint.map((point: Point, index: number) => (
+ {interestPoint.map((point: Point, index: number) => (
           <Marker
             position={{ lat: point.lat, lng: point.lon }}
             onRightClick={() => onRightClickInterest(index)}
@@ -499,9 +473,10 @@ function Map(props: MapProps) {
           </Marker>
         ))}
       </GoogleMap>
-    </div>
-  );
-}
+{props.showDelete &&
+        <Button text="Apagar todos os pontos" onClick = {clickDelete}/>}
+</div>)}
+
 
 export default React.memo(Map);
 /*

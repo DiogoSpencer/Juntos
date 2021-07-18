@@ -6,11 +6,15 @@
     ". tt ai vc ef ht"
     ". rc . vc ef ht";
 }
-
-.title {
+.titleContainer {
   grid-area: tt;
   align-self: center;
-  justify-self: start;
+  display: grid;
+  grid-template-columns: 0.4fr 0.1fr 0.5fr;
+  grid-template-areas: "zx . pl";
+}
+.title {
+  grid-area: zx;
   color: #e6513e;
   font-weight: 600;
   font-size: 1.5em;
@@ -21,6 +25,11 @@
   display: flex;
   align-self: center;
   justify-self: center;
+}
+.selectButton {
+  grid-area: pl;
+  font-size: 0.8em;
+  float: right;
 }
 
 .requestCircle {
