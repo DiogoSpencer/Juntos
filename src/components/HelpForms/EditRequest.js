@@ -8,7 +8,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import Info from "./Info";
 import classes from "./EditRequest.module.css";
 import { changeMarker } from "../../services/http";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import Map from "../Map/Map";
@@ -38,6 +38,9 @@ const isDifficultyNumber = (value) => {
 };
 
 const EditRequest = () => {
+  const authUsername = useSelector((state) => state.auth.username);
+  const authRole = useSelector((state) => state.auth.role);
+
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [formConcluded, setFormConcluded] = useState(false);
   const [anonimousValue, setAnonimousValue] = useState(false);
@@ -85,6 +88,7 @@ const EditRequest = () => {
     (distance) => {
       setDistance(distance);
     },
+    // eslint-disable-next-line
     [distance]
   );
 
@@ -92,28 +96,31 @@ const EditRequest = () => {
     (center) => {
       setCenter(center);
     },
+    // eslint-disable-next-line
     [center]
   );
-
 
   const pointsCallback = useCallback(
     (points) => {
       setPoint(points);
     },
+    // eslint-disable-next-line
     [point]
   );
 
   const dangerPointsCallback = useCallback(
-      (points) => {
-        setDangerPoint(points);
-      },
-      [dangerPoint]
+    (points) => {
+      setDangerPoint(points);
+    },
+    // eslint-disable-next-line
+    [dangerPoint]
   );
   const interestPointsCallback = useCallback(
-      (points) => {
-        setInterestPoint(points);
-      },
-      [interestPoint]
+    (points) => {
+      setInterestPoint(points);
+    },
+    // eslint-disable-next-line
+    [interestPoint]
   );
 
   /************/
@@ -123,34 +130,41 @@ const EditRequest = () => {
     setIsLoading(true);
     markerDetails(helpId).then(
       (response) => {
+        console.log(response.data);
         setResponseData(response.data);
         setTitleValueHandler(response.data.title);
         setDescriptionValueHandler(response.data.description);
         setSelectedFiles(response.data.photoGalery);
         setAnonimousValue(response.data.anonymousOwner);
         let responsePoints = response.data.points;
-        responsePoints.map((point) => {
+        for (const point of responsePoints) {
+          //.map((point) => (
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
-        });
+        }
+        //));
         initialPoints = responsePoints;
         setPoint(responsePoints);
 
-        let responseDanger = response.data.dangers
-        responseDanger.map((point) => {
-          point.lat = parseFloat(point.lat)
-          point.lon = parseFloat(point.lon)
-        });
-        setDangerPoint(responseDanger)
-        initialDangers = responseDanger
+        let responseDanger = response.data.dangers;
+        for (const point of responseDanger) {
+          //.map((point) => (
+          point.lat = parseFloat(point.lat);
+          point.lon = parseFloat(point.lon);
+        }
+        //);
+        setDangerPoint(responseDanger);
+        initialDangers = responseDanger;
 
-        let responseInterest = response.data.interests
-        responseInterest.map((point) => {
-          point.lat = parseFloat(point.lat)
-          point.lon = parseFloat(point.lon)
-        });
-        setInterestPoint(responseInterest)
-        initialInterests = responseInterest
+        let responseInterest = response.data.interests;
+        for (const point of responseInterest) {
+          //.map((point) => (
+          point.lat = parseFloat(point.lat);
+          point.lon = parseFloat(point.lon);
+        }
+        //));
+        setInterestPoint(responseInterest);
+        initialInterests = responseInterest;
 
         setVolunteersValueHandler(response.data.helpersCapacity);
         setDifficultyValueHandler(response.data.difficulty);
@@ -165,14 +179,25 @@ const EditRequest = () => {
         }
       }
     );
-  }, [helpId]);
+    // eslint-disable-next-line
+  }, [helpId, dispatch]);
+
+  useEffect(() => {
+    if (authUsername !== responseData.owner) {
+      if (authRole === "USER" || authRole === "PARTNER") {
+        history.goBack();
+      }
+    }
+    // eslint-disable-next-line
+  }, [responseData, authRole, authUsername]);
 
   useEffect(() => {
     setIsLoading(false);
     if (status) {
       history.replace(`/minhasajudas/criadas/${helpId}`);
     }
-  }, [responseData, status]);
+    // eslint-disable-next-line
+  }, [responseData, status, helpId]);
 
   const {
     value: enteredTitle,
@@ -280,14 +305,12 @@ const EditRequest = () => {
     responseData.helpersCapacity !== enteredNumberVolunteers ||
     responseData.difficulty !== enteredDifficulty ||
     (point.length > 0 &&
-      JSON.stringify(initialPoints) !== JSON.stringify(point))
-      ||
-      (dangerPoint.length > 0 &&
-          JSON.stringify(initialDangers) !== JSON.stringify(dangerPoint))
-      ||
-      (interestPoint.length > 0 &&
-          JSON.stringify(initialInterests) !== JSON.stringify(interestPoint ))
-  )  {
+      JSON.stringify(initialPoints) !== JSON.stringify(point)) ||
+    (dangerPoint.length > 0 &&
+      JSON.stringify(initialDangers) !== JSON.stringify(dangerPoint)) ||
+    (interestPoint.length > 0 &&
+      JSON.stringify(initialInterests) !== JSON.stringify(interestPoint))
+  ) {
     changesMade = true;
   }
 
@@ -407,15 +430,15 @@ const EditRequest = () => {
         <span className={classes.selectedTitle}>{enteredTitle}</span>
       </h1>
       <Map
-          unique
-          center={center}
-          bounds={bounds}
-          points={point.length <= 0 ? [] : [point[0]]}
-          dangerPoints={[]}
-          interestPoints={[]}
-          callback={pointsCallback}
-          callbackC={callbackC}
-          markerTypeSelected={"MARKER"}
+        unique
+        center={center}
+        bounds={bounds}
+        points={point.length <= 0 ? [] : [point[0]]}
+        dangerPoints={[]}
+        interestPoints={[]}
+        callback={pointsCallback}
+        callbackC={callbackC}
+        markerTypeSelected={"MARKER"}
       />
     </div>
   );

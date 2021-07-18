@@ -8,17 +8,22 @@ const MultipleUpload = (props) => {
   const fileChanger = props.fileChangeHandler;
 
   const textClass = props.images.length > 0 ? classes.addImageTextInactive : "";
-  const text = props.comment ? "Inserir Imagens" : "Adiciona imagens e torna o teu pedido mais apelativo!"
+  const text = props.comment
+    ? "Inserir Imagens"
+    : "Adiciona imagens e torna o teu pedido mais apelativo!";
   const buttonClass = props.comment ? classes.smallButton : classes.imageButton;
-  const imageClass = props.comment ? classes.imgPreviewSmall : classes.imgPreview;
+  const imageClass = props.comment
+    ? classes.imgPreviewSmall
+    : classes.imgPreview;
   const textSmallClass = props.comment ? classes.addText : classes.addImageText;
-  const containerClass = props.comment? classes.containerSmall : classes.container;
-
+  const containerClass = props.comment
+    ? classes.containerSmall
+    : classes.container;
 
   useEffect(() => {
-    if (props.images.length > 0) {
+    if (props.images && props.images.length > 0) {
       setPreview([]);
-    
+
       let toLoad = props.images.length;
       let loadedImages = [];
 
@@ -29,7 +34,7 @@ const MultipleUpload = (props) => {
           setPreview((prevState) => prevState.concat(loadedImage));
         }
       };
-    
+
       for (let i = 0; i < props.images.length; i++) {
         if (props.images[i].type) {
           //fileChanger(props.images);
@@ -43,8 +48,7 @@ const MultipleUpload = (props) => {
           synchronizedPreview(i, props.images[i]);
         }
       }
-
-    } else if (props.images === null) {
+    } else if (!props.images || props.images.length <= 0) {
       //fileChanger(props.images);
 
       setPreview(null);
@@ -76,36 +80,34 @@ const MultipleUpload = (props) => {
     });
   };
 
-  const renderImages = preview.map((photo, index) => {
-    return (
-      <li key={index} className={classes.imageItem}>
-        <img
-          src={photo}
-          alt={`foto-${index}`}
-          onClick={onRemoveHandler}
-          className={imageClass}
-          id={index}
-        />
-      </li>
-    );
-  });
+  const renderImages =
+    preview &&
+    preview.map((photo, index) => {
+      return (
+        <li key={index} className={classes.imageItem}>
+          <img
+            src={photo}
+            alt={`foto-${index}`}
+            onClick={onRemoveHandler}
+            className={imageClass}
+            id={index}
+          />
+        </li>
+      );
+    });
 
   return (
     <div className={containerClass}>
-      <h5
-        className={`${textClass} ${textSmallClass}`}
-      >
-        {text}
-      </h5>
+      <h5 className={`${textClass} ${textSmallClass}`}>{text}</h5>
       <button
         className={buttonClass}
-        disabled={props.images.length >= 5}
+        disabled={props.images && props.images.length >= 5}
         onClick={(event) => {
           event.preventDefault();
           fileInputRef.current.click();
         }}
       ></button>
-      {preview.length >= 0 && (
+      {preview && preview.length >= 0 && (
         <ul className={classes.imageList}>{renderImages}</ul>
       )}
 

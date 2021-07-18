@@ -10,6 +10,7 @@ const PrivateBackOfficeRoute = (props) => {
     if (role !== "MOD" || role !== "ADMIN") {
       history.push("/home");
     }
+    // eslint-disable-next-line
   }, [role]);
 
   return <Fragment>{props.children}</Fragment>;

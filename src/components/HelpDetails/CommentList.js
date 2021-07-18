@@ -1,41 +1,67 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Button from "../UI/Button";
 import Comment from "./Comment";
 import NewComment from "./NewComment";
 import useInput from "../hooks/use-input";
 import classes from "./CommentList.module.css";
-import refreshIcon from "../../img/refresh.png"
+import refreshIcon from "../../img/refresh.png";
+import { createComment, listComments } from "../../services/http";
+import { useRouteMatch } from "react-router";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
-const dummy_data = [
-  {
-    ownerPicture: "",
-    ownerFirstName: "Daniel",
-    ownerLastName: "Silva",
-    text: "Adoraria Poder Ajudar..",
-    date: "15-05-2020",
-  },
-  {
-    ownerPicture: "",
-    ownerFirstName: "Maria",
-    ownerLastName: "Gaspar",
-    text: "Boa ação..",
-    date: "15-04-2020",
-  },
-];
-
+const ASC = "ASC";
+const DESC = "DESC";
+const DATE = "creationDate";
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const MS_PER_HOUR = 1000 * 60 * 60;
 const MS_PER_MINUTE = 1000 * 60;
+const ALL = "markerId";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
 //get List of comments
 const CommentsList = (props) => {
-  const authUsername = useSelector((state) => state.auth.username);
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const match = useRouteMatch();
+  const requestId = match.params.requestId;
 
-  const [commentText, setCommentText] = useState("");
+  const authRole = useSelector((state) => state.auth.role);
+
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [byParam, setByParam] = useState(ALL);
+  const [orderParam, setOrderParam] = useState(DATE); //neste momento so suporta creationDate
+  const [dirParam, setDirParam] = useState(DESC);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [value, setValue] = useState(requestId);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pageSize, setPageSize] = useState(5);
+  const [refresh, setRefresh] = useState(true);
+  const [responseData, setResponseData] = useState(null);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [disableButton, setDisableButton] = useState(false);
+
+  useEffect(() => {
+    if (refresh) {
+      setIsLoading(true);
+      listComments(
+        `?by=${byParam}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}&value=${value}`
+      ).then(
+        (response) => {
+          console.log(response.data);
+          setResponseData(response.data);
+        },
+        (error) => {
+          setErrorMsg(error);
+          console.log(error);
+        }
+      );
+    }
+  }, [byParam, orderParam, dirParam, pageNumber, pageSize, value, refresh]);
+
+  useEffect(() => {
+    setIsLoading(false);
+    setRefresh(false);
+  }, [responseData, errorMsg]);
 
   const {
     value: enteredNewComment,
@@ -45,25 +71,67 @@ const CommentsList = (props) => {
     reset: resetNewCommentInput,
   } = useInput(isNotEmpty);
 
+  const loadNextPageHandler = () => {
+    setPageNumber((prevState) => {
+      if (responseData.length === pageSize) {
+        setRefresh(true);
+        return prevState + 1;
+      } else {
+        setDisableButton(true);
+        return prevState;
+      }
+    });
+  };
+
+  const onRefreshHandler = () => {
+    setRefresh(true);
+  };
+
+  let formIsValid = false;
+
+  if (enteredNewCommentIsValid) {
+    formIsValid = true;
+  }
+
   const newCommentHandler = (event) => {
     event.preventDefault();
 
-    let today = new Date();
-    const dd = today.getDate();
-    const mm = today.getMonth() + 1; //January is 0!
-    const yyyy = today.getFullYear();
+    if (!formIsValid) {
+      return;
+    }
 
-    today = dd + "-" + mm + "-" + yyyy;
+    setIsLoading(true);
 
-    dummy_data.unshift({
-      ownerPicture: "",
-      ownerFirstName: authUsername,
-      ownerLastName: "SSS",
-      text: commentText,
-      date: today,
-    });
+    const formData = new FormData();
+    if (selectedFiles.length > 0) {
+      for (const image of selectedFiles) {
+        formData.append("img", image);
+      }
+    }
 
-    setCommentText("");
+    const formInfo = {
+      text: enteredNewComment,
+      fromChat: false,
+      markerId: requestId,
+    };
+
+    formData.append(
+      "comment",
+      new Blob([JSON.stringify(formInfo)], { type: "application/json" })
+    );
+
+    createComment(formData).then(
+      (response) => {
+        console.log(response);
+        resetNewCommentInput();
+        setSelectedFiles([]);
+        setRefresh(true);
+      },
+      (error) => {
+        console.log(error);
+        setErrorMsg(error);
+      }
+    );
   };
 
   const formatDate = (longDate) => {
@@ -76,6 +144,11 @@ const CommentsList = (props) => {
       date.getMonth(),
       date.getDate()
     );
+
+    const formatDateDDMMYY = (longDate) => {
+      const date = new Date(longDate);
+      return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    };
 
     const diffInDays = Math.floor((nowDate - serverDate) / MS_PER_DAY);
     if (diffInDays < 1) {
@@ -108,33 +181,55 @@ const CommentsList = (props) => {
 
   return (
     <div className={classes.mainContainer}>
-      {props.isOwner && <div className={classes.newComment}>
-        <NewComment
-          newCommentHandler={newCommentHandler}
-          enteredDescription={enteredNewComment}
-          onChange={newCommentChangeHandler}
-          isValid={enteredNewCommentIsValid}
-          images={selectedFiles}
-          fileChangeHandler={setSelectedFiles}
-        />
-      </div>}
-      <img src={refreshIcon} alt="atualizar-comentarios" className={classes.refresh}/>
-      <ol className={classes.commentList}>
-        {dummy_data.map((comment, index) => (
-          <li key={index} className={classes.comment}>
-            <Comment
-              ownerEmail={comment.ownerEmail}
-              ownerPicture={comment.ownerPicture}
-              ownerFirstName={comment.ownerFirstName}
-              ownerLastName={comment.ownerLastName}
-              text={comment.text}
-              date={comment.date}
+      {isLoading && (
+        <div className={classes.spinner}>
+          <LoadingSpinner />
+        </div>
+      )}
+      <div className={classes.subContainer}>
+        {(props.isOwner || authRole === "ADMIN" || authRole === "MOD") && (
+          <div className={classes.newComment}>
+            <NewComment
+              newCommentHandler={newCommentHandler}
+              enteredDescription={enteredNewComment}
+              onChange={newCommentChangeHandler}
+              isValid={enteredNewCommentIsValid}
+              images={selectedFiles}
+              fileChangeHandler={setSelectedFiles}
             />
-          </li>
-        ))}
-      </ol>
-      <div className={classes.buttonContainer}>
-        <Button text="Carregar Mais" />
+            {NewCommentHasError && <p>{errorMsg}</p>}
+          </div>
+        )}
+        <img
+          src={refreshIcon}
+          alt="atualizar-comentarios"
+          className={classes.refresh}
+          onClick={onRefreshHandler}
+        />
+        <ul className={classes.commentList}>
+          {responseData &&
+            responseData.content.length > 0 &&
+            responseData.content.map((comment, index) => (
+              <li key={index} className={classes.comment}>
+                <Comment
+                  owner={comment.owner}
+                  ownerPicture={comment.profileImg}
+                  ownerFirstName={comment.firstName}
+                  ownerLastName={comment.lastName}
+                  text={comment.text}
+                  date={formatDate(comment.creationDate)}
+                  images={comment.photos}
+                />
+              </li>
+            ))}
+        </ul>
+        <div className={classes.buttonContainer}>
+          <Button
+            text="Carregar Mais"
+            onClick={loadNextPageHandler}
+            disable={disableButton}
+          />
+        </div>
       </div>
     </div>
   );

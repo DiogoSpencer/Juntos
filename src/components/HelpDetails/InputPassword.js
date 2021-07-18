@@ -22,14 +22,6 @@ const InputPassword = (props) => {
     inputBlurHandler: passBlurHandler,
   } = useInput(isNotEmpty); //pass func to validate
 
-  const {
-    value: enteredTime,
-    isValid: enteredTimeIsValid,
-    hasError: timeHasError,
-    valueChangeHandler: timeChangeHandler,
-    inputBlurHandler: timeBlurHandler,
-  } = useInput(isNotEmpty);
-
   const passwordSubmitHandler = (event) => {
     event.preventDefault();
 
@@ -82,23 +74,6 @@ const InputPassword = (props) => {
         {passHasError && (
           <p className={classes.errorPass}>
             Por favor insere uma password válida
-          </p>
-        )}
-        <label htmlFor="time" className={classes.labelTime}>
-          Quantos minutos demoraste a concluir esta ação?
-        </label>
-        <input
-          type="text"
-          id="time"
-          value={enteredTime}
-          onChange={timeChangeHandler}
-          onBlur={timeBlurHandler}
-          className={classes.inputTime}
-          disabled={props.isOwner}
-        />
-        {timeHasError && (
-          <p className={classes.errorTime}>
-            Por favor insere um tempo médio de conclusão maior que 0
           </p>
         )}
         <span className={classes.rating}>O que achaste da ação?</span>

@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import useInput from "../hooks/use-input";
 import Button from "..//UI/Button";
 import { useDispatch, useSelector } from "react-redux";
-//import { useRouteMatch } from "react-router";
-import { getUser, changeCreds, deleteUser } from "../../services/http";
+import { changeCreds, deleteUser, getUserUsername } from "../../services/http";
 import keyIcon from "../../img/key.png";
 import classes from "./Profile.module.css";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
-import { useHistory } from "react-router";
+import { useHistory, useRouteMatch } from "react-router";
 import ImageUpload from "../Registration/ImageUpload";
 import logoIcon from "../../img/logo.png";
 import PassModal from "./PassModal";
@@ -24,7 +23,9 @@ const interests = ["HELP_OFFER", "HELP_REQUEST", "DONATE", "ACTION"];
 const showInterest = ["Ofertas Ajuda", "Pedidos Ajuda", "Doações", "Ações"];
 
 const Profile = () => {
-  const authEmail = useSelector((state) => state.auth.email);
+  const authUsername = useSelector((state) => state.auth.username);
+  const match = useRouteMatch();
+  const urlUsername = match.params.username;
   const dispatch = useDispatch();
   const history = useHistory();
   //const match = useRouteMatch();
@@ -77,10 +78,10 @@ const Profile = () => {
 
   //queremos so fazer useEffect onMount -> []
   useEffect(() => {
-    if (authEmail !== "") {
+    if (authUsername !== "" && authUsername === urlUsername) {
       setIsLoading(true);
 
-      getUser(authEmail).then(
+      getUserUsername(authUsername).then(
         (response) => {
           console.log(response.data);
           setResponseData(response.data);
@@ -116,9 +117,13 @@ const Profile = () => {
         }
       );
       setIsLoading(false);
+    } else if (authUsername !== urlUsername) {
+      history.replace(`/verperfil/${urlUsername}`);
+    } else {
+      history.goBack();
     }
     // eslint-disable-next-line
-  }, [authEmail]);
+  }, [authUsername]);
 
   let formIsValid = false;
 
@@ -210,7 +215,7 @@ const Profile = () => {
       )
     ) {
       setIsLoading(true);
-      deleteUser(authEmail).then(
+      deleteUser(authUsername).then(
         (response) => {
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);

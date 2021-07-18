@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import gS from "./services/generalServices.json";
@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import Layout from "./components/layout/Layout";
 import PrivateRoute from "./components/Private/PrivateRoute";
 import { authActions } from "./store/session/auth";
-import { getUser } from "./services/http";
+import { getUserUsername } from "./services/http";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
 import BackOfficeRoute from "./components/Private/BackOfficeRoute";
@@ -14,14 +14,12 @@ import PrivateBackOfficeRoute from "./components/Private/PrivateBackOfficeRoute"
 import BackOfficeStats from "./components/BackOffice/BackOfficeStats";
 import BackOfficeTable from "./components/BackOffice/BackOfficeTable";
 
-const PARTNER = "PARTNER";
 const USER = "USER";
 const MOD = "MOD";
 const ADMIN = "ADMIN";
 
 const Home = React.lazy(() => import("./components/Home/Home"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
-const NotFound = React.lazy(() => import("./components/NotFound/NotFound"));
 const FAQ = React.lazy(() => import("./components/FAQ/FAQ"));
 const HeroisWraper = React.lazy(() =>
   import("./components/Herois/HeroisWraper")
@@ -85,7 +83,7 @@ function App() {
           })
         );
       } else {
-        getUser(parsedToken.email).then(
+        getUserUsername(parsedToken.username).then(
           (response) => {
             dispatch(
               authActions.login({
@@ -108,7 +106,7 @@ function App() {
         );
       }
     }
-  }, [isLogged]);
+  }, [isLogged, dispatch]);
 
   //backoffice
   //entities % para utilizadores, trilhos, pontos

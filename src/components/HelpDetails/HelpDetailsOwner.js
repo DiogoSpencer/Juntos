@@ -57,6 +57,7 @@ const HelpDetailsOwner = () => {
     (points) => {
       setPoint(points);
     },
+    // eslint-disable-next-line
     [point]
   );
 
@@ -82,7 +83,8 @@ const HelpDetailsOwner = () => {
         history.replace(`/ajudas/ofertas/${helpId}`);
       }
     }
-  }, [isOwner, responseData]);
+    // eslint-disable-next-line
+  }, [isOwner, responseData, helpId]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -91,27 +93,32 @@ const HelpDetailsOwner = () => {
         console.log(response.data);
         setResponseData(response.data);
         let responsePoints = response.data.points;
-        responsePoints.map((point) => {
+        for (const point of responsePoints) {
+          //.map((point) => {
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
-        });
+        } //);
         setPoint(responsePoints);
 
         let responseDanger = response.data.dangers;
-        responseDanger.map((point) => {
+        for (const point of responseDanger) {
+          //.map((point) => {
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
-        });
+        } //);
         setDangerPoint(responseDanger);
 
         let responseInterest = response.data.interests;
-        responseInterest.map((point) => {
+        for (const point of responseInterest) {
+          //.map((point) => {
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
-        });
+        } //);
         setInterestPoint(responseInterest);
       },
       (error) => {
+        setIsLoading(false);
+        console.log(error);
         /*console.log(error);
         setIsLoading(false);
         if (error.status === 401) {
@@ -141,6 +148,7 @@ const HelpDetailsOwner = () => {
         return donateIcon;
       case "ACTION":
         return actionIcon;
+      default:
     }
   };
 
@@ -157,6 +165,8 @@ const HelpDetailsOwner = () => {
           history.replace("/minhasajudas");
         },
         (error) => {
+          setIsLoading(false);
+          setDeleteError(true);
           /*setIsLoading(false);
           if (error.status === 401) {
             alert(

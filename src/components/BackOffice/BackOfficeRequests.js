@@ -1,7 +1,6 @@
 import classes from "./BackOfficeRequests.module.css";
 import { Fragment, useEffect, useState } from "react";
-import { deleteUser, listMarker } from "../../services/http";
-import userIcon from "../../img/userblue.png";
+import { deleteMarker, listMarker } from "../../services/http";
 import leftArrowIcon from "../../img/leftArrow.png";
 import rightArrowIcon from "../../img/rightArrow.png";
 import editIcon from "../../img/edit.png";
@@ -15,31 +14,31 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 import { Link } from "react-router-dom";
 import shareIcon from "../../img/share.png";
 
+const HELP_REQUEST = "HELP_REQUEST";
+const HELP_OFFER = "HELP_OFFER";
+const DONATE = "DONATE";
+const ACTION = "ACTION";
 const ASC = "ASC";
 const DESC = "DESC";
 const DATE = "creationDate";
-const PUBLIC = "PUBLIC";
-const PRIVATE = "PRIVATE";
 const ALL = "all";
 const TITLE = "title";
 const TOPICS = "topics";
-const mainTitle = "Ajudas";
-const firstButton = "Pedidos";
-const secondButton = "Ofertas";
-const pathFirstArg = "pedidos";
-const pathSecondArg = "ofertas";
 const location = "location";
-const USER = "USER";
-const MOD = "MOD";
-const PARTNER = "PARTNER";
-const ADMIN = "ADMIN";
-const ENABLE = "ENABLE";
-const DISABLE = "DISABLE";
+const VOLUNTEER_NUMBER = 1;
 
 const isNotEmpty = (value) => value.trim() !== "";
 
-const isHelpNumber = (value) => {
-  if (value >= 0) {
+const isVolunteerNumber = (value) => {
+  if (value >= 1) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const isDifficultyNumber = (value) => {
+  if (value >= 1 && value <= 5) {
     return true;
   } else {
     return false;
@@ -57,19 +56,12 @@ const BackOfficeRequests = () => {
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState("");
   const [isEditing, setIsEditing] = useState("");
-  const [deleteImage, setDeleteImage] = useState(false);
-  const [isCompany, setIsCompany] = useState(false);
   const [enteredType, setEnteredType] = useState("");
-  const [enteredRole, setEnteredRole] = useState("");
-  const [enteredState, setEnteredState] = useState("");
-  const [enableAdmin, setEnableAdmin] = useState(false);
-  const [enableMod, setEnableMod] = useState(false);
-  const [enablePartner, setEnablePartner] = useState(false);
-  const [deletedUser, setDeletedUser] = useState(false);
   const [refresh, setRefresh] = useState(true);
   const [isFirst, setIsFirst] = useState(true);
   const [isActive, setIsActive] = useState(false);
   const [isAnonimous, setIsAnonimous] = useState(false);
+  const [generalType, setGeneralType] = useState("");
 
   const authRole = useSelector((state) => state.auth.role);
 
@@ -88,6 +80,7 @@ const BackOfficeRequests = () => {
         `?by=${byParam}&value=${search}&order=${orderParam}&isFirst=${isFirst}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
       ).then(
         (response) => {
+          setIsEditing("");
           setIsLoading(false);
           setRefresh(false);
           console.log(response.data);
@@ -105,10 +98,10 @@ const BackOfficeRequests = () => {
     byParam,
     orderParam,
     dirParam,
-    pageNumber,
     pageSize,
     refresh,
     isFirst,
+    search,
   ]);
 
   useEffect(() => {
@@ -163,12 +156,12 @@ const BackOfficeRequests = () => {
     });
   };
 
-  const deleteImageHandler = () => {
-    setDeleteImage(true);
+  const editRequestHandler = (requestId) => {
+    setIsEditing(requestId);
   };
 
-  const editUserHandler = (username) => {
-    setIsEditing(username);
+  const closeEditHandler = () => {
+    setIsEditing("");
   };
 
   const formatDate = (longDate) => {
@@ -183,67 +176,59 @@ const BackOfficeRequests = () => {
     byParam === location ? classes.autoComplete : classes.autoCompleteHidden;
 
   const {
-    value: enteredFirstName,
+    value: enteredTitle,
     isValid: enteredFirstNameIsValid,
-    hasError: firstNameHasError,
-    valueChangeHandler: firstNameChangeHandler,
-    inputBlurHandler: firstNameBlurHandler,
-    setValueHandler: setFirstNameValueHandler,
+    hasError: titleNameHasError,
+    valueChangeHandler: titleChangeHandler,
+    inputBlurHandler: titleBlurHandler,
+    setValueHandler: setTitleValueHandler,
   } = useInput(isNotEmpty);
 
   const {
-    value: enteredLastName,
+    value: enteredDescription,
     isValid: enteredLastNameIsValid,
-    hasError: lastNameHasError,
-    valueChangeHandler: lastNameChangeHandler,
-    inputBlurHandler: lastNameBlurHandler,
-    setValueHandler: setLastNameValueHandler,
+    hasError: descriptionHasError,
+    valueChangeHandler: descriptionChangeHandler,
+    inputBlurHandler: descriptionBlurHandler,
+    setValueHandler: setDescriptionValueHandler,
   } = useInput(isNotEmpty);
 
   const {
-    value: enteredHelps,
+    value: enteredVolunteers,
     isValid: enteredHelpsIsValid,
-    hasError: enteredHelpsHasError,
-    valueChangeHandler: enteredHelpsChangeHandler,
-    inputBlurHandler: enteredHelpsBlurHandler,
-    setValueHandler: setHelpsValueHandler,
-  } = useInput(isHelpNumber);
+    hasError: enteredVolunteersHasError,
+    valueChangeHandler: enteredVolunteersChangeHandler,
+    inputBlurHandler: enteredVolunteersBlurHandler,
+    setValueHandler: setVolunteersValueHandler,
+  } = useInput(isVolunteerNumber);
 
-  const checkRoleHandler = () => {
-    switch (authRole) {
-      case ADMIN:
-        setEnableAdmin(true);
-        setEnableMod(true);
-        setEnablePartner(true);
-        break;
-      case MOD:
-        setEnablePartner(true);
-        setEnableMod(true);
-        break;
-      default:
-    }
-  };
+  const {
+    value: enteredDifficulty,
+    isValid: enteredDifficultyIsValid,
+    hasError: enteredDifficultyHasError,
+    valueChangeHandler: enteredDifficultyChangeHandler,
+    inputBlurHandler: enteredDifficultyBlurHandler,
+    setValueHandler: setDifficultyValueHandler,
+  } = useInput(isDifficultyNumber);
 
   useEffect(() => {
-    if (isEditing != "") {
-      for (const user of responseData) {
-        if (user.username === isEditing) {
-          setFirstNameValueHandler(user.firstName);
-          setLastNameValueHandler(user.lastName);
-          setIsCompany(user.company);
-          setHelpsValueHandler(user.numHelps);
-          setEnteredType(user.privacy);
-          setEnteredRole(user.role);
-          checkRoleHandler();
+    if (isEditing !== "") {
+      for (const request of responseData) {
+        if (request.id === isEditing) {
+          setGeneralType(request.generalType);
+          setTitleValueHandler(request.title);
+          setDescriptionValueHandler(request.description);
+          setVolunteersValueHandler(request.helpersCapacity);
+          setDifficultyValueHandler(request.difficulty);
+          setEnteredType(request.type);
+          setIsAnonimous(request.anonymousOwner);
+          setIsActive(request.activeMarker);
           break;
         }
       }
     }
+    // eslint-disable-next-line
   }, [isEditing]);
-
-  const isCompanyHandler = (event) => {
-    setIsCompany(event.target.value);
-  };
 
   const isAnonimousHandler = (event) => {
     setIsAnonimous(event.target.value);
@@ -251,14 +236,15 @@ const BackOfficeRequests = () => {
 
   const typeHandler = (event) => {
     setEnteredType(event.target.value);
+    if (event.target.value === HELP_OFFER || event.target.value === DONATE) {
+      setGeneralType("OFFER");
+    } else {
+      setGeneralType("REQUEST");
+    }
   };
 
   const isActiveHandler = (event) => {
     setIsActive(event.target.value);
-  };
-
-  const stateHandler = (event) => {
-    setEnteredState(event.target.value);
   };
 
   const onRefreshHandler = () => {
@@ -270,7 +256,8 @@ const BackOfficeRequests = () => {
   if (
     enteredFirstNameIsValid &&
     enteredLastNameIsValid &&
-    enteredHelpsIsValid
+    enteredHelpsIsValid &&
+    enteredDifficultyIsValid
   ) {
     formIsValid = true;
   }
@@ -288,15 +275,15 @@ const BackOfficeRequests = () => {
     setIsEditing("");
   };
 
-  const onDeleteRequestHandler = (requestID) => {
+  const onDeleteRequestHandler = (requestId) => {
     if (
       window.confirm(
-        "Tem a certeza que pretende apagar esta conta? Esta ação é irreversível."
+        "Tem a certeza que pretende apagar este pedido? Esta ação é irreversível."
       )
     ) {
       setIsLoading(true);
 
-      deleteUser(requestID).then(
+      deleteMarker(requestId).then(
         (response) => {
           setIsLoading(false);
           setRefresh(true);
@@ -445,7 +432,7 @@ const BackOfficeRequests = () => {
                     <td className={classes.generalContainer}>
                       {request.generalType}
                     </td>
-                    <td className={classes.title}>{request.title}</td>
+                    <td className={classes.titleContainer}>{request.title}</td>
                     <td className={classes.descriptionContainer}>
                       {request.description}
                     </td>
@@ -460,7 +447,7 @@ const BackOfficeRequests = () => {
                         {request.helperUsernames &&
                           request.helperUsernames.map((user, idx) => (
                             <li key={idx}>
-                              <Link to={`/perfil/${user}`}>{user}</Link>
+                              <Link to={`/verperfil/${user}`}>{user}</Link>
                             </li>
                           ))}
                       </ul>
@@ -477,15 +464,15 @@ const BackOfficeRequests = () => {
                     <td className={classes.imgContainer}>
                       <ul>
                         {request.photoGalery &&
-                          request.photoGalery.map((img, index) => {
+                          request.photoGalery.map((img, index) => (
                             <li key={index}>
                               <img
                                 src={img}
                                 alt={`foto-pedido-${index}`}
                                 className={classes.requestImg}
                               />
-                            </li>;
-                          })}
+                            </li>
+                          ))}
                       </ul>
                     </td>
                     <td className={classes.iconsContainer}>
@@ -493,13 +480,7 @@ const BackOfficeRequests = () => {
                         src={editIcon}
                         alt="editar"
                         className={classes.iconRow}
-                        onClick={() => editUserHandler(request.id)}
-                      />
-                      <img
-                        src={binIcon}
-                        alt="apagar"
-                        className={classes.iconRow}
-                        onClick={() => onDeleteRequestHandler(request.id)}
+                        onClick={() => editRequestHandler(request.id)}
                       />
                       <Link to={`/editar/${request.id}`}>
                         <img
@@ -508,6 +489,12 @@ const BackOfficeRequests = () => {
                           className={classes.iconRow}
                         />
                       </Link>
+                      <img
+                        src={binIcon}
+                        alt="apagar"
+                        className={classes.iconRow}
+                        onClick={() => onDeleteRequestHandler(request.id)}
+                      />
                     </td>
                   </tr>
                 ) : (
@@ -525,15 +512,7 @@ const BackOfficeRequests = () => {
                       </select>
                     </td>
                     <td className={classes.orgContainer}>
-                      <select
-                        id="company"
-                        value={isCompany}
-                        onChange={isCompanyHandler}
-                        className={classes.selectSub}
-                      >
-                        <option value={true}>True</option>
-                        <option value={false}>False</option>
-                      </select>
+                      {request.company ? "True" : "False"}
                     </td>
                     <td className={classes.usernameContainer}>
                       {request.owner}
@@ -556,63 +535,103 @@ const BackOfficeRequests = () => {
                         onChange={typeHandler}
                         className={classes.selectSub}
                       >
-                        <option value={USER}>USER</option>
-                        {enablePartner && (
-                          <option value={PARTNER}>PARTNER</option>
-                        )}
-                        {enableMod && <option value={MOD}>MOD</option>}
-                        {enableAdmin && <option value={ADMIN}>ADMIN</option>}
+                        <option value={HELP_REQUEST}>HELP_REQUEST</option>
+                        <option value={HELP_OFFER}>HELP_OFFER</option>)
+                        <option value={DONATE}>DONATE</option>
+                        <option value={ACTION}>ACTION</option>
                       </select>
                     </td>
-
-                    <td className={classes.nameContainer}>
+                    <td className={classes.generalContainer}>{generalType}</td>
+                    <td className={classes.titleContainer}>
                       <input
                         type="text"
-                        id="firstName"
-                        value={enteredFirstName}
-                        onChange={firstNameChangeHandler}
-                        onBlur={firstNameBlurHandler}
+                        id="titleRequest"
+                        value={enteredTitle}
+                        onChange={titleChangeHandler}
+                        onBlur={titleBlurHandler}
                       />
-                      {firstNameHasError && <p>Por favor insira um nome.</p>}
+                      {titleNameHasError && <p>Por favor insira um título.</p>}
                     </td>
-                    <td className={classes.lastNameContainer}>
+                    <td className={classes.descriptionContainer}>
                       <input
                         type="text"
-                        id="lastName"
-                        value={enteredLastName}
-                        onChange={lastNameChangeHandler}
-                        onBlur={lastNameBlurHandler}
+                        id="description"
+                        value={enteredDescription}
+                        onChange={descriptionChangeHandler}
+                        onBlur={descriptionBlurHandler}
                       />
-                      {lastNameHasError && <p>Por favor insira um apelido.</p>}
+                      {descriptionHasError && (
+                        <p>Por favor insira uma descrição.</p>
+                      )}
                     </td>
-                    <td className={classes.orgContainer}>
-                      <select
-                        id="company"
-                        value={isCompany}
-                        onChange={isCompanyHandler}
-                        className={classes.selectSub}
-                      >
-                        <option value={true}>True</option>
-                        <option value={false}>False</option>
-                      </select>
+                    <td className={classes.numContainer}>
+                      {enteredType === ACTION ? (
+                        <Fragment>
+                          <input
+                            type="number"
+                            id="numberVolunteers"
+                            value={enteredVolunteers}
+                            onChange={enteredVolunteersChangeHandler}
+                            onBlur={enteredVolunteersBlurHandler}
+                            min="1"
+                          />
+                          {enteredVolunteersHasError && (
+                            <p className={classes.inputError}>
+                              Por favor insira um número de voluntários
+                            </p>
+                          )}
+                        </Fragment>
+                      ) : (
+                        VOLUNTEER_NUMBER
+                      )}
+                    </td>
+                    <td className={classes.helpersContainer}>
+                      {request.currentHelpers}
+                    </td>
+                    <td className={classes.helperUserContainer}>
+                      <ul>
+                        {request.helperUsernames &&
+                          request.helperUsernames.map((user, idx) => (
+                            <li key={idx}>
+                              <Link to={`/verperfil/${user}`}>{user}</Link>
+                            </li>
+                          ))}
+                      </ul>
+                    </td>
+                    <td className={classes.localContainer}>
+                      {request.location}
+                    </td>
+                    <td className={classes.difficultyContainer}>
+                      <input
+                        type="number"
+                        id="numberVolunteers"
+                        value={enteredDifficulty}
+                        onChange={enteredDifficultyChangeHandler}
+                        onBlur={enteredDifficultyBlurHandler}
+                        min="1"
+                      />
+                      {enteredDifficultyHasError && (
+                        <p className={classes.inputError}>
+                          Por favor insira uma dificuldade
+                        </p>
+                      )}
                     </td>
                     <td className={classes.dateContainer}>
                       {formatDate(request.creationDate)}
                     </td>
-                    <td className={classes.numContainer}>
-                      <input
-                        type="number"
-                        id="numberVolunteers"
-                        value={enteredHelps}
-                        onChange={enteredHelpsChangeHandler}
-                        onBlur={enteredHelpsBlurHandler}
-                        min="0"
-                      />
-                      {enteredHelpsHasError && (
-                        <p className={classes.inputError}>
-                          Por favor insira um número de ajudas
-                        </p>
-                      )}
+                    <td className={classes.imgContainer}>
+                      <ul>
+                        {request.photoGalery &&
+                          request.photoGalery.map((img, index) => (
+                            <li key={index}>
+                              <img
+                                src={img}
+                                alt={`foto-pedido-${index}`}
+                                className={classes.requestImg}
+                              />
+                            </li>
+                          ))}
+                      </ul>
                     </td>
                     <td className={classes.iconsContainer}>
                       <img
@@ -620,6 +639,12 @@ const BackOfficeRequests = () => {
                         alt="aceitar"
                         className={classes.iconRow}
                         onClick={onSubmitChangesHandler}
+                      />{" "}
+                      <img
+                        src={closeIcon}
+                        alt="fechar"
+                        className={classes.iconRow}
+                        onClick={closeEditHandler}
                       />
                     </td>
                   </tr>

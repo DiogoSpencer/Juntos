@@ -62,6 +62,7 @@ const HelpTitle = (props) => {
         return "Doar";
       case "ACTION":
         return "Ação";
+      default:
     }
   };
 
@@ -75,6 +76,7 @@ const HelpTitle = (props) => {
         return donateIcon;
       case "ACTION":
         return actionIcon;
+      default:
     }
   };
 

@@ -15,52 +15,60 @@ function TodasAjudas() {
     lat: 38.7071,
     lng: -9.13549,
   });
-    const [bounds, setBounds] = useState<Bounds>({
-        latLower: 38.575291199755526,
-        lngLower: -9.428419410934456,
-        latTop: 38.83652687020928,
-        lngTop: -8.84256058906556,
-    });
+  const [bounds, setBounds] = useState<Bounds>({
+    latLower: 38.575291199755526,
+    lngLower: -9.428419410934456,
+    latTop: 38.83652687020928,
+    lngTop: -8.84256058906556,
+  });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const callbackBound = useCallback(
-        (bound: Bounds) => {
-            setBounds(bound);
-        },
-        [bounds]
-    );
+    (bound: Bounds) => {
+      setBounds(bound);
+    },
+    // eslint-disable-next-line
+    [bounds]
+  );
 
   const callbackC = useCallback(
-      (center: Center) => {
-        setCenter(center);
-      },
-      [center]
+    (center: Center) => {
+      setCenter(center);
+    },
+    // eslint-disable-next-line
+    [center]
   );
 
   const pointsCallback = useCallback(
-      (points: Point[]) => {
-        setPoint(points);
-      },
-      [point]
+    (points: Point[]) => {
+      setPoint(points);
+    },
+    // eslint-disable-next-line
+    [point]
   );
   useEffect(() => {
     setIsLoading(true);
-    getMarkers(bounds.latLower, bounds.lngLower, bounds.latTop, bounds.lngTop).then(
-        (response) => {
-          let newVec: Point[] = response.data;
-          for (let i = 0; i < newVec.length; i++) {
-            newVec[i].lat = parseFloat(response.data[i].points[0].lat)
-            newVec[i].lon = parseFloat(response.data[i].points[0].lon)
-          }
-          setPoint(newVec)
-          console.log(response)
-          setIsLoading(false);
-        },
-        (error) => {
-          console.log(error);
-          setIsLoading(false);
+    getMarkers(
+      bounds.latLower,
+      bounds.lngLower,
+      bounds.latTop,
+      bounds.lngTop
+    ).then(
+      (response) => {
+        let newVec: Point[] = response.data;
+        for (let i = 0; i < newVec.length; i++) {
+          newVec[i].lat = parseFloat(response.data[i].points[0].lat);
+          newVec[i].lon = parseFloat(response.data[i].points[0].lon);
         }
+        setPoint(newVec);
+        console.log(response);
+        setIsLoading(false);
+      },
+      (error) => {
+        console.log(error);
+        setIsLoading(false);
+      }
     );
   }, [bounds]);
 
@@ -73,41 +81,41 @@ function TodasAjudas() {
   };
 
   return (
-      <div className={classes.mainContainer}>
-        <h1 className={classes.title}>Ajudas Disponíveis</h1>
-        {isLoading && (
-            <div className={classes.spinner}>
-              <LoadingSpinner />
-            </div>
-        )}
-        <div className={classes.subContainer}>
-          <div className={classes.sideButtons}>
-            <SideButtons
-                button1="Pedidos"
-                button2="Ofertas"
-                onClick1={requestHandler}
-                onClick2={offerHandler}
-                isButton1={pedido === HELP_REQUEST}
-            />
-          </div>
-          <div className={classes.map}>
-            <Map
-                noAdd
-                bounds={bounds}
-                typeSelected={pedido}
-                noRoute
-                cluster
-                points={point}
-                dangerPoints={[]}
-                interestPoints={[]}
-                center={center}
-                callback={pointsCallback}
-                callbackBounds={callbackBound}
-                callbackC={callbackC}
-            />
-          </div>
+    <div className={classes.mainContainer}>
+      <h1 className={classes.title}>Ajudas Disponíveis</h1>
+      {isLoading && (
+        <div className={classes.spinner}>
+          <LoadingSpinner />
+        </div>
+      )}
+      <div className={classes.subContainer}>
+        <div className={classes.sideButtons}>
+          <SideButtons
+            button1="Pedidos"
+            button2="Ofertas"
+            onClick1={requestHandler}
+            onClick2={offerHandler}
+            isButton1={pedido === HELP_REQUEST}
+          />
+        </div>
+        <div className={classes.map}>
+          <Map
+            noAdd
+            bounds={bounds}
+            typeSelected={pedido}
+            noRoute
+            cluster
+            points={point}
+            dangerPoints={[]}
+            interestPoints={[]}
+            center={center}
+            callback={pointsCallback}
+            callbackBounds={callbackBound}
+            callbackC={callbackC}
+          />
         </div>
       </div>
+    </div>
   );
 }
 

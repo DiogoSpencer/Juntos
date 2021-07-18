@@ -4,7 +4,7 @@ import NavBar from "./NavBar";
 import SideBar from "./SideBar";
 import classes from "./Layout.module.css";
 import OfficeBar from "../BackOffice/OfficeBar";
-import { useLocation, useRouteMatch } from "react-router";
+import { useLocation } from "react-router";
 
 const Layout = (props) => {
   const isLogged = useSelector((state) => state.auth.isLogged);

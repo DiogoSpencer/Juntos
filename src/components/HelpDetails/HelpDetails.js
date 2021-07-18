@@ -4,7 +4,7 @@ import CommentList from "./CommentList";
 import HelpTitle from "./HelpTitle";
 import ImageDisplay from "./ImageDisplay";
 import UserDisplay from "./UserDisplay";
-import { Route, Link, useRouteMatch } from "react-router-dom";
+import { Route, Link, useRouteMatch, useHistory } from "react-router-dom";
 import classes from "./HelpDetails.module.css";
 import { joinMarker, leaveMarker, markerDetails } from "../../services/http";
 import offerHelpIcon from "../../img/helpIcon.png";
@@ -19,7 +19,7 @@ import Map from "../Map/Map";
 let text = "";
 
 const HelpDetails = (props) => {
-  const [responseData, setResponseData] = useState([]);
+  const [responseData, setResponseData] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [point, setPoint] = useState([]);
   const [dangerPoint, setDangerPoint] = useState([]);
@@ -49,12 +49,13 @@ const HelpDetails = (props) => {
     (points) => {
       setPoint(points);
     },
+    // eslint-disable-next-line
     [point]
   );
 
   const match = useRouteMatch();
   const helpId = match.params.requestId;
-
+  const history = useHistory();
   const loggedUsername = useSelector((state) => state.auth.username);
 
   useEffect(() => {
@@ -62,35 +63,43 @@ const HelpDetails = (props) => {
       setIsLoading(true);
       markerDetails(helpId).then(
         (response) => {
-          setHasChanges(false);
           console.log(response.data);
+          setIsLoading(false);
+          setHasChanges(false);
           setResponseData(response.data);
+          console.log(responseData);
           let responsePoints = response.data.points;
-          responsePoints.map((point) => {
+          for (const point of responsePoints) {
+            //.map((point) => {
             point.lat = parseFloat(point.lat);
             point.lon = parseFloat(point.lon);
-          });
+          } //);
           setPoint(responsePoints);
 
           let responseDanger = response.data.dangers;
-          responseDanger.map((point) => {
+          for (const point of responseDanger) {
+            //.map((point) => {
             point.lat = parseFloat(point.lat);
             point.lon = parseFloat(point.lon);
-          });
+          } //);
           setDangerPoint(responseDanger);
 
           let responseInterest = response.data.interests;
-          responseInterest.map((point) => {
+          for (const point of responseInterest) {
+            //.map((point) => {
             point.lat = parseFloat(point.lat);
             point.lon = parseFloat(point.lon);
-          });
+          } //);
           setInterestPoint(responseInterest);
+
           if (response.data.helperUsernames.includes(loggedUsername)) {
             setIsHelper(true);
           }
           typeHandler(response.data.type);
         },
         (error) => {
+          setIsLoading(false);
+          console.log(error);
           /*console.log(error);
         setIsLoading(false);
         if (error.status === 401) {
@@ -101,10 +110,23 @@ const HelpDetails = (props) => {
         }
       );
     }
-  }, [helpId, hasChanges]);
+    // eslint-disable-next-line
+  }, [helpId, hasChanges, loggedUsername]);
 
   useEffect(() => {
-    setIsLoading(false);
+    if (responseData !== "") {
+      if (
+        match.path === "/minhasajudas/participacoes/:requestId" &&
+        !isHelper
+      ) {
+        history.replace(
+          `/ajudas/${
+            responseData.generalType === "REQUEST" ? "pedidos" : "ofertas"
+          }/${helpId}`
+        );
+      }
+    }
+    // eslint-disable-next-line
   }, [responseData]);
 
   const typeHandler = (type) => {
@@ -121,6 +143,7 @@ const HelpDetails = (props) => {
       case "ACTION":
         text = "Participar";
         return actionIcon;
+      default:
     }
   };
 
@@ -140,6 +163,8 @@ const HelpDetails = (props) => {
         console.log(response);
       },
       (error) => {
+        setIsLoading(false);
+
         /*console.log(error);
         setIsLoading(false);
         if (error.status === 401) {
@@ -161,6 +186,8 @@ const HelpDetails = (props) => {
         console.log(response);
       },
       (error) => {
+        setIsLoading(false);
+
         /*console.log(error);
         setIsLoading(false);
         if (error.status === 401) {
