@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import SearchBar from "../UI/SearchBar";
-import SideButtons from "../UI/SIdeButtons";
+import SideButtons from "../UI/SideButtons";
 import classes from "./MyHelps.module.css";
 import { listMarker } from "../../services/http";
 import leftArrowIcon from "../../img/leftArrow.png";
