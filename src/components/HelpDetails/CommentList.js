@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Button from "../UI/Button";
 import Comment from "./Comment";
 import NewComment from "./NewComment";
 import useInput from "../hooks/use-input";
 import classes from "./CommentList.module.css";
-import refreshIcon from "../../img/refresh.png"
+import refreshIcon from "../../img/refresh.png";
+import { listComments } from "../../services/http";
+import { useRouteMatch } from "react-router";
 
 const dummy_data = [
   {
@@ -24,18 +26,50 @@ const dummy_data = [
   },
 ];
 
+const ASC = "ASC";
+const DESC = "DESC";
+const DATE = "creationDate";
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const MS_PER_HOUR = 1000 * 60 * 60;
 const MS_PER_MINUTE = 1000 * 60;
+const ALL = "markerId";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
 //get List of comments
 const CommentsList = (props) => {
-  const authUsername = useSelector((state) => state.auth.username);
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const match = useRouteMatch();
+  const requestId = match.params.requestId;
 
+  const authUsername = useSelector((state) => state.auth.username);
+  const authRole = useSelector((state) => state.auth.role);
+
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [commentText, setCommentText] = useState("");
+  const [byParam, setByParam] = useState(ALL);
+  const [orderParam, setOrderParam] = useState(DATE); //neste momento so suporta creationDate
+  const [dirParam, setDirParam] = useState(DESC);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [value, setValue] = useState(requestId);
+  const [isLoading, setIsLoading] = useState(false);
+  const [disableSelect, setDisableSelect] = useState(false);
+  const [pageSize, setPageSize] = useState(5);
+  const [refresh, setRefresh] = useState(true);
+  const [responseData, setResponseData] = useState("");
+
+  useEffect(() => {
+    listComments(
+      `?by=${byParam}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}&value=${value}`
+    ).then(
+      (response) => {
+        console.log(response.data);
+        setResponseData(response.data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }, [byParam, orderParam, dirParam, pageNumber, pageSize, value, refresh]);
 
   const {
     value: enteredNewComment,
@@ -77,6 +111,11 @@ const CommentsList = (props) => {
       date.getDate()
     );
 
+    const formatDateDDMMYY = (longDate) => {
+      const date = new Date(longDate);
+      return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    };
+
     const diffInDays = Math.floor((nowDate - serverDate) / MS_PER_DAY);
     if (diffInDays < 1) {
       const hours = Math.abs(now - date) / MS_PER_HOUR;
@@ -108,17 +147,23 @@ const CommentsList = (props) => {
 
   return (
     <div className={classes.mainContainer}>
-      {props.isOwner && <div className={classes.newComment}>
-        <NewComment
-          newCommentHandler={newCommentHandler}
-          enteredDescription={enteredNewComment}
-          onChange={newCommentChangeHandler}
-          isValid={enteredNewCommentIsValid}
-          images={selectedFiles}
-          fileChangeHandler={setSelectedFiles}
-        />
-      </div>}
-      <img src={refreshIcon} alt="atualizar-comentarios" className={classes.refresh}/>
+      {props.isOwner && (
+        <div className={classes.newComment}>
+          <NewComment
+            newCommentHandler={newCommentHandler}
+            enteredDescription={enteredNewComment}
+            onChange={newCommentChangeHandler}
+            isValid={enteredNewCommentIsValid}
+            images={selectedFiles}
+            fileChangeHandler={setSelectedFiles}
+          />
+        </div>
+      )}
+      <img
+        src={refreshIcon}
+        alt="atualizar-comentarios"
+        className={classes.refresh}
+      />
       <ol className={classes.commentList}>
         {dummy_data.map((comment, index) => (
           <li key={index} className={classes.comment}>

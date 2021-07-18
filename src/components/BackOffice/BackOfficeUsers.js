@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-import { deleteUser, getAllUsers } from "../../services/http";
+import { controlUserCreds, deleteUser, getAllUsers } from "../../services/http";
 import classes from "./BackOfficeUsers.module.css";
 import userIcon from "../../img/userblue.png";
 import leftArrowIcon from "../../img/leftArrow.png";
@@ -12,6 +12,7 @@ import refreshIcon from "../../img/refresh.png";
 import useInput from "../hooks/use-input";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import { Link } from "react-router-dom";
 
 const ASC = "ASC";
 const DESC = "DESC";
@@ -81,6 +82,7 @@ const BackOfficeUsers = () => {
         }
       );
     }
+    // eslint-disable-next-line
   }, [pageNumber, byParam, orderParam, dirParam, pageSize, refresh]);
 
   useEffect(() => {
@@ -198,6 +200,7 @@ const BackOfficeUsers = () => {
         }
       }
     }
+    // eslint-disable-next-line
   }, [isEditing]);
 
   const isCompanyHandler = (event) => {
@@ -237,10 +240,36 @@ const BackOfficeUsers = () => {
 
     setIsLoading(true);
 
+    const formData = new FormData();
+
+    const userInfo = {
+      company: isCompany,
+      numHelps: enteredHelps,
+      firstName: enteredFirstName,
+      lastName: enteredLastName,
+      role: enteredRole,
+      privacy: enteredPrivacy,
+      state: enteredState,
+      deletePhoto: deleteImage,
+    };
+
+    formData.append(
+      "creds",
+      new Blob([JSON.stringify(userInfo)], { type: "application/json" })
+    );
+
+    controlUserCreds.then(
+      (response) => {
+        setIsLoading(false);
+        setRefresh(true);
+        setIsEditing("");
+      },
+      (error) => {
+        setIsLoading(false);
+        console.log(error);
+      }
+    );
     //mandar ao servidor mudanças
-    setIsLoading(false);
-    setRefresh(true);
-    setIsEditing("");
   };
 
   const onDeleteUserHandler = (userRole, userEmail) => {
@@ -402,7 +431,9 @@ const BackOfficeUsers = () => {
                     </td>
                     <td className={classes.emailContainer}>{user.email}</td>
                     <td className={classes.usernameContainer}>
-                      {user.username}
+                      <Link to={`/verperfil/${user.username}`}>
+                        {user.username}
+                      </Link>
                     </td>
                     <td className={classes.nameContainer}>{user.firstName}</td>
                     <td className={classes.lastNameContainer}>
@@ -478,7 +509,9 @@ const BackOfficeUsers = () => {
                     </td>
                     <td className={classes.emailContainer}>{user.email}</td>
                     <td className={classes.usernameContainer}>
-                      {user.username}
+                      <Link to={`/verperfil/${user.username}`}>
+                        {user.username}
+                      </Link>
                     </td>
                     <td className={classes.nameContainer}>
                       <input

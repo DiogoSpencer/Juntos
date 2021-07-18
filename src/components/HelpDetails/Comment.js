@@ -17,11 +17,15 @@ const Comment = (props) => {
       <p className={classes.comment}>{props.text}</p>
       {props.images && (
         <ul className={classes.imageList}>
-          {props.images.map((image, index) => {
+          {props.images.map((image, index) => (
             <li key={index}>
-              <img src={image} alt="imagem-comentario" className={classes.imageComment}/>
-            </li>;
-          })}
+              <img
+                src={image}
+                alt="imagem-comentario"
+                className={classes.imageComment}
+              />
+            </li>
+          ))}
         </ul>
       )}
     </div>

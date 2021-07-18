@@ -1,4 +1,4 @@
-import { useRouteMatch } from "react-router";
+//import { useRouteMatch } from "react-router";
 import classes from "./HeroisWrapper.module.css";
 import volunteer1 from "../../img/boxesVolunteer.jpg";
 import Button from "../UI/Button";
@@ -14,10 +14,10 @@ const dummy = {
 };
 
 const HeroisWraper = () => {
-  const match = useRouteMatch();
+  //const match = useRouteMatch();
 
   //ir buscar data com este id ao server
-  const id = match.params.heroidId;
+  //const id = match.params.heroId;
 
   return (
     <div className={classes.container}>

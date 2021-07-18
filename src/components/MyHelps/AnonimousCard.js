@@ -20,6 +20,7 @@ const AnonimousCard = (props) => {
         return donateIcon;
       case "ACTION":
         return actionIcon;
+      default:
     }
   };
 
@@ -44,7 +45,7 @@ const AnonimousCard = (props) => {
       </div>
       <h3 className={classes.title}>{props.title}</h3>
       <div className={classes.markerInfo}>
-        <img src={markerIcon} />
+        <img src={markerIcon} alt="localizacao" />
         <p>{props.location}</p>
       </div>
       <div className={classes.activeInfo}>

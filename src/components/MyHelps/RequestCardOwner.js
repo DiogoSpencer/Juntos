@@ -21,6 +21,7 @@ const RequestCardOwner = (props) => {
         return donateIcon;
       case "ACTION":
         return actionIcon;
+      default:
     }
   };
 

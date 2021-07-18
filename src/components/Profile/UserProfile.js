@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-import { useHistory, useRouteMatch } from "react-router";
+import { useRouteMatch } from "react-router";
 import { getUserUsername } from "../../services/http";
-import { authActions } from "../../store/session/auth";
-import gS from "../../services/generalServices.json";
-import { useDispatch } from "react-redux";
 import classes from "./UserProfile.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import userIcon from "../../img/userblue.png";
@@ -14,8 +11,6 @@ const UserProfile = () => {
   const [responseData, setResponseData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const dispatch = useDispatch();
-  const history = useHistory();
   const match = useRouteMatch();
   const username = match.params.username;
 
@@ -29,11 +24,6 @@ const UserProfile = () => {
       (error) => {
         setIsLoading(false);
         if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
-          history.replace("/home");
-        } else {
           console.log(error);
         }
       }

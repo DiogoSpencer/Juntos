@@ -80,6 +80,14 @@ export async function getUserUsername(username: string) {
   }
 }
 
+export async function controlUserCreds(form: FormData) {
+  try {
+    return await axios.put(`${url}/rest/user/mod`, form);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
 export async function deleteUser(email: string) {
   try {
     return await axios.delete(`${url}/rest/user/${email}`);
@@ -241,6 +249,14 @@ export async function restartMarker(markerId: string, password: string) {
 export async function listMarker(urlParams: string) {
   try {
     return await axios.get(`${url}/rest/marker/list${urlParams}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function listComments(urlParams: string) {
+  try {
+    return await axios.get(`${url}/rest/comments${urlParams}`);
   } catch (error) {
     throw error.response;
   }

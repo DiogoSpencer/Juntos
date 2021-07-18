@@ -12,7 +12,7 @@ import { createMarker } from "../../services/http";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
-import Map, { Bounds } from "../Map/Map";
+import Map from "../Map/Map";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import MapDetails from "./MapDetails";
 
@@ -76,15 +76,16 @@ const Help = () => {
 
   const handleMarkerChange = (event) => {
     setMarker(event.target.value);
-  }
+  };
   const handleMove = (event) => {
-    setMove(event.target.value)
-  }
+    setMove(event.target.value);
+  };
 
   const callbackC = useCallback(
     (center) => {
       setCenter(center);
     },
+    // eslint-disable-next-line
     [center]
   );
 
@@ -92,6 +93,7 @@ const Help = () => {
     (points) => {
       setPoint(points);
     },
+    // eslint-disable-next-line
     [point]
   );
 
@@ -99,12 +101,14 @@ const Help = () => {
     (points) => {
       setDangerPoint(points);
     },
+    // eslint-disable-next-line
     [dangerPoint]
   );
   const interestPointsCallback = useCallback(
     (points) => {
       setInterestPoint(points);
     },
+    // eslint-disable-next-line
     [interestPoint]
   );
 
@@ -112,12 +116,14 @@ const Help = () => {
     (distance) => {
       setDistance(distance);
     },
+    // eslint-disable-next-line
     [distance]
   );
   const locationCallback = useCallback(
     (location) => {
       setLocation(location);
     },
+    // eslint-disable-next-line
     [location]
   );
 
@@ -416,21 +422,21 @@ const Help = () => {
         <span className={classes.selectedTitle}>{selected}</span>
       </h1>
       <Map
-          points={point}
-          remove
-          edit
-          bounds={bounds}
-          dangerPoints={dangerPoint}
-          interestPoints={interestPoint}
-          callback={pointsCallback}
-          center={center}
-          callbackC={callbackC}
-          callbackLo={locationCallback}
-          callbackD={distanceCallback}
-          callbackDanger={dangerPointsCallback}
-          callbackInterest={interestPointsCallback}
-          markerTypeSelected={marker}
-          moveTypeSelected = {move}
+        points={point}
+        remove
+        edit
+        bounds={bounds}
+        dangerPoints={dangerPoint}
+        interestPoints={interestPoint}
+        callback={pointsCallback}
+        center={center}
+        callbackC={callbackC}
+        callbackLo={locationCallback}
+        callbackD={distanceCallback}
+        callbackDanger={dangerPointsCallback}
+        callbackInterest={interestPointsCallback}
+        markerTypeSelected={marker}
+        moveTypeSelected={move}
       />
       <div>
         <label>
@@ -453,8 +459,8 @@ const Help = () => {
       </div>
       <div>
         <MapDetails
-          markerType = {marker}
-          handleMarkerChange = {handleMarkerChange}
+          markerType={marker}
+          handleMarkerChange={handleMarkerChange}
           difficultyChangeHandler={difficultyChangeHandler}
           enteredDifficulty={enteredDifficulty}
           difficultyBlurHandler={difficultyBlurHandler}
@@ -524,7 +530,6 @@ const Help = () => {
                 onChange={numberVolunteersChangeHandler}
                 onBlur={numberVolunteersBlurHandler}
                 error={numberVolunteersHasError}
-                volunteersValue={volunteersValue}
               />
             </div>
           )}

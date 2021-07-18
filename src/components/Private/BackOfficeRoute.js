@@ -10,6 +10,7 @@ const BackOfficeRoute = (props) => {
     if (role === "USER") {
       history.push("/home");
     }
+    // eslint-disable-next-line
   }, [role]);
 
   return <Fragment>{props.children}</Fragment>;

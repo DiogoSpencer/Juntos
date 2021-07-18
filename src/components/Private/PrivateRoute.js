@@ -13,6 +13,7 @@ const PrivateRoute = (props) => {
     if (!token) {
       history.push("/home");
     }
+    // eslint-disable-next-line
   }, [isLogged]);
 
   return <Fragment>{props.children}</Fragment>;

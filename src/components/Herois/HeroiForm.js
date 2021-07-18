@@ -12,7 +12,7 @@ const HeroiForm = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const firstName = useSelector((state) => state.auth.firstName);
-  const lastName = useSelector((state) => state.auth.lastName);
+  //const lastName = useSelector((state) => state.auth.lastName);
 
   const {
     value: enteredName,
@@ -20,7 +20,6 @@ const HeroiForm = () => {
     hasError: nameHasError,
     valueChangeHandler: nameChangeHandler,
     inputBlurHandler: nameBlurHandler,
-    reset: resetNameInput,
   } = useInput(isNotEmpty);
 
   const {
@@ -29,7 +28,6 @@ const HeroiForm = () => {
     hasError: descriptionHasError,
     valueChangeHandler: descriptionChangeHandler,
     inputBlurHandler: descriptionBlurHandler,
-    reset: resetDescriptionInput,
   } = useInput(isNotEmpty);
 
   let formIsValid = false;

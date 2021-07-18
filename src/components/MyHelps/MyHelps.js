@@ -103,7 +103,7 @@ const MyHelps = () => {
         }
       );
     }
-  }, [byParam, orderParam, dirParam, pageNumber, search, isFirst, pageSize, refresh]);
+  }, [byParam, orderParam, dirParam, pageNumber, search, isFirst, pageSize, refresh, dispatch]);
 
   useEffect(() => {
     setPageNumber(0);
