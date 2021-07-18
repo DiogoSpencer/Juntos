@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Map, {Bounds, Center, Point} from "../Map/Map";
 import { getMarkers } from "../../services/http";
-import SideButtons from "../UI/SIdeButtons";
+import SideButtons from "../UI/SideButtons";
 import classes from "./TodasAjudas.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
