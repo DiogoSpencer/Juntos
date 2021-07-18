@@ -2,6 +2,7 @@ import classes from "./NewComment.module.css";
 import { useSelector } from "react-redux";
 import MultipleUpload from "../HelpForms/MultipleUpload";
 import donateIcon from "../../img/volunteersdonate.jpg";
+import userIcon from "../../img/userblue.png";
 
 //set the text of the new comment
 const NewComment = (props) => {
@@ -11,7 +12,11 @@ const NewComment = (props) => {
 
   return (
     <form onSubmit={props.newCommentHandler} className={classes.container}>
-      <img src={authImg} alt="foto-perfil" className={classes.profileImg} />
+      {authImg && authImg !== "" ? (
+        <img src={authImg} alt="foto-perfil" className={classes.profileImg} />
+      ) : (
+        <img src={userIcon} alt="foto-perfil" className={classes.profileImg} />
+      )}
       <p className={classes.name}>
         {authFirstName} {authLastName}
       </p>

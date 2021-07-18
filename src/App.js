@@ -194,10 +194,10 @@ function App() {
             <Route exact path="/conversas">
               <Chat />
             </Route>
-            <Route path="/conversas/pedidos/:pedidoId">
+            <Route path="/conversas/criadas/:requestId">
               <Conversation />
             </Route>
-            <Route path="/conversas/ofertas/:ofertaId">
+            <Route path="/conversas/participacoes/:requestId">
               <Conversation />
             </Route>
             <Route path="/mapa">
@@ -207,13 +207,21 @@ function App() {
               <EditRequest />
             </Route>
             <Route exact path="/backoffice">
-              {role !== USER ? <BackOfficeHome /> : <Redirect to="/home"/>}
+              {role !== USER ? <BackOfficeHome /> : <Redirect to="/home" />}
             </Route>
             <Route path="/backoffice/utilizadores">
-            {(role === ADMIN || role === MOD) ? <BackOfficeUsers /> : <Redirect to="/backoffice" />}
+              {role === ADMIN || role === MOD ? (
+                <BackOfficeUsers />
+              ) : (
+                <Redirect to="/backoffice" />
+              )}
             </Route>
             <Route path="/backoffice/pedidos">
-              {(role === ADMIN || role === MOD) ? <BackOfficeRequests /> : <Redirect to="/backoffice" />}
+              {role === ADMIN || role === MOD ? (
+                <BackOfficeRequests />
+              ) : (
+                <Redirect to="/backoffice" />
+              )}
             </Route>
           </PrivateRoute>
 
