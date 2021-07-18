@@ -52,6 +52,8 @@ const EditRequest = () => {
   const editing = match.path === "/editar/:requestId";
 
   const [markerType, setMarker] = useState("MARKER");
+  const [move, setMove] = useState("WALKING");
+  const [moveChange, setMoveChange] = useState(false);
 
   //AjudaMap state
   const [point, setPoint] = useState([]);
@@ -72,6 +74,10 @@ const EditRequest = () => {
 
   const handleMarkerChange = (event) => {
     setMarker(event.target.value);
+  }
+  const handleMove = (event) => {
+    setMove(event.target.value)
+    setMoveChange(true)
   }
 
   const [distance, setDistance] = useState(0);
@@ -266,6 +272,7 @@ const EditRequest = () => {
 
   if (
     responseData.title !== enteredTitle ||
+      moveChange ||
     responseData.description !== enteredDescription ||
     JSON.stringify(responseData.photoGalery) !==
       JSON.stringify(selectedFiles) ||
@@ -330,8 +337,8 @@ const EditRequest = () => {
       anonymousOwner: anonimousValue,
     };
     if(responseData.type !== ACTION) {
-      formInfo.dangers = [];
-      formInfo.interests = [];
+      formInfo.dangers = dangerPoint;
+      formInfo.interests = interestPoint;
     }
 
     formData.append(
@@ -430,6 +437,7 @@ const EditRequest = () => {
           remove
           bounds={bounds}
           edit
+          showDelete
           dangerPoints={dangerPoint}
           interestPoints={interestPoint}
           callback={pointsCallback}

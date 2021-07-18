@@ -12,6 +12,7 @@ import classes from "../FAQ/Faq.module.css";
 import Button from "../UI/Button";
 import Form from 'react-bootstrap/Form';
 import pin from "../../img/pin.png";
+import interest from "../../img/interest.png";
 
 const containerStyle = {
   width: "100%",
@@ -29,7 +30,6 @@ export interface Bounds {
   lngTop:number;
 }
 
-
 interface infoOpen {
   index: number;
   openIn: boolean;
@@ -43,6 +43,7 @@ export interface Point {
   id?: string;
   generalType?: string;
   type?: string
+  activeMarker?: boolean;
 }
 
 interface MapProps {
@@ -68,6 +69,7 @@ interface MapProps {
   markerTypeSelected?: string;
   moveTypeSelected?: string;
   cluster?: boolean;
+  showDelete?:boolean;
 }
 
 function Map(props: MapProps) {
@@ -107,9 +109,6 @@ function Map(props: MapProps) {
           props.callback([{lat: ev.latLng.lat(), lon: ev.latLng.lng()}]);
         }
       }
-
-
-
       if (props.markerTypeSelected === "DANGER" && props.callbackDanger) {
         props.callbackDanger([
           ...dangerPoint,
@@ -264,6 +263,14 @@ function Map(props: MapProps) {
   const clickMarkerInterest = (index: number) => {
     setOpenInterest({ index: index, openIn: true });
   };
+
+  const clickDelete = () => {
+    props.callback([]);
+    if(props.callbackDanger)
+    props.callbackDanger([]);
+    if(props.callbackInterest)
+    props.callbackInterest([]);
+  }
   const handleLoad = (map: any) => {
     mapRef.current = map;
   }
@@ -399,10 +406,6 @@ function Map(props: MapProps) {
                       )
               )
           }
-
-
-
-
           {
             dangerPoint.map(
                 (point: Point, index: number) =>
@@ -411,7 +414,7 @@ function Map(props: MapProps) {
                         onRightClick={() => onRightClickDanger(index)}
                         onClick={() => clickMarkerDanger(index)}
                         key={index}
-                        icon={pin}
+                        icon= {{url: pin, scaledSize: new google.maps.Size(30,30)}}
                     >
                       {openDanger.openIn && openDanger.index === index ? (
                           <InfoWindow
@@ -437,6 +440,7 @@ function Map(props: MapProps) {
                       )}
                     </Marker>
 
+
             )
           }
           { interestPoint.map(
@@ -446,8 +450,8 @@ function Map(props: MapProps) {
                       onRightClick={() => onRightClickInterest(index)}
                       onClick={() => clickMarkerInterest(index)}
                       key={index}
+                      icon={{url: interest, scaledSize: new google.maps.Size(30,30)}}
                   >
-
                     {openInterest.openIn && openInterest.index === index ? (
                         <InfoWindow
                             onCloseClick={() =>
@@ -469,6 +473,8 @@ function Map(props: MapProps) {
           )}
 
         </GoogleMap>
+        {props.showDelete &&
+        <Button text="Apagar todos os pontos" onClick = {clickDelete}/>}
       </div>
   );
 }

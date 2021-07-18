@@ -1,4 +1,4 @@
-import SideButtons from "../UI/SideButtons";
+import SideButtons from "../UI/SIdeButtons";
 import classes from "./Volunteers.module.css"
 
 const Volunteers = (props) => {

@@ -27,6 +27,11 @@ const HelpDetails = (props) => {
   const [isHelper, setIsHelper] = useState(false);
   const [hasChanges, setHasChanges] = useState(true);
 
+  const [move, setMove] = useState("WALKING");
+  const handleMove = (event) => {
+        setMove(event.target.value)
+    }
+
   const center =
     point.length > 0
       ? { lat: point[0].lat, lng: point[0].lon }
@@ -189,8 +194,20 @@ const HelpDetails = (props) => {
             interestPoints={interestPoint}
             callback={pointsCallback}
             center={center}
+            moveTypeSelected = {move}
           />
         </div>
+          {point.length > 1 &&
+          <div>
+              <label>
+                  Selecione como se vai deslocar:
+                  <select value={move}
+                          onChange={handleMove}>
+                      <option value="WALKING">Andar</option>
+                      <option value="DRIVING">Conduzir</option>
+                  </select>
+              </label>
+          </div>}
         <div className={classes.infoContent}>
           <div className={classes.helpTitle}>
             <HelpTitle

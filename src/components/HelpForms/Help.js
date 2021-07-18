@@ -430,17 +430,7 @@ const Help = () => {
           callbackDanger={dangerPointsCallback}
           callbackInterest={interestPointsCallback}
           markerTypeSelected={marker}
-          moveTypeSelected = {move}
       />
-      <div>
-        <label>
-          Seleciona como se deslocar:
-          <select value={move} onChange={handleMove}>
-            <option value="WALKING">Andar</option>
-            <option value="DRIVING">Conduzir</option>
-          </select>
-        </label>
-      </div>
       <div>
         <MapDetails
           markerType = {marker}

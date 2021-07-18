@@ -35,6 +35,10 @@ const HelpDetailsOwner = () => {
   const [deleteError, setDeleteError] = useState(false);
   const [point, setPoint] = useState([]);
   const [beginAction, setBeginAction] = useState(false);
+  const [move, setMove] = useState("WALKING");
+  const handleMove = (event) => {
+    setMove(event.target.value)
+  }
 
   const center =
     point.length > 0
@@ -241,6 +245,7 @@ const HelpDetailsOwner = () => {
             interestPoints={interestPoint}
             callback={pointsCallback}
             center={center}
+            moveTypeSelected={move}
           />
         </div>
         <div className={classes.infoContent}>
@@ -253,6 +258,9 @@ const HelpDetailsOwner = () => {
               difficulty={responseData.difficulty}
               currentHelpers={responseData.currentHelpers}
               isActive={responseData.activeMarker}
+              points={responseData.points}
+              move={move}
+              handleMove={handleMove}
             />
           </div>
           <div className={classes.userDisplay}>

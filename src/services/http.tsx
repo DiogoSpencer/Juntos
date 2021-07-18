@@ -246,6 +246,21 @@ export async function listMarker(urlParams: string) {
   }
 }
 
+export async function officeDetail() {
+  try {
+    return await axios.get(`${url}/rest/office/details`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+export async function officeDetailTable() {
+  try {
+    return await axios.get(`${url}/rest/office/`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
 /*//ir ao store fazer dispatch de logout e apagar local storage
 //dentro de use effect do app -> redux tb nao ha -> /home
 //= a estar a verificar */
