@@ -56,20 +56,4 @@ const NewComment = (props) => {
 
 export default NewComment;
 
-/*
-Comment in DB:
-
-let comment = {
-  commentId: {
-    id: commentId,
-    text: commentText,
-    author: userId,
-    timestamp: timestamp,
-    likes: [userId1, userId2],
-    replies: [commentd1, commentId2],
-    replyingTo: commentId_OR_null
-  }
-};
-*/
-
 //To get the reply comments, we can get the comment with a specific id from the list of all of the comments and access its replies property.

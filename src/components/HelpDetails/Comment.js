@@ -1,15 +1,21 @@
 import classes from "./Comment.module.css";
+import userIcon from "../../img/userblue.png";
+
 //get comment from list of comments
 //get the user currently logged in (authed user) so that we can toggle likes on comments
 //get the authed user to enable reply to comment
 const Comment = (props) => {
   return (
     <div className={classes.container}>
-      <img
-        src={props.ownerPicture}
-        alt="foto-perfil"
-        className={classes.profileImg}
-      />
+      {props.ownerPicture ? (
+        <img
+          src={props.ownerPicture}
+          alt="foto-perfil"
+          className={classes.profileImg}
+        />
+      ) : (
+        <img src={userIcon} alt="sem-foto" className={classes.profileImg} />
+      )}
       <h6 className={classes.name}>
         {props.ownerFirstName + " " + props.ownerLastName}
       </h6>

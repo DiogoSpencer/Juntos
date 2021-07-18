@@ -13,7 +13,7 @@ const pedidoChat = [
   },
 ];
 
-const RequestChatList = () => {
+const ParticipationChatList = () => {
   const match = useRouteMatch();
 
   return (
@@ -35,4 +35,4 @@ const RequestChatList = () => {
   );
 };
 
-export default RequestChatList;
+export default ParticipationChatList;

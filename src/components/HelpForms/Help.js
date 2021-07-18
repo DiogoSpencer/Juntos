@@ -323,7 +323,6 @@ const Help = () => {
       formInfo.interests = [];
     }
 
-    console.log(formInfo);
     formData.append(
       "marker",
       new Blob([JSON.stringify(formInfo)], { type: "application/json" })

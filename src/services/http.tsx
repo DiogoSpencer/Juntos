@@ -262,6 +262,14 @@ export async function listComments(urlParams: string) {
   }
 }
 
+export async function createComment(form: FormData) {
+  try {
+    return await axios.post(`${url}/rest/comments`, form);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
 /*//ir ao store fazer dispatch de logout e apagar local storage
 //dentro de use effect do app -> redux tb nao ha -> /home
 //= a estar a verificar */
