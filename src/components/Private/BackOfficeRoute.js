@@ -2,17 +2,17 @@ import { Fragment, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 
-const PrivateRoute = (props) => {
+const BackOfficeRoute = (props) => {
   const role = useSelector((state) => state.auth.role);
   const history = useHistory();
 
   useEffect(() => {
     if (role === "USER") {
-      history.goBack();
+      history.push("/home");
     }
   }, [role]);
 
   return <Fragment>{props.children}</Fragment>;
 };
 
-export default PrivateRoute;
+export default BackOfficeRoute;

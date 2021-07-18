@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from "react";
+import React, { Fragment, Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import gS from "./services/generalServices.json";
@@ -11,6 +11,11 @@ import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
 import BackOfficeRoute from "./components/Private/BackOfficeRoute";
 import PrivateBackOfficeRoute from "./components/Private/PrivateBackOfficeRoute";
+
+const PARTNER = "PARTNER";
+const USER = "USER";
+const MOD = "MOD";
+const ADMIN = "ADMIN";
 
 const Home = React.lazy(() => import("./components/Home/Home"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
@@ -60,7 +65,7 @@ const BackOfficeRequests = React.lazy(() =>
 function App() {
   const dispatch = useDispatch();
   const isLogged = useSelector((state) => state.auth.isLogged);
-
+  const role = useSelector((state) => state.auth.role);
   //verificar aqui se tokens sao iguais - redux e localstorage -> se nao for -> logout
   //isto faz re render sempre que fazemos mount de um componente
   useEffect(() => {
@@ -140,65 +145,89 @@ function App() {
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
-          <Route path="/home" render={() => <Home />} />
-          <Route path="/faq" render={() => <FAQ />} />
-          <Route path="/verperfil/:username" render={() => <UserProfile />} />
-          <Route path="/herois/:heroiId" render={() => <HeroisWraper />} />
-          <Route path="/contactos" render={() => <Contacts />} />
-          <Route path="/app" render={() => <AppPage />} />
-          <Route path="/heroiForm" render={() => <HeroiForm />} />
+          <Route path="/home">
+            <Home />
+          </Route>
+          <Route path="/faq">
+            <FAQ />
+          </Route>
+          <Route path="/herois/:heroiId">
+            <HeroisWraper />
+          </Route>
+          <Route path="/contactos">
+            <Contacts />
+          </Route>
+          <Route path="/app">
+            <AppPage />
+          </Route>
+
           <PrivateRoute>
-            <Route
-              path="/recuperarpassword"
-              render={() => <PasswordRecover />}
-            />
-            <Route path="/alterarpassword" render={() => <ChangePassword />} />
-            <Route path="/perfil/:username" render={() => <Profile />} />
-            <Route exact path="/minhasajudas" render={() => <MyHelps />} />
-            <Route
-              path="/minhasajudas/criadas/:requestId"
-              render={() => <HelpDetailsOwner />}
-            />
-            <Route
-              path="/minhasajudas/participacoes/:requestId"
-              render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
-            />
-            <Route path="/novopedido" render={() => <Help />} />
-            <Route exact path="/ajudas" render={() => <MyHelps />} />
-            <Route
-              path="/ajudas/pedidos/:requestId"
-              render={() => <HelpDetails buttonText="Oferecer Ajuda" />}
-            />
-            <Route
-              path="/ajudas/ofertas/:requestId"
-              render={() => <HelpDetails buttonText="Pedir Ajuda" />}
-            />
-            <Route exact path="/conversas" render={() => <Chat />} />
-            <Route
-              path="/conversas/pedidos/:pedidoId"
-              render={() => <Conversation />}
-            />
-            <Route
-              path="/conversas/ofertas/:ofertaId"
-              render={() => <Conversation />}
-            />
-            <Route path="/mapa" render={() => <TodasAjudas />} />
-            <Route path="/editar/:requestId" render={() => <EditRequest />} />
-            <BackOfficeRoute>
-              <Route exact path="/backoffice" render={() => <BackOfficeHome />} />
-              <PrivateBackOfficeRoute>
-                <Route
-                  path="/backoffice/utilizadores"
-                  render={() => <BackOfficeUsers />}
-                />
-                <Route
-                  path="/backoffice/pedidos"
-                  render={() => <BackOfficeRequests />}
-                />
-              </PrivateBackOfficeRoute>
-            </BackOfficeRoute>
+            <Route path="/verperfil/:username">
+              <UserProfile />
+            </Route>
+            <Route path="/recuperarpassword">
+              <PasswordRecover />
+            </Route>
+            <Route path="/alterarpassword">
+              <ChangePassword />
+            </Route>
+            <Route path="/perfil/:username">
+              <Profile />
+            </Route>
+            <Route exact path="/minhasajudas">
+              <MyHelps />
+            </Route>
+            <Route path="/minhasajudas/criadas/:requestId">
+              <HelpDetailsOwner />
+            </Route>
+            <Route path="/minhasajudas/participacoes/:requestId">
+              <HelpDetails buttonText="Oferecer Ajuda" />
+            </Route>
+            <Route path="/novopedido">
+              <Help />
+            </Route>
+            <Route exact path="/ajudas">
+              <MyHelps />
+            </Route>
+            <Route path="/ajudas/pedidos/:requestId">
+              <HelpDetails buttonText="Oferecer Ajuda" />
+            </Route>
+            <Route path="/ajudas/ofertas/:requestId">
+              <HelpDetails buttonText="Pedir Ajuda" />
+            </Route>
+            <Route exact path="/conversas">
+              <Chat />
+            </Route>
+            <Route path="/conversas/pedidos/:pedidoId">
+              <Conversation />
+            </Route>
+            <Route path="/conversas/ofertas/:ofertaId">
+              <Conversation />
+            </Route>
+            <Route path="/mapa">
+              <TodasAjudas />
+            </Route>
+            <Route path="/editar/:requestId">
+              <EditRequest />
+            </Route>
+            <Route exact path="/backoffice">
+              {role !== USER ? <BackOfficeHome /> : <Redirect to="/home"/>}
+            </Route>
+            <Route path="/backoffice/utilizadores">
+            {(role === ADMIN || role === MOD) ? <BackOfficeUsers /> : <Redirect to="/backoffice" />}
+            </Route>
+            <Route path="/backoffice/pedidos">
+              {(role === ADMIN || role === MOD) ? <BackOfficeRequests /> : <Redirect to="/backoffice" />}
+            </Route>
           </PrivateRoute>
-          <Route path="*" render={() => <NotFound />} />
+
+          <Route path="/heroisForm">
+            <HeroiForm />
+          </Route>
+
+          <Route path="*">
+            <Redirect to="/home" />
+          </Route>
         </Switch>
       </Suspense>
     </Layout>

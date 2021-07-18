@@ -8,6 +8,7 @@ import editIcon from "../../img/edit.png";
 import binIcon from "../../img/bin.png";
 import closeIcon from "../../img/closered.png";
 import checkIcon from "../../img/check.png";
+import refreshIcon from "../../img/refresh.png";
 import useInput from "../hooks/use-input";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "../UI/LoadingSpinner";
@@ -54,14 +55,14 @@ const BackOfficeUsers = () => {
   const [enableAdmin, setEnableAdmin] = useState(false);
   const [enableMod, setEnableMod] = useState(false);
   const [enablePartner, setEnablePartner] = useState(false);
-  const [deletedUser, setDeletedUser] = useState(false);
+  const [refresh, setRefresh] = useState(true);
 
   const authUsername = useSelector((state) => state.auth.username);
   const authRole = useSelector((state) => state.auth.role);
 
   useEffect(() => {
     setDisableSelect(false);
-    if (!isEditing || !deletedUser) {
+    if (refresh) {
       setIsLoading(true);
 
       getAllUsers(
@@ -69,25 +70,18 @@ const BackOfficeUsers = () => {
       ).then(
         (response) => {
           setIsLoading(false);
+          setRefresh(false);
           console.log(response.data);
           setResponseData(response.data.content);
         },
         (error) => {
           setIsLoading(false);
+          setRefresh(false);
           console.log(error);
         }
       );
     }
-  }, [
-    isEditing,
-    deletedUser,
-    pageNumber,
-    byParam,
-    orderParam,
-    dirParam,
-    pageNumber,
-    pageSize,
-  ]);
+  }, [pageNumber, byParam, orderParam, dirParam, pageSize, refresh]);
 
   useEffect(() => {
     setIsLoading(false);
@@ -96,22 +90,26 @@ const BackOfficeUsers = () => {
   const changeFilterHandler = (event) => {
     setByParam(event.target.value);
     setDisableSelect(true);
+    setRefresh(true);
   };
 
   const changeOrderHandler = (event) => {
     setDirParam(event.target.value);
     setDisableSelect(true);
+    setRefresh(true);
   };
 
   const changePageSizeHandler = (event) => {
     setPageSize(parseInt(event.target.value));
     setDisableSelect(true);
+    setRefresh(true);
   };
   //console.log(responseData.length)
 
   const nextPageHandler = () => {
     setPageNumber((prevState) => {
       if (responseData.length === pageSize) {
+        setRefresh(true);
         return prevState + 1;
       } else {
         return prevState;
@@ -122,6 +120,7 @@ const BackOfficeUsers = () => {
   const prevPageHandler = () => {
     setPageNumber((prevState) => {
       if (prevState > 0) {
+        setRefresh(true);
         return prevState - 1;
       } else {
         return prevState;
@@ -185,8 +184,8 @@ const BackOfficeUsers = () => {
   };
 
   useEffect(() => {
-    if (isEditing) {
-      responseData.map((user) => {
+    if (isEditing !== "") {
+      for (const user of responseData) {
         if (user.username === isEditing) {
           setFirstNameValueHandler(user.firstName);
           setLastNameValueHandler(user.lastName);
@@ -195,8 +194,9 @@ const BackOfficeUsers = () => {
           setEnteredPrivacy(user.privacy);
           setEnteredRole(user.role);
           checkRoleHandler();
+          break;
         }
-      });
+      }
     }
   }, [isEditing]);
 
@@ -214,6 +214,10 @@ const BackOfficeUsers = () => {
 
   const stateHandler = (event) => {
     setEnteredState(event.target.value);
+  };
+
+  const onRefreshHandler = () => {
+    setRefresh(true);
   };
 
   let formIsValid = false;
@@ -234,8 +238,9 @@ const BackOfficeUsers = () => {
     setIsLoading(true);
 
     //mandar ao servidor mudanças
-
-    setIsEditing(false);
+    setIsLoading(false);
+    setRefresh(true);
+    setIsEditing("");
   };
 
   const onDeleteUserHandler = (userRole, userEmail) => {
@@ -249,13 +254,12 @@ const BackOfficeUsers = () => {
           "Tem a certeza que pretende apagar esta conta? Esta ação é irreversível."
         )
       ) {
-        setDeletedUser(true);
         setIsLoading(true);
 
         deleteUser(userEmail).then(
           (response) => {
             setIsLoading(false);
-            setDeletedUser(false);
+            setRefresh(true);
           },
           (error) => {
             setIsLoading(false);
@@ -368,6 +372,12 @@ const BackOfficeUsers = () => {
       <div className={classes.mainSubContainer}>
         {filterButtons}
         {orderButtons}
+        <img
+          src={refreshIcon}
+          alt="Atualizar"
+          onClick={onRefreshHandler}
+          className={classes.refresh}
+        />
         <table className={classes.subContainer}>
           {tableHead}
           <tbody>
@@ -406,9 +416,10 @@ const BackOfficeUsers = () => {
                     </td>
                     <td className={classes.prefContainer}>
                       <ul>
-                        {user.favTopics.map((favTopic, idx) => (
-                          <li key={idx}>{favTopic}</li>
-                        ))}
+                        {user.favTopics &&
+                          user.favTopics.map((favTopic, idx) => (
+                            <li key={idx}>{favTopic}</li>
+                          ))}
                       </ul>
                     </td>
                     <td className={classes.numContainer}>{user.numHelps}</td>
