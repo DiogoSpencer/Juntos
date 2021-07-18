@@ -22,8 +22,8 @@
   grid-area: mn;
   background-image: url("../../img/togetherapart.jpg");
   height: 100%;
-  background-size: 27vw auto;
-  background-position: 33.5vw bottom;
+  background-size: 22vw auto;
+  background-position: 36vw bottom;
   background-repeat: no-repeat;
   display: grid;
   grid-template-columns: 1fr 0.5fr 0.2fr 1fr;
@@ -101,11 +101,10 @@
   grid-area: fc;
   display: grid;
   grid-template-columns: 1fr 0.5fr 0.5fr;
-  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 2fr;
+  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
   row-gap: 2.5em;
   column-gap: 3em;
   grid-template-areas:
-    ". un ."
     ". ed pv"
     ". fn ln"
     "it it it"
@@ -145,12 +144,6 @@
   display: flex;
   flex-direction: column;
   justify-self: start;
-}
-
-.usernameDiv {
-  grid-area: un;
-  display: flex;
-  flex-direction: column;
 }
 
 .firstNameDiv {
