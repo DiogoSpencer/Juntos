@@ -11,6 +11,7 @@ import { Link, useRouteMatch } from "react-router-dom";
 import classes from "../FAQ/Faq.module.css";
 import Button from "../UI/Button";
 import Form from "react-bootstrap/Form";
+import pin from "../../img/pin.png";
 
 const containerStyle = {
   width: "100%",
@@ -40,6 +41,7 @@ export interface Point {
   description?: string;
   id?: string;
   generalType?: string;
+  type?: string;
 }
 
 interface MapProps {
@@ -131,9 +133,9 @@ function Map(props: MapProps) {
           lng: mapRef.current.getCenter().toJSON().lng,
         });
         props.callbackBounds({
-          latLower: mapRef.current.getBounds().mc.g,
+          latLower: mapRef.current.getBounds().lc.g,
           lngLower: mapRef.current.getBounds().Eb.g,
-          latTop: mapRef.current.getBounds().mc.i,
+          latTop: mapRef.current.getBounds().lc.i,
           lngTop: mapRef.current.getBounds().Eb.i,
         });
       }
@@ -142,9 +144,9 @@ function Map(props: MapProps) {
   const handleZoomChanged = () => {
     if (mapRef.current !== null && props.callbackBounds) {
       props.callbackBounds({
-        latLower: mapRef.current.getBounds().mc.g,
+        latLower: mapRef.current.getBounds().lc.g,
         lngLower: mapRef.current.getBounds().Eb.g,
-        latTop: mapRef.current.getBounds().mc.i,
+        latTop: mapRef.current.getBounds().lc.i,
         lngTop: mapRef.current.getBounds().Eb.i,
       });
     }
@@ -244,7 +246,6 @@ function Map(props: MapProps) {
         }
       );
     else setDirections(null);
-    // eslint-disable-next-line
   }, [points, props.moveTypeSelected]);
 
   const clickMarker = (index: number) => {
@@ -310,7 +311,7 @@ function Map(props: MapProps) {
             options={{ suppressMarkers: true }}
           />
         )}
-        {/* Child components, such as markers, info windows, etc. */}
+        /* Child components, such as markers, info windows, etc. */
         {props.cluster ? (
           <MarkerClusterer options={options}>
             {(clusterer) =>
@@ -323,6 +324,17 @@ function Map(props: MapProps) {
                       onClick={() => clickMarker(index)}
                       key={index}
                       clusterer={clusterer}
+                      icon={
+                        point.type === "HELP_REQUEST"
+                          ? ""
+                          : point.type === "HELP_OFFER"
+                          ? ""
+                          : point.type === "DONATE"
+                          ? ""
+                          : point.type === "ACTION"
+                          ? ""
+                          : undefined
+                      }
                     >
                       {open.openIn && open.index === index ? (
                         <InfoWindow
@@ -421,6 +433,7 @@ function Map(props: MapProps) {
             onRightClick={() => onRightClickDanger(index)}
             onClick={() => clickMarkerDanger(index)}
             key={index}
+            icon={pin}
           >
             {openDanger.openIn && openDanger.index === index ? (
               <InfoWindow
@@ -492,5 +505,4 @@ function Map(props: MapProps) {
 
 export default React.memo(Map);
 /*
-
  */
