@@ -83,6 +83,11 @@ const CommentsList = (props) => {
     });
   };
 
+  const reportHandler = () => {
+    console.log("reportado")
+    //gerir reporte, enviar pedido etc..
+  }
+
   const onRefreshHandler = () => {
     setRefresh(true);
   };
@@ -144,11 +149,6 @@ const CommentsList = (props) => {
       date.getMonth(),
       date.getDate()
     );
-
-    const formatDateDDMMYY = (longDate) => {
-      const date = new Date(longDate);
-      return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-    };
 
     const diffInDays = Math.floor((nowDate - serverDate) / MS_PER_DAY);
     if (diffInDays < 1) {
@@ -219,6 +219,7 @@ const CommentsList = (props) => {
                   text={comment.text}
                   date={formatDate(comment.creationDate)}
                   images={comment.photos}
+                  reportHandler={reportHandler}
                 />
               </li>
             ))}

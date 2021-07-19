@@ -4,6 +4,7 @@
   padding-top: 1em;
   margin-bottom: 2em;
   grid-template-areas:
+    "pi rf"
     "pi tx"
     "nm tx"
     "dt tx"
@@ -41,12 +42,27 @@
   box-shadow: 1px 1px 1px #999;
 }
 
+.reportFlag {
+  grid-area: rf;
+  align-self: start;
+  justify-self: end;
+  height: 1.5em;
+  fill: lightgray;
+}
+
+.reportFlag:hover {
+  cursor: pointer;
+  fill: red;
+}
+
 .imageList {
   grid-area: im;
   list-style: none;
   display: flex;
   flex-direction: row;
   align-content: space-evenly;
+  padding-left: 0;
+  padding-bottom: 0.5em;
 }
 
 .imageComment {

@@ -4,6 +4,29 @@
   grid-template-rows: auto 0.25fr;
   row-gap: 2em;
   grid-template-areas:
+    "sc";
+}
+
+.spinner {
+  grid-area: sc;
+  align-self: center;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  z-index: 5;
+}
+
+.subContainer {
+  grid-area: sc;
+  display: grid;
+  width: 50em;
+  grid-template-rows: auto 0.25fr;
+  row-gap: 2em;
+  grid-template-areas:
     "nc"
     "rf"
     "cl"

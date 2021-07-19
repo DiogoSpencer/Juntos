@@ -142,7 +142,7 @@ const Profile = () => {
     setIsLoading(true);
 
     const formData = new FormData();
-    if (selectedFile !== null) {
+    if (selectedFile !== null && selectedFile) {
       formData.append("profileImg", selectedFile);
     }
 
