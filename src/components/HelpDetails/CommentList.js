@@ -188,7 +188,8 @@ const CommentList = (props) => {
       {(props.isOwner ||
         authRole === "ADMIN" ||
         authRole === "MOD" ||
-        responseData.allHelperUsernames.includes(authUsername)) && (
+        (responseData &&
+          responseData.allHelperUsernames.includes(authUsername))) && (
         <div className={classes.newComment}>
           <NewComment
             buttonText="Comentar"

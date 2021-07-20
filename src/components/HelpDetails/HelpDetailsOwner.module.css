@@ -60,7 +60,7 @@
 }
 
 .completeImg {
-  height: 18em;
+  height: 10em;
   grid-area: lg;
   justify-self: center;
   align-self: start;

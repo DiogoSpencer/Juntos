@@ -346,3 +346,33 @@ export async function recoverPassword(
     throw error.response;
   }
 }
+
+export async function activateAccount(code: string) {
+  try {
+    return await axios.put(`${url}/rest/user/activate/${code}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function loginExternal(
+  email: string,
+  firstName: string,
+  id: string,
+  imgUrl: string,
+  lastName: string,
+  type: string
+) {
+  try {
+    return await axios.put(`${url}/rest/user/external`, {
+      email: email,
+      firstName: firstName,
+      id: id,
+      imgUrl: imgUrl,
+      lastName: lastName,
+      type: type,
+    });
+  } catch (error) {
+    throw error.response;
+  }
+}

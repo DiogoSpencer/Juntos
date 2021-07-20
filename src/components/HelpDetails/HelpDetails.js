@@ -202,7 +202,11 @@ const HelpDetails = (props) => {
   return (
     <div className={classes.mainContainer}>
       <h1 className={classes.title}>
-        <img src={typeHandler(responseData.type)} alt={responseData.type} />
+        <img
+          src={typeHandler(responseData.type)}
+          alt={responseData.type}
+          className={classes.iconImg}
+        />
         {responseData.title}
       </h1>
       {isLoading && (

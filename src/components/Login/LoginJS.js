@@ -1,5 +1,5 @@
 import useInput from "../hooks/use-input";
-import { login, sendRecover } from "../../services/http";
+import { login, sendRecover, loginExternal } from "../../services/http";
 import { Fragment, useState } from "react";
 import jwt_decode from "jwt-decode";
 import Button from "../UI/Button";
@@ -9,6 +9,8 @@ import backIcon from "../../img/back.png";
 import classes from "./LoginJS.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import juntosIcon from "../../img/logo.png";
+import { GoogleLogin } from "react-google-login";
+import FacebookLogin from "react-facebook-login";
 
 //out of rendering cycle - functions to verify input
 const isNotEmpty = (value) => value.trim() !== "";
@@ -43,6 +45,98 @@ const Login = (props) => {
   if (enteredEmailIsValid && enteredPasswordIsValid) {
     formIsValid = true;
   }
+
+  const responseFacebook = (responseG) => {
+    console.log(responseG);
+    loginExternal(
+      responseG.email,
+      responseG.first_name,
+      responseG.id,
+      responseG.picture.data.url,
+      responseG.last_name,
+      "FACEBOOK"
+    ).then(
+      (response) => {
+        props.setIsLoading(false);
+        const token = response.headers.authorization;
+        const parsedToken = jwt_decode(token);
+        dispatch(
+          authActions.login({
+            isLogged: true,
+            token: token,
+            username: parsedToken.username,
+            role: parsedToken.role,
+            email: parsedToken.email,
+            firstName: response.data.firstName,
+            lastName: response.data.lastName,
+            numHelps: response.data.numHelps,
+            profileImg: response.data.profileImg,
+          })
+        );
+        localStorage.setItem("token", token);
+        props.onCloseModal();
+      },
+      (error) => {
+        props.setIsLoading(false);
+        if (error.status === 400) {
+          setError("Credenciais Inválidas");
+        } else if (error.status === 403) {
+          setError("Esta conta está desativada");
+        } else if (error.status === 404) {
+          setError("Não existe um utilizador registado com este e-mail");
+        } else {
+          setError("Algo Inesperado aconteceu, tente novamente");
+          console.log(error);
+        }
+      }
+    );
+  };
+
+  const responseGoogle = (responseG) => {
+    console.log(responseG);
+    loginExternal(
+      responseG.profileObj.email,
+      responseG.profileObj.givenName,
+      responseG.profileObj.googleId,
+      responseG.profileObj.imgUrl,
+      responseG.profileObj.familyName,
+      "GOOGLE"
+    ).then(
+      (response) => {
+        props.setIsLoading(false);
+        const token = response.headers.authorization;
+        const parsedToken = jwt_decode(token);
+        dispatch(
+          authActions.login({
+            isLogged: true,
+            token: token,
+            username: parsedToken.username,
+            role: parsedToken.role,
+            email: parsedToken.email,
+            firstName: response.data.firstName,
+            lastName: response.data.lastName,
+            numHelps: response.data.numHelps,
+            profileImg: response.data.profileImg,
+          })
+        );
+        localStorage.setItem("token", token);
+        props.onCloseModal();
+      },
+      (error) => {
+        props.setIsLoading(false);
+        if (error.status === 400) {
+          setError("Credenciais Inválidas");
+        } else if (error.status === 403) {
+          setError("Esta conta está desativada");
+        } else if (error.status === 404) {
+          setError("Não existe um utilizador registado com este e-mail");
+        } else {
+          setError("Algo Inesperado aconteceu, tente novamente");
+          console.log(error);
+        }
+      }
+    );
+  };
 
   const formSubmissionHandler = (event) => {
     event.preventDefault();
@@ -204,6 +298,31 @@ const Login = (props) => {
             </div>
             <div className={classes.buttonDiv}>
               <Button disabled={!formIsValid} text={"Entrar"} />
+            </div>
+            <div className={classes.buttonsWrap}>
+              <GoogleLogin
+                clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
+                buttonText=""
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+                cookiePolicy={"single_host_origin"}
+                cssClass={classes.google}
+              />
+              <FacebookLogin
+                buttonStyle={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: "50%",
+                  marginLeft: 30,
+                }}
+                appId="360511435646701"
+                size="small"
+                cssClass={classes.facebook}
+                fields="first_name, last_name, email, picture"
+                callback={responseFacebook}
+                icon="fa-facebook"
+                textButton=""
+              />
             </div>
             {error && (
               <p className={`${classes.formError} ${classes.serverError}`}>

@@ -43,6 +43,7 @@ const Profile = () => {
   const [isCheckedInterest, setIsCheckedInterest] = useState(
     new Array(interests.length).fill(false)
   );
+  const [refresh, setRefresh] = useState(true);
 
   const {
     value: enteredEmail,
@@ -70,51 +71,54 @@ const Profile = () => {
 
   //queremos so fazer useEffect onMount -> []
   useEffect(() => {
-    if (authUsername !== "" && authUsername === urlUsername) {
-      setIsLoading(true);
+    if (refresh) {
+      if (authUsername !== "" && authUsername === urlUsername) {
+        setIsLoading(true);
 
-      getUserUsername(authUsername).then(
-        (response) => {
-          console.log(response.data);
-          setResponseData(response.data);
-          setEmailValueHandler(response.data.email);
-          setLastNameValueHandler(response.data.lastName);
-          setFirstNameValueHandler(response.data.firstName);
-          setPrivacy(response.data.privacy);
-          setNumHelps(response.data.numHelps);
-          const date = new Date(response.data.creationDate);
-          setCreationDate(
-            `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-          );
-          if (response.data.profileImg === undefined) {
-            setSelectedFile(null);
-          } else {
-            setSelectedFile(response.data.profileImg);
+        getUserUsername(authUsername).then(
+          (response) => {
+            setRefresh(false);
+            console.log(response.data);
+            setResponseData(response.data);
+            setEmailValueHandler(response.data.email);
+            setLastNameValueHandler(response.data.lastName);
+            setFirstNameValueHandler(response.data.firstName);
+            setPrivacy(response.data.privacy);
+            setNumHelps(response.data.numHelps);
+            const date = new Date(response.data.creationDate);
+            setCreationDate(
+              `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+            );
+            if (response.data.profileImg) {
+              setSelectedFile(response.data.profileImg);
+            } else {
+              setSelectedFile(null);
+            }
+            initialTopics = new Array(interests.length).fill(false);
+            response.data.favTopics &&
+              response.data.favTopics.forEach((interest) => {
+                initialTopics[interests.indexOf(interest)] = true;
+              });
+            setIsCheckedInterest(initialTopics);
+          },
+          (error) => {
+            if (error.status === 401) {
+              alert("Sessão expirou");
+              dispatch(authActions.logout());
+              localStorage.removeItem(gS.storage.token);
+              history.replace("/home");
+            }
           }
-          initialTopics = new Array(interests.length).fill(false);
-          response.data.favTopics &&
-            response.data.favTopics.forEach((interest) => {
-              initialTopics[interests.indexOf(interest)] = true;
-            });
-          setIsCheckedInterest(initialTopics);
-        },
-        (error) => {
-          if (error.status === 401) {
-            alert("Sessão expirou");
-            dispatch(authActions.logout());
-            localStorage.removeItem(gS.storage.token);
-            history.replace("/home");
-          }
-        }
-      );
-      setIsLoading(false);
-    } else if (authUsername !== urlUsername) {
-      history.replace(`/verperfil/${urlUsername}`);
-    } else {
-      history.goBack();
+        );
+        setIsLoading(false);
+      } else if (authUsername !== urlUsername) {
+        history.replace(`/verperfil/${urlUsername}`);
+      } else {
+        history.goBack();
+      }
     }
     // eslint-disable-next-line
-  }, [authUsername]);
+  }, [authUsername, refresh]);
 
   let formIsValid = false;
 
@@ -142,7 +146,8 @@ const Profile = () => {
     setIsLoading(true);
 
     const formData = new FormData();
-    if (selectedFile !== null && selectedFile) {
+    if (selectedFile) {
+      console.log("img");
       formData.append("profileImg", selectedFile);
     }
 
@@ -154,11 +159,18 @@ const Profile = () => {
       }
     }
 
+    let deleteImg = false;
+
+    if (responseData.profileImg && !selectedFile) {
+      deleteImg = true;
+    }
+
     const userInfo = {
       firstName: enteredFirstName,
       lastName: enteredLastName,
       privacy,
       favTopics: topics,
+      deleteImg: deleteImg,
     };
 
     formData.append(
@@ -169,8 +181,9 @@ const Profile = () => {
     changeCreds(formData).then(
       (response) => {
         initialTopics = isCheckedInterest;
-
+        formIsValid = false;
         setIsLoading(false);
+        setRefresh(true);
       },
       (error) => {
         if (error.status === 400) {
