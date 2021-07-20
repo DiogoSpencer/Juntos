@@ -13,6 +13,8 @@ import BackOfficeRoute from "./components/Private/BackOfficeRoute";
 import PrivateBackOfficeRoute from "./components/Private/PrivateBackOfficeRoute";
 import BackOfficeStats from "./components/BackOffice/BackOfficeStats";
 import BackOfficeTable from "./components/BackOffice/BackOfficeTable";
+import BackOfficeAppEngine from "./components/BackOffice/BackOfficeAppEngine";
+import LoginGoogle from "./components/Login/LoginGoogle";
 
 const USER = "USER";
 const MOD = "MOD";
@@ -170,6 +172,12 @@ function App() {
             </Route>
             <Route exact path="/office">
               <BackOfficeStats />
+            </Route>
+            <Route exact path="/appEng">
+              <BackOfficeAppEngine/>
+            </Route>
+            <Route exact path="/loginGoogle">
+              <LoginGoogle />
             </Route>
             <Route exact path="/office/table">
               <BackOfficeTable />

@@ -13,6 +13,10 @@ import Button from "../UI/Button";
 import Form from "react-bootstrap/Form";
 import pin from "../../img/pin.png";
 import interest from "../../img/interest.png";
+import helpIcon from "../../img/helpIcon.png";
+import requestIcon from "../../img/hand.png";
+import donateIcon from "../../img/box.png";
+import actionIcon from "../../img/walk.png";
 
 const containerStyle = {
   width: "100%",
@@ -70,6 +74,15 @@ interface MapProps {
   cluster?: boolean;
   showDelete?:boolean;
 }
+function usePrevious(value: number) : number {
+  const ref = useRef<number>()
+  useEffect(()=>{
+    ref.current = value;
+  })
+
+
+  return ref.current as number;
+}
 
 function Map(props: MapProps) {
   const mapRef = useRef<any>(null);
@@ -78,6 +91,9 @@ function Map(props: MapProps) {
   const [interestPoint, setInterestPoints] = useState<Point[]>(
     props.interestPoints
   );
+
+  const [zoom, setZoom] = useState<number>(10)
+  const previous = usePrevious(zoom)
   const [center, setCenter] = useState<Center>(props.center);
   const geocoder = new google.maps.Geocoder();
   const [bounds, setBounds] = useState<Bounds>(props.bounds);
@@ -87,7 +103,7 @@ function Map(props: MapProps) {
   });
   const [openDanger, setOpenDanger] = useState<infoOpen>({
     index: 0,
-    openIn: false,
+    openIn: true,
   });
   const [openInterest, setOpenInterest] = useState<infoOpen>({
     index: 0,
@@ -133,26 +149,45 @@ function Map(props: MapProps) {
           lat: mapRef.current.getCenter().toJSON().lat,
           lng: mapRef.current.getCenter().toJSON().lng,
         });
+        var bounds :google.maps.LatLngBounds = mapRef.current.getBounds()
         props.callbackBounds({
-          latLower: mapRef.current.getBounds().lc.g,
-          lngLower: mapRef.current.getBounds().Eb.g,
-          latTop: mapRef.current.getBounds().lc.i,
-          lngTop: mapRef.current.getBounds().Eb.i,
-        });
+          latLower: bounds.getSouthWest().lat(),
+          lngLower:  bounds.getSouthWest().lng(),
+          latTop: bounds.getNorthEast().lat(),
+          lngTop: bounds.getNorthEast().lng(),
+        })
+       ;;
       }
     }
   };
-  const handleZoomChanged = () => {
-    if (mapRef.current !== null && props.callbackBounds) {
+
+  useEffect(()=>{
+    if(mapRef.current !== null) {
+      console.log(mapRef.current.getZoom())
+      setZoom(mapRef.current.getZoom())
+    }
+  }, [mapRef])
+  useEffect(()=>{
+    console.log(zoom)
+    console.log(previous)
+    if (mapRef.current !== null && props.callbackBounds && previous > zoom ) {
+      console.log(previous)
+      console.log(mapRef.current.getZoom())
+      var bounds :google.maps.LatLngBounds = mapRef.current.getBounds()
       props.callbackBounds({
-        latLower: mapRef.current.getBounds().lc.g,
-        lngLower: mapRef.current.getBounds().Eb.g,
-        latTop: mapRef.current.getBounds().lc.i,
-        lngTop: mapRef.current.getBounds().Eb.i,
-      });
+        latLower: bounds.getSouthWest().lat(),
+        lngLower:  bounds.getSouthWest().lng(),
+        latTop: bounds.getNorthEast().lat(),
+        lngTop: bounds.getNorthEast().lng(),
+      })
+      ;
+    }
+  }, [zoom])
+  const handleZoomChanged = () => {
+    if (mapRef.current !== null) {
+      setZoom(Math.min(zoom, mapRef.current.getZoom()))
     }
   };
-
   const onRightClick = (index: number) => {
     if (!props.unique && props.remove) {
       let newVec = [...points];
@@ -183,6 +218,14 @@ function Map(props: MapProps) {
   useEffect(() => {
     setDangerPoints(props.dangerPoints);
   }, [props.dangerPoints]);
+
+  useEffect(() => {
+    setOpenDanger({ index: dangerPoint.length - 1, openIn: true });
+  }, [dangerPoint]);
+
+  useEffect(() => {
+    setOpenInterest({ index: interestPoint.length - 1, openIn: true });
+  }, [interestPoint]);
 
   useEffect(() => {
     setInterestPoints(props.interestPoints);
@@ -276,6 +319,12 @@ function Map(props: MapProps) {
       props.callbackDanger(dangerPoint);
     }
   };
+  const handleInterest = (ev: any, index: number) => {
+    if (props.callbackInterest) {
+      interestPoint[index].description = ev.target.value;
+      props.callbackInterest(dangerPoint);
+    }
+  };
   const match = useRouteMatch();
   const options = {
     imagePath:
@@ -317,7 +366,7 @@ function Map(props: MapProps) {
           {directions !== null && <DirectionsRenderer directions={directions} options = {{suppressMarkers : true}} />}
             /* Child components, such as markers, info windows, etc. */
           {props.cluster ?
-            <MarkerClusterer options={options}>
+            <MarkerClusterer options={options} averageCenter ignoreHidden>
               {(clusterer) =>
                   points.map(
                       (point: Point, index: number) =>
@@ -328,8 +377,11 @@ function Map(props: MapProps) {
                                   onClick={() => clickMarker(index)}
                                   key={index}
                                   clusterer={clusterer}
-                                  icon={point.type === "HELP_REQUEST" ? "" : point.type === "HELP_OFFER"
-                                  ? "" : point.type === "DONATE" ? "" : point.type === "ACTION" ? "" : undefined}
+                                  icon={point.type === "HELP_REQUEST" ? {url: requestIcon, scaledSize: new google.maps.Size(30,30)}
+                                      : point.type === "HELP_OFFER" ? {url: helpIcon, scaledSize: new google.maps.Size(30,30)}
+                                          : point.type === "DONATE" ? {url: donateIcon, scaledSize: new google.maps.Size(30,30)}
+                                              : point.type === "ACTION" ? {url: actionIcon, scaledSize: new google.maps.Size(30,30)}
+                                                  :undefined}
                               >
                                 {open.openIn && open.index === index ? (
                                     <InfoWindow
@@ -364,12 +416,17 @@ function Map(props: MapProps) {
             </MarkerClusterer>
               : points.map(
                   (point: Point, index: number) =>
-                      point.generalType === props.typeSelected && (
+                       point.generalType === props.typeSelected && (
                           <Marker
                               position={{lat: point.lat, lng: point.lon}}
                               onRightClick={() => onRightClick(index)}
                               onClick={() => clickMarker(index)}
                               key={index}
+                              icon={point.type === "HELP_REQUEST" ? {url: requestIcon, scaledSize: new google.maps.Size(30,30)}
+                                  : point.type === "HELP_OFFER" ? {url: helpIcon, scaledSize: new google.maps.Size(30,30)}
+                                  : point.type === "DONATE" ? {url: donateIcon, scaledSize: new google.maps.Size(30,30)}
+                                  : point.type === "ACTION" ? {url: actionIcon, scaledSize: new google.maps.Size(30,30)}
+                              :undefined}
                           >
                             {open.openIn && open.index === index ? (
                                 <InfoWindow
@@ -407,7 +464,7 @@ function Map(props: MapProps) {
             onRightClick={() => onRightClickDanger(index)}
             onClick={() => clickMarkerDanger(index)}
             key={index}
-            icon={pin}
+            icon={{url: pin, scaledSize: new google.maps.Size(30,30)}}
           >
             {openDanger.openIn && openDanger.index === index ? (
               <InfoWindow
@@ -451,24 +508,41 @@ function Map(props: MapProps) {
             onRightClick={() => onRightClickInterest(index)}
             onClick={() => clickMarkerInterest(index)}
             key={index}
+            icon={{url: interest, scaledSize: new google.maps.Size(30,30)}}
           >
             {openInterest.openIn && openInterest.index === index ? (
-              <InfoWindow
-                onCloseClick={() =>
-                  setOpenInterest({ index: index, openIn: false })
-                }
-              >
-                <div className="info-wrapper">
-                  <span className="info-title-wrapper">{point.title}</span>
-                  <br />
-                  <span className="info-footer">
-                    lat: {point.lat} <br /> lon: {point.lon}
+                <InfoWindow
+                    onCloseClick={() =>
+                        setOpenInterest({ index: index, openIn: false })
+                    }
+                >
+                  {props.edit ? (
+                      <Form>
+                        <Form.Group controlId="descriptionForm">
+                          <Form.Label>Descrição</Form.Label>
+                          <Form.Control
+                              type="descrição"
+                              size="sm"
+                              className="input-text-wrapper"
+                              as="textarea"
+                              maxLength={100}
+                              value={
+                                point.description !== ""
+                                    ? point.description
+                                    : undefined
+                              }
+                              onChange={(event: any) => handleDanger(event, index)}
+                          />
+                        </Form.Group>
+                      </Form>
+                  ) : (
+                      <span className="info-title-wrapper">
+                    {point.description}
                   </span>
-                  <br />
-                </div>
-              </InfoWindow>
+                  )}
+                </InfoWindow>
             ) : (
-              <div></div>
+                <div></div>
             )}
           </Marker>
         ))}

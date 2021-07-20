@@ -139,3 +139,7 @@
   text-decoration: none;
   color: #e6513e;
 }
+.buttonsWrap {
+  display: flex;
+  justify-content: space-evenly;
+}

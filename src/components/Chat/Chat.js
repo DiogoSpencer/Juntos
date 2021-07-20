@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ParticipationChatList from "./ParticipationChatList";
 import CreatedChatList from "./CreatedChatList";
-import SideButtons from "../UI/SideButtons";
+import SideButtons from "../UI/SIdeButtons";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import classes from "./Chat.module.css";
 

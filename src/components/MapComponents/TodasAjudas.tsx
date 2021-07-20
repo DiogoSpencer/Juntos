@@ -28,7 +28,6 @@ function TodasAjudas() {
     (bound: Bounds) => {
       setBounds(bound);
     },
-    // eslint-disable-next-line
     [bounds]
   );
 
@@ -44,10 +43,10 @@ function TodasAjudas() {
     (points: Point[]) => {
       setPoint(points);
     },
-    // eslint-disable-next-line
     [point]
   );
   useEffect(() => {
+    console.log(bounds);
     setIsLoading(true);
     getMarkers(
       bounds.latLower,
@@ -60,6 +59,8 @@ function TodasAjudas() {
         for (let i = 0; i < newVec.length; i++) {
           newVec[i].lat = parseFloat(response.data[i].points[0].lat);
           newVec[i].lon = parseFloat(response.data[i].points[0].lon);
+          newVec[i].type = response.data[i].type
+
         }
         setPoint(newVec);
         console.log(response);
