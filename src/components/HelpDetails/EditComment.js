@@ -3,55 +3,76 @@ import { useSelector } from "react-redux";
 import MultipleUpload from "../HelpForms/MultipleUpload";
 import donateIcon from "../../img/volunteersdonate.jpg";
 import userIcon from "../../img/userblue.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useInput from "../hooks/use-input";
-import { createComment } from "../../services/http";
+import { changeComment } from "../../services/http";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
 //set the text of the new comment
-const NewComment = (props) => {
+const EditComment = (props) => {
   const authFirstName = useSelector((state) => state.auth.firstName);
   const authLastName = useSelector((state) => state.auth.lastName);
   const authImg = useSelector((state) => state.auth.profileImg);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
 
+  useEffect(() => {
+    props.images && setSelectedFiles(props.images);
+    setEditCommentValueHandler(props.text);
+  }, [props.images, props.text]);
+
   const {
-    value: enteredNewComment,
-    isValid: enteredNewCommentIsValid,
-    hasError: NewCommentHasError,
-    valueChangeHandler: newCommentChangeHandler,
-    reset: resetNewCommentInput,
+    value: enteredEditComment,
+    isValid: editCommentIsValid,
+    hasError: editCommentHasError,
+    valueChangeHandler: editCommentChangeHandler,
+    setValueHandler: setEditCommentValueHandler,
+    reset: resetEditCommentInput,
   } = useInput(isNotEmpty);
 
-  let formIsValid = false;
+  let editIsValid = false;
 
-  if (enteredNewCommentIsValid) {
-    formIsValid = true;
+  if (
+    editCommentIsValid &&
+    (JSON.stringify(props.images) !== JSON.stringify(selectedFiles) ||
+      props.text !== enteredEditComment)
+  ) {
+    editIsValid = true;
   }
 
-  const newCommentHandler = (event) => {
+  const editCommentHandler = (event) => {
     event.preventDefault();
 
-    if (!formIsValid) {
+    if (!editIsValid) {
       return;
     }
 
     setIsLoading(true);
 
     const formData = new FormData();
-    if (selectedFiles.length > 0) {
+    if (
+      selectedFiles.length > 0 &&
+      JSON.stringify(props.images) !== JSON.stringify(selectedFiles)
+    ) {
       for (const image of selectedFiles) {
-        formData.append("img", image);
+        if (image.type) {
+          formData.append("img", image);
+        }
       }
     }
 
+    let toRemove = "";
+
+    if (props.images) {
+      toRemove = props.images.filter((photo) => !selectedFiles.includes(photo));
+    }
+
     const formInfo = {
-      text: enteredNewComment,
-      fromChat: props.isChat,
-      markerId: props.requestId,
+      text: enteredEditComment,
+      commentId: props.commentId,
+      imgsToDelete: toRemove,
     };
 
     formData.append(
@@ -59,17 +80,16 @@ const NewComment = (props) => {
       new Blob([JSON.stringify(formInfo)], { type: "application/json" })
     );
 
-    createComment(formData).then(
+    changeComment(formData).then(
       (response) => {
-        console.log(response);
-        setSelectedFiles([]);
-        props.setRefresh();
-        resetNewCommentInput();
         setIsLoading(false);
+        console.log(response);
+        props.setRefresh();
+        resetEditCommentInput();
       },
       (error) => {
-        console.log(error);
         setIsLoading(false);
+        console.log(error);
       }
     );
   };
@@ -81,7 +101,7 @@ const NewComment = (props) => {
           <LoadingSpinner />
         </div>
       )}
-      <form onSubmit={newCommentHandler} className={classes.container}>
+      <form onSubmit={editCommentHandler} className={classes.container}>
         {authImg && authImg !== "" ? (
           <img src={authImg} alt="foto-perfil" className={classes.profileImg} />
         ) : (
@@ -99,8 +119,8 @@ const NewComment = (props) => {
           id="new-comment"
           name="newComment"
           placeholder="Escrever comentário..."
-          value={enteredNewComment}
-          onChange={newCommentChangeHandler}
+          value={enteredEditComment}
+          onChange={editCommentChangeHandler}
           className={classes.newComment}
           rows="3"
           minLength="10"
@@ -136,18 +156,18 @@ const NewComment = (props) => {
           )}
         </div>
         <button
-          disabled={!formIsValid}
-          onClick={newCommentHandler}
+          disabled={!editIsValid}
+          onClick={editCommentHandler}
           className={classes.commentButton}
         >
           {props.buttonText}
         </button>
-        {NewCommentHasError && <p>Por favor insira um comentário válido</p>}
+        {editCommentHasError && <p>Por favor insira um comentário válido</p>}
       </form>
     </div>
   );
 };
 
-export default NewComment;
+export default EditComment;
 
 //To get the reply comments, we can get the comment with a specific id from the list of all of the comments and access its replies property.

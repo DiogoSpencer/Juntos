@@ -31,6 +31,12 @@
   align-content: space-between;
 }
 
+.titleContainer {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
 .formTitle {
   padding-top: 1em;
   text-align: center;
@@ -64,7 +70,7 @@
 
 .formInputDiv input:focus {
   outline: none;
-  box-shadow: 0 0 10px #719ECE;
+  box-shadow: 0 0 10px #719ece;
 }
 
 .formLabelEmail {
@@ -138,8 +144,32 @@
 .homeLink:hover {
   text-decoration: none;
   color: #e6513e;
+  cursor: pointer;
+}
+
+.back {
+  padding-top: 1.5em;
+  margin-right: 1em;
+  height: 5em;
+  cursor: pointer;
 }
 .buttonsWrap {
   display: flex;
   justify-content: space-evenly;
+}
+
+.hideLink {
+  display: none;
+}
+
+.completeImg {
+  height: 18em;
+  margin-left: 7em;
+  margin-bottom: 2em;
+}
+
+.completeText {
+  font-weight: 600;
+  color: #3385d9;
+  font-size: 1.1em;
 }

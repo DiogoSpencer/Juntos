@@ -9,8 +9,6 @@ import { authActions } from "./store/session/auth";
 import { getUserUsername } from "./services/http";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
-import BackOfficeRoute from "./components/Private/BackOfficeRoute";
-import PrivateBackOfficeRoute from "./components/Private/PrivateBackOfficeRoute";
 import BackOfficeStats from "./components/BackOffice/BackOfficeStats";
 import BackOfficeTable from "./components/BackOffice/BackOfficeTable";
 import BackOfficeAppEngine from "./components/BackOffice/BackOfficeAppEngine";
@@ -27,9 +25,6 @@ const HeroisWraper = React.lazy(() =>
   import("./components/Herois/HeroisWraper")
 );
 const Contacts = React.lazy(() => import("./components/Contacts/Contacts"));
-const PasswordRecover = React.lazy(() =>
-  import("./components/Password/PasswordRecover")
-);
 const ChangePassword = React.lazy(() =>
   import("./components/Password/ChangePassword")
 );
@@ -42,8 +37,9 @@ const HelpDetails = React.lazy(() =>
 const HelpDetailsOwner = React.lazy(() =>
   import("./components/HelpDetails/HelpDetailsOwner")
 );
-const Chat = React.lazy(() => import("./components/Chat/Chat"));
-const Conversation = React.lazy(() => import("./components/Chat/Conversation"));
+const CommentList = React.lazy(() =>
+  import("./components/HelpDetails/CommentList")
+);
 const UserProfile = React.lazy(() =>
   import("./components/Profile/UserProfile")
 );
@@ -101,10 +97,7 @@ function App() {
               })
             );
           },
-          (error) => {
-            dispatch(authActions.logout());
-            localStorage.removeItem(gS.storage.token);
-          }
+          (error) => {}
         );
       }
     }
@@ -162,13 +155,16 @@ function App() {
           <Route path="/app">
             <AppPage />
           </Route>
+          <Route path="/recuperarpassword/:code">
+            <ChangePassword />
+          </Route>
 
           <PrivateRoute>
+            <Route path="/heroisForm">
+              <HeroiForm />
+            </Route>
             <Route path="/verperfil/:username">
               <UserProfile />
-            </Route>
-            <Route path="/recuperarpassword">
-              <PasswordRecover />
             </Route>
             <Route exact path="/office">
               <BackOfficeStats />
@@ -181,9 +177,6 @@ function App() {
             </Route>
             <Route exact path="/office/table">
               <BackOfficeTable />
-            </Route>
-            <Route path="/alterarpassword">
-              <ChangePassword />
             </Route>
             <Route path="/perfil/:username">
               <Profile />
@@ -210,13 +203,13 @@ function App() {
               <HelpDetails buttonText="Pedir Ajuda" />
             </Route>
             <Route exact path="/conversas">
-              <Chat />
+              <MyHelps />
             </Route>
-            <Route path="/conversas/pedidos/:pedidoId">
-              <Conversation />
+            <Route path="/conversas/criadas/:requestId">
+              <CommentList />
             </Route>
-            <Route path="/conversas/ofertas/:ofertaId">
-              <Conversation />
+            <Route path="/conversas/participacoes/:requestId">
+              <CommentList />
             </Route>
             <Route path="/mapa">
               <TodasAjudas />
@@ -225,19 +218,23 @@ function App() {
               <EditRequest />
             </Route>
             <Route exact path="/backoffice">
-              {role !== USER ? <BackOfficeHome /> : <Redirect to="/home"/>}
+              {role !== USER ? <BackOfficeHome /> : <Redirect to="/home" />}
             </Route>
             <Route path="/backoffice/utilizadores">
-            {(role === ADMIN || role === MOD) ? <BackOfficeUsers /> : <Redirect to="/backoffice" />}
+              {role === ADMIN || role === MOD ? (
+                <BackOfficeUsers />
+              ) : (
+                <Redirect to="/backoffice" />
+              )}
             </Route>
             <Route path="/backoffice/pedidos">
-              {(role === ADMIN || role === MOD) ? <BackOfficeRequests /> : <Redirect to="/backoffice" />}
+              {role === ADMIN || role === MOD ? (
+                <BackOfficeRequests />
+              ) : (
+                <Redirect to="/backoffice" />
+              )}
             </Route>
           </PrivateRoute>
-
-          <Route path="/heroisForm">
-            <HeroiForm />
-          </Route>
 
           <Route path="*">
             <Redirect to="/home" />

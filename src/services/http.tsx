@@ -27,7 +27,7 @@ axios.interceptors.response.use(
     return response;
   },
   function (error: any) {
-    if (error.status === 401) {
+    if (error.response.status === 401) {
       store.dispatch(authActions.logout());
       localStorage.removeItem(gS.storage.token);
       window.stop();
@@ -71,7 +71,6 @@ export async function getAllUsers(urlParams: string) {
   }
 }
 
-
 export async function getUserUsername(username: string) {
   try {
     return await axios.get(`${url}/rest/user/${username}`);
@@ -88,9 +87,9 @@ export async function controlUserCreds(form: FormData) {
   }
 }
 
-export async function deleteUser(email: string) {
+export async function deleteUser(username: string) {
   try {
-    return await axios.delete(`${url}/rest/user/${email}`);
+    return await axios.delete(`${url}/rest/user/${username}`);
   } catch (error) {
     throw error.response;
   }
@@ -153,10 +152,10 @@ export async function markerDetails(markerId: string) {
 }
 
 export async function getMarkers(
-    SWlat: number,
-    SWlon: number,
-    NElat: number,
-    NElon: number
+  SWlat: number,
+  SWlon: number,
+  NElat: number,
+  NElon: number
 ) {
   try {
     return await axios.get(`${url}/rest/marker/box`, {
@@ -270,11 +269,11 @@ export async function listComments(urlParams: string) {
 }
 export async function officeDetailTable() {
   try {
-    return await axios.get(`${url}/rest/office/`);}
-    catch (error) {
-      throw error.response;
-    }
+    return await axios.get(`${url}/rest/office/`);
+  } catch (error) {
+    throw error.response;
   }
+}
 
 export async function createComment(form: FormData) {
   try {
@@ -329,6 +328,66 @@ export async function officeDetailAppEngine(end:number, filter:string,merge:numb
   }
 }
 
-/*//ir ao store fazer dispatch de logout e apagar local storage
-//dentro de use effect do app -> redux tb nao ha -> /home
-//= a estar a verificar */
+export async function changeComment(form: FormData) {
+  try {
+    return await axios.put(`${url}/rest/comments`, form);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function deleteComment(commentId: string) {
+  try {
+    return await axios.delete(`${url}/rest/comments/${commentId}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function reportComment(commentId: string) {
+  try {
+    return await axios.put(`${url}/rest/comments/report/${commentId}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function homeData() {
+  try {
+    return await axios.get(`${url}/rest/user/heroes/partners`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function verifyCompany(email: string) {
+  try {
+    return await axios.put(`${url}/rest/user/verify/${email}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function sendRecover(email: string) {
+  try {
+    return await axios.post(`${url}/rest/user/${email}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function recoverPassword(
+  password: string,
+  confirmation: string,
+  code: string
+) {
+  try {
+    return await axios.put(`${url}/rest/user/recover`, {
+      code: code,
+      password: password,
+      password2: confirmation,
+    });
+  } catch (error) {
+    throw error.response;
+  }
+}

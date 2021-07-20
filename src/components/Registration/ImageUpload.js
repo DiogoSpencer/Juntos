@@ -19,10 +19,8 @@ const ImageUpload = (props) => {
       };
       reader.readAsDataURL(props.selectedFile);
     } else if (props.selectedFile) {
-
       setPreview(props.selectedFile);
     } else if (props.selectedFile === null) {
-
       fileChanger(props.selectedFile);
 
       setPreview(null);
@@ -65,9 +63,16 @@ const ImageUpload = (props) => {
             accept="image/*"
             onChange={(event) => {
               const file = event.target.files[0];
-              if (file && file.type.substring(0, 5) === "image") {
+              if (
+                file &&
+                file.type.substring(0, 5) === "image" &&
+                file.size <= 10485760
+              ) {
                 props.fileChangeHandler(file);
               } else {
+                if (file.size > 10485760) {
+                  alert("Só imagens com menos de 10MB");
+                }
                 props.fileChangeHandler(null);
               }
             }}

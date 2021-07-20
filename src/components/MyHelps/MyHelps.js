@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import SearchBar from "../UI/SearchBar";
-import SideButtons from "../UI/SIdeButtons";
+import SideButtons from "../UI/SideButtons";
 import classes from "./MyHelps.module.css";
 import { listMarker } from "../../services/http";
 import leftArrowIcon from "../../img/leftArrow.png";
@@ -10,9 +10,6 @@ import RequestCardOwner from "./RequestCardOwner";
 import AnonimousCard from "./AnonimousCard";
 import volunteersIcon from "../../img/volunteersdonate.jpg";
 import { Link, useRouteMatch } from "react-router-dom";
-import { authActions } from "../../store/session/auth";
-import gS from "../../services/generalServices.json";
-import { useDispatch } from "react-redux";
 import refreshIcon from "../../img/refresh.png";
 import Autocomplete from "react-google-autocomplete";
 
@@ -34,7 +31,6 @@ let location = "";
 
 const MyHelps = () => {
   const match = useRouteMatch();
-  const dispatch = useDispatch();
 
   if (match.path === "/ajudas") {
     ALL = "all";
@@ -51,7 +47,8 @@ const MyHelps = () => {
     TITLE = "myTitle";
     TOPICS = "myTopics";
     location = "myLocation";
-    mainTitle = "As Minhas Ajudas";
+    mainTitle =
+      match.path === "/minhasajudas" ? "As Minhas Ajudas" : "Conversas";
     firstButton = "Criadas";
     secondButton = "Participações";
     pathFirstArg = "criadas";
@@ -95,15 +92,19 @@ const MyHelps = () => {
           console.log(error);
           setIsLoading(false);
           setRefresh(false);
-          if (error.status === 401) {
-            alert("Sessão expirou");
-            dispatch(authActions.logout());
-            localStorage.removeItem(gS.storage.token);
-          }
         }
       );
     }
-  }, [byParam, orderParam, dirParam, pageNumber, search, isFirst, pageSize, refresh, dispatch]);
+  }, [
+    byParam,
+    orderParam,
+    dirParam,
+    pageNumber,
+    search,
+    isFirst,
+    pageSize,
+    refresh,
+  ]);
 
   useEffect(() => {
     setPageNumber(0);
@@ -217,7 +218,7 @@ const MyHelps = () => {
   //lista de ajudas ativas -> mapear da data que se recebe
   const ownRequests = (
     <Fragment>
-      {responseData.length <= 0 && (
+      {(!responseData || responseData.length <= 0) && (
         <Fragment>
           <img
             src={volunteersIcon}
@@ -230,7 +231,7 @@ const MyHelps = () => {
         </Fragment>
       )}
 
-      {responseData.length > 0 && (
+      {responseData && responseData.length > 0 && (
         <Fragment>
           <ul>
             {responseData.map((request) => (
@@ -243,9 +244,6 @@ const MyHelps = () => {
                     <AnonimousCard
                       id={request.id}
                       creationDate={formatDate(request.creationDate)}
-                      difficulty={request.difficulty}
-                      lat={request.lat}
-                      lon={request.lon}
                       title={request.title}
                       firstName={request.firstName}
                       type={request.type}
@@ -257,12 +255,8 @@ const MyHelps = () => {
                     <RequestCardOwner
                       id={request.id}
                       creationDate={formatDate(request.creationDate)}
-                      difficulty={request.difficulty}
-                      lat={request.lat}
-                      lon={request.lon}
                       owner={request.owner}
                       title={request.title}
-                      username={request.owner}
                       firstName={request.firstName}
                       lastName={request.lastName}
                       type={request.type}
@@ -285,7 +279,7 @@ const MyHelps = () => {
   //lista de ajudas concluidas (inativas) -> mapear do que se recebe
   const participations = (
     <Fragment>
-      {responseData.length <= 0 && (
+      {responseData && responseData.length <= 0 && (
         <Fragment>
           <img
             src={volunteersIcon}
@@ -298,7 +292,7 @@ const MyHelps = () => {
         </Fragment>
       )}
 
-      {responseData.length > 0 && (
+      {responseData && responseData.length > 0 && (
         <Fragment>
           <ul>
             {responseData.map((request) => (
@@ -445,7 +439,7 @@ const MyHelps = () => {
         </div>
         <div className={autoComplete}>
           <Autocomplete
-            style={{ width: "15rem" }}
+            style={{ width: "15em" }}
             apiKey="AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU"
             onPlaceSelected={(place) => {
               if (place.address_components !== undefined) {

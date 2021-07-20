@@ -70,14 +70,6 @@ const Profile = () => {
     setValueHandler: setLastNameValueHandler,
   } = useInput(isNotEmpty);
 
-  const {
-    value: enteredUsername,
-    hasError: usernameHasError,
-    setValueHandler: setUsernameValueHandler,
-  } = useInput(isNotEmpty);
-
-  //const userId = match.params.username;
-
   //queremos so fazer useEffect onMount -> []
   useEffect(() => {
     if (authUsername !== "" && authUsername === urlUsername) {
@@ -87,7 +79,6 @@ const Profile = () => {
         (response) => {
           console.log(response.data);
           setResponseData(response.data);
-          setUsernameValueHandler(response.data.username);
           setEmailValueHandler(response.data.email);
           setLastNameValueHandler(response.data.lastName);
           setFirstNameValueHandler(response.data.firstName);
@@ -153,7 +144,7 @@ const Profile = () => {
     setIsLoading(true);
 
     const formData = new FormData();
-    if (selectedFile !== null) {
+    if (selectedFile !== null && selectedFile) {
       formData.append("profileImg", selectedFile);
     }
 
@@ -354,18 +345,6 @@ const Profile = () => {
             />
             {emailHasError && <p>Por favor insira um e-mail.</p>}
           </div>
-          <div className={classes.usernameDiv}>
-            <label htmlFor="username">Nome de Utilizador</label>
-            <input
-              readOnly
-              disabled
-              type="text"
-              id="username"
-              value={enteredUsername}
-            />
-            {usernameHasError && <p>Por favor insira um nome de utilizador.</p>}
-          </div>
-
           <div className={classes.firstNameDiv}>
             <label htmlFor="firstName">Nome</label>
             <input
@@ -444,7 +423,6 @@ const Profile = () => {
             <p className={classes.invalidError}>Por favor tente novamente.</p>
           )}
         </form>
-        )
       </div>
     </div>
   );

@@ -62,10 +62,12 @@ const MultipleUpload = (props) => {
         alert("Máximo 5 imagens");
       } else {
         filesArray.forEach((file) => {
-          if (file && file.type.substring(0, 5) === "image") {
+          if (file && file.type.substring(0, 5) === "image" && file.size <= 10485760) {
             fileChanger((prevState) => {
               return prevState.concat(file);
             });
+          } else if (file.size > 10485760) {
+            alert("Só imagens com menos de 10MB")
           }
         });
       }

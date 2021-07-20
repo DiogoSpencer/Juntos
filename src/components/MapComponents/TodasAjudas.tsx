@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import Map, {Bounds, Center, Point} from "../Map/Map";
+import Map, { Bounds, Center, Point } from "../Map/Map";
 import { getMarkers } from "../../services/http";
-import SideButtons from "../UI/SIdeButtons";
+import SideButtons from "../UI/SideButtons";
 import classes from "./TodasAjudas.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
@@ -83,7 +83,7 @@ function TodasAjudas() {
 
   return (
     <div className={classes.mainContainer}>
-      <h1 className={classes.title}>Ajudas Disponíveis</h1>
+      <h1 className={classes.title}>Ajudas Disponí­veis</h1>
       {isLoading && (
         <div className={classes.spinner}>
           <LoadingSpinner />

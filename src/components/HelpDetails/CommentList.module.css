@@ -1,6 +1,31 @@
 .mainContainer {
   display: grid;
   width: 50em;
+  grid-template-areas: "sc";
+}
+
+.mainContainerConversation {
+  display: grid;
+  grid-template-areas: "sc";
+}
+
+.spinner {
+  grid-area: sc;
+  align-self: center;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  z-index: 50;
+}
+
+.subContainer {
+  grid-area: sc;
+  display: grid;
+  width: 50em;
   grid-template-rows: auto 0.25fr;
   row-gap: 2em;
   grid-template-areas:
@@ -8,6 +33,20 @@
     "rf"
     "cl"
     "bc";
+}
+
+.subContainerConversation {
+  grid-area: sc;
+  justify-self: center;
+  width: 50em;
+  display: grid;
+  grid-template-rows: auto 0.25fr;
+  row-gap: 2em;
+  grid-template-areas:
+    "bc"
+    "cl"
+    "rf"
+    "nc";
 }
 
 .newComment {

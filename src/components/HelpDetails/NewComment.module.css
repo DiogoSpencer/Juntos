@@ -1,9 +1,28 @@
+.mainContainer {
+  display: grid;
+  grid-template-areas: "mn";
+}
+
+.spinner {
+  grid-area: mn;
+  align-self: center;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  z-index: 50;
+}
+
 .container {
+  grid-area: mn;
   display: grid;
   width: 50em;
   grid-template-columns: 0.4fr 2fr 0.5fr;
   grid-template-areas:
-    "pi nc ."
+    "pi nc ce"
     "nm nc cb"
     "iu iu iu";
 }
@@ -33,6 +52,18 @@
 .newComment:focus {
   outline: none;
   box-shadow: 0 0 10px #719ece;
+}
+
+.closeEdit {
+  grid-area: ce;
+  height: 2em;
+  justify-self: start;
+  align-self: start;
+  fill: lightgray;
+}
+
+.closeEdit:hover {
+  fill: red;
 }
 
 .commentButton {
@@ -86,6 +117,6 @@
   padding-top: 2em;
   align-self: center;
   justify-self: center;
-  height: 10em;
+  height: 9em;
   margin-top: 3em;
 }
