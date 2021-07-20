@@ -9,8 +9,6 @@ import { authActions } from "./store/session/auth";
 import { getUserUsername } from "./services/http";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
-import BackOfficeStats from "./components/BackOffice/BackOfficeStats";
-import BackOfficeTable from "./components/BackOffice/BackOfficeTable";
 
 const USER = "USER";
 const MOD = "MOD";
@@ -59,6 +57,12 @@ const BackOfficeUsers = React.lazy(() =>
 );
 const BackOfficeRequests = React.lazy(() =>
   import("./components/BackOffice/BackOfficeRequests")
+);
+const BackOfficeStats = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeStats")
+);
+const BackOfficeTable = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeTable")
 );
 
 function App() {
@@ -170,12 +174,6 @@ function App() {
             <Route path="/verperfil/:username">
               <UserProfile />
             </Route>
-            <Route exact path="/office">
-              <BackOfficeStats />
-            </Route>
-            <Route exact path="/office/table">
-              <BackOfficeTable />
-            </Route>
             <Route path="/perfil/:username">
               <Profile />
             </Route>
@@ -216,7 +214,7 @@ function App() {
               <EditRequest />
             </Route>
             <Route exact path="/backoffice">
-              {role !== USER ? <BackOfficeHome /> : <Redirect to="/home" />}
+              {role !== USER ? <BackOfficeStats /> : <Redirect to="/home" />}
             </Route>
             <Route path="/backoffice/utilizadores">
               {role === ADMIN || role === MOD ? (
@@ -228,6 +226,13 @@ function App() {
             <Route path="/backoffice/pedidos">
               {role === ADMIN || role === MOD ? (
                 <BackOfficeRequests />
+              ) : (
+                <Redirect to="/backoffice" />
+              )}
+            </Route>
+            <Route path="/backoffice/table">
+              {role === ADMIN || role === MOD ? (
+                <BackOfficeTable />
               ) : (
                 <Redirect to="/backoffice" />
               )}
