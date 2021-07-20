@@ -23,9 +23,6 @@ const HeroisWraper = React.lazy(() =>
   import("./components/Herois/HeroisWraper")
 );
 const Contacts = React.lazy(() => import("./components/Contacts/Contacts"));
-const PasswordRecover = React.lazy(() =>
-  import("./components/Password/PasswordRecover")
-);
 const ChangePassword = React.lazy(() =>
   import("./components/Password/ChangePassword")
 );
@@ -156,6 +153,9 @@ function App() {
           <Route path="/app">
             <AppPage />
           </Route>
+          <Route path="/recuperarpassword/:code">
+            <ChangePassword />
+          </Route>
 
           <PrivateRoute>
             <Route path="/heroisForm">
@@ -164,17 +164,11 @@ function App() {
             <Route path="/verperfil/:username">
               <UserProfile />
             </Route>
-            <Route path="/recuperarpassword">
-              <PasswordRecover />
-            </Route>
             <Route exact path="/office">
               <BackOfficeStats />
             </Route>
             <Route exact path="/office/table">
               <BackOfficeTable />
-            </Route>
-            <Route path="/alterarpassword">
-              <ChangePassword />
             </Route>
             <Route path="/perfil/:username">
               <Profile />

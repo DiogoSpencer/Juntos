@@ -37,6 +37,11 @@ const isHelpNumber = (value) => {
   }
 };
 
+const formatDate = (longDate) => {
+  const date = new Date(longDate);
+  return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+};
+
 const BackOfficeUsers = () => {
   const [responseData, setResponseData] = useState(null);
   const [byParam, setByParam] = useState(ALL);
@@ -135,11 +140,6 @@ const BackOfficeUsers = () => {
 
   const editUserHandler = (username) => {
     setIsEditing(username);
-  };
-
-  const formatDate = (longDate) => {
-    const date = new Date(longDate);
-    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
   };
 
   const {
@@ -271,7 +271,7 @@ const BackOfficeUsers = () => {
     //mandar ao servidor mudanças
   };
 
-  const onDeleteUserHandler = (userRole, userEmail) => {
+  const onDeleteUserHandler = (userRole, username) => {
     if (
       userRole === USER ||
       (userRole === PARTNER && enableMod) ||
@@ -284,7 +284,7 @@ const BackOfficeUsers = () => {
       ) {
         setIsLoading(true);
 
-        deleteUser(userEmail).then(
+        deleteUser(username).then(
           (response) => {
             setIsLoading(false);
             setRefresh(true);
@@ -468,7 +468,7 @@ const BackOfficeUsers = () => {
                         alt="apagar"
                         className={classes.iconRow}
                         onClick={() =>
-                          onDeleteUserHandler(user.role, user.email)
+                          onDeleteUserHandler(user.role, user.username)
                         }
                       />
                     </td>

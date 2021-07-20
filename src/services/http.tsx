@@ -306,3 +306,43 @@ export async function reportComment(commentId: string) {
     throw error.response;
   }
 }
+
+export async function homeData() {
+  try {
+    return await axios.get(`${url}/rest/user/heroes/partners`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function verifyCompany(email: string) {
+  try {
+    return await axios.put(`${url}/rest/user/verify/${email}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function sendRecover(email: string) {
+  try {
+    return await axios.post(`${url}/rest/user/${email}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function recoverPassword(
+  password: string,
+  confirmation: string,
+  code: string
+) {
+  try {
+    return await axios.put(`${url}/rest/user/recover`, {
+      code: code,
+      password: password,
+      password2: confirmation,
+    });
+  } catch (error) {
+    throw error.response;
+  }
+}

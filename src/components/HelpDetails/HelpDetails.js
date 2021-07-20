@@ -29,8 +29,8 @@ const HelpDetails = (props) => {
 
   const [move, setMove] = useState("WALKING");
   const handleMove = (event) => {
-        setMove(event.target.value)
-    }
+    setMove(event.target.value);
+  };
 
   const center =
     point.length > 0
@@ -221,20 +221,20 @@ const HelpDetails = (props) => {
             interestPoints={interestPoint}
             callback={pointsCallback}
             center={center}
-            moveTypeSelected = {move}
+            moveTypeSelected={move}
           />
         </div>
-          {point.length > 1 &&
+        {point.length > 1 && (
           <div>
-              <label>
-                  Selecione como se vai deslocar:
-                  <select value={move}
-                          onChange={handleMove}>
-                      <option value="WALKING">Andar</option>
-                      <option value="DRIVING">Conduzir</option>
-                  </select>
-              </label>
-          </div>}
+            <label>
+              Selecione como se vai deslocar:
+              <select value={move} onChange={handleMove}>
+                <option value="WALKING">Andar</option>
+                <option value="DRIVING">Conduzir</option>
+              </select>
+            </label>
+          </div>
+        )}
         <div className={classes.infoContent}>
           <div className={classes.helpTitle}>
             <HelpTitle
@@ -293,7 +293,9 @@ const HelpDetails = (props) => {
         <div className={classes.commentContent}>
           <Route path={match.path} exact>
             <div>
-              <Link to={`${match.url}/comentarios`}>Carregar Comentários</Link>
+              <Link to={`${match.url}/comentarios`}>
+                <Button text="Carregar Comentários" />
+              </Link>
             </div>
           </Route>
           <Route path={`${match.path}/comentarios`}>

@@ -25,6 +25,46 @@ const pageSize = 5;
 const dirParam = DESC;
 const orderParam = DATE;
 
+const formatDate = (longDate) => {
+  const now = new Date(Date.now());
+  const date = new Date(longDate);
+
+  const nowDate = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  const serverDate = Date.UTC(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+
+  const diffInDays = Math.floor((nowDate - serverDate) / MS_PER_DAY);
+  if (diffInDays < 1) {
+    const hours = Math.abs(now - date) / MS_PER_HOUR;
+    const minutes = Math.abs(now - date) / MS_PER_MINUTE;
+    const roundedHours = Math.round(hours);
+    const roundedMinutes = Math.round(minutes);
+
+    if (roundedHours === 24) {
+      return `${diffInDays} dia atrás`;
+    } else if (hours < 1) {
+      return `${minutes < 1 ? 1 : roundedMinutes} ${
+        roundedMinutes <= 1 ? "minuto" : "minutos"
+      } atrás`;
+    } else if (roundedHours > hours) {
+      return `< ${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
+    } else if (roundedHours < hours) {
+      return `> ${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
+    } else {
+      return `${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
+    }
+  } else {
+    return `${diffInDays} dias atrás`;
+  }
+};
+
+const reverseItems = (items) => {
+  return items.map((item) => item).reverse();
+};
+
 //get List of comments
 const CommentList = (props) => {
   const match = useRouteMatch();
@@ -122,7 +162,7 @@ const CommentList = (props) => {
     setRefresh(true);
   };
 
-  const startEditingHandler = (commentId, images, text) => {
+  const startEditingHandler = (commentId) => {
     setIsEditing(commentId);
   };
 
@@ -143,50 +183,6 @@ const CommentList = (props) => {
     );
   };
 
-  const formatDate = (longDate) => {
-    const now = new Date(Date.now());
-    const date = new Date(longDate);
-
-    const nowDate = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-    const serverDate = Date.UTC(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate()
-    );
-
-    const diffInDays = Math.floor((nowDate - serverDate) / MS_PER_DAY);
-    if (diffInDays < 1) {
-      const hours = Math.abs(now - date) / MS_PER_HOUR;
-      const minutes = Math.abs(now - date) / MS_PER_MINUTE;
-      const roundedHours = Math.round(hours);
-      const roundedMinutes = Math.round(minutes);
-
-      if (roundedHours === 24) {
-        return `${diffInDays} dia atrás`;
-      } else if (hours < 1) {
-        return `${minutes < 1 ? 1 : roundedMinutes} ${
-          roundedMinutes <= 1 ? "minuto" : "minutos"
-        } atrás`;
-      } else if (roundedHours > hours) {
-        return `< ${roundedHours} ${
-          roundedHours === 1 ? "hora" : "horas"
-        } atrás`;
-      } else if (roundedHours < hours) {
-        return `> ${roundedHours} ${
-          roundedHours === 1 ? "hora" : "horas"
-        } atrás`;
-      } else {
-        return `${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
-      }
-    } else {
-      return `${diffInDays} dias atrás`;
-    }
-  };
-
-  const reverseItems = (items) => {
-    return items.map((item) => item).reverse();
-  };
-
   const comments = (
     <div className={classes.subContainer}>
       {(props.isOwner ||
@@ -198,6 +194,7 @@ const CommentList = (props) => {
             buttonText="Comentar"
             requestId={requestId}
             setRefresh={onRefreshHandler}
+            isChat={false}
           />
         </div>
       )}
@@ -227,7 +224,6 @@ const CommentList = (props) => {
                   isOwner={props.isOwner}
                   authRole={authRole}
                   editCommentHandler={startEditingHandler}
-                  isChat={false}
                 />
               ) : (
                 <Fragment>
@@ -283,7 +279,6 @@ const CommentList = (props) => {
                   isOwner={props.isOwner}
                   authRole={authRole}
                   editCommentHandler={startEditingHandler}
-                  isChat={true}
                 />
               ) : (
                 <Fragment>
@@ -311,6 +306,7 @@ const CommentList = (props) => {
           buttonText="Comentar"
           requestId={requestId}
           setRefresh={onRefreshHandler}
+          isChat={true}
         />
       </div>
       <div ref={messagesEndRef} />

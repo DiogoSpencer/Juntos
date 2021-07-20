@@ -1,10 +1,12 @@
-const AppCard = (props) => {
-    return (
-        <div>
-            <img src={props.img} alt={props.alt}/>
-            <p>{props.text}</p>
-        </div>
-    )
-}
+import classes from "./AppCard.module.css";
 
-export default AppCard
+const AppCard = (props) => {
+  return (
+    <div className={classes.AppCard}>
+      <img src={props.img} alt={props.alt} className={classes.appImg} />
+      <p className={classes.text}>{props.text}</p>
+    </div>
+  );
+};
+
+export default AppCard;

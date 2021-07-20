@@ -18,6 +18,7 @@ import { deleteMarker } from "../../services/http";
 import Map from "../Map/Map";
 import juntosIcon from "../../img/logo.png";
 import useInput from "../hooks/use-input";
+import Button from "../UI/Button";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
@@ -37,8 +38,8 @@ const HelpDetailsOwner = () => {
   const [beginAction, setBeginAction] = useState(false);
   const [move, setMove] = useState("WALKING");
   const handleMove = (event) => {
-    setMove(event.target.value)
-  }
+    setMove(event.target.value);
+  };
 
   const center =
     point.length > 0
@@ -353,7 +354,9 @@ const HelpDetailsOwner = () => {
         <div className={classes.commentContent}>
           <Route path={match.path} exact>
             <div>
-              <Link to={`${match.url}/comentarios`}>Carregar Comentários</Link>
+              <Link to={`${match.url}/comentarios`}>
+                <Button text="Carregar Comentários" />
+              </Link>
             </div>
           </Route>
           <Route path={`${match.path}/comentarios`}>

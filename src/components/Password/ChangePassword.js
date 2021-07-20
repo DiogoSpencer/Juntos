@@ -1,11 +1,20 @@
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
-import { useHistory } from "react-router";
+import { useHistory, useRouteMatch } from "react-router";
+import { recoverPassword } from "../../services/http";
+import classes from "./ChangePassword.module.css";
+import juntosIcon from "../../img/logo.png";
+import LoadingSpinner from "../UI/LoadingSpinner";
+import { useState } from "react";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
 const ChangePassword = (props) => {
   const history = useHistory();
+  const match = useRouteMatch();
+  const urlCode = match.params.code;
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     value: enteredPassword,
@@ -13,7 +22,6 @@ const ChangePassword = (props) => {
     hasError: passwordHasError,
     valueChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
-    reset: resetPasswordInput,
   } = useInput(isNotEmpty);
 
   const {
@@ -22,14 +30,13 @@ const ChangePassword = (props) => {
     hasError: confirmationHasError,
     valueChangeHandler: confirmationChangeHandler,
     inputBlurHandler: confirmationBlurHandler,
-    reset: resetConfirmationInput,
   } = useInput(isNotEmpty);
 
   let formIsValid = false;
 
   let passConfirmed = false;
 
-  if (!enteredPassword.localeCompare(enteredConfirmation)) {
+  if (enteredPassword === enteredConfirmation) {
     passConfirmed = true;
   }
 
@@ -44,41 +51,72 @@ const ChangePassword = (props) => {
       return;
     }
 
-    //TODO: send to server
+    setIsLoading(true);
 
-    resetPasswordInput();
-    resetConfirmationInput();
-    history.replace("/home");
+    recoverPassword(urlCode, enteredPassword, enteredConfirmation).then(
+      (response) => {
+        setIsLoading(false);
+        history.replace("/home");
+      },
+      (error) => {
+        setIsLoading(false);
+        console.log(error);
+      }
+    );
   };
   return (
-    <form onSubmit={formSubmissionHandler}>
-      <h1>Alterar Password</h1>
-      <img src="" alt="icon-juntos" />
-      <div>
-        <label htmlFor="name">Nova Password</label>
-        <input
-          type="password"
-          id="newPassword"
-          value={enteredPassword}
-          onChange={passwordChangeHandler}
-          onBlur={passwordBlurHandler}
-        />
-        {passwordHasError && <p>Por favor insira uma nova password válida.</p>}
+    <form onSubmit={formSubmissionHandler} className={classes.mainContainer}>
+      <h1 className={classes.title}>Alterar Password</h1>
+      <img src={juntosIcon} alt="icon-juntos" className={classes.juntosImg} />
+      {isLoading && (
+        <div className={classes.spinner}>
+          <LoadingSpinner />
+        </div>
+      )}
+      <div className={classes.subContainer}>
+        <div className={classes.passContainer}>
+          <label htmlFor="name">Nova Password</label>
+          <input
+            type="password"
+            id="newPassword"
+            value={enteredPassword}
+            onChange={passwordChangeHandler}
+            onBlur={passwordBlurHandler}
+          />
+          {passwordHasError && (
+            <p className={classes.passError}>
+              Por favor insira uma nova password válida.
+            </p>
+          )}
+        </div>
+        <div className={classes.confirmationContainer}>
+          <label htmlFor="name">Confirmação</label>
+          <input
+            type="password"
+            id="confirmation"
+            value={enteredConfirmation}
+            onChange={confirmationChangeHandler}
+            onBlur={confirmationBlurHandler}
+          />
+          {confirmationHasError && (
+            <p className={classes.passError}>
+              Por favor insira uma confirmação válida.
+            </p>
+          )}
+          {enteredConfirmationIsValid && !passConfirmed && (
+            <p className={classes.passError}>
+              Confirmação e Password não são iguais
+            </p>
+          )}
+        </div>
+        <div className={classes.buttonDiv}>
+          <Button
+            text="Confirmar"
+            disabled={!formIsValid}
+            onClick={formSubmissionHandler}
+          />
+        </div>
       </div>
-      <div>
-        <label htmlFor="name">Confirmação</label>
-        <input
-          type="password"
-          id="confirmation"
-          value={enteredConfirmation}
-          onChange={confirmationChangeHandler}
-          onBlur={confirmationBlurHandler}
-        />
-        {confirmationHasError && (
-          <p>Por favor insira uma confirmação válida.</p>
-        )}
-      </div>
-      <Button text="Confirmar" disabled={!formIsValid} />
     </form>
   );
 };
