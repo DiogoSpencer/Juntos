@@ -93,3 +93,10 @@
   align-self: center;
   justify-self: center;
 }
+.subTitle {
+  color: #3385d9;
+  font-weight: 600;
+  padding-right: 0.5em;
+  padding-top: 0.5em;
+  padding-top: 1.5em;
+}

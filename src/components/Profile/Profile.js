@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useInput from "../hooks/use-input";
 import Button from "..//UI/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { changeCreds, deleteUser, getUserUsername } from "../../services/http";
+import {changeCreds, deleteUser, getUserUsername, linkExternal, loginExternal} from "../../services/http";
 import keyIcon from "../../img/key.png";
 import classes from "./Profile.module.css";
 import { authActions } from "../../store/session/auth";
@@ -13,6 +13,8 @@ import logoIcon from "../../img/logo.png";
 import PassModal from "./PassModal";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import verifiedIcon from "../../img/verified.png";
+import {GoogleLogin} from "react-google-login";
+import jwt_decode from "jwt-decode";
 
 const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
@@ -203,6 +205,30 @@ const Profile = () => {
       setPrivacy(PUBLIC);
     }
   };
+  const responseGoogle = (responseG) => {
+    console.log(responseG)
+    linkExternal(responseG.profileObj.email,
+        responseG.profileObj.givenName,
+        responseG.profileObj.googleId,
+        responseG.profileObj.imgUrl,
+        responseG.profileObj.familyName,
+        'GOOGLE').then((response) => {
+          console.log(response)
+        },
+        (error) => {
+          if (error.status === 400) {
+            setError("Credenciais Inválidas")
+          } else if (error.status === 403) {
+            setError("Esta conta está desativada")
+          } else if (error.status === 404) {
+            setError("Não existe um utilizador registado com este e-mail")
+          } else {
+            setError("Algo Inesperado aconteceu, tente novamente");
+            console.log(error)
+          }
+        }
+    )
+  }
 
   const openPassModalHandler = () => {
     setIsModalOpen(true);
@@ -296,6 +322,13 @@ const Profile = () => {
             />
             {isModalOpen && <PassModal onClose={closePassModalHandler} />}
           </div>
+          <GoogleLogin
+              clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={'single_host_origin'}
+          />
           <div>
             <span
               onClick={deleteAccountHandler}

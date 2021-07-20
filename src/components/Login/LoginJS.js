@@ -29,7 +29,6 @@ const Login = (props) => {
     hasError: emailHasError,
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
-    reset: resetEmail,
   } = useInput(isNotEmpty); //pass func to validate
 
   const {

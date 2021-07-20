@@ -118,6 +118,11 @@ const HelpTitle = (props) => {
         )}
 
       </div>
+      <div>
+        <p className={classes.subTitle}>
+          Distância Total: <span>{props.distance / 1000} KM</span>
+        </p>
+      </div>
       <div className={classes.requestContainer}>
         <p className={classes.type}>{typeHandler(props.helpType)}</p>
         <p className={classes.creationDate}>{formatDate(props.creationDate)}</p>
@@ -139,6 +144,12 @@ const HelpTitle = (props) => {
           <p className={classes.type}>Exigência Física:</p>
           <p className={classes.number}>{props.difficulty}</p>
         </div>
+      )}
+      {props.helpType === "ACTION" && (
+          <div className={classes.difficultyContainer}>
+            <p className={classes.type}>Exigência Física:</p>
+            <p className={classes.number}>{props.difficulty}</p>
+          </div>
       )}
       <img
         src={typeIconHandler(props.helpType)}

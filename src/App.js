@@ -52,6 +52,9 @@ const HeroiForm = React.lazy(() => import("./components/Herois/HeroiForm"));
 const BackOfficeHome = React.lazy(() =>
   import("./components/BackOffice/BackOfficeHome")
 );
+const BackOfficeAppEngine = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeAppEngine")
+);
 const BackOfficeUsers = React.lazy(() =>
   import("./components/BackOffice/BackOfficeUsers")
 );
@@ -230,9 +233,16 @@ function App() {
                 <Redirect to="/backoffice" />
               )}
             </Route>
-            <Route path="/backoffice/table">
+            <Route path="/backoffice/statsgerais">
               {role === ADMIN || role === MOD ? (
                 <BackOfficeTable />
+              ) : (
+                <Redirect to="/backoffice" />
+              )}
+            </Route>
+            <Route path="/backoffice/appEng">
+              {role === ADMIN || role === MOD ? (
+                <BackOfficeAppEngine />
               ) : (
                 <Redirect to="/backoffice" />
               )}

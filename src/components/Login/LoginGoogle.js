@@ -11,7 +11,7 @@ function LoginGoogle(){
         console.log("logout");
     }
 return(
-    <div>
+    <div style={{padding: 20}}>
         <GoogleLogin
             clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
             buttonText="Login"

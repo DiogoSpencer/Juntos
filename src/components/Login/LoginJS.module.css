@@ -153,6 +153,10 @@
   height: 5em;
   cursor: pointer;
 }
+.buttonsWrap {
+  display: flex;
+  justify-content: space-evenly;
+}
 
 .hideLink {
   display: none;

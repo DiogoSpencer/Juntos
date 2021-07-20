@@ -36,6 +36,7 @@ const HelpDetailsOwner = () => {
   const [deleteError, setDeleteError] = useState(false);
   const [point, setPoint] = useState([]);
   const [beginAction, setBeginAction] = useState(false);
+  const [distance, setDistance] = useState(0);
   const [move, setMove] = useState("WALKING");
   const handleMove = (event) => {
     setMove(event.target.value);
@@ -60,6 +61,13 @@ const HelpDetailsOwner = () => {
     },
     // eslint-disable-next-line
     [point]
+  );
+  const distanceCallback = useCallback(
+      (distance) => {
+        setDistance(distance);
+      },
+      // eslint-disable-next-line
+      [distance]
   );
 
   const history = useHistory();
@@ -96,8 +104,11 @@ const HelpDetailsOwner = () => {
         let responsePoints = response.data.points;
         for (const point of responsePoints) {
           //.map((point) => {
+          console.log(point)
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
+          point.type = response.data.type;
+
         } //);
         setPoint(responsePoints);
 
@@ -257,12 +268,14 @@ const HelpDetailsOwner = () => {
             callback={pointsCallback}
             center={center}
             moveTypeSelected={move}
+            callbackD={distanceCallback}
           />
         </div>
         <div className={classes.infoContent}>
           <div className={classes.helpTitle}>
             <HelpTitle
               title={responseData.title}
+              distance={distance}
               helpType={responseData.type}
               creationDate={responseData.creationDate}
               volunteers={responseData.helpersCapacity}

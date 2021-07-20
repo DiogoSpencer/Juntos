@@ -282,6 +282,51 @@ export async function createComment(form: FormData) {
     throw error.response;
   }
 }
+export async function loginExternal(email:string, firstName:string,id:string,imgUrl:string,lastName:string,type:string) {
+  try {
+    return await axios.put(`${url}/rest/user/external`,
+        {
+          email:email,
+          firstName: firstName,
+          id:id,
+          imgUrl:imgUrl,
+          lastName:lastName,
+          type:type
+        });
+  } catch (error) {
+    throw error.response;
+  }
+}
+export async function linkExternal(email:string, firstName:string,id:string,imgUrl:string,lastName:string,type:string) {
+  try {
+    return await axios.put(`${url}/rest/user/link`,
+        {
+          email:email,
+          firstName: firstName,
+          id:id,
+          imgUrl:imgUrl,
+          lastName:lastName,
+          type:type
+        });
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function officeDetailAppEngine(end:number, filter:string,merge:number,start:number) {
+  try {
+    return await axios.get(`${url}/rest/office/appengine`,{params: {
+        end: end,
+        filter: filter,
+        merge: merge,
+        start: start
+      }
+    })
+    ;}
+  catch (error) {
+    throw error.response;
+  }
+}
 
 export async function changeComment(form: FormData) {
   try {
