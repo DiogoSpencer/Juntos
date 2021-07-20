@@ -58,7 +58,6 @@ const BackOfficeUsers = () => {
   const [enablePartner, setEnablePartner] = useState(false);
   const [refresh, setRefresh] = useState(true);
 
-  const authUsername = useSelector((state) => state.auth.username);
   const authRole = useSelector((state) => state.auth.role);
 
   useEffect(() => {

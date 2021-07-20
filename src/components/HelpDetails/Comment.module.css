@@ -42,10 +42,14 @@
   box-shadow: 1px 1px 1px #999;
 }
 
-.reportFlag {
+.commentIcons {
   grid-area: rf;
   align-self: start;
   justify-self: end;
+  display: flex;
+}
+
+.reportFlag {
   height: 1.5em;
   fill: lightgray;
 }
@@ -53,6 +57,16 @@
 .reportFlag:hover {
   cursor: pointer;
   fill: red;
+}
+
+.editPencil {
+  height: 1.5em;
+  fill: lightgray;
+}
+
+.editPencil:hover {
+  cursor: pointer;
+  fill: #3385d9;
 }
 
 .imageList {

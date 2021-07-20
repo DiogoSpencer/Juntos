@@ -77,11 +77,11 @@ const EditRequest = () => {
 
   const handleMarkerChange = (event) => {
     setMarker(event.target.value);
-  }
+  };
   const handleMove = (event) => {
-    setMove(event.target.value)
-    setMoveChange(true)
-  }
+    setMove(event.target.value);
+    setMoveChange(true);
+  };
 
   const [distance, setDistance] = useState(0);
   const distanceCallback = useCallback(
@@ -297,7 +297,7 @@ const EditRequest = () => {
 
   if (
     responseData.title !== enteredTitle ||
-      moveChange ||
+    moveChange ||
     responseData.description !== enteredDescription ||
     JSON.stringify(responseData.photoGalery) !==
       JSON.stringify(selectedFiles) ||
@@ -359,7 +359,8 @@ const EditRequest = () => {
       imgsToDelete: toRemove,
       anonymousOwner: anonimousValue,
     };
-    if(responseData.type !== ACTION) {
+
+    if (responseData.type !== ACTION) {
       formInfo.dangers = dangerPoint;
       formInfo.interests = interestPoint;
     }
@@ -374,11 +375,6 @@ const EditRequest = () => {
         setStatus(true);
       },
       (error) => {
-        if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
-        }
         console.log(error);
         setIsLoading(false);
       }
@@ -456,20 +452,20 @@ const EditRequest = () => {
         <span className={classes.selectedTitle}>{enteredTitle}</span>
       </h1>
       <Map
-          points={point}
-          remove
-          bounds={bounds}
-          edit
-          showDelete
-          dangerPoints={dangerPoint}
-          interestPoints={interestPoint}
-          callback={pointsCallback}
-          center={center}
-          callbackC={callbackC}
-          callbackD={distanceCallback}
-          callbackDanger={dangerPointsCallback}
-          callbackInterest={interestPointsCallback}
-          markerTypeSelected={markerType}
+        points={point}
+        remove
+        bounds={bounds}
+        edit
+        showDelete
+        dangerPoints={dangerPoint}
+        interestPoints={interestPoint}
+        callback={pointsCallback}
+        center={center}
+        callbackC={callbackC}
+        callbackD={distanceCallback}
+        callbackDanger={dangerPointsCallback}
+        callbackInterest={interestPointsCallback}
+        markerTypeSelected={markerType}
       />
       <div>
         <MapDetails

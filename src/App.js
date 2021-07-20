@@ -9,8 +9,6 @@ import { authActions } from "./store/session/auth";
 import { getUserUsername } from "./services/http";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
-import BackOfficeRoute from "./components/Private/BackOfficeRoute";
-import PrivateBackOfficeRoute from "./components/Private/PrivateBackOfficeRoute";
 import BackOfficeStats from "./components/BackOffice/BackOfficeStats";
 import BackOfficeTable from "./components/BackOffice/BackOfficeTable";
 
@@ -40,8 +38,9 @@ const HelpDetails = React.lazy(() =>
 const HelpDetailsOwner = React.lazy(() =>
   import("./components/HelpDetails/HelpDetailsOwner")
 );
-const Chat = React.lazy(() => import("./components/Chat/Chat"));
-const Conversation = React.lazy(() => import("./components/Chat/Conversation"));
+const CommentList = React.lazy(() =>
+  import("./components/HelpDetails/CommentList")
+);
 const UserProfile = React.lazy(() =>
   import("./components/Profile/UserProfile")
 );
@@ -99,10 +98,7 @@ function App() {
               })
             );
           },
-          (error) => {
-            dispatch(authActions.logout());
-            localStorage.removeItem(gS.storage.token);
-          }
+          (error) => {}
         );
       }
     }
@@ -162,6 +158,9 @@ function App() {
           </Route>
 
           <PrivateRoute>
+            <Route path="/heroisForm">
+              <HeroiForm />
+            </Route>
             <Route path="/verperfil/:username">
               <UserProfile />
             </Route>
@@ -202,13 +201,13 @@ function App() {
               <HelpDetails buttonText="Pedir Ajuda" />
             </Route>
             <Route exact path="/conversas">
-              <Chat />
+              <MyHelps />
             </Route>
             <Route path="/conversas/criadas/:requestId">
-              <Conversation />
+              <CommentList />
             </Route>
             <Route path="/conversas/participacoes/:requestId">
-              <Conversation />
+              <CommentList />
             </Route>
             <Route path="/mapa">
               <TodasAjudas />
@@ -234,10 +233,6 @@ function App() {
               )}
             </Route>
           </PrivateRoute>
-
-          <Route path="/heroisForm">
-            <HeroiForm />
-          </Route>
 
           <Route path="*">
             <Redirect to="/home" />

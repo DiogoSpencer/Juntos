@@ -1,10 +1,12 @@
 .mainContainer {
   display: grid;
   width: 50em;
-  grid-template-rows: auto 0.25fr;
-  row-gap: 2em;
-  grid-template-areas:
-    "sc";
+  grid-template-areas: "sc";
+}
+
+.mainContainerConversation {
+  display: grid;
+  grid-template-areas: "sc";
 }
 
 .spinner {
@@ -17,7 +19,7 @@
   align-items: center;
   justify-content: center;
   background-color: white;
-  z-index: 5;
+  z-index: 50;
 }
 
 .subContainer {
@@ -31,6 +33,20 @@
     "rf"
     "cl"
     "bc";
+}
+
+.subContainerConversation {
+  grid-area: sc;
+  justify-self: center;
+  width: 50em;
+  display: grid;
+  grid-template-rows: auto 0.25fr;
+  row-gap: 2em;
+  grid-template-areas:
+    "bc"
+    "cl"
+    "rf"
+    "nc";
 }
 
 .newComment {

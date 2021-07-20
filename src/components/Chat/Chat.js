@@ -26,6 +26,8 @@ let TITLE = "";
 let TOPICS = "";
 
 const Chat = () => {
+  const match = useRouteMatch();
+
   const [isCreated, setIsCreated] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(true);
@@ -38,8 +40,6 @@ const Chat = () => {
   const [pageNumber, setPageNumber] = useState(0);
   const [disableSelect, setDisableSelect] = useState(false);
   const [pageSize, setPageSize] = useState(5);
-
-  const match = useRouteMatch();
 
   useEffect(() => {
     setDisableSelect(false);

@@ -47,7 +47,8 @@ const MyHelps = () => {
     TITLE = "myTitle";
     TOPICS = "myTopics";
     location = "myLocation";
-    mainTitle = "As Minhas Ajudas";
+    mainTitle =
+      match.path === "/minhasajudas" ? "As Minhas Ajudas" : "Conversas";
     firstButton = "Criadas";
     secondButton = "Participações";
     pathFirstArg = "criadas";

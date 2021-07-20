@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import Map, {Bounds, Center, Point} from "../Map/Map";
+import Map, { Bounds, Center, Point } from "../Map/Map";
 import { getMarkers } from "../../services/http";
 import SideButtons from "../UI/SideButtons";
 import classes from "./TodasAjudas.module.css";
@@ -60,6 +60,7 @@ function TodasAjudas() {
         for (let i = 0; i < newVec.length; i++) {
           newVec[i].lat = parseFloat(response.data[i].points[0].lat);
           newVec[i].lon = parseFloat(response.data[i].points[0].lon);
+          newVec[i].type = response.data[i].type;
         }
         setPoint(newVec);
         console.log(response);
@@ -82,7 +83,7 @@ function TodasAjudas() {
 
   return (
     <div className={classes.mainContainer}>
-      <h1 className={classes.title}>Ajudas Disponíveis</h1>
+      <h1 className={classes.title}>Ajudas Disponí­veis</h1>
       {isLoading && (
         <div className={classes.spinner}>
           <LoadingSpinner />
