@@ -63,11 +63,11 @@ const HelpDetailsOwner = () => {
     [point]
   );
   const distanceCallback = useCallback(
-      (distance) => {
-        setDistance(distance);
-      },
-      // eslint-disable-next-line
-      [distance]
+    (distance) => {
+      setDistance(distance);
+    },
+    // eslint-disable-next-line
+    [distance]
   );
 
   const history = useHistory();
@@ -104,11 +104,10 @@ const HelpDetailsOwner = () => {
         let responsePoints = response.data.points;
         for (const point of responsePoints) {
           //.map((point) => {
-          console.log(point)
+          console.log(point);
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
           point.type = response.data.type;
-
         } //);
         setPoint(responsePoints);
 
