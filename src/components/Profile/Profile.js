@@ -372,25 +372,27 @@ const Profile = () => {
           <div className={classes.interestDiv}>
             <h3 className={classes.subTitle}>Interesses</h3>
             <ul className={classes.interestList}>
-              {interests.map((interest, index) => {
-                return (
-                  <li key={index}>
-                    <input
-                      type="checkbox"
-                      id={`${showInterest[index]}`}
-                      value={isCheckedInterest[index]}
-                      checked={isCheckedInterest[index]}
-                      onChange={() => checkedInterestHandler(index)}
-                    />
-                    <label
-                      htmlFor={`${showInterest[index]}`}
-                      className={classes.labelForm}
-                    >
-                      {showInterest[index]}
-                    </label>
-                  </li>
-                );
-              })}
+              {interests &&
+                interests.length > 0 &&
+                interests.map((interest, index) => {
+                  return (
+                    <li key={index}>
+                      <input
+                        type="checkbox"
+                        id={`${showInterest[index]}`}
+                        value={isCheckedInterest[index]}
+                        checked={isCheckedInterest[index]}
+                        onChange={() => checkedInterestHandler(index)}
+                      />
+                      <label
+                        htmlFor={`${showInterest[index]}`}
+                        className={classes.labelForm}
+                      >
+                        {showInterest[index]}
+                      </label>
+                    </li>
+                  );
+                })}
             </ul>
           </div>
           <div className={classes.buttonContainer}>

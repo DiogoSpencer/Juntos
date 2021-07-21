@@ -396,9 +396,9 @@ export async function sendRecover(email: string) {
 }
 
 export async function recoverPassword(
+  code: string,
   password: string,
-  confirmation: string,
-  code: string
+  confirmation: string
 ) {
   try {
     return await axios.put(`${url}/rest/user/recover`, {

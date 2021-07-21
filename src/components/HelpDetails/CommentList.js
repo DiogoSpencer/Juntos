@@ -108,11 +108,16 @@ const CommentList = (props) => {
               : setResponseData(response.data.content);
           } else {
             if (moreComments) {
-              setResponseData((prevState) =>
-                reverseItems(response.data.content).concat(prevState)
+              setResponseData(
+                (prevState) =>
+                  response.data.content &&
+                  response.data.content.length > 0 &&
+                  reverseItems(response.data.content).concat(prevState)
               );
             } else {
-              setResponseData(reverseItems(response.data.content));
+              response.data.content &&
+                response.data.content.length > 0 &&
+                setResponseData(reverseItems(response.data.content));
               scrollToBottom();
             }
           }
@@ -188,8 +193,7 @@ const CommentList = (props) => {
       {(props.isOwner ||
         authRole === "ADMIN" ||
         authRole === "MOD" ||
-        (responseData &&
-          responseData.allHelperUsernames.includes(authUsername))) && (
+        (responseData && responseData.wasAHelper)) && (
         <div className={classes.newComment}>
           <NewComment
             buttonText="Comentar"

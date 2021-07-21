@@ -16,16 +16,18 @@ const ParticipantsList = () => {
   return (
     <div className={classes.container}>
       <ul className={classes.list}>
-        {responseData.map((participant) => (
-          <li key={participant.username} className={classes.listItem}>
-            <PartcipantItem
-              profileImg={participant.profileImg}
-              firstName={participant.firstName}
-              lastName={participant.lastname}
-              username={participant.username}
-            />
-          </li>
-        ))}
+        {responseData &&
+          responseData.length > 0 &&
+          responseData.map((participant) => (
+            <li key={participant.username} className={classes.listItem}>
+              <PartcipantItem
+                profileImg={participant.profileImg}
+                firstName={participant.firstName}
+                lastName={participant.lastname}
+                username={participant.username}
+              />
+            </li>
+          ))}
       </ul>
     </div>
   );

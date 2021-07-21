@@ -90,7 +90,7 @@ const Login = (props) => {
       }
     );
   };
-
+  /*
   const responseGoogle = (responseG) => {
     console.log(responseG);
     loginExternal(
@@ -136,7 +136,7 @@ const Login = (props) => {
       }
     );
   };
-
+*/
   const formSubmissionHandler = (event) => {
     event.preventDefault();
 
@@ -299,14 +299,6 @@ const Login = (props) => {
               <Button disabled={!formIsValid} text={"Entrar"} />
             </div>
             <div className={classes.buttonsWrap}>
-              <GoogleLogin
-                clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
-                buttonText=""
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                cookiePolicy={"single_host_origin"}
-                cssClass={classes.google}
-              />
               <FacebookLogin
                 buttonStyle={{
                   width: 50,
@@ -390,3 +382,15 @@ const Login = (props) => {
 };
 
 export default Login;
+
+/*
+              <GoogleLogin
+                clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
+                buttonText=""
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+                cookiePolicy={"single_host_origin"}
+                cssClass={classes.google}
+              />
+
+*/

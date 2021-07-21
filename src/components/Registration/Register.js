@@ -83,9 +83,12 @@ const Register = (props) => {
   };
 
   const checkedInterestHandler = (position) => {
-    const updatedCheckedState = isCheckedInterest.map((interest, index) =>
-      index === position ? !interest : interest
-    );
+    const updatedCheckedState =
+      isCheckedInterest &&
+      isCheckedInterest.length > 0 &&
+      isCheckedInterest.map((interest, index) =>
+        index === position ? !interest : interest
+      );
 
     setIsCheckedInterest(updatedCheckedState);
   };
@@ -111,9 +114,9 @@ const Register = (props) => {
 
   let topics = [];
 
-  for (let i = 0; i < isCheckedInterest.length; i++ ) {
+  for (let i = 0; i < isCheckedInterest.length; i++) {
     if (isCheckedInterest[i]) {
-      topics.push(interests[i])
+      topics.push(interests[i]);
     }
   }
 
@@ -298,25 +301,27 @@ const Register = (props) => {
       <div className={classes.interestDiv}>
         <h3 className={classes.subTitle}>Tens algum interesse?</h3>
         <ul className={classes.interestList}>
-          {interests.map((interest, index) => {
-            return (
-              <li key={index}>
-                <input
-                  type="checkbox"
-                  id={`${showInterest[index]}`}
-                  value={isCheckedInterest[index]}
-                  checked={isCheckedInterest[index]}
-                  onChange={() => checkedInterestHandler(index)}
-                />
-                <label
-                  htmlFor={`${showInterest[index]}`}
-                  className={classes.labelForm}
-                >
-                  {showInterest[index]}
-                </label>
-              </li>
-            );
-          })}
+          {interests &&
+            interests.length > 0 &&
+            interests.map((interest, index) => {
+              return (
+                <li key={index}>
+                  <input
+                    type="checkbox"
+                    id={`${showInterest[index]}`}
+                    value={isCheckedInterest[index]}
+                    checked={isCheckedInterest[index]}
+                    onChange={() => checkedInterestHandler(index)}
+                  />
+                  <label
+                    htmlFor={`${showInterest[index]}`}
+                    className={classes.labelForm}
+                  >
+                    {showInterest[index]}
+                  </label>
+                </li>
+              );
+            })}
         </ul>
       </div>
       <div className={classes.buttonDiv}>

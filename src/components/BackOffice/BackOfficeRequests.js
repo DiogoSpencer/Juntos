@@ -412,6 +412,7 @@ const BackOfficeRequests = () => {
           {tableHead}
           <tbody>
             {responseData &&
+              responseData.length > 0 &&
               responseData.map((request) =>
                 isEditing !== request.id ? (
                   <tr key={request.id} className={classes.topicsContainer}>
@@ -445,6 +446,7 @@ const BackOfficeRequests = () => {
                     <td className={classes.helperUserContainer}>
                       <ul>
                         {request.helperUsernames &&
+                          request.helperUsernames.length > 0 &&
                           request.helperUsernames.map((user, idx) => (
                             <li key={idx}>
                               <Link to={`/verperfil/${user}`}>{user}</Link>
@@ -464,6 +466,7 @@ const BackOfficeRequests = () => {
                     <td className={classes.imgContainer}>
                       <ul>
                         {request.photoGalery &&
+                          request.photoGalery.length > 0 &&
                           request.photoGalery.map((img, index) => (
                             <li key={index}>
                               <img
@@ -591,6 +594,7 @@ const BackOfficeRequests = () => {
                     <td className={classes.helperUserContainer}>
                       <ul>
                         {request.helperUsernames &&
+                          request.helperUsernames.length > 0 &&
                           request.helperUsernames.map((user, idx) => (
                             <li key={idx}>
                               <Link to={`/verperfil/${user}`}>{user}</Link>
@@ -622,6 +626,7 @@ const BackOfficeRequests = () => {
                     <td className={classes.imgContainer}>
                       <ul>
                         {request.photoGalery &&
+                          request.photoGalery.length > 0 &&
                           request.photoGalery.map((img, index) => (
                             <li key={index}>
                               <img

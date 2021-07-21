@@ -410,6 +410,7 @@ const BackOfficeUsers = () => {
           {tableHead}
           <tbody>
             {responseData &&
+              responseData.length > 0 &&
               responseData.map((user) =>
                 isEditing !== user.username ? (
                   <tr key={user.username} className={classes.topicsContainer}>
@@ -447,6 +448,7 @@ const BackOfficeUsers = () => {
                     <td className={classes.prefContainer}>
                       <ul>
                         {user.favTopics &&
+                          user.favTopics.length > 0 &&
                           user.favTopics.map((favTopic, idx) => (
                             <li key={idx}>{favTopic}</li>
                           ))}
@@ -548,9 +550,11 @@ const BackOfficeUsers = () => {
                     </td>
                     <td className={classes.prefContainer}>
                       <ul>
-                        {user.favTopics.map((favTopic, idx) => (
-                          <li key={idx}>{favTopic}</li>
-                        ))}
+                        {user.favTopics &&
+                          user.favTopics.length > 0 &&
+                          user.favTopics.map((favTopic, idx) => (
+                            <li key={idx}>{favTopic}</li>
+                          ))}
                       </ul>
                     </td>
                     <td className={classes.numContainer}>
