@@ -13,9 +13,7 @@ de stats vs dentro de home? -> Mudar no titulo + dentro do texto
 21. redes sociais
 22. falta verificar os limites quando se submete - titulo + textBox -> quando fizer os regex
 24. Modificar o alert depois de inserir mais de 5 imagens
-25. mudar botao de comentario nos detalhes
 26. fazer pagina de participaçoes nos pedidos para o owner
-27. fazer route privada para formulario dos herois
 28. honeypots para os forms
 29. backoffice para company aceitar/recusar
 30. recuperaçao de passes

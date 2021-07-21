@@ -19,6 +19,7 @@ import Map from "../Map/Map";
 import juntosIcon from "../../img/logo.png";
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
+import MapHelpDetails from "./MapHelpDetails";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
@@ -274,16 +275,10 @@ const HelpDetailsOwner = () => {
           <div className={classes.helpTitle}>
             <HelpTitle
               title={responseData.title}
-              distance={distance}
               helpType={responseData.type}
               creationDate={responseData.creationDate}
-              volunteers={responseData.helpersCapacity}
-              difficulty={responseData.difficulty}
-              currentHelpers={responseData.currentHelpers}
               isActive={responseData.activeMarker}
               points={responseData.points}
-              move={move}
-              handleMove={handleMove}
             />
           </div>
           <div className={classes.userDisplay}>
@@ -300,12 +295,24 @@ const HelpDetailsOwner = () => {
               isAnonimous={responseData.anonymousOwner}
             />
           </div>
-          <div className={classes.imageDisplay}>
-            <ImageDisplay images={responseData.photoGalery} owner={isOwner} />
-          </div>
+          {responseData.type === "ACTION" && (
+            <div className={classes.pathDetails}>
+              <MapHelpDetails
+                distance={distance}
+                move={move}
+                handleMove={handleMove}
+                difficulty={responseData.difficulty}
+                volunteers={responseData.helpersCapacity}
+                currentHelpers={responseData.currentHelpers}
+              />
+            </div>
+          )}
           <div className={classes.description}>
             <h6 className={classes.subTitle}>Descrição</h6>
             <p>{responseData.description}</p>
+          </div>
+          <div className={classes.imageDisplay}>
+            <ImageDisplay images={responseData.photoGalery} owner={isOwner} />
           </div>
           {responseData.activeMarker &&
             responseData.currentHelpers > 0 &&

@@ -1,0 +1,77 @@
+.container {
+  display: grid;
+  grid-template-columns: 0.4fr 0.75fr 0.75fr 0.75fr 0.75fr;
+  grid-template-rows: 0.5fr 1fr;
+  grid-template-areas:
+    ". tt tt tt tt"
+    ". dc pl vc ef";
+}
+
+.titleContainer {
+  grid-area: tt;
+  align-self: center;
+  justify-self: center;
+  font-size: 0.8em;
+}
+
+.title {
+  margin-right: 8em;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 1.5em;
+}
+
+.distanceContainer {
+  grid-area: dc;
+  display: flex;
+  flex-direction: column;
+}
+
+.moveMode {
+  grid-area: pl;
+  display: flex;
+  flex-direction: column;
+}
+
+.selectButton {
+  margin-top: 0.5em;
+  grid-area: pl;
+  font-size: 0.9em;
+  width: 12em;
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+  box-shadow: 1px 1px 1px #999;
+}
+
+.selectButton:focus {
+  outline: none;
+  box-shadow: 0 0 10px #719ece;
+}
+
+
+.volunteersContainer {
+  grid-area: vc;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.difficultyContainer {
+  grid-area: ef;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.number {
+  text-align: center;
+  color: #e6513e;
+  font-weight: 600;
+}
+
+.subTitle {
+  color: #3385d9;
+  font-weight: 600;
+}

@@ -20,7 +20,7 @@
 
 .title img {
   padding-right: 1em;
-  height: 3em;
+  height: 1.5em;
 }
 
 .spinner {
@@ -59,8 +59,8 @@
   grid-area: ic;
   display: grid;
   row-gap: 1em;
-  grid-template-rows: 0.25fr 0.25fr auto 0.5fr auto 0.25fr 0.25fr;
-  grid-template-areas: "ht" "ud" "id" "dp" "ip" "bd" "er" "dr";
+  grid-template-rows: 0.25fr 0.25fr auto 0.5fr auto auto 0.25fr 0.25fr;
+  grid-template-areas: "ht" "ud" "pd" "dp" "id" "ip" "bd" "er" "dr";
 }
 
 .helpTitle {
@@ -73,8 +73,8 @@
   border-bottom: 1px solid #b9e1ff;
 }
 
-.imageDisplay {
-  grid-area: id;
+.pathDetails {
+  grid-area: pd;
   border-bottom: 1px solid #b9e1ff;
 }
 
@@ -85,6 +85,11 @@
   font-size: 0.9em;
   padding-bottom: 0.5em;
   padding-top: 0.5em;
+}
+
+.imageDisplay {
+  grid-area: id;
+  border-bottom: 1px solid #b9e1ff;
 }
 
 .subTitle {

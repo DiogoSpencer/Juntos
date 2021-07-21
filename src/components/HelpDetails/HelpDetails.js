@@ -15,6 +15,7 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 import InputPassword from "./InputPassword";
 import { useSelector } from "react-redux";
 import Map from "../Map/Map";
+import MapHelpDetails from "./MapHelpDetails";
 
 let text = "";
 
@@ -54,13 +55,13 @@ const HelpDetails = (props) => {
     // eslint-disable-next-line
     [point]
   );
-    const distanceCallback = useCallback(
-        (distance) => {
-            setDistance(distance);
-        },
-        // eslint-disable-next-line
-        [distance]
-    );
+  const distanceCallback = useCallback(
+    (distance) => {
+      setDistance(distance);
+    },
+    // eslint-disable-next-line
+    [distance]
+  );
 
   const match = useRouteMatch();
   const helpId = match.params.requestId;
@@ -82,7 +83,7 @@ const HelpDetails = (props) => {
             //.map((point) => {
             point.lat = parseFloat(point.lat);
             point.lon = parseFloat(point.lon);
-              point.type = response.data.type;
+            point.type = response.data.type;
           } //);
           setPoint(responsePoints);
 
@@ -91,7 +92,6 @@ const HelpDetails = (props) => {
             //.map((point) => {
             point.lat = parseFloat(point.lat);
             point.lon = parseFloat(point.lon);
-
           } //);
           setDangerPoint(responseDanger);
 
@@ -236,24 +236,17 @@ const HelpDetails = (props) => {
             interestPoints={interestPoint}
             callback={pointsCallback}
             center={center}
-            moveTypeSelected = {move}
-
+            moveTypeSelected={move}
             callbackD={distanceCallback}
           />
         </div>
         <div className={classes.infoContent}>
           <div className={classes.helpTitle}>
             <HelpTitle
-                distance={distance}
               title={responseData.title}
               helpType={responseData.type}
               creationDate={responseData.creationDate}
-              volunteers={responseData.helpersCapacity}
-              difficulty={responseData.difficulty}
               isActive={responseData.activeMarker}
-              currentHelpers={responseData.currentHelpers}
-                move={move}
-                handleMove={handleMove}
             />
           </div>
           <div className={classes.userDisplay}>
@@ -271,13 +264,26 @@ const HelpDetails = (props) => {
               company={responseData.company}
             />
           </div>
-          <div className={classes.imageDisplay}>
-            <ImageDisplay images={responseData.photoGalery} />
-          </div>
+          {responseData.type === "ACTION" && (
+            <div className={classes.pathDetails}>
+              <MapHelpDetails
+                distance={distance}
+                move={move}
+                handleMove={handleMove}
+                difficulty={responseData.difficulty}
+                volunteers={responseData.helpersCapacity}
+                currentHelpers={responseData.currentHelpers}
+              />
+            </div>
+          )}
           <div className={classes.description}>
             <h6 className={classes.subTitle}>Descrição</h6>
             <p>{responseData.description}</p>
           </div>
+          <div className={classes.imageDisplay}>
+            <ImageDisplay images={responseData.photoGalery} />
+          </div>
+
           <div className={classes.inputPass}>
             <InputPassword isOwner={isOwner} markerId={helpId} />
           </div>
