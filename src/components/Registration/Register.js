@@ -233,7 +233,7 @@ const Register = (props) => {
         />
         {confirmationHasError && (
           <p className={classes.registError}>
-            Por favor insira uma confirmação de password válida.
+            Por favor insira a confirmação.
           </p>
         )}
         {enteredConfirmationIsValid && !passConfirmed && (
@@ -282,6 +282,7 @@ const Register = (props) => {
           value={enteredEmail}
           onChange={emailChangeHandler}
           onBlur={emailBlurHandler}
+          className={classes.emailInput}
         />
         {emailHasError && (
           <p className={classes.registError}>Por favor insira um e-mail.</p>
@@ -324,9 +325,6 @@ const Register = (props) => {
             })}
         </ul>
       </div>
-      <div className={classes.buttonDiv}>
-        <Button disabled={!formIsValid} text="Registar" />
-      </div>
       {invalidInput && (
         <p className={classes.invalidError}>Informação inválida.</p>
       )}
@@ -338,6 +336,9 @@ const Register = (props) => {
       {error && (
         <p className={classes.invalidError}>Por favor tente novamente.</p>
       )}
+      <div className={classes.buttonDiv}>
+        <Button disabled={!formIsValid} text="Registar" />
+      </div>
     </form>
   );
 
