@@ -4,7 +4,7 @@ const MapHelpDetails = (props) => {
   return (
     <div className={classes.container}>
       <div className={classes.titleContainer}>
-        <p className={classes.title}>Detalhes do Percurso</p>
+        <p className={classes.title}>Detalhes da Ação</p>
       </div>
       <div className={classes.moveMode}>
         <label htmlFor="move" className={classes.subTitle}>

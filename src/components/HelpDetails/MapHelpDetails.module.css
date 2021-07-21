@@ -11,14 +11,13 @@
   grid-area: tt;
   align-self: center;
   justify-self: center;
-  font-size: 0.8em;
 }
 
 .title {
-  margin-right: 8em;
+  margin-right: 9em;
   color: #e6513e;
   font-weight: 600;
-  font-size: 1.5em;
+  font-size: 1.15em;
 }
 
 .distanceContainer {
