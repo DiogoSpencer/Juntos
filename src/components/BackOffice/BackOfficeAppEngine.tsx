@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from "react";
 import {officeDetailAppEngine} from "../../services/http";
-import {Data} from "@react-google-maps/api";
 import {Line, XAxis, YAxis, LineChart, Legend } from "recharts";
-import classes from "../HelpForms/MapDetails.module.css";
+import './BackOfficeAppEngine.css'
 
 
 export default function BackOfficeAppEngine() {
     const [data, setData] = useState<any>()
     const[filter, setFilter] = useState<string>("GAE_INST")
     const[start, setStart] = useState<number>(1800000)
+    const[text, setText] = useState<string>("Número de instâncias que existem.")
 
     useEffect(() => {
-        officeDetailAppEngine(new Date().getTime(), filter, 10, new Date().getTime() - start).then((response) => {
+        officeDetailAppEngine(new Date().getTime(), filter, 100, new Date().getTime() - start).then((response) => {
             console.log(response)
             setData(response.data)
             },
@@ -20,12 +20,32 @@ export default function BackOfficeAppEngine() {
             })
     }, [filter, start])
     const handleFilterChange = (event:any) => {
-        setFilter(
-            event.target.value);
+        setFilter(event.target.value);
+        switch (event.target.value) {
+            case "GAE_INST": setText("Número de instâncias que existem.")
+                break;
+            case "GAE_CPU_USAGE": setText("Utilização do CPU em megaciclos sobre todas as instâncias.")
+                break;
+            case "GAE_CPU_CORES": setText("Número total de núcleos de CPU alocados para uma versão do App Engine.")
+                break;
+            case "GAE_MEM": setText("Memória total usada pelas instâncias a correr.")
+                break;
+            case "GAE_SENT_BYTES": setText("Contagem delta da largura de banda da rede de saída.")
+                break;
+            case "GAE_RECEIVED_BYTES": setText("Contagem delta da largura de banda da rede de entradas.")
+                break;
+            case "CACHE_HIT_RATIO": setText("Percentagem de acessos bem-sucedidos em comparação com todas as operações do memcache.")
+                break;
+            case "CACHE_USED_SIZE": setText("Tamanho da cache, calculado como o tamanho total de todos os items guardados.")
+                break;
+            case "STORAGE_OBJECT_COUNT": setText("Número total de objetos per bucket.")
+                break;
+            case "STORAGE_TOTAL_BYTES": setText("Tamanho total de todos os objetos in the bucket")
+                break;
+        }
     };
     const handleStartChange = (event:any) => {
-        setStart(parseFloat(event.target.value)
-            );
+        setStart(parseFloat(event.target.value))
     };
 
     const formatter = (secs: number) => {
@@ -45,8 +65,8 @@ export default function BackOfficeAppEngine() {
 
 
     return (
-        <div>
-            <label >
+        <div className="back-office-app-wrapper">
+            <label className="text">
                 Selecione a estatistica que pretende visualizar:
                 <select
                     value={filter}
@@ -62,13 +82,9 @@ export default function BackOfficeAppEngine() {
                     <option value="STORAGE_TOTAL_BYTES">Storage Total Bytes</option>
                     <option value="CACHE_HIT_RATIO">Cache Hit Ratio</option>
                     <option value="CACHE_USED_SIZE">Cache Used Size</option>
-                    <option value="DATASTORE_REQUEST_COUNT">Datastore Request Count</option>
-                    <option value="DATASTORE_WRITE_COUNT">Datastore Write Count</option>
-                    <option value="DATASTORE_READ_SIZES">Datastore Read Sizes</option>
-                    <option value="DATASTORE_WRITE_SIZES">Datastore Write Sizes</option>
                 </select>
             </label>
-            <label>
+            <label className="text">
                 Selecione desde que altura pretende ver:
                 <select
                     value={start}
@@ -103,6 +119,9 @@ export default function BackOfficeAppEngine() {
                     <YAxis type = "number" dataKey="data" />
                     <Line type = "monotone" dataKey = "data" stroke = "#ff9f36" dot = {false} />
                 </LineChart> }
+            <div className="downText">
+                {text}
+            </div>
         </div>
     )
 }

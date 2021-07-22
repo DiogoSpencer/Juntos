@@ -12,7 +12,6 @@ import LoadingSpinner from "./components/UI/LoadingSpinner";
 import BackOfficeStats from "./components/BackOffice/BackOfficeStats";
 import BackOfficeTable from "./components/BackOffice/BackOfficeTable";
 import BackOfficeAppEngine from "./components/BackOffice/BackOfficeAppEngine";
-import LoginGoogle from "./components/Login/LoginGoogle";
 
 const USER = "USER";
 const MOD = "MOD";
@@ -166,17 +165,14 @@ function App() {
             <Route path="/verperfil/:username">
               <UserProfile />
             </Route>
-            <Route exact path="/office">
-              <BackOfficeStats />
+            <Route path="/backoffice/geral">
+                  <BackOfficeStats />
             </Route>
-            <Route exact path="/appEng">
-              <BackOfficeAppEngine/>
+            <Route path="/backoffice/appEngine">
+                  <BackOfficeAppEngine />
             </Route>
-            <Route exact path="/loginGoogle">
-              <LoginGoogle />
-            </Route>
-            <Route exact path="/office/table">
-              <BackOfficeTable />
+            <Route path="/backoffice/tables">
+                  <BackOfficeTable />
             </Route>
             <Route path="/perfil/:username">
               <Profile />

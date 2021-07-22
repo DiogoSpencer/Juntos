@@ -429,6 +429,7 @@ const EditRequest = () => {
         unique
         center={center}
         bounds={bounds}
+        zoom={16}
         points={point.length <= 0 ? [] : [point[0]]}
         dangerPoints={[]}
         interestPoints={[]}
@@ -457,6 +458,7 @@ const EditRequest = () => {
         bounds={bounds}
         edit
         showDelete
+        zoom={13}
         dangerPoints={dangerPoint}
         interestPoints={interestPoint}
         callback={pointsCallback}

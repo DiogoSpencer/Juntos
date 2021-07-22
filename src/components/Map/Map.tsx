@@ -68,6 +68,7 @@ interface MapProps {
   interestPoints: Point[];
   center: Center;
   bounds: Bounds;
+  zoom?: number;
   typeSelected?: string;
   markerTypeSelected?: string;
   moveTypeSelected?: string;
@@ -79,8 +80,6 @@ function usePrevious(value: number) : number {
   useEffect(()=>{
     ref.current = value;
   })
-
-
   return ref.current as number;
 }
 
@@ -112,14 +111,18 @@ function Map(props: MapProps) {
   const [directions, setDirections] =
     useState<google.maps.DirectionsResult | null>(null);
   const client = new google.maps.DirectionsService();
-
+  useEffect(()=>{
+    if (props.zoom){
+      setZoom(props.zoom)
+    }
+  },[])
   const onClick = (ev: any) => {
     if (ev.latLng !== null && !props.noAdd) {
       if (props.markerTypeSelected === "MARKER") {
         if (!props.unique)
           props.callback([
             ...points,
-            { lat: ev.latLng.lat(), lon: ev.latLng.lng() },
+            { lat: ev.latLng.lat() + (Math.random()/10000), lon: ev.latLng.lng() + (Math.random()/10000)},
           ]);
         else {
           props.callback([{ lat: ev.latLng.lat(), lon: ev.latLng.lng() }]);
@@ -163,13 +166,10 @@ function Map(props: MapProps) {
 
   useEffect(()=>{
     if(mapRef.current !== null) {
-      console.log(mapRef.current.getZoom())
       setZoom(mapRef.current.getZoom())
     }
   }, [mapRef])
   useEffect(()=>{
-    console.log(zoom)
-    console.log(previous)
     if (mapRef.current !== null && props.callbackBounds && previous > zoom ) {
       console.log(previous)
       console.log(mapRef.current.getZoom())
@@ -257,7 +257,7 @@ function Map(props: MapProps) {
       geocoder
         .geocode({ location: locationPo, componentRestrictions: {} }, null)
         .then((response) => {
-          let res = response.results.filter((res) => res.types.includes(admin));
+          let res = response.results.filter((res) => {return res.types.includes(admin)});
           if (res.length > 0 && props.callbackLo) {
             props.callbackLo(res[0].address_components[0].long_name);
           }
@@ -357,7 +357,7 @@ function Map(props: MapProps) {
 <GoogleMap
             mapContainerStyle={containerStyle}
             center={center}
-            zoom={10}
+            zoom={zoom}
             onLoad={handleLoad}
             onClick={onClick}
             onCenterChanged={handleCenterChanged}

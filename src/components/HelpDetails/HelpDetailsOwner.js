@@ -284,6 +284,7 @@ const HelpDetailsOwner = () => {
               isActive={responseData.activeMarker}
               points={responseData.points}
               move={move}
+              zoom={16}
               handleMove={handleMove}
             />
           </div>

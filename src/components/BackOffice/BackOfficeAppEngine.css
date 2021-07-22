@@ -1,0 +1,16 @@
+.back-office-app-wrapper{
+    width: 70% ;
+    margin: 10vh auto;
+}
+.text{
+    color: #3385d9;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-evenly;
+}
+.downText{
+    color: #3385d9;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-evenly;
+}

@@ -233,7 +233,7 @@ const HelpDetails = (props) => {
             callback={pointsCallback}
             center={center}
             moveTypeSelected = {move}
-
+            zoom={16}
             callbackD={distanceCallback}
           />
         </div>

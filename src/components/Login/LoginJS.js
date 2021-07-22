@@ -15,6 +15,8 @@ import FacebookLogin from 'react-facebook-login';
 //out of rendering cycle - functions to verify input
 const isNotEmpty = (value) => value.trim() !== "";
 
+
+
 const Login = (props) => {
   const dispatch = useDispatch();
 
@@ -45,6 +47,92 @@ const Login = (props) => {
   if (enteredEmailIsValid && enteredPasswordIsValid) {
     formIsValid = true;
   }
+
+    const responseFacebook = (responseG) => {
+        console.log(responseG)
+        loginExternal(responseG.email,
+            responseG.first_name,
+            responseG.id,
+            responseG.picture.data.url,
+            responseG.last_name,
+            'FACEBOOK').then((response) => {
+                props.setIsLoading(false);
+                const token = response.headers.authorization;
+                const parsedToken = jwt_decode(token);
+                dispatch(
+                    authActions.login({
+                        isLogged: true,
+                        token: token,
+                        username: parsedToken.username,
+                        role: parsedToken.role,
+                        email: parsedToken.email,
+                        firstName: response.data.firstName,
+                        lastName: response.data.lastName,
+                        numHelps: response.data.numHelps,
+                        profileImg: response.data.profileImg,
+                    })
+                );
+                localStorage.setItem("token", token);
+                props.onCloseModal();
+            },
+            (error) => {
+                props.setIsLoading(false);
+                if (error.status === 400) {
+                    setError("Credenciais Inválidas")
+                } else if (error.status === 403) {
+                    setError("Esta conta está desativada")
+                } else if (error.status === 404) {
+                    setError("Não existe um utilizador registado com este e-mail")
+                } else {
+                    setError("Algo Inesperado aconteceu, tente novamente");
+                    console.log(error)
+                }
+            }
+        )
+    }
+
+    const responseGoogle = (responseG) => {
+        console.log(responseG)
+        loginExternal(responseG.profileObj.email,
+            responseG.profileObj.givenName,
+            responseG.profileObj.googleId,
+            responseG.profileObj.imgUrl,
+            responseG.profileObj.familyName,
+            'GOOGLE').then((response) => {
+                props.setIsLoading(false);
+                const token = response.headers.authorization;
+                const parsedToken = jwt_decode(token);
+                dispatch(
+                    authActions.login({
+                        isLogged: true,
+                        token: token,
+                        username: parsedToken.username,
+                        role: parsedToken.role,
+                        email: parsedToken.email,
+                        firstName: response.data.firstName,
+                        lastName: response.data.lastName,
+                        numHelps: response.data.numHelps,
+                        profileImg: response.data.profileImg,
+                    })
+                );
+                localStorage.setItem("token", token);
+                props.onCloseModal();
+            },
+            (error) => {
+                props.setIsLoading(false);
+                if (error.status === 400) {
+                    setError("Credenciais Inválidas")
+                } else if (error.status === 403) {
+                    setError("Esta conta está desativada")
+                } else if (error.status === 404) {
+                    setError("Não existe um utilizador registado com este e-mail")
+                } else {
+                    setError("Algo Inesperado aconteceu, tente novamente");
+                    console.log(error)
+                }
+            }
+        )
+    }
 
   const formSubmissionHandler = (event) => {
     event.preventDefault();
@@ -165,6 +253,7 @@ const Login = (props) => {
   const formSubmit = showLogin ? formSubmissionHandler : onRecuperateSubmit;
 
   const loginForm = (
+      <>
     <div className={classes.mainContainer}>
       <form onSubmit={formSubmit} className={classes.loginForm}>
         {showLogin ? (
@@ -224,6 +313,7 @@ const Login = (props) => {
               />
               <h1 className={classes.formTitle}>Recuperar Password</h1>
             </div>
+
             <div className={classes.formInputDiv}>
               <label htmlFor="email" className={classes.formLabelEmail}>
                 Email
@@ -263,6 +353,22 @@ const Login = (props) => {
         Recuperar Password
       </p>
     </div>
+
+    <div className={classes.buttonsWrap}>
+        <GoogleLogin
+            clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
+            buttonText="Login"
+            onSuccess={responseGoogle}
+            cookiePolicy={'single_host_origin'}
+        />
+        <FacebookLogin
+            appId="360511435646701"
+            size="small"
+            cssClass = {classes.google}
+            fields="first_name,last_name, email,picture"
+            callback={responseFacebook}/>
+    </div>
+      </>
   );
 
   return (
