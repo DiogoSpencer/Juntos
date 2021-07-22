@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import SearchBar from "../UI/SearchBar";
-import SideButtons from "../UI/SIdeButtons";
+import SideBySideButtons from "../UI/SideBySideButtons";
 import classes from "./MyHelps.module.css";
 import { listMarker } from "../../services/http";
 import leftArrowIcon from "../../img/leftArrow.png";
@@ -451,7 +451,7 @@ const MyHelps = () => {
           />
         </div>
         <div className={classes.sideButtons}>
-          <SideButtons
+          <SideBySideButtons
             button1={firstButton}
             button2={secondButton}
             onClick1={isOwnerHandler}
