@@ -346,9 +346,18 @@ const EditRequest = () => {
       difficulty = enteredDifficulty;
     }
 
-    let toRemove = responseData.photoGalery.filter(
-      (photo) => !selectedFiles.includes(photo)
-    );
+    let toRemove = "";
+
+    if (
+      responseData.photoGalery &&
+      responseData.photoGalery.length > 0 &&
+      selectedFiles &&
+      selectedFiles.length > 0
+    ) {
+      toRemove = responseData.photoGalery.filter(
+        (photo) => !selectedFiles.includes(photo)
+      );
+    }
 
     const formInfo = {
       title: enteredTitle,

@@ -23,7 +23,7 @@ const MapHelpDetails = (props) => {
       <div className={classes.distanceContainer}>
         <p>
           <span className={classes.subTitle}>Distância:</span>
-          <p></p>
+          <br />
           <span className={classes.number}>{props.distance / 1000} km</span>
         </p>
       </div>

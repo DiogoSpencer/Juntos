@@ -20,7 +20,10 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   function (response: AxiosResponse) {
-    if (store.getState().auth.token !== "") {
+    if (
+      response.headers["Authorization"] &&
+      store.getState().auth.token !== ""
+    ) {
       store.dispatch(authActions.resetToken(response.headers["authorization"]));
       localStorage.setItem("token", response.headers["authorization"]);
     }
@@ -28,6 +31,7 @@ axios.interceptors.response.use(
   },
   function (error: any) {
     if (error.response.status === 401) {
+      alert("A sua sessão expirou, por favor efectue novo login");
       store.dispatch(authActions.logout());
       localStorage.removeItem(gS.storage.token);
       window.stop();

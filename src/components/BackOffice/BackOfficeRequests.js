@@ -357,7 +357,7 @@ const BackOfficeRequests = () => {
         onClick={prevPageHandler}
         className={classes.navArrow}
       />
-      <span className={classes.pageNumber}>{pageNumber}</span>
+      <span className={classes.pageNumber}>{pageNumber+1}</span>
       <img
         src={rightArrowIcon}
         alt="página-seguinte"

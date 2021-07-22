@@ -330,7 +330,7 @@ const Register = (props) => {
       )}
       {emailHasAccount && (
         <p className={classes.invalidError}>
-          Uma conta com o mesmo e-mail já está registado no sistema.
+          Já existe uma conta com este e-mail.
         </p>
       )}
       {error && (

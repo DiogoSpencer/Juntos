@@ -301,10 +301,10 @@ const Login = (props) => {
             <div className={classes.buttonsWrap}>
               <FacebookLogin
                 buttonStyle={{
-                  width: 50,
-                  height: 50,
+                  width: "40%",
+                  height: "80%",
                   borderRadius: "50%",
-                  marginLeft: 30,
+                  marginLeft: "3em",
                 }}
                 appId="360511435646701"
                 size="small"
@@ -390,7 +390,7 @@ export default Login;
                 onSuccess={responseGoogle}
                 onFailure={responseGoogle}
                 cookiePolicy={"single_host_origin"}
-                cssClass={classes.google}
+                className={classes.google}
               />
 
 */

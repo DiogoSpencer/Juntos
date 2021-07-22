@@ -71,12 +71,34 @@
   display: grid;
   grid-template-rows: auto;
   row-gap: 3em;
-  grid-template-areas: "mp" "ic" "cc";
+  grid-template-areas: "mp" "ic" "hc" "cc";
 }
 
 .mapContent {
   grid-area: mp;
   align-self: center;
+}
+
+.helpersContainer {
+  grid-area: hc;
+  align-self: center;
+  justify-self: center;
+}
+
+.participantsButton {
+  width: 15em;
+  height: 2.5em;
+  border-radius: 25px;
+  font-weight: 600;
+  background-color: #3385d9;
+  color: white;
+  border: 1px solid #3385d9;
+}
+
+.participantsButton:hover {
+  background-color: transparent;
+  color: #3385d9;
+  border: 1px solid #3385d9;
 }
 
 .commentContent {

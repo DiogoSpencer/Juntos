@@ -42,7 +42,7 @@ const BackOfficeCompany = () => {
       setIsLoading(true);
 
       getAllUsers(
-        `?by=${byParam}&value=${PUBLIC}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+        `?by=${byParam}&value=${""}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
       ).then(
         (response) => {
           setIsLoading(false);

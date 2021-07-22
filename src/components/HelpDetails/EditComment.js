@@ -17,6 +17,7 @@ const EditComment = (props) => {
   const authImg = useSelector((state) => state.auth.profileImg);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  console.log(props.images)
 
   useEffect(() => {
     props.images && setSelectedFiles(props.images);
@@ -65,7 +66,12 @@ const EditComment = (props) => {
 
     let toRemove = "";
 
-    if (props.images) {
+    if (
+      props.images &&
+      props.images.length > 0 &&
+      selectedFiles &&
+      selectedFiles.length > 0
+    ) {
       toRemove = props.images.filter((photo) => !selectedFiles.includes(photo));
     }
 

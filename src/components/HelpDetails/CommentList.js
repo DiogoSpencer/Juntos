@@ -10,7 +10,7 @@ import {
   listComments,
   reportComment,
 } from "../../services/http";
-import { useRouteMatch } from "react-router";
+import { useHistory, useRouteMatch } from "react-router";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import EditComment from "./EditComment";
 
@@ -69,9 +69,8 @@ const reverseItems = (items) => {
 const CommentList = (props) => {
   const match = useRouteMatch();
   const requestId = match.params.requestId;
-
   const authRole = useSelector((state) => state.auth.role);
-  const authUsername = useSelector((state) => state.auth.username);
+  const history = useHistory();
 
   const messagesEndRef = useRef(null);
 
@@ -79,7 +78,6 @@ const CommentList = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(true);
   const [responseData, setResponseData] = useState([]);
-  const [errorMsg, setErrorMsg] = useState("");
   const [disableButton, setDisableButton] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [moreComments, setMoreComments] = useState(false);
@@ -98,6 +96,7 @@ const CommentList = (props) => {
         }&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}&value=${requestId}`
       ).then(
         (response) => {
+          setIsLoading(false);
           setResponseSize(response.data.content.length);
           console.log(response.data);
           if (match.path.includes("comentarios")) {
@@ -123,7 +122,11 @@ const CommentList = (props) => {
           }
         },
         (error) => {
-          setErrorMsg(error);
+          setIsLoading(false);
+          //se houver erro da para fazer pedido outra vez?
+          if (error && error.status === 403) {
+            history.replace("/conversas");
+          }
           console.log(error);
         }
       );
@@ -134,7 +137,7 @@ const CommentList = (props) => {
     isLoading && setIsLoading(false);
     refresh && setRefresh(false);
     moreComments && setMoreComments(false);
-  }, [responseData, errorMsg]);
+  }, [responseData]);
 
   const loadNextPageHandler = () => {
     setPageNumber((prevState) => {
@@ -234,7 +237,7 @@ const CommentList = (props) => {
                 <Fragment>
                   <EditComment
                     text={comment.text}
-                    images={comment.images}
+                    images={comment.photos}
                     buttonText="Alterar"
                     closeEditHandler={closeEditHandler}
                     commentId={comment.id}
@@ -289,7 +292,7 @@ const CommentList = (props) => {
                 <Fragment>
                   <EditComment
                     text={comment.text}
-                    images={comment.images}
+                    images={comment.photos}
                     buttonText="Alterar"
                     closeEditHandler={closeEditHandler}
                     commentId={comment.id}

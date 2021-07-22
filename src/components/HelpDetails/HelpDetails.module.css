@@ -157,3 +157,19 @@
   width: 5em;
   font-size: 1em;
 }
+
+.giveUpButton {
+  width: 15em;
+  height: 2.5em;
+  background-color: transparent;
+  color: #e6513e;
+  border-radius: 25px;
+  font-weight: 600;
+  border: 1px solid #e6513e;
+}
+
+.giveUpButton:hover {
+  background-color: #e6513e;
+  color: white;
+  border: 1px solid #e6513e;
+}

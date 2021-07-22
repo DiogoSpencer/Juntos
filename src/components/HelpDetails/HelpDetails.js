@@ -19,8 +19,8 @@ import MapHelpDetails from "./MapHelpDetails";
 
 let text = "";
 
-const HelpDetails = (props) => {
-  const [responseData, setResponseData] = useState("");
+const HelpDetails = () => {
+  const [responseData, setResponseData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [point, setPoint] = useState([]);
   const [dangerPoint, setDangerPoint] = useState([]);
@@ -80,30 +80,27 @@ const HelpDetails = (props) => {
           console.log(responseData);
           let responsePoints = response.data.points;
           for (const point of responsePoints) {
-            //.map((point) => {
             point.lat = parseFloat(point.lat);
             point.lon = parseFloat(point.lon);
             point.type = response.data.type;
-          } //);
+          }
           setPoint(responsePoints);
 
           let responseDanger = response.data.dangers;
           for (const point of responseDanger) {
-            //.map((point) => {
             point.lat = parseFloat(point.lat);
             point.lon = parseFloat(point.lon);
-          } //);
+          }
           setDangerPoint(responseDanger);
 
           let responseInterest = response.data.interests;
           for (const point of responseInterest) {
-            //.map((point) => {
             point.lat = parseFloat(point.lat);
             point.lon = parseFloat(point.lon);
-          } //);
+          }
           setInterestPoint(responseInterest);
 
-          if (response.data.helperUsernames.includes(loggedUsername)) {
+          if (response.data.isAHelper) {
             setIsHelper(true);
           }
           typeHandler(response.data.type);
@@ -111,13 +108,6 @@ const HelpDetails = (props) => {
         (error) => {
           setIsLoading(false);
           console.log(error);
-          /*console.log(error);
-        setIsLoading(false);
-        if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
-        }*/
         }
       );
     }
@@ -125,7 +115,7 @@ const HelpDetails = (props) => {
   }, [helpId, hasChanges, loggedUsername]);
 
   useEffect(() => {
-    if (responseData !== "") {
+    if (responseData && responseData.length > 0) {
       if (
         match.path === "/minhasajudas/participacoes/:requestId" &&
         !isHelper
@@ -160,7 +150,7 @@ const HelpDetails = (props) => {
 
   let isOwner = false;
 
-  if (responseData.owner === loggedUsername) {
+  if (responseData && responseData.owner === loggedUsername) {
     isOwner = true;
   }
 
@@ -175,14 +165,7 @@ const HelpDetails = (props) => {
       },
       (error) => {
         setIsLoading(false);
-
-        /*console.log(error);
-        setIsLoading(false);
-        if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
-        }*/
+        console.log(error);
       }
     );
   };
@@ -198,14 +181,6 @@ const HelpDetails = (props) => {
       },
       (error) => {
         setIsLoading(false);
-
-        /*console.log(error);
-        setIsLoading(false);
-        if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
-        }*/
       }
     );
   };
@@ -284,23 +259,33 @@ const HelpDetails = (props) => {
             <ImageDisplay images={responseData.photoGalery} />
           </div>
 
-          <div className={classes.inputPass}>
-            <InputPassword isOwner={isOwner} markerId={helpId} />
-          </div>
-          {!isOwner && (
+          {responseData && (responseData.wasAHelper || responseData.isAHelper) && (
+            <div className={classes.inputPass}>
+              {responseData.wasAHelper && (
+                <p className={classes.passText}>
+                  Ajuda concluída! Obrigado &#128512;
+                </p>
+              )}
+              {responseData.isAHelper && (
+                <InputPassword isOwner={isOwner} markerId={helpId} />
+              )}
+            </div>
+          )}
+          {!isOwner && responseData && !responseData.wasAHelper && (
             <div className={classes.buttonDisplay}>
-              <Button
-                text={text}
-                onClick={joinHelpHandler}
-                disabled={isHelper || !responseData.activeMarker}
-              />
-              {isHelper && (
-                <span
-                  className={classes.participating}
+              {!responseData.isAHelper ? (
+                <Button
+                  text={text}
+                  onClick={joinHelpHandler}
+                  disabled={!responseData.activeMarker}
+                />
+              ) : (
+                <button
                   onClick={onLeaveHandler}
+                  className={classes.giveUpButton}
                 >
-                  Estás a participar! Clica aqui para desistir.
-                </span>
+                  Desistir
+                </button>
               )}
             </div>
           )}

@@ -1,6 +1,11 @@
 import React, { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Switch, Redirect, useLocation } from "react-router-dom";
+import {
+  Route,
+  Switch,
+  Redirect,
+  useLocation,
+} from "react-router-dom";
 import gS from "./services/generalServices.json";
 import jwt_decode from "jwt-decode";
 import Layout from "./components/layout/Layout";
@@ -9,10 +14,6 @@ import { authActions } from "./store/session/auth";
 import { getUserUsername } from "./services/http";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
-
-const USER = "USER";
-const MOD = "MOD";
-const ADMIN = "ADMIN";
 
 const Home = React.lazy(() => import("./components/Home/Home"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
@@ -49,8 +50,8 @@ const EditRequest = React.lazy(() =>
   import("./components/HelpForms/EditRequest")
 );
 const HeroiForm = React.lazy(() => import("./components/Herois/HeroiForm"));
-const BackOfficeHome = React.lazy(() =>
-  import("./components/BackOffice/BackOfficeHome")
+const BackOfficeCompany = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeCompany")
 );
 const BackOfficeAppEngine = React.lazy(() =>
   import("./components/BackOffice/BackOfficeAppEngine")
@@ -71,9 +72,9 @@ const BackOfficeTable = React.lazy(() =>
 function App() {
   const dispatch = useDispatch();
   const isLogged = useSelector((state) => state.auth.isLogged);
-  const role = useSelector((state) => state.auth.role);
   //verificar aqui se tokens sao iguais - redux e localstorage -> se nao for -> logout
   //isto faz re render sempre que fazemos mount de um componente
+
   useEffect(() => {
     const token = localStorage.getItem(gS.storage.token);
     if (token !== null && token !== undefined) {
@@ -217,35 +218,19 @@ function App() {
               <EditRequest />
             </Route>
             <Route exact path="/backoffice">
-              {role !== USER ? <BackOfficeStats /> : <Redirect to="/home" />}
+              <BackOfficeStats />
             </Route>
             <Route path="/backoffice/utilizadores">
-              {role === ADMIN || role === MOD ? (
-                <BackOfficeUsers />
-              ) : (
-                <Redirect to="/backoffice" />
-              )}
+              <BackOfficeUsers />
             </Route>
             <Route path="/backoffice/pedidos">
-              {role === ADMIN || role === MOD ? (
-                <BackOfficeRequests />
-              ) : (
-                <Redirect to="/backoffice" />
-              )}
+              <BackOfficeRequests />
             </Route>
             <Route path="/backoffice/statsgerais">
-              {role === ADMIN || role === MOD ? (
-                <BackOfficeTable />
-              ) : (
-                <Redirect to="/backoffice" />
-              )}
+              <BackOfficeTable />
             </Route>
             <Route path="/backoffice/appEng">
-              {role === ADMIN || role === MOD ? (
-                <BackOfficeAppEngine />
-              ) : (
-                <Redirect to="/backoffice" />
-              )}
+              <BackOfficeAppEngine />
             </Route>
           </PrivateRoute>
 
