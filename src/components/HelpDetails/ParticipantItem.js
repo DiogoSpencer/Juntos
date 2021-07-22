@@ -6,7 +6,7 @@ import userIcon from "../../img/userblue.png";
 
 const PartcipantItem = (props) => {
   return (
-    <Link to={`/verperfil/${props.username}`} className={classes.container}>
+    <Link to={`/juntos/verperfil/${props.username}`} className={classes.container}>
       {props.profileImg ? (
         <img
           src={props.profileImg}

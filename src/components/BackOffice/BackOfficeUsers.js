@@ -13,6 +13,7 @@ import useInput from "../hooks/use-input";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { Link } from "react-router-dom";
+import BackOfficeReports from "./BackOfficeReports";
 
 const ASC = "ASC";
 const DESC = "DESC";
@@ -359,7 +360,7 @@ const BackOfficeUsers = () => {
         onClick={prevPageHandler}
         className={classes.navArrow}
       />
-      <span className={classes.pageNumber}>{pageNumber+1}</span>
+      <span className={classes.pageNumber}>{pageNumber + 1}</span>
       <img
         src={rightArrowIcon}
         alt="página-seguinte"
@@ -431,7 +432,7 @@ const BackOfficeUsers = () => {
                     </td>
                     <td className={classes.emailContainer}>{user.email}</td>
                     <td className={classes.usernameContainer}>
-                      <Link to={`/verperfil/${user.username}`}>
+                      <Link to={`/juntos/verperfil/${user.username}`}>
                         {user.username}
                       </Link>
                     </td>
@@ -510,7 +511,7 @@ const BackOfficeUsers = () => {
                     </td>
                     <td className={classes.emailContainer}>{user.email}</td>
                     <td className={classes.usernameContainer}>
-                      <Link to={`/verperfil/${user.username}`}>
+                      <Link to={`/juntos/verperfil/${user.username}`}>
                         {user.username}
                       </Link>
                     </td>

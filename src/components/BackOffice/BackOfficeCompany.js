@@ -5,7 +5,9 @@ import userIcon from "../../img/userblue.png";
 import leftArrowIcon from "../../img/leftArrow.png";
 import rightArrowIcon from "../../img/rightArrow.png";
 import refreshIcon from "../../img/refresh.png";
-import { getAllUsers, verifyCompany } from "../../services/http";
+import binIcon from "../../img/bin.png";
+import checkIcon from "../../img/check.png";
+import { deleteUser, getAllUsers, verifyCompany } from "../../services/http";
 
 const ASC = "ASC";
 const DESC = "DESC";
@@ -104,16 +106,35 @@ const BackOfficeCompany = () => {
     setRefresh(true);
   };
 
-  const acceptCompanyHandler = (email) => {
-    verifyCompany(email).then(
-      (response) => {
-        setRefresh(true);
-      },
-      (error) => {}
-    );
+  const acceptCompanyHandler = (email, verify) => {
+    if (verify) {
+      setIsLoading(true);
+      verifyCompany(email, verify).then(
+        (response) => {
+          setRefresh(true);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else {
+      if (
+        window.confirm(
+          "Tem a certeza que pretende apagar esta conta? Esta ação é irreversível."
+        )
+      ) {
+        setIsLoading(true);
+        verifyCompany(email, verify).then(
+          (response) => {
+            setRefresh(true);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+    }
   };
-
-  const onDeleteCompanyHandler = (email) => {};
 
   const filterButtons = (
     <div className={classes.filterButtons}>
@@ -194,8 +215,6 @@ const BackOfficeCompany = () => {
         <th className={classes.lastNameContainer}>Apelido</th>
         <th className={classes.orgContainer}>Organização</th>
         <th className={classes.dateContainer}>Data de Criação</th>
-        <th className={classes.prefContainer}>Preferências</th>
-        <th className={classes.numContainer}>Nº Ajudas</th>
         <th className={classes.privacyContainer}>Privacidade</th>
         <th className={classes.roleContainer}>Role</th>
         <th className={classes.stateContainer}>Estado</th>
@@ -213,6 +232,7 @@ const BackOfficeCompany = () => {
         </div>
       )}
       <div className={classes.mainSubContainer}>
+        {filterButtons}
         {orderButtons}
         <img
           src={refreshIcon}
@@ -256,59 +276,32 @@ const BackOfficeCompany = () => {
                   <td className={classes.dateContainer}>
                     {formatDate(company.creationDate)}
                   </td>
-                  <td className={classes.prefContainer}>
-                    <ul>
-                      {company.favTopics &&
-                        company.favTopics.length > 0 &&
-                        company.favTopics.map((favTopic, idx) => (
-                          <li key={idx}>{favTopic}</li>
-                        ))}
-                    </ul>
-                  </td>
-                  <td className={classes.numContainer}>{company.numHelps}</td>
                   <td className={classes.privacyContainer}>
                     {company.privacy}
                   </td>
                   <td className={classes.roleContainer}>{company.role}</td>
                   <td className={classes.stateContainer}>{company.state}</td>
                   <td className={classes.iconsContainer}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 256 256"
+                    <img
+                      src={checkIcon}
+                      alt="aceitar"
                       className={classes.iconRow}
-                      onClick={() => acceptCompanyHandler(company.email)}
-                    >
-                      <rect width="256" height="256" fill="none" />
-                      <polyline
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="24"
-                        points="216 72.005 104 184 48 128.005"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="none"
-                      viewBox="0 0 24 24"
+                      onClick={() => acceptCompanyHandler(company.email, true)}
+                    />
+                    <img
+                      src={binIcon}
+                      alt="apagar"
                       className={classes.iconRow}
-                      onClick={() => onDeleteCompanyHandler(company.email)}
-                    >
-                      <path d="M15 3C15.5523 3 16 3.44772 16 4L18 4C18.5523 4 19 4.44772 19 5C19 5.55229 18.5523 6 18 6L6 6C5.44772 6 5 5.55228 5 5C5 4.44772 5.44772 4 6 4L8 4C8 3.44772 8.44772 3 9 3H15Z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M6 7H18V19C18 20.1046 17.1046 21 16 21H8C6.89543 21 6 20.1046 6 19V7ZM9.5 9C9.22386 9 9 9.22386 9 9.5V18.5C9 18.7761 9.22386 19 9.5 19C9.77614 19 10 18.7761 10 18.5V9.5C10 9.22386 9.77614 9 9.5 9ZM14.5 9C14.2239 9 14 9.22386 14 9.5V18.5C14 18.7761 14.2239 19 14.5 19C14.7761 19 15 18.7761 15 18.5V9.5C15 9.22386 14.7761 9 14.5 9Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                      onClick={() => acceptCompanyHandler(company.email, false)}
+                    />
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
       </div>
+      {navPageButtons}
+      {sizeButtons}
     </div>
   );
 };

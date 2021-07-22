@@ -339,7 +339,7 @@ const HelpDetailsOwner = () => {
               </button>
             </form>
           )}
-          <Link to={`/editar/${helpId}`} className={classes.editRequest}>
+          <Link to={`/juntos/editar/${helpId}`} className={classes.editRequest}>
             Editar Pedido
           </Link>
           <div className={classes.deleteRequest}>

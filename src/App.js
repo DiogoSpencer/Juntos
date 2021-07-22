@@ -1,11 +1,6 @@
 import React, { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Route,
-  Switch,
-  Redirect,
-  useLocation,
-} from "react-router-dom";
+import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import gS from "./services/generalServices.json";
 import jwt_decode from "jwt-decode";
 import Layout from "./components/layout/Layout";
@@ -68,6 +63,9 @@ const BackOfficeStats = React.lazy(() =>
 const BackOfficeTable = React.lazy(() =>
   import("./components/BackOffice/BackOfficeTable")
 );
+const BackOfficeReports = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeReports")
+);
 
 function App() {
   const dispatch = useDispatch();
@@ -78,6 +76,7 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem(gS.storage.token);
     if (token !== null && token !== undefined) {
+      //basta if token?
       const parsedToken = jwt_decode(token);
       if (!isLogged) {
         dispatch(
@@ -174,65 +173,69 @@ function App() {
             <ReceiveRegister />
           </Route>
 
-          <PrivateRoute>
-            <Route path="/verperfil/:username">
-              <UserProfile />
-            </Route>
-            <Route path="/perfil/:username">
-              <Profile />
-            </Route>
-            <Route exact path="/minhasajudas">
-              <MyHelps />
-            </Route>
-            <Route path="/minhasajudas/criadas/:requestId">
-              <HelpDetailsOwner />
-            </Route>
-            <Route path="/minhasajudas/participacoes/:requestId">
-              <HelpDetails buttonText="Oferecer Ajuda" />
-            </Route>
-            <Route path="/novopedido">
-              <Help />
-            </Route>
-            <Route exact path="/ajudas">
-              <MyHelps />
-            </Route>
-            <Route path="/ajudas/pedidos/:requestId">
-              <HelpDetails buttonText="Oferecer Ajuda" />
-            </Route>
-            <Route path="/ajudas/ofertas/:requestId">
-              <HelpDetails buttonText="Pedir Ajuda" />
-            </Route>
-            <Route exact path="/conversas">
-              <MyHelps />
-            </Route>
-            <Route path="/conversas/criadas/:requestId">
-              <CommentList />
-            </Route>
-            <Route path="/conversas/participacoes/:requestId">
-              <CommentList />
-            </Route>
-            <Route path="/mapa">
-              <TodasAjudas />
-            </Route>
-            <Route path="/editar/:requestId">
-              <EditRequest />
-            </Route>
-            <Route exact path="/backoffice">
-              <BackOfficeStats />
-            </Route>
-            <Route path="/backoffice/utilizadores">
-              <BackOfficeUsers />
-            </Route>
-            <Route path="/backoffice/pedidos">
-              <BackOfficeRequests />
-            </Route>
-            <Route path="/backoffice/statsgerais">
-              <BackOfficeTable />
-            </Route>
-            <Route path="/backoffice/appEng">
-              <BackOfficeAppEngine />
-            </Route>
-          </PrivateRoute>
+          <Route path="/juntos/verperfil/:username">
+            <UserProfile />
+          </Route>
+          <Route path="/juntos/perfil/:username">
+            <Profile />
+          </Route>
+          <Route exact path="/juntos/minhasajudas">
+            <MyHelps />
+          </Route>
+          <Route path="/juntos/minhasajudas/criadas/:requestId">
+            <HelpDetailsOwner />
+          </Route>
+          <Route path="/juntos/minhasajudas/participacoes/:requestId">
+            <HelpDetails buttonText="Oferecer Ajuda" />
+          </Route>
+          <Route path="/juntos/novopedido">
+            <Help />
+          </Route>
+          <Route exact path="/juntos/ajudas">
+            <MyHelps />
+          </Route>
+          <Route path="/juntos/ajudas/pedidos/:requestId">
+            <HelpDetails buttonText="Oferecer Ajuda" />
+          </Route>
+          <Route path="/juntos/ajudas/ofertas/:requestId">
+            <HelpDetails buttonText="Pedir Ajuda" />
+          </Route>
+          <Route exact path="/juntos/conversas">
+            <MyHelps />
+          </Route>
+          <Route path="/juntos/conversas/criadas/:requestId">
+            <CommentList />
+          </Route>
+          <Route path="/juntos/conversas/participacoes/:requestId">
+            <CommentList />
+          </Route>
+          <Route path="/juntos/mapa">
+            <TodasAjudas />
+          </Route>
+          <Route path="/juntos/editar/:requestId">
+            <EditRequest />
+          </Route>
+          <Route exact path="/backoffice">
+            <BackOfficeStats />
+          </Route>
+          <Route path="/backoffice/reportes">
+            <BackOfficeReports />
+          </Route>
+          <Route path="/backoffice/utilizadores">
+            <BackOfficeUsers />
+          </Route>
+          <Route path="/backoffice/pedidos">
+            <BackOfficeRequests />
+          </Route>
+          <Route path="/backoffice/statsgerais">
+            <BackOfficeTable />
+          </Route>
+          <Route path="/backoffice/appEng">
+            <BackOfficeAppEngine />
+          </Route>
+          <Route path="/backoffice/organizacoes">
+            <BackOfficeCompany />
+          </Route>
 
           <Route path="*">
             <Redirect to="/home" />

@@ -11,8 +11,8 @@
   grid-area: tt;
   align-self: center;
   display: grid;
-  grid-template-columns: 0.4fr 0.1fr 0.5fr;
-  grid-template-areas: "zx . pl";
+  grid-template-columns: auto;
+  grid-template-areas: "zx";
 }
 
 .title {

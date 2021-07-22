@@ -383,9 +383,15 @@ export async function homeData() {
   }
 }
 
-export async function verifyCompany(email: string) {
+export async function verifyCompany(email: string, verify: boolean) {
   try {
-    return await axios.put(`${url}/rest/user/verify/${email}`);
+    return (
+      await axios.put(`${url}/rest/user/verify`),
+      {
+        email: email,
+        verified: verify,
+      }
+    );
   } catch (error) {
     throw error.response;
   }

@@ -395,12 +395,12 @@ function Map(props: MapProps) {
                                         <span className='info-footer'>lat: {point.lat} <br/> lon: {point.lon}</span>
                                         <br/>
                                         {point.generalType === 'REQUEST' &&
-                                        <Link to={`ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
+                                        <Link to={`/juntos/ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
                                           <Button text="Detalhes"/>
                                         </Link>
                                         }
                                         {point.generalType === 'OFFER' &&
-                                        <Link to={`ajudas/ofertas/${point.id}`} className={classes.linkContacts}>
+                                        <Link to={`/juntos/ajudas/ofertas/${point.id}`} className={classes.linkContacts}>
                                           <Button text="Detalhes"/>
                                         </Link>
                                         }
@@ -440,12 +440,12 @@ function Map(props: MapProps) {
                                     <span className='info-footer'>lat: {point.lat} <br/> lon: {point.lon}</span>
                                     <br/>
                                     {point.generalType === 'REQUEST' &&
-                                    <Link to={`ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
+                                    <Link to={`/juntos/ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
                                       <Button text="Detalhes"/>
                                     </Link>
                                     }
                                     {point.generalType === 'OFFER' &&
-                                    <Link to={`ajudas/ofertas/${point.id}`} className={classes.linkContacts}>
+                                    <Link to={`/juntos/ajudas/ofertas/${point.id}`} className={classes.linkContacts}>
                                       <Button text="Detalhes"/>
                                     </Link>
                                     }

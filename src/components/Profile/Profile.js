@@ -226,14 +226,7 @@ const Profile = () => {
           history.replace("/home");
         },
         (error) => {
-          if (error.status === 401) {
-            alert(
-              "Sessão expirou! Efetue login novamente para concluir a operação"
-            );
-            dispatch(authActions.logout());
-            localStorage.removeItem(gS.storage.token);
-            history.replace("/home");
-          } else {
+          if (error) {
             console.log(error);
             setDeleteError(true);
           }

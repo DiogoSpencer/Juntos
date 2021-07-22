@@ -31,8 +31,7 @@ let location = "";
 
 const MyHelps = () => {
   const match = useRouteMatch();
-
-  if (match.path === "/ajudas") {
+  if (match.path === "/juntos/ajudas") {
     ALL = "all";
     TITLE = "title";
     TOPICS = "topics";
@@ -48,7 +47,7 @@ const MyHelps = () => {
     TOPICS = "myTopics";
     location = "myLocation";
     mainTitle =
-      match.path === "/minhasajudas" ? "As Minhas Ajudas" : "Conversas";
+      match.path === "/juntos/minhasajudas" ? "As Minhas Ajudas" : "Conversas";
     firstButton = "Criadas";
     secondButton = "Participações";
     pathFirstArg = "criadas";
@@ -90,8 +89,10 @@ const MyHelps = () => {
         },
         (error) => {
           console.log(error);
-          setIsLoading(false);
-          setRefresh(false);
+          if (error) {
+            setIsLoading(false);
+            setRefresh(false);
+          }
         }
       );
     }
@@ -215,6 +216,7 @@ const MyHelps = () => {
   const autoComplete =
     byParam === location ? classes.autoComplete : classes.autoCompleteHidden;
 
+  console.log(match.path);
   //lista de ajudas ativas -> mapear da data que se recebe
   const ownRequests = (
     <Fragment>
@@ -403,7 +405,7 @@ const MyHelps = () => {
         onClick={prevPageHandler}
         className={classes.navArrow}
       />
-      <span className={classes.pageNumber}>{pageNumber+1}</span>
+      <span className={classes.pageNumber}>{pageNumber + 1}</span>
       <img
         src={rightArrowIcon}
         alt="página-seguinte"

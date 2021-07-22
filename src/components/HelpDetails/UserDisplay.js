@@ -15,7 +15,7 @@ const UserDisplay = (props) => {
         />
       ) : (
         <Link
-          to={`/verperfil/${props.username}`}
+          to={`/juntos/verperfil/${props.username}`}
           className={classes.profileImg}
         >
           {props.profileImg ? (

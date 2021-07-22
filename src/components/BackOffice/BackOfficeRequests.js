@@ -5,8 +5,8 @@ import leftArrowIcon from "../../img/leftArrow.png";
 import rightArrowIcon from "../../img/rightArrow.png";
 import editIcon from "../../img/edit.png";
 import binIcon from "../../img/bin.png";
-import closeIcon from "../../img/closered.png";
 import checkIcon from "../../img/check.png";
+import closeIcon from "../../img/closered.png";
 import useInput from "../hooks/use-input";
 import { useSelector } from "react-redux";
 import refreshIcon from "../../img/refresh.png";
@@ -449,7 +449,7 @@ const BackOfficeRequests = () => {
                           request.helperUsernames.length > 0 &&
                           request.helperUsernames.map((user, idx) => (
                             <li key={idx}>
-                              <Link to={`/verperfil/${user}`}>{user}</Link>
+                              <Link to={`/juntos/verperfil/${user}`}>{user}</Link>
                             </li>
                           ))}
                       </ul>
@@ -485,7 +485,7 @@ const BackOfficeRequests = () => {
                         className={classes.iconRow}
                         onClick={() => editRequestHandler(request.id)}
                       />
-                      <Link to={`/editar/${request.id}`}>
+                      <Link to={`/juntos/editar/${request.id}`}>
                         <img
                           src={shareIcon}
                           alt="link-perfil"
@@ -597,7 +597,7 @@ const BackOfficeRequests = () => {
                           request.helperUsernames.length > 0 &&
                           request.helperUsernames.map((user, idx) => (
                             <li key={idx}>
-                              <Link to={`/verperfil/${user}`}>{user}</Link>
+                              <Link to={`/juntos/verperfil/${user}`}>{user}</Link>
                             </li>
                           ))}
                       </ul>
@@ -644,7 +644,7 @@ const BackOfficeRequests = () => {
                         alt="aceitar"
                         className={classes.iconRow}
                         onClick={onSubmitChangesHandler}
-                      />{" "}
+                      />
                       <img
                         src={closeIcon}
                         alt="fechar"

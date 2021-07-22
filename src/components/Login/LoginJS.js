@@ -11,6 +11,7 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 import juntosIcon from "../../img/logo.png";
 import { GoogleLogin } from "react-google-login";
 import FacebookLogin from "react-facebook-login";
+//import CustomizedSnackbars from "../AddOns/CustomizedSnackbars";
 
 //out of rendering cycle - functions to verify input
 const isNotEmpty = (value) => value.trim() !== "";
@@ -137,6 +138,7 @@ const Login = (props) => {
     );
   };
 */
+
   const formSubmissionHandler = (event) => {
     event.preventDefault();
 
@@ -358,9 +360,7 @@ const Login = (props) => {
               />
             </div>
             {error && (
-              <p className={`${classes.formError} ${classes.serverError}`}>
-                {error}
-              </p>
+              <p className={`${classes.formError} ${classes.serverError}`}></p>
             )}
           </Fragment>
         ) : (
@@ -392,5 +392,10 @@ export default Login;
                 cookiePolicy={"single_host_origin"}
                 className={classes.google}
               />
+      <CustomizedSnackbars open={snackBarOpen} text="hello" />
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
 
-*/
+          setSnackBarOpen(true);
+
+
+              */

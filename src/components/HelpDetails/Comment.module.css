@@ -54,6 +54,11 @@
   fill: lightgray;
 }
 
+.reportFlagFilled {
+  height: 1.5em;
+  fill: red;
+}
+
 .reportFlag:hover {
   cursor: pointer;
   fill: red;

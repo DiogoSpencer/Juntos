@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Map, { Bounds, Center, Point } from "../Map/Map";
 import { getMarkers } from "../../services/http";
 import SideButtons from "../UI/SideButtons";

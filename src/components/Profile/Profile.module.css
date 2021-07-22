@@ -63,12 +63,11 @@
 }
 
 .passLink {
-  margin-left: 4em;
   grid-area: pl;
   font-size: 0.9em;
   display: flex;
   flex-direction: column;
-  padding-left: 2.5em;
+  padding-left: 4.5em;
 }
 
 .keyIcon {
