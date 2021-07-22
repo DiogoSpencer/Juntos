@@ -62,12 +62,16 @@ const MultipleUpload = (props) => {
         alert("Máximo 5 imagens");
       } else {
         filesArray.forEach((file) => {
-          if (file && file.type.substring(0, 5) === "image" && file.size <= 10485760) {
+          if (
+            file &&
+            file.type.substring(0, 5) === "image" &&
+            file.size <= 10485760
+          ) {
             fileChanger((prevState) => {
               return prevState.concat(file);
             });
-          } else if (file.size > 10485760) {
-            alert("Só imagens com menos de 10MB")
+          } else if (file && file.size > 10485760) {
+            alert("Só imagens com menos de 10MB");
           }
         });
       }
@@ -75,7 +79,7 @@ const MultipleUpload = (props) => {
   };
 
   const onRemoveHandler = (event) => {
-    fileChanger((prevState) => {
+    fileChanger(() => {
       let currentState = [...props.images];
       currentState.splice(event.target.id, 1);
       return currentState;

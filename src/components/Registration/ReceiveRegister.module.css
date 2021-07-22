@@ -1,0 +1,53 @@
+.mainContainer {
+  display: grid;
+  grid-template-areas: "mc";
+}
+
+.spinner {
+  grid-area: mc;
+  align-self: center;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.completeDiv {
+  grid-area: mc;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-areas:
+    "tl"
+    "lg"
+    "pc";
+  row-gap: 3em;
+}
+
+.completeTitle {
+  grid-area: tl;
+  padding-top: 1em;
+  justify-self: center;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2em;
+}
+
+.completeImg {
+  height: 18em;
+  grid-area: lg;
+  justify-self: center;
+  align-self: center;
+}
+
+.completeText {
+  grid-area: pc;
+  justify-self: center;
+  align-self: center;
+  font-weight: 600;
+  color: #3385d9;
+  font-size: 1.1em;
+}

@@ -3,7 +3,7 @@ import { Link, NavLink, useHistory } from "react-router-dom";
 import classes from "./NavBar.module.css";
 import logo from "../../img/logo.png";
 import logoutIcon from "../../img/exit.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalAuth from "../Login/ModalAuth.js";
 import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
@@ -17,6 +17,19 @@ const NavBar = () => {
   const profileImg = useSelector((state) => state.auth.profileImg);
   const dispatch = useDispatch();
   const history = useHistory();
+  const role = useSelector((state) => state.auth.role);
+
+  useEffect(() => {
+    if (history.location.pathname === "/backoffice/" && role === "USER") {
+      history.replace("/home");
+    } else if (
+      history.location.pathname.includes("/backoffice/") &&
+      (role === "USER" || role === "PARTNER")
+    ) {
+      history.replace("/home");
+    }
+    // eslint-disable-next-line
+  }, [history.location.pathname, role]);
 
   const [loginShow, setLoginShow] = useState(false);
 

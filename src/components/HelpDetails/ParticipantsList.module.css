@@ -1,0 +1,58 @@
+.container {
+  display: grid;
+  grid-template-areas: "mf" "bc";
+}
+
+.spinner {
+  grid-area: mf;
+  align-self: center;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.list {
+  grid-area: mf;
+  align-self: center;
+  justify-self: center;
+  list-style: none;
+  padding-left: 0;
+}
+
+.buttonContainer {
+  grid-area: bc;
+  align-self: center;
+  justify-self: center;
+}
+
+.seeMore {
+  width: 8em;
+  height: 2.5em;
+  border-radius: 25px;
+  font-weight: 600;
+  background-color: transparent;
+  color: #3385d9;
+  border: 1px solid #3385d9;
+}
+
+.seeMore:hover {
+  background-color: #3385d9;
+  color: white;
+  border: 1px solid #3385d9;
+}
+
+.seeMore:disabled {
+  cursor: not-allowed;
+}
+
+.seeMore:hover:disabled {
+  background-color: transparent;
+  color: #3385d9;
+  border: 1px solid #3385d9;
+  cursor: not-allowed;
+}

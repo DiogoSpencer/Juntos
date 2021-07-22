@@ -173,3 +173,8 @@
   color: #3385d9;
   font-size: 1.1em;
 }
+
+.buttonsWrap {
+  display: flex;
+  margin-top: 2em;
+}

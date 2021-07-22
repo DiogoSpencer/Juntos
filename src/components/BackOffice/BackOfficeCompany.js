@@ -19,7 +19,7 @@ const PARTNER = "PARTNER";
 const ADMIN = "ADMIN";
 const ENABLE = "ENABLE";
 const DISABLE = "DISABLE";
-const byParam = "company"
+const byParam = "company";
 
 const formatDate = (longDate) => {
   const date = new Date(longDate);
@@ -42,7 +42,7 @@ const BackOfficeCompany = () => {
       setIsLoading(true);
 
       getAllUsers(
-        `?by=${byParam}&value=${PUBLIC}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+        `?by=${byParam}&value=${""}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
       ).then(
         (response) => {
           setIsLoading(false);
@@ -224,6 +224,7 @@ const BackOfficeCompany = () => {
           {tableHead}
           <tbody>
             {responseData &&
+              responseData.length > 0 &&
               responseData.map((company) => (
                 <tr key={company.username} className={classes.topicsContainer}>
                   <td className={classes.imgContainer}>
@@ -258,6 +259,7 @@ const BackOfficeCompany = () => {
                   <td className={classes.prefContainer}>
                     <ul>
                       {company.favTopics &&
+                        company.favTopics.length > 0 &&
                         company.favTopics.map((favTopic, idx) => (
                           <li key={idx}>{favTopic}</li>
                         ))}

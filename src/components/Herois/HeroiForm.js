@@ -5,6 +5,7 @@ import { useState } from "react";
 import Button from "../UI/Button";
 import HeroiUpload from "./HeroiUpload";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import { useRouteMatch } from "react-router";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
@@ -13,6 +14,8 @@ const HeroiForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const firstName = useSelector((state) => state.auth.firstName);
   //const lastName = useSelector((state) => state.auth.lastName);
+  const match = useRouteMatch();
+  const urlCode = match.params.code;
 
   const {
     value: enteredName,
@@ -38,7 +41,7 @@ const HeroiForm = () => {
 
   const heroiSubmissionHandler = (event) => {
     event.preventDefault();
-    
+
     if (!formIsValid) {
       return;
     }
@@ -52,7 +55,7 @@ const HeroiForm = () => {
       <h1 className={classes.heroiTitle}>Parabéns Herói {firstName}!</h1>
       <p className={classes.heroiInstructions}>
         Escolhe um dos teus pedidos favoritos de entre todos os que participaste
-        e preenche este formulário com uma foto <br/> e uma pequena descrição a
+        e preenche este formulário com uma foto <br /> e uma pequena descrição a
         explicar porque este pedido foi tão especial para ti
       </p>
       {isLoading && (

@@ -83,9 +83,12 @@ const Register = (props) => {
   };
 
   const checkedInterestHandler = (position) => {
-    const updatedCheckedState = isCheckedInterest.map((interest, index) =>
-      index === position ? !interest : interest
-    );
+    const updatedCheckedState =
+      isCheckedInterest &&
+      isCheckedInterest.length > 0 &&
+      isCheckedInterest.map((interest, index) =>
+        index === position ? !interest : interest
+      );
 
     setIsCheckedInterest(updatedCheckedState);
   };
@@ -111,9 +114,9 @@ const Register = (props) => {
 
   let topics = [];
 
-  for (let i = 0; i < isCheckedInterest.length; i++ ) {
+  for (let i = 0; i < isCheckedInterest.length; i++) {
     if (isCheckedInterest[i]) {
-      topics.push(interests[i])
+      topics.push(interests[i]);
     }
   }
 
@@ -231,7 +234,7 @@ const Register = (props) => {
         />
         {confirmationHasError && (
           <p className={classes.registError}>
-            Por favor insira uma confirmação de password válida.
+            Por favor insira a confirmação.
           </p>
         )}
         {enteredConfirmationIsValid && !passConfirmed && (
@@ -280,6 +283,7 @@ const Register = (props) => {
           value={enteredEmail}
           onChange={emailChangeHandler}
           onBlur={emailBlurHandler}
+          className={classes.emailInput}
         />
         {emailHasError && (
           <p className={classes.registError}>Por favor insira um e-mail.</p>
@@ -299,41 +303,43 @@ const Register = (props) => {
       <div className={classes.interestDiv}>
         <h3 className={classes.subTitle}>Tens algum interesse?</h3>
         <ul className={classes.interestList}>
-          {interests.map((interest, index) => {
-            return (
-              <li key={index}>
-                <input
-                  type="checkbox"
-                  id={`${showInterest[index]}`}
-                  value={isCheckedInterest[index]}
-                  checked={isCheckedInterest[index]}
-                  onChange={() => checkedInterestHandler(index)}
-                />
-                <label
-                  htmlFor={`${showInterest[index]}`}
-                  className={classes.labelForm}
-                >
-                  {showInterest[index]}
-                </label>
-              </li>
-            );
-          })}
+          {interests &&
+            interests.length > 0 &&
+            interests.map((interest, index) => {
+              return (
+                <li key={index}>
+                  <input
+                    type="checkbox"
+                    id={`${showInterest[index]}`}
+                    value={isCheckedInterest[index]}
+                    checked={isCheckedInterest[index]}
+                    onChange={() => checkedInterestHandler(index)}
+                  />
+                  <label
+                    htmlFor={`${showInterest[index]}`}
+                    className={classes.labelForm}
+                  >
+                    {showInterest[index]}
+                  </label>
+                </li>
+              );
+            })}
         </ul>
-      </div>
-      <div className={classes.buttonDiv}>
-        <Button disabled={!formIsValid} text="Registar" />
       </div>
       {invalidInput && (
         <p className={classes.invalidError}>Informação inválida.</p>
       )}
       {emailHasAccount && (
         <p className={classes.invalidError}>
-          Uma conta com o mesmo e-mail já está registado no sistema.
+          Já existe uma conta com este e-mail.
         </p>
       )}
       {error && (
         <p className={classes.invalidError}>Por favor tente novamente.</p>
       )}
+      <div className={classes.buttonDiv}>
+        <Button disabled={!formIsValid} text="Registar" />
+      </div>
     </form>
   );
 

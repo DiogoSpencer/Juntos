@@ -1,0 +1,69 @@
+.container {
+  margin-top: 2em;
+  height: 4em;
+  text-decoration: none;
+  display: grid;
+  grid-template-areas: "pi ui nm";
+  column-gap: 0.5fr;
+  border-bottom: 1.5px solid #addbff;
+  border-radius: 25px;
+  margin-bottom: 1.5em;
+  box-shadow: #dbebf7 0px 5px 8px;
+}
+
+.container:hover {
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: #aad7ff 0px 5px 10px;
+}
+
+.profileImg {
+  grid-area: pi;
+  align-self: center;
+  justify-self: center;
+  height: 3em;
+  width: 3em;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userInfo {
+  grid-area: ui;
+  align-self: center;
+  justify-self: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-items: center;
+  padding-left: 1em;
+}
+
+.userInfo p {
+  margin: 0;
+  font-weight: 600;
+  color: #3385d9;
+}
+
+.userInfo img {
+  height: 2em;
+}
+
+.names {
+  grid-area: nm;
+  align-self: center;
+  justify-self: center;
+  padding-right: 2em;
+  padding-left: 2em;
+  padding-top: 0.5em;
+  display: flex;
+  flex-direction: row;
+  color: #e6513e;
+  font-weight: 600;
+}
+
+.verifiedIcon {
+  height: 3em;
+  width: 4em;
+  padding-right: 1em;
+  object-fit: contain;
+}

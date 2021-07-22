@@ -86,7 +86,7 @@ const Comment = (props) => {
       </div>
       <p className={classes.comment}>{props.text}</p>
 
-      {props.images && (
+      {props.images && props.images.length > 0 && (
         <ul className={classes.imageList}>
           {props.images.map((image, index) => (
             <li key={index}>

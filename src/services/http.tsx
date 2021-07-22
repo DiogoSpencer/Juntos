@@ -20,7 +20,10 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   function (response: AxiosResponse) {
-    if (store.getState().auth.token !== "") {
+    if (
+      response.headers["Authorization"] &&
+      store.getState().auth.token !== ""
+    ) {
       store.dispatch(authActions.resetToken(response.headers["authorization"]));
       localStorage.setItem("token", response.headers["authorization"]);
     }
@@ -28,6 +31,7 @@ axios.interceptors.response.use(
   },
   function (error: any) {
     if (error.response.status === 401) {
+      alert("A sua sessão expirou, por favor efectue novo login");
       store.dispatch(authActions.logout());
       localStorage.removeItem(gS.storage.token);
       window.stop();
@@ -282,48 +286,67 @@ export async function createComment(form: FormData) {
     throw error.response;
   }
 }
-export async function loginExternal(email:string, firstName:string,id:string,imgUrl:string,lastName:string,type:string) {
+
+export async function linkExternal(
+  email: string,
+  firstName: string,
+  id: string,
+  imgUrl: string,
+  lastName: string,
+  type: string
+) {
   try {
-    return await axios.put(`${url}/rest/user/external`,
-        {
-          email:email,
-          firstName: firstName,
-          id:id,
-          imgUrl:imgUrl,
-          lastName:lastName,
-          type:type
-        });
-  } catch (error) {
-    throw error.response;
-  }
-}
-export async function linkExternal(email:string, firstName:string,id:string,imgUrl:string,lastName:string,type:string) {
-  try {
-    return await axios.put(`${url}/rest/user/link`,
-        {
-          email:email,
-          firstName: firstName,
-          id:id,
-          imgUrl:imgUrl,
-          lastName:lastName,
-          type:type
-        });
+    return await axios.put(`${url}/rest/user/link`, {
+      email: email,
+      firstName: firstName,
+      id: id,
+      imgUrl: imgUrl,
+      lastName: lastName,
+      type: type,
+    });
   } catch (error) {
     throw error.response;
   }
 }
 
-export async function officeDetailAppEngine(end:number, filter:string,merge:number,start:number) {
+export async function loginExternal(
+  email: string,
+  firstName: string,
+  id: string,
+  imgUrl: string,
+  lastName: string,
+  type: string
+) {
   try {
-    return await axios.get(`${url}/rest/office/appengine`,{params: {
+    return await axios.put(`${url}/rest/user/external`, {
+      email: email,
+      firstName: firstName,
+      id: id,
+      imgUrl: imgUrl,
+      lastName: lastName,
+      type: type,
+    });
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function officeDetailAppEngine(
+  end: number,
+  filter: string,
+  merge: number,
+  start: number
+) {
+  try {
+    return await axios.get(`${url}/rest/office/appengine`, {
+      params: {
         end: end,
         filter: filter,
         merge: merge,
-        start: start
-      }
-    })
-    ;}
-  catch (error) {
+        start: start,
+      },
+    });
+  } catch (error) {
     throw error.response;
   }
 }
@@ -377,10 +400,9 @@ export async function sendRecover(email: string) {
 }
 
 export async function recoverPassword(
-    code: string,
+  code: string,
   password: string,
   confirmation: string
-
 ) {
   try {
     return await axios.put(`${url}/rest/user/recover`, {
@@ -388,6 +410,14 @@ export async function recoverPassword(
       password: password,
       password2: confirmation,
     });
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function activateAccount(code: string) {
+  try {
+    return await axios.put(`${url}/rest/user/activate/${code}`);
   } catch (error) {
     throw error.response;
   }

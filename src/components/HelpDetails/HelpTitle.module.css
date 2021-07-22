@@ -6,6 +6,7 @@
     ". tt ai vc ef ht"
     ". rc . vc ef ht";
 }
+
 .titleContainer {
   grid-area: tt;
   align-self: center;
@@ -13,6 +14,7 @@
   grid-template-columns: 0.4fr 0.1fr 0.5fr;
   grid-template-areas: "zx . pl";
 }
+
 .title {
   grid-area: zx;
   color: #e6513e;
@@ -26,6 +28,7 @@
   align-self: center;
   justify-self: center;
 }
+
 .selectButton {
   grid-area: pl;
   font-size: 0.8em;
@@ -35,15 +38,15 @@
 .requestCircle {
   height: 1.2rem;
   padding-right: 1em;
-  padding-top: .5em;
+  padding-top: 0.5em;
 }
 
 .activeText {
-  color: #52CC99;
+  color: #52cc99;
 }
 
 .inactiveText {
-  color: #DD2E44;
+  color: #dd2e44;
 }
 
 .requestContainer {

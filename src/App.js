@@ -1,6 +1,11 @@
 import React, { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Switch, Redirect, useLocation } from "react-router-dom";
+import {
+  Route,
+  Switch,
+  Redirect,
+  useLocation,
+} from "react-router-dom";
 import gS from "./services/generalServices.json";
 import jwt_decode from "jwt-decode";
 import Layout from "./components/layout/Layout";
@@ -22,6 +27,9 @@ const Profile = React.lazy(() => import("./components/Profile/Profile"));
 const FAQ = React.lazy(() => import("./components/FAQ/FAQ"));
 const HeroisWraper = React.lazy(() =>
   import("./components/Herois/HeroisWraper")
+);
+const ReceiveRegister = React.lazy(() =>
+  import("./components/Registration/ReceiveRegister")
 );
 const Contacts = React.lazy(() => import("./components/Contacts/Contacts"));
 const ChangePassword = React.lazy(() =>
@@ -49,8 +57,11 @@ const EditRequest = React.lazy(() =>
   import("./components/HelpForms/EditRequest")
 );
 const HeroiForm = React.lazy(() => import("./components/Herois/HeroiForm"));
-const BackOfficeHome = React.lazy(() =>
-  import("./components/BackOffice/BackOfficeHome")
+const BackOfficeCompany = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeCompany")
+);
+const BackOfficeAppEngine = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeAppEngine")
 );
 const BackOfficeUsers = React.lazy(() =>
   import("./components/BackOffice/BackOfficeUsers")
@@ -58,13 +69,19 @@ const BackOfficeUsers = React.lazy(() =>
 const BackOfficeRequests = React.lazy(() =>
   import("./components/BackOffice/BackOfficeRequests")
 );
+const BackOfficeStats = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeStats")
+);
+const BackOfficeTable = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeTable")
+);
 
 function App() {
   const dispatch = useDispatch();
   const isLogged = useSelector((state) => state.auth.isLogged);
-  const role = useSelector((state) => state.auth.role);
   //verificar aqui se tokens sao iguais - redux e localstorage -> se nao for -> logout
   //isto faz re render sempre que fazemos mount de um componente
+
   useEffect(() => {
     const token = localStorage.getItem(gS.storage.token);
     if (token !== null && token !== undefined) {
@@ -157,22 +174,16 @@ function App() {
           <Route path="/recuperarpassword/:code">
             <ChangePassword />
           </Route>
+          <Route path="/heroisForm/:code">
+            <HeroiForm />
+          </Route>
+          <Route path="/registercomplete/:code">
+            <ReceiveRegister />
+          </Route>
 
           <PrivateRoute>
-            <Route path="/heroisForm">
-              <HeroiForm />
-            </Route>
             <Route path="/verperfil/:username">
               <UserProfile />
-            </Route>
-            <Route path="/backoffice/geral">
-                  <BackOfficeStats />
-            </Route>
-            <Route path="/backoffice/appEngine">
-                  <BackOfficeAppEngine />
-            </Route>
-            <Route path="/backoffice/tables">
-                  <BackOfficeTable />
             </Route>
             <Route path="/perfil/:username">
               <Profile />
@@ -214,21 +225,19 @@ function App() {
               <EditRequest />
             </Route>
             <Route exact path="/backoffice">
-              {role !== USER ? <BackOfficeHome /> : <Redirect to="/home" />}
+              <BackOfficeStats />
             </Route>
             <Route path="/backoffice/utilizadores">
-              {role === ADMIN || role === MOD ? (
-                <BackOfficeUsers />
-              ) : (
-                <Redirect to="/backoffice" />
-              )}
+              <BackOfficeUsers />
             </Route>
             <Route path="/backoffice/pedidos">
-              {role === ADMIN || role === MOD ? (
-                <BackOfficeRequests />
-              ) : (
-                <Redirect to="/backoffice" />
-              )}
+              <BackOfficeRequests />
+            </Route>
+            <Route path="/backoffice/statsgerais">
+              <BackOfficeTable />
+            </Route>
+            <Route path="/backoffice/appEng">
+              <BackOfficeAppEngine />
             </Route>
           </PrivateRoute>
 

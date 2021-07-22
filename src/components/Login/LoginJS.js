@@ -1,6 +1,6 @@
 import useInput from "../hooks/use-input";
 import { login, sendRecover, loginExternal } from "../../services/http";
-import React, { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 import jwt_decode from "jwt-decode";
 import Button from "../UI/Button";
 import { useDispatch } from "react-redux";
@@ -9,8 +9,8 @@ import backIcon from "../../img/back.png";
 import classes from "./LoginJS.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import juntosIcon from "../../img/logo.png";
-import {GoogleLogin} from "react-google-login";
-import FacebookLogin from 'react-facebook-login';
+import { GoogleLogin } from "react-google-login";
+import FacebookLogin from "react-facebook-login";
 
 //out of rendering cycle - functions to verify input
 const isNotEmpty = (value) => value.trim() !== "";
@@ -31,7 +31,6 @@ const Login = (props) => {
     hasError: emailHasError,
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
-    reset: resetEmail,
   } = useInput(isNotEmpty); //pass func to validate
 
   const {
@@ -296,6 +295,23 @@ const Login = (props) => {
             <div className={classes.buttonDiv}>
               <Button disabled={!formIsValid} text={"Entrar"} />
             </div>
+            <div className={classes.buttonsWrap}>
+              <FacebookLogin
+                buttonStyle={{
+                  width: "40%",
+                  height: "80%",
+                  borderRadius: "50%",
+                  marginLeft: "3em",
+                }}
+                appId="360511435646701"
+                size="small"
+                cssClass={classes.facebook}
+                fields="first_name, last_name, email, picture"
+                callback={responseFacebook}
+                icon="fa-facebook"
+                textButton=""
+              />
+            </div>
             {error && (
               <p className={`${classes.formError} ${classes.serverError}`}>
                 {error}
@@ -380,3 +396,15 @@ const Login = (props) => {
 };
 
 export default Login;
+
+/*
+              <GoogleLogin
+                clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
+                buttonText=""
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+                cookiePolicy={"single_host_origin"}
+                className={classes.google}
+              />
+
+*/

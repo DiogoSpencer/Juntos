@@ -13,13 +13,13 @@ const HeroGallery = () => {
     <div className={classes.container}>
       <h1 className={classes.tittle}>Nem Todos os Heróis Vestem Capas</h1>
       <div className={classes.subContainer}>
-        {responseData && (
+        {responseData && responseData.length > 0 && (
           <ul className={classes.heroList}>
-            {responseData.heroes.map((hero, index) => {
+            {responseData.heroes.map((hero, index) => (
               <li key={index}>
                 <HeroiCard hero={hero} />
-              </li>;
-            })}
+              </li>
+            ))}
           </ul>
         )}
       </div>

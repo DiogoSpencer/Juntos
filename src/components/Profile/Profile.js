@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useInput from "../hooks/use-input";
 import Button from "..//UI/Button";
 import { useDispatch, useSelector } from "react-redux";
-import {changeCreds, deleteUser, getUserUsername, linkExternal, loginExternal} from "../../services/http";
+import { changeCreds, deleteUser, getUserUsername } from "../../services/http";
 import keyIcon from "../../img/key.png";
 import classes from "./Profile.module.css";
 import { authActions } from "../../store/session/auth";
@@ -13,9 +13,6 @@ import logoIcon from "../../img/logo.png";
 import PassModal from "./PassModal";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import verifiedIcon from "../../img/verified.png";
-import {GoogleLogin} from "react-google-login";
-import jwt_decode from "jwt-decode";
-import FacebookLogin from "react-facebook-login";
 
 const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
@@ -46,6 +43,7 @@ const Profile = () => {
   const [isCheckedInterest, setIsCheckedInterest] = useState(
     new Array(interests.length).fill(false)
   );
+  const [refresh, setRefresh] = useState(true);
 
   const {
     value: enteredEmail,
@@ -73,52 +71,54 @@ const Profile = () => {
 
   //queremos so fazer useEffect onMount -> []
   useEffect(() => {
-    if (authUsername !== "" && authUsername === urlUsername) {
-      setIsLoading(true);
+    if (refresh) {
+      if (authUsername !== "" && authUsername === urlUsername) {
+        setIsLoading(true);
 
-      getUserUsername(authUsername).then(
-        (response) => {
-          console.log(response.data);
-          setResponseData(response.data);
-          setEmailValueHandler(response.data.email);
-          setLastNameValueHandler(response.data.lastName);
-          setFirstNameValueHandler(response.data.firstName);
-          setPrivacy(response.data.privacy);
-          setNumHelps(response.data.numHelps);
-          const date = new Date(response.data.creationDate);
-          setCreationDate(
-            `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-          );
-          if (response.data.profileImg === undefined) {
-            setSelectedFile(null);
-          } else {
-            setSelectedFile(response.data.profileImg);
+        getUserUsername(authUsername).then(
+          (response) => {
+            setRefresh(false);
+            console.log(response.data);
+            setResponseData(response.data);
+            setEmailValueHandler(response.data.email);
+            setLastNameValueHandler(response.data.lastName);
+            setFirstNameValueHandler(response.data.firstName);
+            setPrivacy(response.data.privacy);
+            setNumHelps(response.data.numHelps);
+            const date = new Date(response.data.creationDate);
+            setCreationDate(
+              `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+            );
+            if (response.data.profileImg) {
+              setSelectedFile(response.data.profileImg);
+            } else {
+              setSelectedFile(null);
+            }
+            initialTopics = new Array(interests.length).fill(false);
+            response.data.favTopics &&
+              response.data.favTopics.forEach((interest) => {
+                initialTopics[interests.indexOf(interest)] = true;
+              });
+            setIsCheckedInterest(initialTopics);
+          },
+          (error) => {
+            if (error.status === 401) {
+              alert("Sessão expirou");
+              dispatch(authActions.logout());
+              localStorage.removeItem(gS.storage.token);
+              history.replace("/home");
+            }
           }
-          initialTopics = new Array(interests.length).fill(false);
-          response.data.favTopics &&
-            response.data.favTopics.forEach((interest) => {
-              initialTopics[interests.indexOf(interest)] = true;
-            });
-          setIsCheckedInterest(initialTopics);
-        },
-        (error) => {
-          console.log(error)
-          if (error.status === 401) {
-            alert("Sessão expirou");
-            dispatch(authActions.logout());
-            localStorage.removeItem(gS.storage.token);
-            history.replace("/home");
-          }
-        }
-      );
-      setIsLoading(false);
-    } else if (authUsername !== urlUsername) {
-      history.replace(`/verperfil/${urlUsername}`);
-    } else {
-      history.goBack();
+        );
+        setIsLoading(false);
+      } else if (authUsername !== urlUsername) {
+        history.replace(`/verperfil/${urlUsername}`);
+      } else {
+        history.goBack();
+      }
     }
     // eslint-disable-next-line
-  }, [authUsername]);
+  }, [authUsername, refresh]);
 
   let formIsValid = false;
 
@@ -146,7 +146,8 @@ const Profile = () => {
     setIsLoading(true);
 
     const formData = new FormData();
-    if (selectedFile !== null && selectedFile) {
+    if (selectedFile) {
+      console.log("img");
       formData.append("profileImg", selectedFile);
     }
 
@@ -158,12 +159,18 @@ const Profile = () => {
       }
     }
 
+    let deleteImg = false;
+
+    if (responseData.profileImg && !selectedFile) {
+      deleteImg = true;
+    }
+
     const userInfo = {
       firstName: enteredFirstName,
       lastName: enteredLastName,
       privacy,
       favTopics: topics,
-      username: authUsername
+      deleteImg: deleteImg,
     };
 
     formData.append(
@@ -174,7 +181,9 @@ const Profile = () => {
     changeCreds(formData).then(
       (response) => {
         initialTopics = isCheckedInterest;
+        formIsValid = false;
         setIsLoading(false);
+        setRefresh(true);
       },
       (error) => {
         if (error.status === 400) {
@@ -194,6 +203,7 @@ const Profile = () => {
       setPrivacy(PUBLIC);
     }
   };
+
   const openPassModalHandler = () => {
     setIsModalOpen(true);
   };
@@ -362,25 +372,27 @@ const Profile = () => {
           <div className={classes.interestDiv}>
             <h3 className={classes.subTitle}>Interesses</h3>
             <ul className={classes.interestList}>
-              {interests.map((interest, index) => {
-                return (
-                  <li key={index}>
-                    <input
-                      type="checkbox"
-                      id={`${showInterest[index]}`}
-                      value={isCheckedInterest[index]}
-                      checked={isCheckedInterest[index]}
-                      onChange={() => checkedInterestHandler(index)}
-                    />
-                    <label
-                      htmlFor={`${showInterest[index]}`}
-                      className={classes.labelForm}
-                    >
-                      {showInterest[index]}
-                    </label>
-                  </li>
-                );
-              })}
+              {interests &&
+                interests.length > 0 &&
+                interests.map((interest, index) => {
+                  return (
+                    <li key={index}>
+                      <input
+                        type="checkbox"
+                        id={`${showInterest[index]}`}
+                        value={isCheckedInterest[index]}
+                        checked={isCheckedInterest[index]}
+                        onChange={() => checkedInterestHandler(index)}
+                      />
+                      <label
+                        htmlFor={`${showInterest[index]}`}
+                        className={classes.labelForm}
+                      >
+                        {showInterest[index]}
+                      </label>
+                    </li>
+                  );
+                })}
             </ul>
           </div>
           <div className={classes.buttonContainer}>

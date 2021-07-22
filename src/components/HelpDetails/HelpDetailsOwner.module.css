@@ -19,7 +19,7 @@
 
 .title img {
   padding-right: 1em;
-  height: 3em;
+  height: 1.5em;
 }
 
 .spinner {
@@ -41,7 +41,7 @@
   width: 100%;
   background-color: white;
   display: grid;
-  grid-template-rows: .5fr auto;
+  grid-template-rows: 0.5fr auto;
   grid-template-areas:
     "tl"
     "lg";
@@ -60,7 +60,7 @@
 }
 
 .completeImg {
-  height: 18em;
+  height: 10em;
   grid-area: lg;
   justify-self: center;
   align-self: start;
@@ -71,12 +71,34 @@
   display: grid;
   grid-template-rows: auto;
   row-gap: 3em;
-  grid-template-areas: "mp" "ic" "cc";
+  grid-template-areas: "mp" "ic" "hc" "cc";
 }
 
 .mapContent {
   grid-area: mp;
   align-self: center;
+}
+
+.helpersContainer {
+  grid-area: hc;
+  align-self: center;
+  justify-self: center;
+}
+
+.participantsButton {
+  width: 15em;
+  height: 2.5em;
+  border-radius: 25px;
+  font-weight: 600;
+  background-color: #3385d9;
+  color: white;
+  border: 1px solid #3385d9;
+}
+
+.participantsButton:hover {
+  background-color: transparent;
+  color: #3385d9;
+  border: 1px solid #3385d9;
 }
 
 .commentContent {
@@ -89,8 +111,8 @@
   grid-area: ic;
   display: grid;
   row-gap: 1em;
-  grid-template-rows: 0.25fr 0.25fr 1.5fr 1fr 0.25fr 0.25fr;
-  grid-template-areas: "ht" "ud" "id" "dp" "sa" "er" "dr";
+  grid-template-rows: 0.25fr 0.25fr auto auto 1fr 0.4fr 0.15fr 0.15fr;
+  grid-template-areas: "ht" "ud" "pd" "dp" "id" "sa" "er" "dr";
 }
 
 .helpTitle {
@@ -103,18 +125,23 @@
   border-bottom: 1px solid #b9e1ff;
 }
 
-.imageDisplay {
-  grid-area: id;
+.pathDetails {
+  grid-area: pd;
   border-bottom: 1px solid #b9e1ff;
 }
 
 .description {
-  grid-auto-columns: dp;
+  grid-area: dp;
   border-bottom: 1px solid #b9e1ff;
   text-align: center;
   font-size: 0.9em;
   padding-bottom: 0.5em;
   padding-top: 0.5em;
+}
+
+.imageDisplay {
+  grid-area: id;
+  border-bottom: 1px solid #b9e1ff;
 }
 
 .subTitle {

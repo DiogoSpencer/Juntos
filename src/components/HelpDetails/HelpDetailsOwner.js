@@ -19,11 +19,27 @@ import Map from "../Map/Map";
 import juntosIcon from "../../img/logo.png";
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
+import MapHelpDetails from "./MapHelpDetails";
+import ParticipantsList from "./ParticipantsList";
 
 const isNotEmpty = (value) => value.trim() !== "";
 
 const RESQUEST = "REQUEST";
 const OFFER = "OFFER";
+
+const typeHandler = (type) => {
+  switch (type) {
+    case "HELP_OFFER":
+      return offerHelpIcon;
+    case "HELP_REQUEST":
+      return requestHelpIcon;
+    case "DONATE":
+      return donateIcon;
+    case "ACTION":
+      return actionIcon;
+    default:
+  }
+};
 
 const HelpDetailsOwner = () => {
   const dispatch = useDispatch();
@@ -38,12 +54,14 @@ const HelpDetailsOwner = () => {
   const [beginAction, setBeginAction] = useState(false);
   const [distance, setDistance] = useState(0);
   const [move, setMove] = useState("WALKING");
+  const [showHelpers, setShowHelpers] = useState(false);
+
   const handleMove = (event) => {
     setMove(event.target.value);
   };
 
   const center =
-    point.length > 0
+    point && point.length > 0
       ? { lat: point[0].lat, lng: point[0].lon }
       : {
           lat: 38.7071,
@@ -63,11 +81,11 @@ const HelpDetailsOwner = () => {
     [point]
   );
   const distanceCallback = useCallback(
-      (distance) => {
-        setDistance(distance);
-      },
-      // eslint-disable-next-line
-      [distance]
+    (distance) => {
+      setDistance(distance);
+    },
+    // eslint-disable-next-line
+    [distance]
   );
 
   const history = useHistory();
@@ -103,41 +121,30 @@ const HelpDetailsOwner = () => {
         setResponseData(response.data);
         let responsePoints = response.data.points;
         for (const point of responsePoints) {
-          //.map((point) => {
-          console.log(point)
+          console.log(point);
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
           point.type = response.data.type;
-
-        } //);
+        }
         setPoint(responsePoints);
 
         let responseDanger = response.data.dangers;
         for (const point of responseDanger) {
-          //.map((point) => {
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
-        } //);
+        }
         setDangerPoint(responseDanger);
 
         let responseInterest = response.data.interests;
         for (const point of responseInterest) {
-          //.map((point) => {
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
-        } //);
+        }
         setInterestPoint(responseInterest);
       },
       (error) => {
         setIsLoading(false);
         console.log(error);
-        /*console.log(error);
-        setIsLoading(false);
-        if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
-        }*/
       }
     );
   }, [helpId]);
@@ -150,18 +157,8 @@ const HelpDetailsOwner = () => {
     isOwner = true;
   }
 
-  const typeHandler = (type) => {
-    switch (type) {
-      case "HELP_OFFER":
-        return offerHelpIcon;
-      case "HELP_REQUEST":
-        return requestHelpIcon;
-      case "DONATE":
-        return donateIcon;
-      case "ACTION":
-        return actionIcon;
-      default:
-    }
+  const showHelpersHandler = () => {
+    setShowHelpers((prevState) => !prevState);
   };
 
   const deleteRequestHandler = () => {
@@ -179,17 +176,6 @@ const HelpDetailsOwner = () => {
         (error) => {
           setIsLoading(false);
           setDeleteError(true);
-          /*setIsLoading(false);
-          if (error.status === 401) {
-            alert(
-              "Sessão expirou! Efetue login novamente para concluir a operação"
-            );
-            dispatch(authActions.logout());
-            localStorage.removeItem(gS.storage.token);
-          } else {
-            console.log(error);
-            setDeleteError(true);
-          }*/
         }
       );
     }
@@ -275,12 +261,8 @@ const HelpDetailsOwner = () => {
           <div className={classes.helpTitle}>
             <HelpTitle
               title={responseData.title}
-              distance={distance}
               helpType={responseData.type}
               creationDate={responseData.creationDate}
-              volunteers={responseData.helpersCapacity}
-              difficulty={responseData.difficulty}
-              currentHelpers={responseData.currentHelpers}
               isActive={responseData.activeMarker}
               points={responseData.points}
               move={move}
@@ -302,12 +284,24 @@ const HelpDetailsOwner = () => {
               isAnonimous={responseData.anonymousOwner}
             />
           </div>
-          <div className={classes.imageDisplay}>
-            <ImageDisplay images={responseData.photoGalery} owner={isOwner} />
-          </div>
+          {responseData.type === "ACTION" && (
+            <div className={classes.pathDetails}>
+              <MapHelpDetails
+                distance={distance}
+                move={move}
+                handleMove={handleMove}
+                difficulty={responseData.difficulty}
+                volunteers={responseData.helpersCapacity}
+                currentHelpers={responseData.currentHelpers}
+              />
+            </div>
+          )}
           <div className={classes.description}>
             <h6 className={classes.subTitle}>Descrição</h6>
             <p>{responseData.description}</p>
+          </div>
+          <div className={classes.imageDisplay}>
+            <ImageDisplay images={responseData.photoGalery} owner={isOwner} />
           </div>
           {responseData.activeMarker &&
             responseData.currentHelpers > 0 &&
@@ -365,6 +359,20 @@ const HelpDetailsOwner = () => {
             )}
           </div>
         </div>
+        {responseData &&
+          responseData.helperUsernames &&
+          responseData.helperUsernames.length > 0 && (
+            <div className={classes.helpersContainer}>
+              <button
+                type="button"
+                onClick={showHelpersHandler}
+                className={classes.participantsButton}
+              >
+                {!showHelpers ? "Esconder Voluntários" : "Ver Voluntários"}
+              </button>
+              {!showHelpers && <ParticipantsList requestId={helpId} />}
+            </div>
+          )}
         <div className={classes.commentContent}>
           <Route path={match.path} exact>
             <div>

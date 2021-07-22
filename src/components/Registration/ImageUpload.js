@@ -70,7 +70,7 @@ const ImageUpload = (props) => {
               ) {
                 props.fileChangeHandler(file);
               } else {
-                if (file.size > 10485760) {
+                if (file && file.size > 10485760) {
                   alert("Só imagens com menos de 10MB");
                 }
                 props.fileChangeHandler(null);
