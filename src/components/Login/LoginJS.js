@@ -91,7 +91,7 @@ const Login = (props) => {
       }
     );
   };
-  /*
+
   const responseGoogle = (responseG) => {
     console.log(responseG);
     loginExternal(
@@ -137,7 +137,6 @@ const Login = (props) => {
       }
     );
   };
-*/
 
   const formSubmissionHandler = (event) => {
     event.preventDefault();
@@ -258,119 +257,140 @@ const Login = (props) => {
   const formSubmit = showLogin ? formSubmissionHandler : onRecuperateSubmit;
 
   const loginForm = (
-    <div className={classes.mainContainer}>
-      <form onSubmit={formSubmit} className={classes.loginForm}>
-        {showLogin ? (
-          <Fragment>
-            <h1 className={classes.formTitle}>Começa a Ajudar</h1>
-            <div className={classes.formInputDiv}>
-              <label htmlFor="email" className={classes.formLabelEmail}>
-                Email
-              </label>
-              <input
-                type="text"
-                id="email"
-                value={enteredEmail}
-                onChange={emailChangeHandler}
-                onBlur={emailBlurHandler}
-                className={classes.formInputEmail}
-              />
-              {emailHasError && (
-                <p className={`${classes.formError} ${classes.emailError}`}>
-                  Por favor insira um e-mail.
+    <>
+      <div className={classes.mainContainer}>
+        <form onSubmit={formSubmit} className={classes.loginForm}>
+          {showLogin ? (
+            <Fragment>
+              <h1 className={classes.formTitle}>Começa a Ajudar</h1>
+              <div className={classes.formInputDiv}>
+                <label htmlFor="email" className={classes.formLabelEmail}>
+                  Email
+                </label>
+                <input
+                  type="text"
+                  id="email"
+                  value={enteredEmail}
+                  onChange={emailChangeHandler}
+                  onBlur={emailBlurHandler}
+                  className={classes.formInputEmail}
+                />
+                {emailHasError && (
+                  <p className={`${classes.formError} ${classes.emailError}`}>
+                    Por favor insira um e-mail.
+                  </p>
+                )}
+                <label htmlFor="password" className={classes.formLabelPass}>
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={enteredPassword}
+                  onChange={passwordChangeHandler}
+                  onBlur={passwordBlurHandler}
+                  className={classes.formInputPass}
+                />
+                {passwordHasError && (
+                  <p className={`${classes.formError} ${classes.passError}`}>
+                    Por favor insira uma password.
+                  </p>
+                )}
+              </div>
+              <div className={classes.buttonDiv}>
+                <Button disabled={!formIsValid} text={"Entrar"} />
+              </div>
+              <div className={classes.buttonsWrap}>
+                <FacebookLogin
+                  buttonStyle={{
+                    width: "40%",
+                    height: "80%",
+                    borderRadius: "50%",
+                    marginLeft: "3em",
+                  }}
+                  appId="360511435646701"
+                  size="small"
+                  cssClass={classes.facebook}
+                  fields="first_name, last_name, email, picture"
+                  callback={responseFacebook}
+                  icon="fa-facebook"
+                  textButton=""
+                />
+              </div>
+              {error && (
+                <p className={`${classes.formError} ${classes.serverError}`}>
+                  {error}
                 </p>
               )}
-              <label htmlFor="password" className={classes.formLabelPass}>
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                value={enteredPassword}
-                onChange={passwordChangeHandler}
-                onBlur={passwordBlurHandler}
-                className={classes.formInputPass}
-              />
-              {passwordHasError && (
-                <p className={`${classes.formError} ${classes.passError}`}>
-                  Por favor insira uma password.
-                </p>
+            </Fragment>
+          ) : !recoverCompleted ? (
+            <Fragment>
+              <div className={classes.titleContainer}>
+                <img
+                  src={backIcon}
+                  className={classes.back}
+                  onClick={onGoBack}
+                  alt="voltar"
+                />
+                <h1 className={classes.formTitle}>Recuperar Password</h1>
+              </div>
+
+              <div className={classes.formInputDiv}>
+                <label htmlFor="email" className={classes.formLabelEmail}>
+                  Email
+                </label>
+                <input
+                  type="text"
+                  id="email"
+                  value={enteredEmail}
+                  onChange={emailChangeHandler}
+                  onBlur={emailBlurHandler}
+                  className={classes.formInputEmail}
+                />
+                {emailHasError && (
+                  <p className={`${classes.formError} ${classes.emailError}`}>
+                    Por favor insira um e-mail.
+                  </p>
+                )}
+              </div>
+              <div className={classes.buttonDiv}>
+                <Button
+                  disabled={!recuperateIsValid}
+                  text={"Recuperar"}
+                  onClick={onRecuperateSubmit}
+                />
+              </div>
+              {error && (
+                <p
+                  className={`${classes.formError} ${classes.serverError}`}
+                ></p>
               )}
-            </div>
-            <div className={classes.buttonDiv}>
-              <Button disabled={!formIsValid} text={"Entrar"} />
-            </div>
-            <div className={classes.buttonsWrap}>
-              <FacebookLogin
-                buttonStyle={{
-                  width: "40%",
-                  height: "80%",
-                  borderRadius: "50%",
-                  marginLeft: "3em",
-                }}
-                appId="360511435646701"
-                size="small"
-                cssClass={classes.facebook}
-                fields="first_name, last_name, email, picture"
-                callback={responseFacebook}
-                icon="fa-facebook"
-                textButton=""
-              />
-            </div>
-            {error && (
-              <p className={`${classes.formError} ${classes.serverError}`}>
-                {error}
-              </p>
-            )}
-          </Fragment>
-        ) : !recoverCompleted ? (
-          <Fragment>
-            <div className={classes.titleContainer}>
-              <img
-                src={backIcon}
-                className={classes.back}
-                onClick={onGoBack}
-                alt="voltar"
-              />
-              <h1 className={classes.formTitle}>Recuperar Password</h1>
-            </div>
-            <div className={classes.formInputDiv}>
-              <label htmlFor="email" className={classes.formLabelEmail}>
-                Email
-              </label>
-              <input
-                type="text"
-                id="email"
-                value={enteredEmail}
-                onChange={emailChangeHandler}
-                onBlur={emailBlurHandler}
-                className={classes.formInputEmail}
-              />
-              {emailHasError && (
-                <p className={`${classes.formError} ${classes.emailError}`}>
-                  Por favor insira um e-mail.
-                </p>
-              )}
-            </div>
-            <div className={classes.buttonDiv}>
-              <Button
-                disabled={!recuperateIsValid}
-                text={"Recuperar"}
-                onClick={onRecuperateSubmit}
-              />
-            </div>
-            {error && (
-              <p className={`${classes.formError} ${classes.serverError}`}></p>
-            )}
-          </Fragment>
-        ) : (
-          <Fragment>{recoverComplete}</Fragment>
-        )}
-      </form>
-      <p className={recuperateClass} onClick={onShowLoginHandler}>
-        Recuperar Password
-      </p>
-    </div>
+            </Fragment>
+          ) : (
+            <Fragment>{recoverComplete}</Fragment>
+          )}
+        </form>
+        <p className={recuperateClass} onClick={onShowLoginHandler}>
+          Recuperar Password
+        </p>
+      </div>
+
+      <div className={classes.buttonsWrap}>
+        <GoogleLogin
+          clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
+          buttonText="Login"
+          onSuccess={responseGoogle}
+          cookiePolicy={"single_host_origin"}
+        />
+        <FacebookLogin
+          appId="360511435646701"
+          size="small"
+          cssClass={classes.google}
+          fields="first_name,last_name, email,picture"
+          callback={responseFacebook}
+        />
+      </div>
+    </>
   );
 
   return (

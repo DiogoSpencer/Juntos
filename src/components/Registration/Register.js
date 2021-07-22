@@ -11,9 +11,9 @@ const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
 const isProfile = false;
 const isNotEmpty = (value) => value.trim() !== "";
+const isRegex = (value) => value.trim().match("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,50}$");
 const interests = ["HELP_OFFER", "HELP_REQUEST", "DONATE", "ACTION"];
 const showInterest = ["Ofertas Ajuda", "Pedidos Ajuda", "Doações", "Ações"];
-//TODO: #2 fazer os REGEX de verificacao
 //TODO: #3 Verify if image is one of these types
 //TODO: #4 Restrict image size
 
@@ -44,7 +44,7 @@ const Register = (props) => {
     hasError: passwordHasError,
     valueChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isNotEmpty && isRegex);
 
   const {
     value: enteredConfirmation,
@@ -217,7 +217,8 @@ const Register = (props) => {
           onBlur={passwordBlurHandler}
         />
         {passwordHasError && (
-          <p className={classes.registError}>Por favor insira uma password.</p>
+          <p className={classes.registError}>Password tem de conter pelo menos 4
+            carácteres, uma letra maiúscula, uma minúscula e um número.</p>
         )}
       </div>
       <div className={classes.confirmDiv}>

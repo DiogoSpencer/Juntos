@@ -6,8 +6,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {officeDetail, officeDetailTable} from "../../services/http";
+import {officeDetailTable} from "../../services/http";
 import './BackOfficeTable.css'
+import {Link} from "react-router-dom";
 
 interface propertyMap{
     builtin_index_bytes: number
@@ -52,9 +53,15 @@ export default function BackOfficeTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {tableContent.map((row: propertyMap) => (
-                            <TableRow>
-                                <TableCell> {row.kind_name ? row.kind_name : 'Total'}</TableCell>
+                        {tableContent.map((row: propertyMap, index:number) => (
+                            <TableRow key = {index}>
+                                <TableCell> {row.kind_name === "Users" ?
+                                    <Link to={`/backoffice/utilizadores`}>
+                                        {row.kind_name}
+                                    </Link> : row.kind_name ?
+                                        <Link to={`/backoffice/pedidos`}>
+                                            {row.kind_name}
+                                        </Link> : 'Total'}</TableCell>
                                 <TableCell> {row.builtin_index_bytes}</TableCell>
                                 <TableCell>{row.builtin_index_count}</TableCell>
                                 <TableCell>{row.bytes}</TableCell>

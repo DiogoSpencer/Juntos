@@ -3,3 +3,15 @@
     flex-wrap: wrap;
     justify-content: space-evenly;
 }
+.back-office-table-wrapper{
+    width: 85% ;
+    margin: 10vh auto;
+}
+
+.back-office-table-wrapper .table-header-footer{
+    background-color: #ff9f36;
+}
+
+.back-office-table-wrapper .table-header-footer >*{
+    color: white;
+}

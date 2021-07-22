@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Map, { Bounds, Center, Point } from "../Map/Map";
 import { getMarkers } from "../../services/http";
-import SideButtons from "../UI/SideButtons";
+import SideButtons from "../UI/SIdeButtons";
 import classes from "./TodasAjudas.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
@@ -30,6 +30,15 @@ function TodasAjudas() {
     },
     [bounds]
   );
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(function(position) {
+
+      setCenter({lat: position.coords.latitude,lng: position.coords.longitude})
+        },
+        function(error) {
+          console.error("Error Code = " + error.code + " - " + error.message);
+        });
+  }, [])
 
   const callbackC = useCallback(
     (center: Center) => {
@@ -46,7 +55,6 @@ function TodasAjudas() {
     [point]
   );
   useEffect(() => {
-    console.log(bounds);
     setIsLoading(true);
     getMarkers(
       bounds.latLower,
@@ -63,7 +71,6 @@ function TodasAjudas() {
 
         }
         setPoint(newVec);
-        console.log(response);
         setIsLoading(false);
       },
       (error) => {

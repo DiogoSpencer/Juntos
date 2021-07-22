@@ -211,7 +211,8 @@ const HelpDetails = () => {
             interestPoints={interestPoint}
             callback={pointsCallback}
             center={center}
-            moveTypeSelected={move}
+            moveTypeSelected = {move}
+            zoom={16}
             callbackD={distanceCallback}
           />
         </div>
