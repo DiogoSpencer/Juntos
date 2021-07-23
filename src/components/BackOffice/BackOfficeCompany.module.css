@@ -1,8 +1,8 @@
 .container {
-  padding-top: 2em;
+  padding-top: 8em;
   font-size: 0.8em;
   display: grid;
-  grid-template-areas: "tt tt" "mc mc" "np sb";
+  grid-template-areas: "tt" "mc";
 }
 
 .spinner {
@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 5;
+  z-index: 10;
 }
 
 .hideButton {
@@ -37,20 +37,21 @@
   display: grid;
   row-gap: 1em;
   grid-template-areas:
-    ". rf ob fb sc"
-    "mt mt mt mt mt";
+    " rf ob fb sc"
+    " mt mt mt mt"
+    "np np sb sb";
 }
 
 .orderButtons {
   grid-area: ob;
   align-self: center;
-  justify-self: start;
+  justify-self: center;
 }
 
 .filterButtons {
   grid-area: fb;
   align-self: center;
-  justify-self: start;
+  justify-self: center;
 }
 
 .searchBar {
@@ -209,11 +210,29 @@
   grid-area: rf;
   height: 3em;
   align-self: center;
-  justify-self: start;
+  justify-self: end;
   cursor: pointer;
   border-radius: 50%;
 }
 
 .refresh:hover {
   box-shadow: 0 0 8px #719ece;
+}
+
+
+@media all and (max-width: 60em) {
+
+}
+
+@media all and (max-width: 60em) {
+}
+
+@media all and (max-width: 40em) {
+  .container {
+    font-size: .65em;
+    margin-left: 10em;
+  }
+}
+
+@media all and (max-width: 40em) and (orientation: landscape) {
 }

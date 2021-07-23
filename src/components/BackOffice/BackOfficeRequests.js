@@ -1,6 +1,6 @@
 import classes from "./BackOfficeRequests.module.css";
 import { Fragment, useEffect, useState } from "react";
-import { deleteMarker, listMarker } from "../../services/http";
+import { changeMarker, deleteMarker, listMarker } from "../../services/http";
 import leftArrowIcon from "../../img/leftArrow.png";
 import rightArrowIcon from "../../img/rightArrow.png";
 import editIcon from "../../img/edit.png";
@@ -8,7 +8,6 @@ import binIcon from "../../img/bin.png";
 import checkIcon from "../../img/check.png";
 import closeIcon from "../../img/closered.png";
 import useInput from "../hooks/use-input";
-import { useSelector } from "react-redux";
 import refreshIcon from "../../img/refresh.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { Link } from "react-router-dom";
@@ -45,6 +44,14 @@ const isDifficultyNumber = (value) => {
   }
 };
 
+let title = "";
+let description = "";
+let requestActive = "";
+let difficulty = 1;
+let anonimous = false;
+let requestType = "";
+let helpers = 1;
+
 const BackOfficeRequests = () => {
   const [responseData, setResponseData] = useState(null);
   const [byParam, setByParam] = useState(ALL);
@@ -63,8 +70,6 @@ const BackOfficeRequests = () => {
   const [isAnonimous, setIsAnonimous] = useState(false);
   const [generalType, setGeneralType] = useState("");
 
-  const authRole = useSelector((state) => state.auth.role);
-
   useEffect(() => {
     setDisableSelect(false);
     if (
@@ -81,7 +86,6 @@ const BackOfficeRequests = () => {
       ).then(
         (response) => {
           setIsEditing("");
-          setIsLoading(false);
           setRefresh(false);
           console.log(response.data);
           setResponseData(response.data.content);
@@ -109,7 +113,10 @@ const BackOfficeRequests = () => {
   }, [isFirst]);
 
   useEffect(() => {
-    setIsLoading(false);
+    if (responseData) {
+      setIsLoading(false);
+    }
+    console.log(responseData);
   }, [responseData]);
 
   useEffect(() => {
@@ -136,7 +143,7 @@ const BackOfficeRequests = () => {
 
   const nextPageHandler = () => {
     setPageNumber((prevState) => {
-      if (responseData.length === pageSize) {
+      if (responseData && responseData.length === pageSize) {
         setRefresh(true);
         return prevState + 1;
       } else {
@@ -171,9 +178,6 @@ const BackOfficeRequests = () => {
 
   const searchBarClass =
     byParam === TITLE ? classes.searchBar : classes.searchBarHidden;
-
-  const autoComplete =
-    byParam === location ? classes.autoComplete : classes.autoCompleteHidden;
 
   const {
     value: enteredTitle,
@@ -212,17 +216,24 @@ const BackOfficeRequests = () => {
   } = useInput(isDifficultyNumber);
 
   useEffect(() => {
-    if (isEditing !== "") {
+    if (isEditing !== "" && responseData) {
       for (const request of responseData) {
         if (request.id === isEditing) {
           setGeneralType(request.generalType);
           setTitleValueHandler(request.title);
+          title = request.title;
           setDescriptionValueHandler(request.description);
+          description = request.description;
           setVolunteersValueHandler(request.helpersCapacity);
+          helpers = request.helpersCapacity;
           setDifficultyValueHandler(request.difficulty);
+          difficulty = request.difficulty;
           setEnteredType(request.type);
+          requestType = request.type;
           setIsAnonimous(request.anonymousOwner);
+          anonimous = request.anonymousOwner;
           setIsActive(request.activeMarker);
+          requestActive = request.activeMarker;
           break;
         }
       }
@@ -262,17 +273,60 @@ const BackOfficeRequests = () => {
     formIsValid = true;
   }
 
-  const onSubmitChangesHandler = () => {
+  let changesMade = false;
+
+  if (
+    responseData &&
+    responseData.length > 0 &&
+    (title !== enteredTitle ||
+      description !== enteredDescription ||
+      anonimous !== isAnonimous ||
+      helpers !== enteredVolunteers ||
+      difficulty !== enteredDifficulty ||
+      requestType !== enteredType ||
+      requestActive !== isActive)
+  ) {
+    changesMade = true;
+  }
+
+  const onSubmitChangesHandler = (requestId) => {
     if (!formIsValid) {
+      return;
+    }
+
+    if (!changesMade) {
       return;
     }
 
     setIsLoading(true);
 
-    //mandar ao servidor mudanças
-    setRefresh(true);
-    setIsLoading(false);
-    setIsEditing("");
+    const formData = new FormData();
+
+    const formInfo = {
+      title: enteredTitle,
+      id: requestId,
+      description: enteredDescription,
+      difficulty: enteredDifficulty,
+      anonymousOwner: isAnonimous,
+      helpersCapacity: enteredVolunteers,
+    };
+
+    formData.append(
+      "info",
+      new Blob([JSON.stringify(formInfo)], { type: "application/json" })
+    );
+
+    changeMarker(formData).then(
+      (response) => {
+        setRefresh(true);
+        setIsLoading(false);
+        setIsEditing("");
+      },
+      (error) => {
+        console.log(error);
+        setIsLoading(false);
+      }
+    );
   };
 
   const onDeleteRequestHandler = (requestId) => {
@@ -357,7 +411,7 @@ const BackOfficeRequests = () => {
         onClick={prevPageHandler}
         className={classes.navArrow}
       />
-      <span className={classes.pageNumber}>{pageNumber+1}</span>
+      <span className={classes.pageNumber}>{pageNumber + 1}</span>
       <img
         src={rightArrowIcon}
         alt="página-seguinte"
@@ -390,6 +444,8 @@ const BackOfficeRequests = () => {
       </tr>
     </thead>
   );
+
+  const imageClass = changesMade ? classes.iconRow : classes.iconRowDisabled;
 
   return (
     <div className={classes.container}>
@@ -449,7 +505,9 @@ const BackOfficeRequests = () => {
                           request.helperUsernames.length > 0 &&
                           request.helperUsernames.map((user, idx) => (
                             <li key={idx}>
-                              <Link to={`/juntos/verperfil/${user}`}>{user}</Link>
+                              <Link to={`/juntos/verperfil/${user}`}>
+                                {user}
+                              </Link>
                             </li>
                           ))}
                       </ul>
@@ -597,7 +655,9 @@ const BackOfficeRequests = () => {
                           request.helperUsernames.length > 0 &&
                           request.helperUsernames.map((user, idx) => (
                             <li key={idx}>
-                              <Link to={`/juntos/verperfil/${user}`}>{user}</Link>
+                              <Link to={`/juntos/verperfil/${user}`}>
+                                {user}
+                              </Link>
                             </li>
                           ))}
                       </ul>
@@ -605,21 +665,28 @@ const BackOfficeRequests = () => {
                     <td className={classes.localContainer}>
                       {request.location}
                     </td>
-                    <td className={classes.difficultyContainer}>
-                      <input
-                        type="number"
-                        id="numberVolunteers"
-                        value={enteredDifficulty}
-                        onChange={enteredDifficultyChangeHandler}
-                        onBlur={enteredDifficultyBlurHandler}
-                        min="1"
-                      />
-                      {enteredDifficultyHasError && (
-                        <p className={classes.inputError}>
-                          Por favor insira uma dificuldade
-                        </p>
-                      )}
-                    </td>
+                    {enteredType === ACTION ? (
+                      <td className={classes.difficultyContainer}>
+                        <input
+                          type="number"
+                          id="numberVolunteers"
+                          value={enteredDifficulty}
+                          onChange={enteredDifficultyChangeHandler}
+                          onBlur={enteredDifficultyBlurHandler}
+                          min="1"
+                          max="5"
+                        />
+                        {enteredDifficultyHasError && (
+                          <p className={classes.inputError}>
+                            Por favor insira uma dificuldade
+                          </p>
+                        )}
+                      </td>
+                    ) : (
+                      <td className={classes.difficultyContainer}>
+                        {request.difficulty}
+                      </td>
+                    )}
                     <td className={classes.dateContainer}>
                       {formatDate(request.creationDate)}
                     </td>
@@ -642,8 +709,8 @@ const BackOfficeRequests = () => {
                       <img
                         src={checkIcon}
                         alt="aceitar"
-                        className={classes.iconRow}
-                        onClick={onSubmitChangesHandler}
+                        className={imageClass}
+                        onClick={() => onSubmitChangesHandler(request.id)}
                       />
                       <img
                         src={closeIcon}
@@ -657,9 +724,9 @@ const BackOfficeRequests = () => {
               )}
           </tbody>
         </table>
+        {navPageButtons}
+        {sizeButtons}
       </div>
-      {navPageButtons}
-      {sizeButtons}
     </div>
   );
 };

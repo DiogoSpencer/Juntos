@@ -1,9 +1,12 @@
 import homeIcon from "../../img/home.png";
-import clockIcon from "../../img/clock.png";
+import appEngIcon from "../../img/appEng.png";
+import buildingIcon from "../../img/building.png";
 import notificationsIcon from "../../img/notifications.png";
 import pointsIcon from "../../img/points.png";
 import usersIcon from "../../img/users.png";
-import classes from "./OfficeBar.module.css"
+import reportOfficeIcon from "../../img/reportoffice.png";
+import emailIcon from "../../img/email.png";
+import classes from "./OfficeBar.module.css";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -32,6 +35,15 @@ const OfficeBar = () => {
             <img src={homeIcon} alt="home" className={classes.navIcon} />
           </Link>
         </li>
+        <li className={classes.navItem}>
+          <Link to="/backoffice/appEng">
+            <img
+              src={appEngIcon}
+              alt="app-engine"
+              className={classes.navIcon}
+            />
+          </Link>
+        </li>
         {checkRole(userRole) && (
           <Fragment>
             <li className={classes.navItem}>
@@ -58,8 +70,26 @@ const OfficeBar = () => {
               </Link>
             </li>
             <li className={classes.navItem}>
-              <Link to="/backoffice/clock">
-                <img src={clockIcon} alt="clock" className={classes.navIcon} />
+              <Link to="/backoffice/organizacoes">
+                <img
+                  src={buildingIcon}
+                  alt="organizacoes"
+                  className={classes.navIcon}
+                />
+              </Link>
+            </li>
+            <li className={classes.navItem}>
+              <Link to="/backoffice/reportes">
+                <img
+                  src={reportOfficeIcon}
+                  alt="reportes"
+                  className={classes.navIcon}
+                />
+              </Link>
+            </li>
+            <li className={classes.navItem}>
+              <Link to="/backoffice/mails">
+                <img src={emailIcon} alt="clock" className={classes.navIcon} />
               </Link>
             </li>
           </Fragment>
@@ -68,17 +98,12 @@ const OfficeBar = () => {
     </nav>
   );
 
-  return (
-    <div className={classes.navigation}>
-      {show && sideBarStyle}
-    </div>
-  );
+  return <div className={classes.navigation}>{show && sideBarStyle}</div>;
 };
 
 export default OfficeBar;
 
 // barra/menu que vai ficar a direita quando se entra no backoffice para escolher operações de users, pedidos, administração, etc...
-
 
 /*
       <img

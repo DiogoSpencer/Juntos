@@ -7,20 +7,12 @@ import rightArrowIcon from "../../img/rightArrow.png";
 import refreshIcon from "../../img/refresh.png";
 import binIcon from "../../img/bin.png";
 import checkIcon from "../../img/check.png";
-import { deleteUser, getAllUsers, verifyCompany } from "../../services/http";
+import { getAllUsers, verifyCompany } from "../../services/http";
 
 const ASC = "ASC";
 const DESC = "DESC";
 const DATE = "creationDate";
-const PUBLIC = "PUBLIC";
-const PRIVATE = "PRIVATE";
 const ALL = "all";
-const USER = "USER";
-const MOD = "MOD";
-const PARTNER = "PARTNER";
-const ADMIN = "ADMIN";
-const ENABLE = "ENABLE";
-const DISABLE = "DISABLE";
 const byParam = "company";
 
 const formatDate = (longDate) => {
@@ -299,9 +291,9 @@ const BackOfficeCompany = () => {
               ))}
           </tbody>
         </table>
+        {navPageButtons}
+        {sizeButtons}
       </div>
-      {navPageButtons}
-      {sizeButtons}
     </div>
   );
 };

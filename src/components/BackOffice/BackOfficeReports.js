@@ -116,11 +116,8 @@ const BackOfficeReports = () => {
     </div>
   );
 
-  const navButtonClass = isLoading ? classes.hideButton : classes.navPage;
-  const sizeButtonClass = isLoading ? classes.hideButton : classes.sizeButtons;
-
   const sizeButtons = (
-    <div className={sizeButtonClass}>
+    <div className={classes.sizeButtons}>
       <label htmlFor="size">Ver</label>
       <select
         id="size"
@@ -137,7 +134,7 @@ const BackOfficeReports = () => {
   );
 
   const navPageButtons = (
-    <div className={navButtonClass}>
+    <div className={classes.navPage}>
       <img
         src={leftArrowIcon}
         alt="página-anteriro"
@@ -173,7 +170,7 @@ const BackOfficeReports = () => {
   );
 
   return (
-    <div>
+    <div className={classes.container}>
       <h1 className={classes.title}>Reportes</h1>
       {isLoading && (
         <div className={classes.spinner}>
@@ -243,30 +240,11 @@ const BackOfficeReports = () => {
               ))}
           </tbody>
         </table>
+        {navPageButtons}
+        {sizeButtons}
       </div>
-      {navPageButtons}
-      {sizeButtons}
     </div>
   );
 };
 
 export default BackOfficeReports;
-
-/*
-
-                  <td className={classes.imgContainer}>
-                    {comment.profileImg ? (
-                      <img
-                        src={company.profileImg}
-                        alt="foto-perfil"
-                        className={classes.profileImg}
-                      />
-                    ) : (
-                      <img
-                        src={userIcon}
-                        alt="foto-perfil"
-                        className={classes.profileImg}
-                      />
-                    )}
-                  </td>
-*/

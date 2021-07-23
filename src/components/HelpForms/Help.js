@@ -227,11 +227,11 @@ const Help = () => {
     setAnonimousValue(false);
   };
 
-  const yesVolunteersHandler = (event) => {
+  const yesVolunteersHandler = () => {
     setVolunteersValue(true);
   };
 
-  const noVolunteersHandler = (event) => {
+  const noVolunteersHandler = () => {
     setVolunteersValue(false);
   };
 

@@ -226,13 +226,13 @@ function App() {
           <Route path="/backoffice/pedidos">
             <BackOfficeRequests />
           </Route>
-          <Route path="/backoffice/statsgerais">
-            <BackOfficeTable />
-          </Route>
           <Route path="/backoffice/appEng">
             <BackOfficeAppEngine />
           </Route>
           <Route path="/backoffice/organizacoes">
+            <BackOfficeCompany />
+          </Route>
+          <Route path="/backoffice/mails">
             <BackOfficeCompany />
           </Route>
 

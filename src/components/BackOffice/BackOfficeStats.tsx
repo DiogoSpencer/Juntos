@@ -70,6 +70,7 @@ function BackOfficeStats() {
 
   return (
     <>
+      <h1>Informação Geral</h1>
       <div className="pie-charts-wrapper">
         {dataUsers.length > 0 && (
           <PieChart width={400} height={400}>
