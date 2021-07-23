@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listComments } from "../../services/http";
+import { deleteCommentMod, listComments } from "../../services/http";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import refreshIcon from "../../img/refresh.png";
 import leftArrowIcon from "../../img/leftArrow.png";
@@ -7,8 +7,8 @@ import rightArrowIcon from "../../img/rightArrow.png";
 import classes from "./BackOfficeReports.module.css";
 import binIcon from "../../img/bin.png";
 import checkIcon from "../../img/check.png";
-import userIcon from "../../img/userblue.png";
 import { Link } from "react-router-dom";
+import shareIcon from "../../img/share.png";
 
 const DESC = "DESC";
 const ASC = "ASC";
@@ -19,6 +19,14 @@ const REPORTS = "reports";
 const formatDate = (longDate) => {
   const date = new Date(longDate);
   return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+};
+
+const getLinkByType = (generalType) => {
+  if (generalType === "OFFER") {
+    return "";
+  } else if (generalType === "REQUEST") {
+    return "";
+  }
 };
 
 const BackOfficeReports = () => {
@@ -51,7 +59,7 @@ const BackOfficeReports = () => {
         }
       );
     }
-  }, [dirParam, pageNumber, pageSize, refresh, reportLimit]);
+  }, [refresh]);
 
   useEffect(() => {
     setIsLoading(false);
@@ -69,6 +77,12 @@ const BackOfficeReports = () => {
     setRefresh(true);
   };
   //console.log(responseData.length)
+
+  const changeReportNumberHandler = (event) => {
+    setReportLimit(parseInt(event.target.value));
+    setDisableSelect(true);
+    setRefresh(true);
+  };
 
   const nextPageHandler = () => {
     setPageNumber((prevState) => {
@@ -96,9 +110,19 @@ const BackOfficeReports = () => {
     setRefresh(true);
   };
 
-  const deleteReportsHandler = () => {};
+  const deleteReportsHandler = (commentId, toRemove) => {
+    setIsLoading(true);
 
-  const deleteCommentHandler = () => {};
+    deleteCommentMod(commentId, toRemove).then(
+      (response) => {
+        setRefresh(true);
+      },
+      (error) => {
+        setIsLoading(false);
+        console.log(error);
+      }
+    );
+  };
 
   const orderButtons = (
     <div className={classes.orderButtons}>
@@ -129,6 +153,25 @@ const BackOfficeReports = () => {
         <option value={5}>5</option>
         <option value={10}>10</option>
         <option value={15}>15</option>
+      </select>
+    </div>
+  );
+
+  const reportNumberSelect = (
+    <div className={classes.reportSelect}>
+      <label htmlFor="reports">Reportes</label>
+      <select
+        id="reports"
+        value={reportLimit}
+        onChange={changeReportNumberHandler}
+        className={classes.selectSub}
+        disabled={disableSelect}
+      >
+        <option value={1}>1</option>
+        <option value={5}>5</option>
+        <option value={10}>10</option>
+        <option value={15}>15</option>
+        <option value={20}>20</option>
       </select>
     </div>
   );
@@ -185,6 +228,7 @@ const BackOfficeReports = () => {
           onClick={onRefreshHandler}
           className={classes.refresh}
         />
+        {reportNumberSelect}
         <table className={classes.subContainer}>
           {tableHead}
           <tbody>
@@ -227,13 +271,24 @@ const BackOfficeReports = () => {
                       src={checkIcon}
                       alt="aceitar"
                       className={classes.iconRow}
-                      onClick={() => deleteReportsHandler(comment.email, true)}
+                      onClick={() => deleteReportsHandler(comment.id, true)}
                     />
+                    <Link
+                      to={`/juntos/${getLinkByType(comment.generalType)}/${
+                        comment.markerId
+                      }`}
+                    >
+                      <img
+                        src={shareIcon}
+                        alt="link-pedido"
+                        className={classes.iconRow}
+                      />
+                    </Link>
                     <img
                       src={binIcon}
                       alt="apagar"
                       className={classes.iconRow}
-                      onClick={() => deleteCommentHandler(comment.email, false)}
+                      onClick={() => deleteReportsHandler(comment.id, false)}
                     />
                   </td>
                 </tr>

@@ -12,7 +12,6 @@ import { getAllUsers, verifyCompany } from "../../services/http";
 const ASC = "ASC";
 const DESC = "DESC";
 const DATE = "creationDate";
-const ALL = "all";
 const byParam = "company";
 
 const formatDate = (longDate) => {
@@ -52,12 +51,6 @@ const BackOfficeCompany = () => {
       );
     }
   }, [refresh]);
-
-  const changeFilterHandler = (event) => {
-    //setByParam(event.target.value);
-    setDisableSelect(true);
-    setRefresh(true);
-  };
 
   const changeOrderHandler = (event) => {
     setDirParam(event.target.value);
@@ -127,21 +120,6 @@ const BackOfficeCompany = () => {
       }
     }
   };
-
-  const filterButtons = (
-    <div className={classes.filterButtons}>
-      <label htmlFor="filters">Filtrar</label>
-      <select
-        id="filters"
-        value={byParam}
-        onChange={changeFilterHandler}
-        className={classes.selectSub}
-        disabled={disableSelect}
-      >
-        <option value={ALL}>Mostrar Tudo</option>
-      </select>
-    </div>
-  );
 
   const orderButtons = (
     <div className={classes.orderButtons}>
@@ -224,7 +202,6 @@ const BackOfficeCompany = () => {
         </div>
       )}
       <div className={classes.mainSubContainer}>
-        {filterButtons}
         {orderButtons}
         <img
           src={refreshIcon}

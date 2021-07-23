@@ -1,6 +1,10 @@
 import classes from "./BackOfficeRequests.module.css";
 import { Fragment, useEffect, useState } from "react";
-import { changeMarker, deleteMarker, listMarker } from "../../services/http";
+import {
+  changeMarker,
+  deleteMarker,
+  listOfficeMarker,
+} from "../../services/http";
 import leftArrowIcon from "../../img/leftArrow.png";
 import rightArrowIcon from "../../img/rightArrow.png";
 import editIcon from "../../img/edit.png";
@@ -12,6 +16,8 @@ import refreshIcon from "../../img/refresh.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { Link } from "react-router-dom";
 import shareIcon from "../../img/share.png";
+import SearchBar from "../UI/SearchBar";
+import Autocomplete from "react-google-autocomplete";
 
 const HELP_REQUEST = "HELP_REQUEST";
 const HELP_OFFER = "HELP_OFFER";
@@ -23,7 +29,7 @@ const DATE = "creationDate";
 const ALL = "all";
 const TITLE = "title";
 const TOPICS = "topics";
-const location = "location";
+const LOCATION = "location";
 const VOLUNTEER_NUMBER = 1;
 
 const isNotEmpty = (value) => value.trim() !== "";
@@ -65,24 +71,23 @@ const BackOfficeRequests = () => {
   const [isEditing, setIsEditing] = useState("");
   const [enteredType, setEnteredType] = useState("");
   const [refresh, setRefresh] = useState(true);
-  const [isFirst, setIsFirst] = useState(true);
   const [isActive, setIsActive] = useState(false);
   const [isAnonimous, setIsAnonimous] = useState(false);
   const [generalType, setGeneralType] = useState("");
 
   useEffect(() => {
-    setDisableSelect(false);
-    if (
-      refresh &&
-      (byParam === ALL ||
-        byParam === TOPICS ||
-        (byParam === TITLE && search !== "") ||
-        (byParam === location && search !== ""))
-    ) {
-      setIsLoading(true);
+    setSearch("");
+  }, [byParam]);
 
-      listMarker(
-        `?by=${byParam}&value=${search}&order=${orderParam}&isFirst=${isFirst}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+  useEffect(() => {
+    setDisableSelect(false);
+    if (refresh) {
+      setIsLoading(true);
+      console.log(
+        `?by=${byParam}&value=${search}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+      );
+      listOfficeMarker(
+        `?by=${byParam}&value=${search}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
       ).then(
         (response) => {
           setIsEditing("");
@@ -97,31 +102,13 @@ const BackOfficeRequests = () => {
         }
       );
     }
-  }, [
-    pageNumber,
-    byParam,
-    orderParam,
-    dirParam,
-    pageSize,
-    refresh,
-    isFirst,
-    search,
-  ]);
-
-  useEffect(() => {
-    setPageNumber(0);
-  }, [isFirst]);
+  }, [pageNumber, byParam, orderParam, dirParam, pageSize, refresh, search]);
 
   useEffect(() => {
     if (responseData) {
       setIsLoading(false);
     }
-    console.log(responseData);
   }, [responseData]);
-
-  useEffect(() => {
-    setSearch("");
-  }, [byParam]);
 
   const changeFilterHandler = (event) => {
     setByParam(event.target.value);
@@ -175,9 +162,6 @@ const BackOfficeRequests = () => {
     const date = new Date(longDate);
     return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
   };
-
-  const searchBarClass =
-    byParam === TITLE ? classes.searchBar : classes.searchBarHidden;
 
   const {
     value: enteredTitle,
@@ -309,7 +293,10 @@ const BackOfficeRequests = () => {
       difficulty: enteredDifficulty,
       anonymousOwner: isAnonimous,
       helpersCapacity: enteredVolunteers,
+      type: enteredType,
     };
+    console.log(enteredType);
+    console.log(formInfo);
 
     formData.append(
       "info",
@@ -352,6 +339,12 @@ const BackOfficeRequests = () => {
     }
   };
 
+  const searchBarClass =
+    byParam === TITLE ? classes.searchBar : classes.searchBarHidden;
+
+  const autoComplete =
+    byParam === LOCATION ? classes.autoComplete : classes.autoCompleteHidden;
+
   const navButtonClass = isLoading ? classes.hideButton : classes.navPage;
   const sizeButtonClass = isLoading ? classes.hideButton : classes.sizeButtons;
 
@@ -366,6 +359,8 @@ const BackOfficeRequests = () => {
         disabled={disableSelect}
       >
         <option value={ALL}>Mostrar Tudo</option>
+        <option value={TITLE}>Título</option>
+        <option value={LOCATION}>Distrito</option>
       </select>
     </div>
   );
@@ -464,6 +459,25 @@ const BackOfficeRequests = () => {
           onClick={onRefreshHandler}
           className={classes.refresh}
         />
+        <div className={autoComplete}>
+          <Autocomplete
+            style={{ width: "15em" }}
+            apiKey="AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU"
+            onPlaceSelected={(place) => {
+              if (place.address_components !== undefined) {
+                setSearch(place.address_components[0].long_name);
+              }
+            }}
+          />
+        </div>
+        <div className={searchBarClass}>
+          <SearchBar
+            input={search}
+            setInput={setSearch}
+            placeholder="Procurar..."
+          />
+        </div>
+
         <table className={classes.subContainer}>
           {tableHead}
           <tbody>
@@ -546,7 +560,7 @@ const BackOfficeRequests = () => {
                       <Link to={`/juntos/editar/${request.id}`}>
                         <img
                           src={shareIcon}
-                          alt="link-perfil"
+                          alt="link-editar"
                           className={classes.iconRow}
                         />
                       </Link>

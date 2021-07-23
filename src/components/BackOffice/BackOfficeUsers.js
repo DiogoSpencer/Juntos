@@ -13,6 +13,7 @@ import useInput from "../hooks/use-input";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { Link } from "react-router-dom";
+import SearchBar from "../UI/SearchBar";
 
 const ASC = "ASC";
 const DESC = "DESC";
@@ -20,6 +21,7 @@ const DATE = "creationDate";
 const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
 const ALL = "all";
+const EMAIL = "email";
 const USER = "USER";
 const MOD = "MOD";
 const PARTNER = "PARTNER";
@@ -74,12 +76,17 @@ const BackOfficeUsers = () => {
   const authRole = useSelector((state) => state.auth.role);
 
   useEffect(() => {
+    setSearch("");
+  }, [byParam]);
+
+  useEffect(() => {
     setDisableSelect(false);
-    if (refresh) {
+
+    if (refresh && (byParam === ALL || (byParam === EMAIL && search !== ""))) {
       setIsLoading(true);
 
       getAllUsers(
-        `?by=${byParam}&value=${PUBLIC}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+        `?by=${byParam}&value=${search}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
       ).then(
         (response) => {
           setRefresh(false);
@@ -94,11 +101,15 @@ const BackOfficeUsers = () => {
       );
     }
     // eslint-disable-next-line
-  }, [pageNumber, byParam, orderParam, dirParam, pageSize, refresh]);
+  }, [pageNumber, byParam, orderParam, dirParam, pageSize, refresh, search]);
 
   useEffect(() => {
     setIsLoading(false);
   }, [responseData]);
+
+  useEffect(() => {
+    setSearch("");
+  }, [byParam]);
 
   const changeFilterHandler = (event) => {
     setByParam(event.target.value);
@@ -151,6 +162,11 @@ const BackOfficeUsers = () => {
 
   const closeEditHandler = () => {
     setIsEditing("");
+  };
+
+  const searchHandler = (value) => {
+    setSearch(value);
+    setRefresh(true);
   };
 
   const {
@@ -278,8 +294,6 @@ const BackOfficeUsers = () => {
 
     setIsLoading(true);
 
-    const formData = new FormData();
-
     const userInfo = {
       company: isCompany,
       numHelps: enteredHelps,
@@ -288,16 +302,11 @@ const BackOfficeUsers = () => {
       role: enteredRole,
       privacy: enteredPrivacy,
       state: enteredState,
-      deletePhoto: deleteImage,
+      photoDelete: deleteImage,
       username: username,
     };
 
-    formData.append(
-      "creds",
-      new Blob([JSON.stringify(userInfo)], { type: "application/json" })
-    );
-
-    controlUserCreds.then(
+    controlUserCreds(userInfo).then(
       (response) => {
         setRefresh(true);
         setIsEditing("");
@@ -344,6 +353,8 @@ const BackOfficeUsers = () => {
   const imageClass = changesMade ? classes.iconRow : classes.iconRowDisabled;
   const navButtonClass = isLoading ? classes.hideButton : classes.navPage;
   const sizeButtonClass = isLoading ? classes.hideButton : classes.sizeButtons;
+  const searchBarClass =
+    byParam === EMAIL ? classes.searchBar : classes.searchBarHidden;
 
   const filterButtons = (
     <div className={classes.filterButtons}>
@@ -356,6 +367,7 @@ const BackOfficeUsers = () => {
         disabled={disableSelect}
       >
         <option value={ALL}>Mostrar Tudo</option>
+        <option value={EMAIL}>E-mail</option>
       </select>
     </div>
   );
@@ -442,6 +454,13 @@ const BackOfficeUsers = () => {
       <div className={classes.mainSubContainer}>
         {filterButtons}
         {orderButtons}
+        <div className={searchBarClass}>
+          <SearchBar
+            input={search}
+            setInput={searchHandler}
+            placeholder="Procurar..."
+          />
+        </div>
         <img
           src={refreshIcon}
           alt="Atualizar"
@@ -501,20 +520,24 @@ const BackOfficeUsers = () => {
                     <td className={classes.roleContainer}>{user.role}</td>
                     <td className={classes.stateContainer}>{user.state}</td>
                     <td className={classes.iconsContainer}>
-                      <img
-                        src={editIcon}
-                        alt="editar"
-                        className={classes.iconRow}
-                        onClick={() => editUserHandler(user.username)}
-                      />
-                      <img
-                        src={binIcon}
-                        alt="apagar"
-                        className={classes.iconRow}
-                        onClick={() =>
-                          onDeleteUserHandler(user.role, user.username)
-                        }
-                      />
+                      {authRole !== user.role && (
+                        <Fragment>
+                          <img
+                            src={editIcon}
+                            alt="editar"
+                            className={classes.iconRow}
+                            onClick={() => editUserHandler(user.username)}
+                          />
+                          <img
+                            src={binIcon}
+                            alt="apagar"
+                            className={classes.iconRow}
+                            onClick={() =>
+                              onDeleteUserHandler(user.role, user.username)
+                            }
+                          />
+                        </Fragment>
+                      )}
                     </td>
                   </tr>
                 ) : (

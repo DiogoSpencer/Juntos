@@ -29,8 +29,46 @@ let pathFirstArg = "";
 let pathSecondArg = "";
 let location = "";
 
+const formatDate = (longDate) => {
+  const now = new Date(Date.now());
+  const date = new Date(longDate);
+
+  const nowDate = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  const serverDate = Date.UTC(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+
+  const diffInDays = Math.floor((nowDate - serverDate) / MS_PER_DAY);
+
+  if (diffInDays < 1) {
+    const hours = Math.abs(now - date) / MS_PER_HOUR;
+    const minutes = Math.abs(now - date) / MS_PER_MINUTE;
+    const roundedHours = Math.round(hours);
+    const roundedMinutes = Math.round(minutes);
+
+    if (roundedHours === 24) {
+      return `${diffInDays} dia atrás`;
+    } else if (hours < 1) {
+      return `${minutes < 1 ? 1 : roundedMinutes} ${
+        roundedMinutes <= 1 ? "minuto" : "minutos"
+      } atrás`;
+    } else if (roundedHours > hours) {
+      return `< ${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
+    } else if (roundedHours < hours) {
+      return `> ${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
+    } else {
+      return `${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
+    }
+  } else {
+    return `${diffInDays} dias atrás`;
+  }
+};
+
 const MyHelps = () => {
   const match = useRouteMatch();
+
   if (match.path === "/juntos/ajudas") {
     ALL = "all";
     TITLE = "title";
@@ -68,15 +106,24 @@ const MyHelps = () => {
   const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
+    setByParam(ALL);
+    setSearch("");
+    setRefresh(true);
+    setIsFirst(true);
+  }, [match.path]);
+
+  useEffect(() => {
+    setSearch("");
+  }, [byParam]);
+
+  useEffect(() => {
+    setPageNumber(0);
+  }, [isFirst]);
+
+  useEffect(() => {
     setDisableSelect(false);
 
-    if (
-      refresh &&
-      (byParam === ALL ||
-        byParam === TOPICS ||
-        (byParam === TITLE && search !== "") ||
-        (byParam === location && search !== ""))
-    ) {
+    if (refresh) {
       setIsLoading(true);
 
       listMarker(
@@ -88,7 +135,6 @@ const MyHelps = () => {
           setRefresh(false);
         },
         (error) => {
-          console.log(error);
           if (error) {
             setIsLoading(false);
             setRefresh(false);
@@ -96,28 +142,11 @@ const MyHelps = () => {
         }
       );
     }
-  }, [
-    byParam,
-    orderParam,
-    dirParam,
-    pageNumber,
-    search,
-    isFirst,
-    pageSize,
-    refresh,
-  ]);
-
-  useEffect(() => {
-    setPageNumber(0);
-  }, [isFirst]);
-
-  useEffect(() => {
-    setSearch("");
-  }, [byParam]);
+  }, [refresh]);
 
   const nextPageHandler = () => {
     setPageNumber((prevState) => {
-      if (responseData.length === pageSize) {
+      if (responseData && responseData.length === pageSize) {
         setRefresh(true);
         return prevState + 1;
       } else {
@@ -169,45 +198,9 @@ const MyHelps = () => {
     setRefresh(true);
   };
 
-  const formatDate = (longDate) => {
-    const now = new Date(Date.now());
-    const date = new Date(longDate);
-
-    const nowDate = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-    const serverDate = Date.UTC(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate()
-    );
-
-    const diffInDays = Math.floor((nowDate - serverDate) / MS_PER_DAY);
-
-    if (diffInDays < 1) {
-      const hours = Math.abs(now - date) / MS_PER_HOUR;
-      const minutes = Math.abs(now - date) / MS_PER_MINUTE;
-      const roundedHours = Math.round(hours);
-      const roundedMinutes = Math.round(minutes);
-
-      if (roundedHours === 24) {
-        return `${diffInDays} dia atrás`;
-      } else if (hours < 1) {
-        return `${minutes < 1 ? 1 : roundedMinutes} ${
-          roundedMinutes <= 1 ? "minuto" : "minutos"
-        } atrás`;
-      } else if (roundedHours > hours) {
-        return `< ${roundedHours} ${
-          roundedHours === 1 ? "hora" : "horas"
-        } atrás`;
-      } else if (roundedHours < hours) {
-        return `> ${roundedHours} ${
-          roundedHours === 1 ? "hora" : "horas"
-        } atrás`;
-      } else {
-        return `${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
-      }
-    } else {
-      return `${diffInDays} dias atrás`;
-    }
+  const searchHandler = (value) => {
+    setSearch(value);
+    setRefresh(true);
   };
 
   const searchBarClass =
@@ -216,7 +209,6 @@ const MyHelps = () => {
   const autoComplete =
     byParam === location ? classes.autoComplete : classes.autoCompleteHidden;
 
-  console.log(match.path);
   //lista de ajudas ativas -> mapear da data que se recebe
   const ownRequests = (
     <Fragment>
@@ -435,7 +427,7 @@ const MyHelps = () => {
         <div className={searchBarClass}>
           <SearchBar
             input={search}
-            setInput={setSearch}
+            setInput={searchHandler}
             placeholder="Procurar..."
           />
         </div>

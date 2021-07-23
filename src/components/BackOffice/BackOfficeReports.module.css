@@ -133,6 +133,7 @@
   grid-area: sb;
   align-self: center;
   justify-self: start;
+  display: flex;
 }
 
 .navArrow {
@@ -186,6 +187,28 @@
 }
 
 .sizeButtons input:focus {
+  outline: none;
+}
+
+.reportSelect {
+  grid-area: fb;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+}
+
+.reportSelect label {
+  font-weight: 700;
+  color: #3385d9;
+  padding-right: 0.5em;
+}
+
+.reportSelect input {
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+}
+
+.reportSelect input:focus {
   outline: none;
 }
 

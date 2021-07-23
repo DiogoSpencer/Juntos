@@ -79,7 +79,7 @@ const Login = (props) => {
       (error) => {
         props.setIsLoading(false);
         if (error.status === 400) {
-          setError("Credenciais Inválidas");
+          setError("Password Incorrecta");
         } else if (error.status === 403) {
           setError("Esta conta está desativada");
         } else if (error.status === 404) {

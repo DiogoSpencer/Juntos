@@ -52,7 +52,7 @@ const EditRequest = () => {
   const history = useHistory();
   const match = useRouteMatch();
   const helpId = match.params.requestId;
-  const editing = match.path === "/editar/:requestId";
+  const editing = match.path === "/juntos/editar/:requestId";
 
   const [markerType, setMarker] = useState("MARKER");
   const [move, setMove] = useState("WALKING");
@@ -525,6 +525,7 @@ const EditRequest = () => {
                 images={selectedFiles}
                 hasImage={selectedFiles.length <= 0 ? true : false}
                 editing={editing}
+                enteredPass={responseData.password}
               />
             </div>
           )}

@@ -1,9 +1,16 @@
 import classes from "./SearchBar.module.css";
 import searchIcon from "../../img/search.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SearchBar = (props) => {
   const [inputSearch, setInputSearch] = useState("");
+  
+  useEffect(() => {
+    if (props.input !== inputSearch) {
+      console.log("here")
+      setInputSearch(props.input);
+    }
+  }, [props.input]);
 
   const inputChangeHandler = (event) => {
     setInputSearch(event.target.value);
@@ -11,6 +18,7 @@ const SearchBar = (props) => {
 
   const searchHandler = (event) => {
     event.preventDefault();
+    console.log(inputSearch);
     props.setInput(inputSearch);
   };
 

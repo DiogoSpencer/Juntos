@@ -60,6 +60,16 @@
   display: none;
 }
 
+.autoComplete {
+  grid-area: sc;
+  align-self: center;
+  justify-self: start;
+}
+
+.autoCompleteHidden {
+  display: none;
+}
+
 .subContainer {
   align-self: center;
   justify-self: center;

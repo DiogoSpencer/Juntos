@@ -61,15 +61,6 @@ const OfficeBar = () => {
               </Link>
             </li>
             <li className={classes.navItem}>
-              <Link to="/backoffice/notificacoes">
-                <img
-                  src={notificationsIcon}
-                  alt="notificacoes"
-                  className={classes.navIcon}
-                />
-              </Link>
-            </li>
-            <li className={classes.navItem}>
               <Link to="/backoffice/organizacoes">
                 <img
                   src={buildingIcon}
@@ -113,4 +104,14 @@ export default OfficeBar;
         onClick={hideSideBarHandler}
       />
 
+
+                  <li className={classes.navItem}>
+              <Link to="/backoffice/notificacoes">
+                <img
+                  src={notificationsIcon}
+                  alt="notificacoes"
+                  className={classes.navIcon}
+                />
+              </Link>
+            </li>
 */
