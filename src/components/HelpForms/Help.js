@@ -83,6 +83,16 @@ const Help = () => {
     lng: -9.13549,
   });
 
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(function(position) {
+          setCenter({lat: position.coords.latitude,lng: position.coords.longitude})
+        },
+        function(error) {
+          console.error("Error Code = " + error.code + " - " + error.message);
+        });
+
+  }, [])
+
   const handleMarkerChange = (event) => {
     setMarker(event.target.value);
   };

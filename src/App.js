@@ -9,6 +9,10 @@ import { getUserUsername } from "./services/http";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
 
+const USER = "USER";
+const MOD = "MOD";
+const ADMIN = "ADMIN";
+
 const Home = React.lazy(() => import("./components/Home/Home"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
 const FAQ = React.lazy(() => import("./components/FAQ/FAQ"));
@@ -24,6 +28,9 @@ const TicketDetails = React.lazy(() =>
 );
 const ChangePassword = React.lazy(() =>
   import("./components/Password/ChangePassword")
+);
+const HallOfFame = React.lazy(() =>
+    import("./components/Herois/HallOfFame")
 );
 const AppPage = React.lazy(() => import("./components/App/AppPage"));
 const MyHelps = React.lazy(() => import("./components/MyHelps/MyHelps"));
@@ -158,6 +165,9 @@ function App() {
           </Route>
           <Route path="/herois/:heroiId">
             <HeroisWraper />
+          </Route>
+          <Route path = "/HallOfFame">
+            <HallOfFame/>
           </Route>
           <Route path="/contactos">
             <Contacts />

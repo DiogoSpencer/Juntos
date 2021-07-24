@@ -2,6 +2,17 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    margin-top: 3vh;
+}
+.pie-charts-wrapper >*{
+   width: 45%;
+    z-index: -1000;
+    text-align: center;
+}
+.pie-charts-wrapper .script{
+    color: #3385d9;
+    font-weight: 600;
+    font-size: larger;
 }
 .back-office-table-wrapper{
     width: 85% ;
@@ -14,4 +25,9 @@
 
 .back-office-table-wrapper .table-header-footer >*{
     color: white;
+}
+
+.legend {
+    position: absolute;
+    top: 0;
 }

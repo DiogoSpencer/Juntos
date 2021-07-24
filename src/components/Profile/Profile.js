@@ -221,6 +221,7 @@ const Profile = () => {
         "Tem a certeza que pretende apagar a sua conta? Esta ação é irreversível."
       )
     ) {
+      console.log(authUsername)
       setIsLoading(true);
       deleteUser(authUsername).then(
         (response) => {

@@ -455,6 +455,14 @@ export async function createTicket(ticketBody: any) {
   }
 }
 
+export async function hallOfFame(urlParams: string) {
+  try {
+    return await axios.get(`${url}/rest/clock${urlParams}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
 export async function deleteTicket(heroForm: FormData) {
   try {
     console.log(heroForm);

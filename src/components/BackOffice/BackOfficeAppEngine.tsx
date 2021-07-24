@@ -26,8 +26,6 @@ export default function BackOfficeAppEngine() {
                 break;
             case "GAE_CPU_USAGE": setText("Utilização do CPU em megaciclos sobre todas as instâncias.")
                 break;
-            case "GAE_CPU_CORES": setText("Número total de núcleos de CPU alocados para uma versão do App Engine.")
-                break;
             case "GAE_MEM": setText("Memória total usada pelas instâncias a correr.")
                 break;
             case "GAE_SENT_BYTES": setText("Contagem delta da largura de banda da rede de saída.")
@@ -36,11 +34,11 @@ export default function BackOfficeAppEngine() {
                 break;
             case "CACHE_HIT_RATIO": setText("Percentagem de acessos bem-sucedidos em comparação com todas as operações do memcache.")
                 break;
-            case "CACHE_USED_SIZE": setText("Tamanho da cache, calculado como o tamanho total de todos os items guardados.")
+            case "CACHE_USED_SIZE": setText("Tamanho da cache, calculado com o tamanho total de todos os items guardados.")
                 break;
-            case "STORAGE_OBJECT_COUNT": setText("Número total de objetos per bucket.")
+            case "STORAGE_OBJECT_COUNT": setText("Número total de objetos por diretoria.")
                 break;
-            case "STORAGE_TOTAL_BYTES": setText("Tamanho total de todos os objetos in the bucket")
+            case "STORAGE_TOTAL_BYTES": setText("Tamanho total de todos os objetos na diretoria")
                 break;
         }
     };
@@ -77,7 +75,6 @@ export default function BackOfficeAppEngine() {
                     <option value="GAE_SENT_BYTES">GAE Sent Bytes</option>
                     <option value="GAE_RECEIBED_BYTES">GAE Received Bytes</option>
                     <option value="GAE_CPU_USAGE">GAE CPU Usage</option>
-                    <option value="GAE_CPU_CORES">GAE CPU Cores</option>
                     <option value="STORAGE_OBJECT_COUNT">Storage Object Count</option>
                     <option value="STORAGE_TOTAL_BYTES">Storage Total Bytes</option>
                     <option value="CACHE_HIT_RATIO">Cache Hit Ratio</option>
