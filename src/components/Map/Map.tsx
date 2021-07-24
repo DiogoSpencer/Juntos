@@ -95,6 +95,7 @@ function Map(props: MapProps) {
   const previous = usePrevious(zoom)
   const [center, setCenter] = useState<Center>(props.center);
   const geocoder = new google.maps.Geocoder();
+
   const [bounds, setBounds] = useState<Bounds>(props.bounds);
   const [open, setOpen] = useState<infoOpen>({
     index: 0,
@@ -145,8 +146,8 @@ function Map(props: MapProps) {
   const handleCenterChanged = () => {
     if (mapRef.current !== null && props.callbackC && props.callbackBounds) {
       if (
-        Math.abs(mapRef.current.getCenter().toJSON().lat - center.lat) > 0.4 ||
-        Math.abs(mapRef.current.getCenter().toJSON().lng - center.lng) > 0.4
+        Math.abs(mapRef.current.getCenter().toJSON().lat - center.lat) > 0.2 ||
+        Math.abs(mapRef.current.getCenter().toJSON().lng - center.lng) > 0.2
       ) {
         props.callbackC({
           lat: mapRef.current.getCenter().toJSON().lat,
@@ -165,15 +166,22 @@ function Map(props: MapProps) {
   };
 
   useEffect(()=>{
-    if(mapRef.current !== null) {
+    if(mapRef.current !== null && props.callbackBounds) {
       setZoom(mapRef.current.getZoom())
+      var bounds :google.maps.LatLngBounds = mapRef.current.getBounds()
+      props.callbackBounds({
+        latLower: bounds.getSouthWest().lat(),
+        lngLower:  bounds.getSouthWest().lng(),
+        latTop: bounds.getNorthEast().lat(),
+        lngTop: bounds.getNorthEast().lng(),
+      })
     }
   }, [mapRef])
   useEffect(()=>{
     if (mapRef.current !== null && props.callbackBounds && previous > zoom ) {
       console.log(previous)
       console.log(mapRef.current.getZoom())
-      var bounds :google.maps.LatLngBounds = mapRef.current.getBounds()
+      let bounds :google.maps.LatLngBounds = mapRef.current.getBounds()
       props.callbackBounds({
         latLower: bounds.getSouthWest().lat(),
         lngLower:  bounds.getSouthWest().lng(),
@@ -234,7 +242,22 @@ function Map(props: MapProps) {
   useEffect(() => {
     setCenter(props.center);
   }, [props.center]);
+
   useEffect(() => {
+      if(props.callbackBounds && mapRef.current && mapRef.current.getBounds() ) {
+          let bounds: google.maps.LatLngBounds = mapRef.current.getBounds()
+          props.callbackBounds({
+              latLower: bounds.getSouthWest().lat(),
+              lngLower: bounds.getSouthWest().lng(),
+              latTop: bounds.getNorthEast().lat(),
+              lngTop: bounds.getNorthEast().lng(),
+          })
+      }
+
+    }, [center]);
+
+  useEffect(() => {
+    console.log(props.bounds)
     setBounds(props.bounds);
   }, [props.bounds]);
 
@@ -389,10 +412,8 @@ function Map(props: MapProps) {
                                             setOpen({index: index, openIn: false})
                                         }
                                     >
-                                      <div className='info-wrapper'>
+                                      <div>
                                         <span className='info-title-wrapper'>{point.title}</span>
-                                        <br/>
-                                        <span className='info-footer'>lat: {point.lat} <br/> lon: {point.lon}</span>
                                         <br/>
                                         {point.generalType === 'REQUEST' &&
                                         <Link to={`ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
@@ -434,10 +455,8 @@ function Map(props: MapProps) {
                                         setOpen({index: index, openIn: false})
                                     }
                                 >
-                                  <div className='info-wrapper'>
-                                    <span className='info-title-wrapper'>{point.title}</span>
-                                    <br/>
-                                    <span className='info-footer'>lat: {point.lat} <br/> lon: {point.lon}</span>
+                                  <div>
+                                    <span>{point.title}</span>
                                     <br/>
                                     {point.generalType === 'REQUEST' &&
                                     <Link to={`ajudas/pedidos/${point.id}`} className={classes.linkContacts}>

@@ -422,3 +422,13 @@ export async function activateAccount(code: string) {
     throw error.response;
   }
 }
+
+export async function hallOfFame(urlParams: string) {
+  try {
+    return await axios.get(`${url}/rest/clock${urlParams}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+

@@ -3,6 +3,8 @@ import classes from "./HeroisWrapper.module.css";
 import volunteer1 from "../../img/boxesVolunteer.jpg";
 import Button from "../UI/Button";
 
+import { Link} from "react-router-dom";
+
 //ir buscar todos aqui ou em slides?
 //ir buscar o do endereço por id
 const dummy = {
@@ -26,9 +28,9 @@ const HeroisWraper = () => {
         <p className={classes.info}>{dummy.text}</p>
         <img src={volunteer1} alt={dummy.alt} className={classes.image} />
       </div>
-      <div className={classes.slidesContainer}>
+      <Link to="/HallOfFame"className={classes.slidesContainer}>
         <Button className={classes.seeOthers} text="Ver Outros Heróis" />
-      </div>
+      </Link>
     </div>
   );
 };

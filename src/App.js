@@ -14,9 +14,6 @@ import { authActions } from "./store/session/auth";
 import { getUserUsername } from "./services/http";
 import classes from "./App.module.css";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
-import BackOfficeStats from "./components/BackOffice/BackOfficeStats";
-import BackOfficeTable from "./components/BackOffice/BackOfficeTable";
-import BackOfficeAppEngine from "./components/BackOffice/BackOfficeAppEngine";
 
 const USER = "USER";
 const MOD = "MOD";
@@ -34,6 +31,9 @@ const ReceiveRegister = React.lazy(() =>
 const Contacts = React.lazy(() => import("./components/Contacts/Contacts"));
 const ChangePassword = React.lazy(() =>
   import("./components/Password/ChangePassword")
+);
+const HallOfFame = React.lazy(() =>
+    import("./components/Herois/HallOfFame")
 );
 const AppPage = React.lazy(() => import("./components/App/AppPage"));
 const MyHelps = React.lazy(() => import("./components/MyHelps/MyHelps"));
@@ -164,6 +164,9 @@ function App() {
           </Route>
           <Route path="/herois/:heroiId">
             <HeroisWraper />
+          </Route>
+          <Route path = "/HallOfFame">
+            <HallOfFame/>
           </Route>
           <Route path="/contactos">
             <Contacts />

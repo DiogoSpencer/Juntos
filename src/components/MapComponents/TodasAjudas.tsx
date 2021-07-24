@@ -7,20 +7,23 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 
 const HELP_REQUEST = "REQUEST";
 const HELP_OFFER = "OFFER";
+const initialBounds : Bounds = {
+  latLower: 38.575291199755526,
+  lngLower: -9.428419410934456,
+  latTop: 38.83652687020928,
+  lngTop: -8.84256058906556,
+}
+const initialCenter : Center ={
+  lat: 38.7071,
+  lng: -9.13549
+}
 
 function TodasAjudas() {
   const [point, setPoint] = useState<Point[]>([]);
   const [pedido, setPedido] = useState<string>(HELP_REQUEST);
-  const [center, setCenter] = useState<Center>({
-    lat: 38.7071,
-    lng: -9.13549,
-  });
-  const [bounds, setBounds] = useState<Bounds>({
-    latLower: 38.575291199755526,
-    lngLower: -9.428419410934456,
-    latTop: 38.83652687020928,
-    lngTop: -8.84256058906556,
-  });
+  const [center, setCenter] = useState<Center>(initialCenter);
+
+  const [bounds, setBounds] = useState<Bounds>(initialBounds);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -32,12 +35,12 @@ function TodasAjudas() {
   );
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(function(position) {
-
       setCenter({lat: position.coords.latitude,lng: position.coords.longitude})
         },
         function(error) {
           console.error("Error Code = " + error.code + " - " + error.message);
         });
+
   }, [])
 
   const callbackC = useCallback(
@@ -68,7 +71,6 @@ function TodasAjudas() {
           newVec[i].lat = parseFloat(response.data[i].points[0].lat);
           newVec[i].lon = parseFloat(response.data[i].points[0].lon);
           newVec[i].type = response.data[i].type
-
         }
         setPoint(newVec);
         setIsLoading(false);
@@ -90,7 +92,7 @@ function TodasAjudas() {
 
   return (
     <div className={classes.mainContainer}>
-      <h1 className={classes.title}>Ajudas Disponí­veis</h1>
+      <h1 className={classes.title}>Ajudas Disponíveis</h1>
       {isLoading && (
         <div className={classes.spinner}>
           <LoadingSpinner />

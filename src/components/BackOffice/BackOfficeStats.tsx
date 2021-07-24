@@ -25,7 +25,7 @@ interface propertyMap{
     entity_bytes: number
     kind_name?: string
 }
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
+    const COLORS = ['#5297de', 'lightgrey', 'gold', 'orangered']
 function BackOfficeStats() {
     const [dataUsers, setDataUsers] = useState<pieChunk[]>([])
     const [dataMarkers, setDataMarkers] = useState<pieChunk[]>([])
@@ -44,7 +44,6 @@ function BackOfficeStats() {
         )
         officeDetail().then(
             (response) => {
-                console.log(response)
                 setDataUsers([
                     {key: "Administradores", value: response.data.roleAdmin},
                     {key: "Moderadores", value: response.data.roleMod},
@@ -66,8 +65,8 @@ return(
     <>
     <div className="pie-charts-wrapper">
         {dataUsers.length>0 &&
-            <PieChart width={400} height={400}>
-                <Pie data={dataUsers} cx={200} cy={200} outerRadius={120} dataKey="value"
+            <PieChart width={500} height={500}>
+                <Pie data={dataUsers} cx={250} cy={250} outerRadius={200} dataKey="value"
                      nameKey="key" label>
                     {dataUsers.map((entry: pieChunk, index: number) => (
                         <Cell key={`Cell-value-${index}`} fill={COLORS[index % COLORS.length]}/>
@@ -77,15 +76,30 @@ return(
             </PieChart>
         }
         {dataMarkers.length>0 &&
-        <PieChart width={400} height={400}>
-            <Pie data={dataMarkers} cx={200} cy={200} outerRadius={120} dataKey="value"
+        <PieChart width={500} height={500}>
+            <Pie data={dataMarkers} cx={250} cy={250} outerRadius={200} dataKey="value"
                  nameKey="key" label>
                 {dataMarkers.map((entry: pieChunk, index: number) => (
                     <Cell key={`Cell-value-${index}`} fill={COLORS[index % COLORS.length]}/>
                 ))}
             </Pie>
-            <Legend/>
+
+            <Legend layout = "horizontal"  align = "center"/>
+
         </PieChart>
+        }
+        {dataUsers.length > 0 &&
+        <p className="script">
+            No 1º gráfico circular podemos ver a distribuição de roles dos utilizadores.
+            Temos {dataUsers[3].value} utilizadores, {dataUsers[1].value} moderadores, {dataUsers[2].value} parceiros e {dataUsers[0].value} administradores.
+        </p>
+        }
+        {dataMarkers.length > 0 &&
+        <p className="script">
+            No 2º gráfico circular podemos ver a distribuição de eventos.
+            Há {dataMarkers[3].value} pedidos, {dataMarkers[1].value} ofertas, {dataMarkers[2].value} doações
+            e {dataMarkers[0].value} ações.
+        </p>
         }
     </div>
     <div className="back-office-table-wrapper">
@@ -108,10 +122,10 @@ return(
                             <TableCell> {row.kind_name === "Users" ?
                                 <Link to={`/backoffice/utilizadores`}>
                                     {row.kind_name}
-                                </Link> : row.kind_name ?
+                                </Link> : row.kind_name === "Marker" ?
                                     <Link to={`/backoffice/pedidos`}>
                                         {row.kind_name}
-                                    </Link> : 'Total'}</TableCell>
+                                    </Link> : row.kind_name ? row.kind_name: 'Total'}</TableCell>
                             <TableCell> {row.builtin_index_bytes}</TableCell>
                             <TableCell>{row.builtin_index_count}</TableCell>
                             <TableCell>{row.bytes}</TableCell>

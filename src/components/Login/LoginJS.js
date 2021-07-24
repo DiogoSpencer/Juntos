@@ -46,52 +46,55 @@ const Login = (props) => {
   if (enteredEmailIsValid && enteredPasswordIsValid) {
     formIsValid = true;
   }
+  const failureGoogle = () => {
 
+  }
     const responseFacebook = (responseG) => {
-        console.log(responseG)
-        loginExternal(responseG.email,
-            responseG.first_name,
-            responseG.id,
-            responseG.picture.data.url,
-            responseG.last_name,
-            'FACEBOOK').then((response) => {
-                props.setIsLoading(false);
-                const token = response.headers.authorization;
-                const parsedToken = jwt_decode(token);
-                dispatch(
-                    authActions.login({
-                        isLogged: true,
-                        token: token,
-                        username: parsedToken.username,
-                        role: parsedToken.role,
-                        email: parsedToken.email,
-                        firstName: response.data.firstName,
-                        lastName: response.data.lastName,
-                        numHelps: response.data.numHelps,
-                        profileImg: response.data.profileImg,
-                    })
-                );
-                localStorage.setItem("token", token);
-                props.onCloseModal();
-            },
-            (error) => {
-                props.setIsLoading(false);
-                if (error.status === 400) {
-                    setError("Credenciais Inválidas")
-                } else if (error.status === 403) {
-                    setError("Esta conta está desativada")
-                } else if (error.status === 404) {
-                    setError("Não existe um utilizador registado com este e-mail")
-                } else {
-                    setError("Algo Inesperado aconteceu, tente novamente");
-                    console.log(error)
+        if(responseG.status !== "unknown") {
+            loginExternal(responseG.email,
+                responseG.first_name,
+                responseG.id,
+                responseG.picture.data.url,
+                responseG.last_name,
+                'FACEBOOK').then((response) => {
+                    props.setIsLoading(false);
+                    const token = response.headers.authorization;
+                    const parsedToken = jwt_decode(token);
+                    dispatch(
+                        authActions.login({
+                            isLogged: true,
+                            token: token,
+                            username: parsedToken.username,
+                            role: parsedToken.role,
+                            email: parsedToken.email,
+                            firstName: response.data.firstName,
+                            lastName: response.data.lastName,
+                            numHelps: response.data.numHelps,
+                            profileImg: response.data.profileImg,
+                        })
+                    );
+                    localStorage.setItem("token", token);
+                    props.onCloseModal();
+                },
+                (error) => {
+                    props.setIsLoading(false);
+                    if (error.status === 400) {
+                        setError("Credenciais Inválidas")
+                    } else if (error.status === 403) {
+                        setError("Esta conta está desativada")
+                    } else if (error.status === 404) {
+                        setError("Não existe um utilizador registado com este e-mail")
+                    } else {
+                        setError("Algo Inesperado aconteceu, tente novamente");
+                        console.log(error)
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 
     const responseGoogle = (responseG) => {
-        console.log(responseG)
+        if(responseG !== undefined){
         loginExternal(responseG.profileObj.email,
             responseG.profileObj.givenName,
             responseG.profileObj.googleId,
@@ -119,11 +122,11 @@ const Login = (props) => {
             },
             (error) => {
                 props.setIsLoading(false);
-                if (error.status === 400) {
-                    setError("Credenciais Inválidas")
+                if (error.status === 409) {
+                    setError("Conta externa já está associada com outra conta juntos")
                 } else if (error.status === 403) {
                     setError("Esta conta está desativada")
-                } else if (error.status === 404) {
+                } else if (error.status === 400) {
                     setError("Não existe um utilizador registado com este e-mail")
                 } else {
                     setError("Algo Inesperado aconteceu, tente novamente");
@@ -131,6 +134,7 @@ const Login = (props) => {
                 }
             }
         )
+        }
     }
 
   const formSubmissionHandler = (event) => {
@@ -167,15 +171,16 @@ const Login = (props) => {
       },
       (error) => {
         props.setIsLoading(false);
-        if (error.status === 400) {
-          setError("Credenciais Inválidas");
-        } else if (error.status === 403) {
-          setError("Esta conta está desativada");
-        } else if (error.status === 404) {
-          setError("Não existe um utilizador registado com este e-mail");
-        } else {
-          setError("Algo Inesperado aconteceu, tente novamente");
-        }
+          if (error.status === 409) {
+              setError("Conta externa já está associada com outra conta juntos")
+          } else if (error.status === 403) {
+              setError("Esta conta está desativada")
+          } else if (error.status === 400) {
+              setError("Não existe um utilizador registado com este e-mail")
+          } else {
+              setError("Algo Inesperado aconteceu, tente novamente");
+              console.log(error)
+          }
       }
     );
   };
@@ -252,7 +257,6 @@ const Login = (props) => {
   const formSubmit = showLogin ? formSubmissionHandler : onRecuperateSubmit;
 
   const loginForm = (
-      <>
     <div className={classes.mainContainer}>
       <form onSubmit={formSubmit} className={classes.loginForm}>
         {showLogin ? (
@@ -296,6 +300,14 @@ const Login = (props) => {
               <Button disabled={!formIsValid} text={"Entrar"} />
             </div>
             <div className={classes.buttonsWrap}>
+                <GoogleLogin
+                    clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
+                    buttonText=""
+                    onSuccess={responseGoogle}
+                    onFailure={failureGoogle}
+                    cookiePolicy={"single_host_origin"}
+                    className={classes.google}
+                />
               <FacebookLogin
                 buttonStyle={{
                   width: "40%",
@@ -370,21 +382,6 @@ const Login = (props) => {
       </p>
     </div>
 
-    <div className={classes.buttonsWrap}>
-        <GoogleLogin
-            clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
-            buttonText="Login"
-            onSuccess={responseGoogle}
-            cookiePolicy={'single_host_origin'}
-        />
-        <FacebookLogin
-            appId="360511435646701"
-            size="small"
-            cssClass = {classes.google}
-            fields="first_name,last_name, email,picture"
-            callback={responseFacebook}/>
-    </div>
-      </>
   );
 
   return (
@@ -398,13 +395,6 @@ const Login = (props) => {
 export default Login;
 
 /*
-              <GoogleLogin
-                clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
-                buttonText=""
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                cookiePolicy={"single_host_origin"}
-                className={classes.google}
-              />
+
 
 */
