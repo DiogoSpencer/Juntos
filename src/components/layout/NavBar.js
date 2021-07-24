@@ -15,21 +15,30 @@ const NavBar = () => {
   const isLogged = useSelector((state) => state.auth.isLogged);
   const username = useSelector((state) => state.auth.username);
   const profileImg = useSelector((state) => state.auth.profileImg);
-  const dispatch = useDispatch();
-  const history = useHistory();
   const role = useSelector((state) => state.auth.role);
 
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   useEffect(() => {
-    if (history.location.pathname === "/backoffice/" && role === "USER") {
+    if (history.location.pathname.includes("/juntos")) {
+      const token = localStorage.getItem(gS.storage.token);
+      if (!token) {
+        history.replace("/home");
+      }
+    } else if (
+      history.location.pathname === "/backoffice" &&
+      (role === "USER" || !role)
+    ) {
       history.replace("/home");
     } else if (
-      history.location.pathname.includes("/backoffice/") &&
+      history.location.pathname.includes("/backoffice") &&
       (role === "USER" || role === "PARTNER")
     ) {
       history.replace("/home");
     }
     // eslint-disable-next-line
-  }, [history.location.pathname, role]);
+  }, [history.location.pathname, role, isLogged]);
 
   const [loginShow, setLoginShow] = useState(false);
 
@@ -153,7 +162,7 @@ const NavBar = () => {
               <NavLink
                 activeClassName={classes.navLinkActive}
                 className={classes.navLink}
-                to={`/perfil/${username}`}
+                to={`/juntos/perfil/${username}`}
               >
                 {profileImg ? (
                   <img

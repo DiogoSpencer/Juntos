@@ -13,6 +13,7 @@ import useInput from "../hooks/use-input";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { Link } from "react-router-dom";
+import SearchBar from "../UI/SearchBar";
 
 const ASC = "ASC";
 const DESC = "DESC";
@@ -20,12 +21,21 @@ const DATE = "creationDate";
 const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
 const ALL = "all";
+const EMAIL = "email";
 const USER = "USER";
 const MOD = "MOD";
 const PARTNER = "PARTNER";
 const ADMIN = "ADMIN";
 const ENABLE = "ENABLE";
 const DISABLE = "DISABLE";
+let firstName = "";
+let lastName = "";
+let company = false;
+let helps = 0;
+let privacy = PUBLIC;
+let userRole = USER;
+let accountState = ENABLE;
+let initialImage = false;
 
 const isNotEmpty = (value) => value.trim() !== "";
 
@@ -66,15 +76,19 @@ const BackOfficeUsers = () => {
   const authRole = useSelector((state) => state.auth.role);
 
   useEffect(() => {
+    setSearch("");
+  }, [byParam]);
+
+  useEffect(() => {
     setDisableSelect(false);
-    if (refresh) {
+
+    if (refresh && (byParam === ALL || (byParam === EMAIL && search !== ""))) {
       setIsLoading(true);
 
       getAllUsers(
-        `?by=${byParam}&value=${PUBLIC}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+        `?by=${byParam}&value=${search}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
       ).then(
         (response) => {
-          setIsLoading(false);
           setRefresh(false);
           console.log(response.data);
           setResponseData(response.data.content);
@@ -87,11 +101,15 @@ const BackOfficeUsers = () => {
       );
     }
     // eslint-disable-next-line
-  }, [pageNumber, byParam, orderParam, dirParam, pageSize, refresh]);
+  }, [pageNumber, byParam, orderParam, dirParam, pageSize, refresh, search]);
 
   useEffect(() => {
     setIsLoading(false);
   }, [responseData]);
+
+  useEffect(() => {
+    setSearch("");
+  }, [byParam]);
 
   const changeFilterHandler = (event) => {
     setByParam(event.target.value);
@@ -142,6 +160,15 @@ const BackOfficeUsers = () => {
     setIsEditing(username);
   };
 
+  const closeEditHandler = () => {
+    setIsEditing("");
+  };
+
+  const searchHandler = (value) => {
+    setSearch(value);
+    setRefresh(true);
+  };
+
   const {
     value: enteredFirstName,
     isValid: enteredFirstNameIsValid,
@@ -189,11 +216,19 @@ const BackOfficeUsers = () => {
       for (const user of responseData) {
         if (user.username === isEditing) {
           setFirstNameValueHandler(user.firstName);
+          firstName = user.firstName;
           setLastNameValueHandler(user.lastName);
+          lastName = user.lastName;
           setIsCompany(user.company);
+          company = user.company;
           setHelpsValueHandler(user.numHelps);
+          helps = user.numHelps;
           setEnteredPrivacy(user.privacy);
+          privacy = user.privacy;
           setEnteredRole(user.role);
+          userRole = user.role;
+          accountState = user.state;
+          initialImage = user.profileImg ? true : false;
           checkRoleHandler();
           break;
         }
@@ -232,14 +267,32 @@ const BackOfficeUsers = () => {
     formIsValid = true;
   }
 
-  const onSubmitChangesHandler = () => {
+  let changesMade = false;
+
+  if (
+    responseData &&
+    (firstName !== enteredFirstName ||
+      lastName !== enteredLastName ||
+      userRole !== enteredRole ||
+      accountState !== enteredState ||
+      company !== isCompany ||
+      helps !== enteredHelps ||
+      privacy !== enteredPrivacy ||
+      initialImage !== deleteImage)
+  ) {
+    changesMade = true;
+  }
+
+  const onSubmitChangesHandler = (username) => {
     if (!formIsValid) {
       return;
     }
 
-    setIsLoading(true);
+    if (!changesMade) {
+      return;
+    }
 
-    const formData = new FormData();
+    setIsLoading(true);
 
     const userInfo = {
       company: isCompany,
@@ -249,23 +302,20 @@ const BackOfficeUsers = () => {
       role: enteredRole,
       privacy: enteredPrivacy,
       state: enteredState,
-      deletePhoto: deleteImage,
+      photoDelete: deleteImage,
+      username: username,
     };
 
-    formData.append(
-      "creds",
-      new Blob([JSON.stringify(userInfo)], { type: "application/json" })
-    );
-
-    controlUserCreds.then(
+    controlUserCreds(userInfo).then(
       (response) => {
-        setIsLoading(false);
         setRefresh(true);
         setIsEditing("");
       },
       (error) => {
-        setIsLoading(false);
-        console.log(error);
+        if (error && error.status !== 401) {
+          setIsLoading(false);
+          console.log(error);
+        }
       }
     );
     //mandar ao servidor mudanças
@@ -300,8 +350,11 @@ const BackOfficeUsers = () => {
     }
   };
 
+  const imageClass = changesMade ? classes.iconRow : classes.iconRowDisabled;
   const navButtonClass = isLoading ? classes.hideButton : classes.navPage;
   const sizeButtonClass = isLoading ? classes.hideButton : classes.sizeButtons;
+  const searchBarClass =
+    byParam === EMAIL ? classes.searchBar : classes.searchBarHidden;
 
   const filterButtons = (
     <div className={classes.filterButtons}>
@@ -314,6 +367,7 @@ const BackOfficeUsers = () => {
         disabled={disableSelect}
       >
         <option value={ALL}>Mostrar Tudo</option>
+        <option value={EMAIL}>E-mail</option>
       </select>
     </div>
   );
@@ -359,7 +413,7 @@ const BackOfficeUsers = () => {
         onClick={prevPageHandler}
         className={classes.navArrow}
       />
-      <span className={classes.pageNumber}>{pageNumber+1}</span>
+      <span className={classes.pageNumber}>{pageNumber + 1}</span>
       <img
         src={rightArrowIcon}
         alt="página-seguinte"
@@ -400,6 +454,13 @@ const BackOfficeUsers = () => {
       <div className={classes.mainSubContainer}>
         {filterButtons}
         {orderButtons}
+        <div className={searchBarClass}>
+          <SearchBar
+            input={search}
+            setInput={searchHandler}
+            placeholder="Procurar..."
+          />
+        </div>
         <img
           src={refreshIcon}
           alt="Atualizar"
@@ -431,7 +492,7 @@ const BackOfficeUsers = () => {
                     </td>
                     <td className={classes.emailContainer}>{user.email}</td>
                     <td className={classes.usernameContainer}>
-                      <Link to={`/verperfil/${user.username}`}>
+                      <Link to={`/juntos/verperfil/${user.username}`}>
                         {user.username}
                       </Link>
                     </td>
@@ -459,20 +520,24 @@ const BackOfficeUsers = () => {
                     <td className={classes.roleContainer}>{user.role}</td>
                     <td className={classes.stateContainer}>{user.state}</td>
                     <td className={classes.iconsContainer}>
-                      <img
-                        src={editIcon}
-                        alt="editar"
-                        className={classes.iconRow}
-                        onClick={() => editUserHandler(user.username)}
-                      />
-                      <img
-                        src={binIcon}
-                        alt="apagar"
-                        className={classes.iconRow}
-                        onClick={() =>
-                          onDeleteUserHandler(user.role, user.username)
-                        }
-                      />
+                      {authRole !== user.role && (
+                        <Fragment>
+                          <img
+                            src={editIcon}
+                            alt="editar"
+                            className={classes.iconRow}
+                            onClick={() => editUserHandler(user.username)}
+                          />
+                          <img
+                            src={binIcon}
+                            alt="apagar"
+                            className={classes.iconRow}
+                            onClick={() =>
+                              onDeleteUserHandler(user.role, user.username)
+                            }
+                          />
+                        </Fragment>
+                      )}
                     </td>
                   </tr>
                 ) : (
@@ -510,7 +575,7 @@ const BackOfficeUsers = () => {
                     </td>
                     <td className={classes.emailContainer}>{user.email}</td>
                     <td className={classes.usernameContainer}>
-                      <Link to={`/verperfil/${user.username}`}>
+                      <Link to={`/juntos/verperfil/${user.username}`}>
                         {user.username}
                       </Link>
                     </td>
@@ -613,8 +678,14 @@ const BackOfficeUsers = () => {
                       <img
                         src={checkIcon}
                         alt="aceitar"
+                        className={imageClass}
+                        onClick={() => onSubmitChangesHandler(user.username)}
+                      />
+                      <img
+                        src={closeIcon}
+                        alt="fechar"
                         className={classes.iconRow}
-                        onClick={onSubmitChangesHandler}
+                        onClick={closeEditHandler}
                       />
                     </td>
                   </tr>
@@ -622,9 +693,9 @@ const BackOfficeUsers = () => {
               )}
           </tbody>
         </table>
+        {navPageButtons}
+        {sizeButtons}
       </div>
-      {navPageButtons}
-      {sizeButtons}
     </div>
   );
 };

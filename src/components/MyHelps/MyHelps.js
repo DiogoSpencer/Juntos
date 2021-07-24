@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import SearchBar from "../UI/SearchBar";
-import SideButtons from "../UI/SIdeButtons";
+import SideBySideButtons from "../UI/SideBySideButtons";
 import classes from "./MyHelps.module.css";
 import { listMarker } from "../../services/http";
 import leftArrowIcon from "../../img/leftArrow.png";
@@ -29,10 +29,47 @@ let pathFirstArg = "";
 let pathSecondArg = "";
 let location = "";
 
+const formatDate = (longDate) => {
+  const now = new Date(Date.now());
+  const date = new Date(longDate);
+
+  const nowDate = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  const serverDate = Date.UTC(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+
+  const diffInDays = Math.floor((nowDate - serverDate) / MS_PER_DAY);
+
+  if (diffInDays < 1) {
+    const hours = Math.abs(now - date) / MS_PER_HOUR;
+    const minutes = Math.abs(now - date) / MS_PER_MINUTE;
+    const roundedHours = Math.round(hours);
+    const roundedMinutes = Math.round(minutes);
+
+    if (roundedHours === 24) {
+      return `${diffInDays} dia atrás`;
+    } else if (hours < 1) {
+      return `${minutes < 1 ? 1 : roundedMinutes} ${
+        roundedMinutes <= 1 ? "minuto" : "minutos"
+      } atrás`;
+    } else if (roundedHours > hours) {
+      return `< ${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
+    } else if (roundedHours < hours) {
+      return `> ${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
+    } else {
+      return `${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
+    }
+  } else {
+    return `${diffInDays} dias atrás`;
+  }
+};
+
 const MyHelps = () => {
   const match = useRouteMatch();
 
-  if (match.path === "/ajudas") {
+  if (match.path === "/juntos/ajudas") {
     ALL = "all";
     TITLE = "title";
     TOPICS = "topics";
@@ -48,7 +85,7 @@ const MyHelps = () => {
     TOPICS = "myTopics";
     location = "myLocation";
     mainTitle =
-      match.path === "/minhasajudas" ? "As Minhas Ajudas" : "Conversas";
+      match.path === "/juntos/minhasajudas" ? "As Minhas Ajudas" : "Conversas";
     firstButton = "Criadas";
     secondButton = "Participações";
     pathFirstArg = "criadas";
@@ -69,15 +106,24 @@ const MyHelps = () => {
   const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
+    setByParam(ALL);
+    setSearch("");
+    setRefresh(true);
+    setIsFirst(true);
+  }, [match.path]);
+
+  useEffect(() => {
+    setSearch("");
+  }, [byParam]);
+
+  useEffect(() => {
+    setPageNumber(0);
+  }, [isFirst]);
+
+  useEffect(() => {
     setDisableSelect(false);
 
-    if (
-      refresh &&
-      (byParam === ALL ||
-        byParam === TOPICS ||
-        (byParam === TITLE && search !== "") ||
-        (byParam === location && search !== ""))
-    ) {
+    if (refresh) {
       setIsLoading(true);
 
       listMarker(
@@ -89,34 +135,18 @@ const MyHelps = () => {
           setRefresh(false);
         },
         (error) => {
-          console.log(error);
-          setIsLoading(false);
-          setRefresh(false);
+          if (error) {
+            setIsLoading(false);
+            setRefresh(false);
+          }
         }
       );
     }
-  }, [
-    byParam,
-    orderParam,
-    dirParam,
-    pageNumber,
-    search,
-    isFirst,
-    pageSize,
-    refresh,
-  ]);
-
-  useEffect(() => {
-    setPageNumber(0);
-  }, [isFirst]);
-
-  useEffect(() => {
-    setSearch("");
-  }, [byParam]);
+  }, [refresh]);
 
   const nextPageHandler = () => {
     setPageNumber((prevState) => {
-      if (responseData.length === pageSize) {
+      if (responseData && responseData.length === pageSize) {
         setRefresh(true);
         return prevState + 1;
       } else {
@@ -168,45 +198,9 @@ const MyHelps = () => {
     setRefresh(true);
   };
 
-  const formatDate = (longDate) => {
-    const now = new Date(Date.now());
-    const date = new Date(longDate);
-
-    const nowDate = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-    const serverDate = Date.UTC(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate()
-    );
-
-    const diffInDays = Math.floor((nowDate - serverDate) / MS_PER_DAY);
-
-    if (diffInDays < 1) {
-      const hours = Math.abs(now - date) / MS_PER_HOUR;
-      const minutes = Math.abs(now - date) / MS_PER_MINUTE;
-      const roundedHours = Math.round(hours);
-      const roundedMinutes = Math.round(minutes);
-
-      if (roundedHours === 24) {
-        return `${diffInDays} dia atrás`;
-      } else if (hours < 1) {
-        return `${minutes < 1 ? 1 : roundedMinutes} ${
-          roundedMinutes <= 1 ? "minuto" : "minutos"
-        } atrás`;
-      } else if (roundedHours > hours) {
-        return `< ${roundedHours} ${
-          roundedHours === 1 ? "hora" : "horas"
-        } atrás`;
-      } else if (roundedHours < hours) {
-        return `> ${roundedHours} ${
-          roundedHours === 1 ? "hora" : "horas"
-        } atrás`;
-      } else {
-        return `${roundedHours} ${roundedHours === 1 ? "hora" : "horas"} atrás`;
-      }
-    } else {
-      return `${diffInDays} dias atrás`;
-    }
+  const searchHandler = (value) => {
+    setSearch(value);
+    setRefresh(true);
   };
 
   const searchBarClass =
@@ -403,7 +397,7 @@ const MyHelps = () => {
         onClick={prevPageHandler}
         className={classes.navArrow}
       />
-      <span className={classes.pageNumber}>{pageNumber+1}</span>
+      <span className={classes.pageNumber}>{pageNumber + 1}</span>
       <img
         src={rightArrowIcon}
         alt="página-seguinte"
@@ -433,7 +427,7 @@ const MyHelps = () => {
         <div className={searchBarClass}>
           <SearchBar
             input={search}
-            setInput={setSearch}
+            setInput={searchHandler}
             placeholder="Procurar..."
           />
         </div>
@@ -449,7 +443,7 @@ const MyHelps = () => {
           />
         </div>
         <div className={classes.sideButtons}>
-          <SideButtons
+          <SideBySideButtons
             button1={firstButton}
             button2={secondButton}
             onClick1={isOwnerHandler}

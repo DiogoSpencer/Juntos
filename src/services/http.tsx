@@ -21,7 +21,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   function (response: AxiosResponse) {
     if (
-      response.headers["Authorization"] &&
+      response.headers["authorization"] &&
       store.getState().auth.token !== ""
     ) {
       store.dispatch(authActions.resetToken(response.headers["authorization"]));
@@ -34,7 +34,6 @@ axios.interceptors.response.use(
       alert("A sua sessão expirou, por favor efectue novo login");
       store.dispatch(authActions.logout());
       localStorage.removeItem(gS.storage.token);
-      window.stop();
     }
     return Promise.reject(error);
   }
@@ -83,9 +82,9 @@ export async function getUserUsername(username: string) {
   }
 }
 
-export async function controlUserCreds(form: FormData) {
+export async function controlUserCreds(userInfo: any) {
   try {
-    return await axios.put(`${url}/rest/user/mod`, form);
+    return await axios.put(`${url}/rest/user/mod`, userInfo);
   } catch (error) {
     throw error.response;
   }
@@ -257,6 +256,14 @@ export async function listMarker(urlParams: string) {
   }
 }
 
+export async function listOfficeMarker(urlParams: string) {
+  try {
+    return await axios.get(`${url}/rest/office/list${urlParams}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
 export async function officeDetail() {
   try {
     return await axios.get(`${url}/rest/office/details`);
@@ -367,6 +374,17 @@ export async function deleteComment(commentId: string) {
   }
 }
 
+export async function deleteCommentMod(commentId: string, toRemove: boolean) {
+  try {
+    return await axios.put(`${url}/rest/comments`, {
+      commentId: commentId,
+      toRemove: toRemove,
+    });
+  } catch (error) {
+    throw error.response;
+  }
+}
+
 export async function reportComment(commentId: string) {
   try {
     return await axios.put(`${url}/rest/comments/report/${commentId}`);
@@ -383,9 +401,15 @@ export async function homeData() {
   }
 }
 
-export async function verifyCompany(email: string) {
+export async function verifyCompany(email: string, verify: boolean) {
   try {
-    return await axios.put(`${url}/rest/user/verify/${email}`);
+    return (
+      await axios.put(`${url}/rest/user/verify`),
+      {
+        email: email,
+        verified: verify,
+      }
+    );
   } catch (error) {
     throw error.response;
   }

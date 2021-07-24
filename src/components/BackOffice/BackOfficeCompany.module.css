@@ -1,0 +1,238 @@
+.container {
+  padding-top: 8em;
+  font-size: 0.8em;
+  display: grid;
+  grid-template-areas: "tt" "mc";
+}
+
+.spinner {
+  grid-area: mc;
+  align-self: center;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.hideButton {
+  display: none;
+}
+
+.title {
+  padding-bottom: 2em;
+  align-self: start;
+  justify-self: center;
+  grid-area: tt;
+  color: #e6513e;
+  font-weight: 600;
+  font-size: 2em;
+}
+
+.mainSubContainer {
+  grid-area: mc;
+  display: grid;
+  row-gap: 1em;
+  grid-template-areas:
+    " rf ob fb sc"
+    " mt mt mt mt"
+    "np np sb sb";
+}
+
+.orderButtons {
+  grid-area: ob;
+  align-self: center;
+  justify-self: center;
+}
+
+.filterButtons {
+  grid-area: fb;
+  align-self: center;
+  justify-self: center;
+}
+
+.searchBar {
+  grid-area: sc;
+  align-self: center;
+  justify-self: start;
+}
+
+.searchBarHidden {
+  display: none;
+}
+
+.subContainer {
+  align-self: center;
+  justify-self: center;
+  grid-area: mt;
+  width: 95em;
+}
+
+.profileImg {
+  height: 2em;
+  width: 2em;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.subContainer th {
+  background-color: #3385d9;
+  color: white;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.subContainer td {
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+}
+
+.prefContainer ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.subContainer tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.subContainer tr:hover {
+  background-color: rgba(224, 241, 255, 0.707);
+}
+
+.iconsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-content: center;
+  align-items: center;
+}
+
+.iconRow {
+  height: 2em;
+  width: 2em;
+  cursor: pointer;
+  object-fit: cover;
+}
+
+.navPage {
+  grid-area: np;
+  justify-self: end;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+}
+
+.pageNumber {
+  color: #3385d9;
+  padding: 1em;
+  padding-top: 1.5em;
+  font-size: 1.1em;
+}
+
+.sizeButtons {
+  grid-area: sb;
+  align-self: center;
+  justify-self: start;
+}
+
+.navArrow {
+  height: 5em;
+  padding: 1em;
+}
+
+.navArrow:hover {
+  cursor: pointer;
+}
+
+.filterButtons label {
+  font-weight: 700;
+  color: #3385d9;
+  padding-right: 0.5em;
+}
+
+.filterButtons input {
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+}
+
+.filterButtons input:focus {
+  outline: none;
+}
+
+.orderButtons label {
+  font-weight: 700;
+  color: #3385d9;
+  padding-right: 0.5em;
+}
+
+.orderButtons input {
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+}
+
+.orderButtons input:focus {
+  outline: none;
+}
+
+.sizeButtons label {
+  font-weight: 700;
+  color: #3385d9;
+  padding-right: 0.5em;
+}
+
+.sizeButtons input {
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+}
+
+.sizeButtons input:focus {
+  outline: none;
+}
+
+.selectSub {
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+}
+
+.selectSub:focus {
+  outline: none;
+  box-shadow: 0 0 10px #719ece;
+}
+
+.refresh {
+  grid-area: rf;
+  height: 3em;
+  align-self: center;
+  justify-self: end;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.refresh:hover {
+  box-shadow: 0 0 8px #719ece;
+}
+
+
+@media all and (max-width: 60em) {
+
+}
+
+@media all and (max-width: 60em) {
+}
+
+@media all and (max-width: 40em) {
+  .container {
+    font-size: .65em;
+    margin-left: 10em;
+  }
+}
+
+@media all and (max-width: 40em) and (orientation: landscape) {
+}

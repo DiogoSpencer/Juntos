@@ -71,13 +71,6 @@
   width: 95em;
 }
 
-.profileImg {
-  height: 2em;
-  width: 2em;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 .subContainer th {
   background-color: #3385d9;
   color: white;
@@ -120,13 +113,6 @@
   object-fit: cover;
 }
 
-.iconRowDisabled {
-  height: 2em;
-  width: 2em;
-  cursor: not-allowed;
-  object-fit: cover;
-}
-
 .navPage {
   grid-area: np;
   justify-self: end;
@@ -147,6 +133,7 @@
   grid-area: sb;
   align-self: center;
   justify-self: start;
+  display: flex;
 }
 
 .navArrow {
@@ -203,6 +190,28 @@
   outline: none;
 }
 
+.reportSelect {
+  grid-area: fb;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+}
+
+.reportSelect label {
+  font-weight: 700;
+  color: #3385d9;
+  padding-right: 0.5em;
+}
+
+.reportSelect input {
+  border-radius: 5px;
+  border: 1px solid #3385d9;
+}
+
+.reportSelect input:focus {
+  outline: none;
+}
+
 .selectSub {
   border-radius: 5px;
   border: 1px solid #3385d9;
@@ -224,4 +233,19 @@
 
 .refresh:hover {
   box-shadow: 0 0 8px #719ece;
+}
+
+.imgContainer ul {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+}
+
+.requestImg {
+  max-height: 3em;
+  max-width: 3em;
+  object-fit: contain;
 }

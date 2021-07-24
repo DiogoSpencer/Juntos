@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import classes from "./SideButtons.module.css";
+import classes from "./SideBySideButtons.module.css";
 
-const SideButtons = (props) => {
+const SideBySideButtons = (props) => {
   const [isButton1, setIsButton1] = useState(props.isButton1);
 
   useEffect(() => {
@@ -46,4 +46,4 @@ const SideButtons = (props) => {
   );
 };
 
-export default SideButtons;
+export default SideBySideButtons;

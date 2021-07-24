@@ -52,7 +52,7 @@ const EditRequest = () => {
   const history = useHistory();
   const match = useRouteMatch();
   const helpId = match.params.requestId;
-  const editing = match.path === "/editar/:requestId";
+  const editing = match.path === "/juntos/editar/:requestId";
 
   const [markerType, setMarker] = useState("MARKER");
   const [move, setMove] = useState("WALKING");
@@ -296,20 +296,21 @@ const EditRequest = () => {
   let changesMade = false;
 
   if (
-    responseData.title !== enteredTitle ||
-    moveChange ||
-    responseData.description !== enteredDescription ||
-    JSON.stringify(responseData.photoGalery) !==
-      JSON.stringify(selectedFiles) ||
-    responseData.anonymousOwner !== anonimousValue ||
-    responseData.helpersCapacity !== enteredNumberVolunteers ||
-    responseData.difficulty !== enteredDifficulty ||
-    (point.length > 0 &&
-      JSON.stringify(initialPoints) !== JSON.stringify(point)) ||
-    (dangerPoint.length > 0 &&
-      JSON.stringify(initialDangers) !== JSON.stringify(dangerPoint)) ||
-    (interestPoint.length > 0 &&
-      JSON.stringify(initialInterests) !== JSON.stringify(interestPoint))
+    responseData &&
+    (responseData.title !== enteredTitle ||
+      moveChange ||
+      responseData.description !== enteredDescription ||
+      JSON.stringify(responseData.photoGalery) !==
+        JSON.stringify(selectedFiles) ||
+      responseData.anonymousOwner !== anonimousValue ||
+      responseData.helpersCapacity !== enteredNumberVolunteers ||
+      responseData.difficulty !== enteredDifficulty ||
+      (point.length > 0 &&
+        JSON.stringify(initialPoints) !== JSON.stringify(point)) ||
+      (dangerPoint.length > 0 &&
+        JSON.stringify(initialDangers) !== JSON.stringify(dangerPoint)) ||
+      (interestPoint.length > 0 &&
+        JSON.stringify(initialInterests) !== JSON.stringify(interestPoint)))
   ) {
     changesMade = true;
   }
@@ -322,6 +323,10 @@ const EditRequest = () => {
     }
 
     if (!pointIsValid) {
+      return;
+    }
+
+    if (!changesMade) {
       return;
     }
 
@@ -367,6 +372,7 @@ const EditRequest = () => {
       difficulty: difficulty,
       imgsToDelete: toRemove,
       anonymousOwner: anonimousValue,
+      helpersCapacity: enteredNumberVolunteers,
     };
 
     if (responseData.type !== ACTION) {
@@ -519,6 +525,7 @@ const EditRequest = () => {
                 images={selectedFiles}
                 hasImage={selectedFiles.length <= 0 ? true : false}
                 editing={editing}
+                enteredPass={responseData.password}
               />
             </div>
           )}

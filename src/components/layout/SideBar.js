@@ -30,7 +30,7 @@ const SideBar = () => {
     <nav className={classes.nav}>
       <ul className={classes.navList}>
         <li className={classes.navItem}>
-          <Link to="/novopedido">
+          <Link to="/juntos/novopedido">
             <img
               src={novaIcon}
               alt="nova-ajuda-pedido"
@@ -39,12 +39,12 @@ const SideBar = () => {
           </Link>
         </li>
         <li className={classes.navItem}>
-          <Link to="/conversas">
+          <Link to="/juntos/conversas">
             <img src={chatIcon} alt="conversas" className={classes.navIcon} />
           </Link>
         </li>
         <li className={classes.navItem}>
-          <Link to="/minhasajudas">
+          <Link to="/juntos/minhasajudas">
             <img
               src={minhasIcon}
               alt="minhas-ajudas"
@@ -53,12 +53,12 @@ const SideBar = () => {
           </Link>
         </li>
         <li className={classes.navItem}>
-          <Link to="/mapa">
+          <Link to="/juntos/mapa">
             <img src={mapIcon} alt="mapa" className={classes.navIcon} />
           </Link>
         </li>
         <li className={classes.navItem}>
-          <Link to="/ajudas">
+          <Link to="/juntos/ajudas">
             <img src={ajudasIcon} alt="ajudas" className={classes.navIcon} />
           </Link>
         </li>

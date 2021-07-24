@@ -1,4 +1,4 @@
-import SideButtons from "../UI/SIdeButtons";
+import SideBySideButtons from "../UI/SideBySideButtons";
 import classes from "./Volunteers.module.css"
 
 const Volunteers = (props) => {
@@ -21,7 +21,7 @@ const Volunteers = (props) => {
     <div className={classes.container}>
       <h3 className={classes.title}>Precisas de Voluntários para este Percurso?</h3>
       <div className={classes.buttonContainer}>
-      <SideButtons
+      <SideBySideButtons
         button1="Sim"
         button2="Não"
         onClick1={props.yesVolunteers}

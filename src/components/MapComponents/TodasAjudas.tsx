@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Map, { Bounds, Center, Point } from "../Map/Map";
 import { getMarkers } from "../../services/http";
-import SideButtons from "../UI/SIdeButtons";
+import SideBySideButtons from "../UI/SideBySideButtons";
 import classes from "./TodasAjudas.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
@@ -100,7 +100,7 @@ function TodasAjudas() {
       )}
       <div className={classes.subContainer}>
         <div className={classes.sideButtons}>
-          <SideButtons
+          <SideBySideButtons
             button1="Pedidos"
             button2="Ofertas"
             onClick1={requestHandler}

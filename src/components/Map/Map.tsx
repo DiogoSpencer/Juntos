@@ -416,12 +416,12 @@ function Map(props: MapProps) {
                                         <span className='info-title-wrapper'>{point.title}</span>
                                         <br/>
                                         {point.generalType === 'REQUEST' &&
-                                        <Link to={`ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
+                                        <Link to={`/juntos/ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
                                           <Button text="Detalhes"/>
                                         </Link>
                                         }
                                         {point.generalType === 'OFFER' &&
-                                        <Link to={`ajudas/ofertas/${point.id}`} className={classes.linkContacts}>
+                                        <Link to={`/juntos/ajudas/ofertas/${point.id}`} className={classes.linkContacts}>
                                           <Button text="Detalhes"/>
                                         </Link>
                                         }
@@ -459,12 +459,12 @@ function Map(props: MapProps) {
                                     <span>{point.title}</span>
                                     <br/>
                                     {point.generalType === 'REQUEST' &&
-                                    <Link to={`ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
+                                    <Link to={`/juntos/ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
                                       <Button text="Detalhes"/>
                                     </Link>
                                     }
                                     {point.generalType === 'OFFER' &&
-                                    <Link to={`ajudas/ofertas/${point.id}`} className={classes.linkContacts}>
+                                    <Link to={`/juntos/ajudas/ofertas/${point.id}`} className={classes.linkContacts}>
                                       <Button text="Detalhes"/>
                                     </Link>
                                     }

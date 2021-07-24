@@ -1,18 +1,23 @@
 import classes from "./BackOfficeRequests.module.css";
 import { Fragment, useEffect, useState } from "react";
-import { deleteMarker, listMarker } from "../../services/http";
+import {
+  changeMarker,
+  deleteMarker,
+  listOfficeMarker,
+} from "../../services/http";
 import leftArrowIcon from "../../img/leftArrow.png";
 import rightArrowIcon from "../../img/rightArrow.png";
 import editIcon from "../../img/edit.png";
 import binIcon from "../../img/bin.png";
-import closeIcon from "../../img/closered.png";
 import checkIcon from "../../img/check.png";
+import closeIcon from "../../img/closered.png";
 import useInput from "../hooks/use-input";
-import { useSelector } from "react-redux";
 import refreshIcon from "../../img/refresh.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { Link } from "react-router-dom";
 import shareIcon from "../../img/share.png";
+import SearchBar from "../UI/SearchBar";
+import Autocomplete from "react-google-autocomplete";
 
 const HELP_REQUEST = "HELP_REQUEST";
 const HELP_OFFER = "HELP_OFFER";
@@ -24,7 +29,7 @@ const DATE = "creationDate";
 const ALL = "all";
 const TITLE = "title";
 const TOPICS = "topics";
-const location = "location";
+const LOCATION = "location";
 const VOLUNTEER_NUMBER = 1;
 
 const isNotEmpty = (value) => value.trim() !== "";
@@ -45,6 +50,14 @@ const isDifficultyNumber = (value) => {
   }
 };
 
+let title = "";
+let description = "";
+let requestActive = "";
+let difficulty = 1;
+let anonimous = false;
+let requestType = "";
+let helpers = 1;
+
 const BackOfficeRequests = () => {
   const [responseData, setResponseData] = useState(null);
   const [byParam, setByParam] = useState(ALL);
@@ -58,30 +71,26 @@ const BackOfficeRequests = () => {
   const [isEditing, setIsEditing] = useState("");
   const [enteredType, setEnteredType] = useState("");
   const [refresh, setRefresh] = useState(true);
-  const [isFirst, setIsFirst] = useState(true);
   const [isActive, setIsActive] = useState(false);
   const [isAnonimous, setIsAnonimous] = useState(false);
   const [generalType, setGeneralType] = useState("");
 
-  const authRole = useSelector((state) => state.auth.role);
+  useEffect(() => {
+    setSearch("");
+  }, [byParam]);
 
   useEffect(() => {
     setDisableSelect(false);
-    if (
-      refresh &&
-      (byParam === ALL ||
-        byParam === TOPICS ||
-        (byParam === TITLE && search !== "") ||
-        (byParam === location && search !== ""))
-    ) {
+    if (refresh) {
       setIsLoading(true);
-
-      listMarker(
-        `?by=${byParam}&value=${search}&order=${orderParam}&isFirst=${isFirst}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+      console.log(
+        `?by=${byParam}&value=${search}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+      );
+      listOfficeMarker(
+        `?by=${byParam}&value=${search}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
       ).then(
         (response) => {
           setIsEditing("");
-          setIsLoading(false);
           setRefresh(false);
           console.log(response.data);
           setResponseData(response.data.content);
@@ -93,28 +102,13 @@ const BackOfficeRequests = () => {
         }
       );
     }
-  }, [
-    pageNumber,
-    byParam,
-    orderParam,
-    dirParam,
-    pageSize,
-    refresh,
-    isFirst,
-    search,
-  ]);
+  }, [pageNumber, byParam, orderParam, dirParam, pageSize, refresh, search]);
 
   useEffect(() => {
-    setPageNumber(0);
-  }, [isFirst]);
-
-  useEffect(() => {
-    setIsLoading(false);
+    if (responseData) {
+      setIsLoading(false);
+    }
   }, [responseData]);
-
-  useEffect(() => {
-    setSearch("");
-  }, [byParam]);
 
   const changeFilterHandler = (event) => {
     setByParam(event.target.value);
@@ -136,7 +130,7 @@ const BackOfficeRequests = () => {
 
   const nextPageHandler = () => {
     setPageNumber((prevState) => {
-      if (responseData.length === pageSize) {
+      if (responseData && responseData.length === pageSize) {
         setRefresh(true);
         return prevState + 1;
       } else {
@@ -168,12 +162,6 @@ const BackOfficeRequests = () => {
     const date = new Date(longDate);
     return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
   };
-
-  const searchBarClass =
-    byParam === TITLE ? classes.searchBar : classes.searchBarHidden;
-
-  const autoComplete =
-    byParam === location ? classes.autoComplete : classes.autoCompleteHidden;
 
   const {
     value: enteredTitle,
@@ -212,17 +200,24 @@ const BackOfficeRequests = () => {
   } = useInput(isDifficultyNumber);
 
   useEffect(() => {
-    if (isEditing !== "") {
+    if (isEditing !== "" && responseData) {
       for (const request of responseData) {
         if (request.id === isEditing) {
           setGeneralType(request.generalType);
           setTitleValueHandler(request.title);
+          title = request.title;
           setDescriptionValueHandler(request.description);
+          description = request.description;
           setVolunteersValueHandler(request.helpersCapacity);
+          helpers = request.helpersCapacity;
           setDifficultyValueHandler(request.difficulty);
+          difficulty = request.difficulty;
           setEnteredType(request.type);
+          requestType = request.type;
           setIsAnonimous(request.anonymousOwner);
+          anonimous = request.anonymousOwner;
           setIsActive(request.activeMarker);
+          requestActive = request.activeMarker;
           break;
         }
       }
@@ -262,17 +257,63 @@ const BackOfficeRequests = () => {
     formIsValid = true;
   }
 
-  const onSubmitChangesHandler = () => {
+  let changesMade = false;
+
+  if (
+    responseData &&
+    responseData.length > 0 &&
+    (title !== enteredTitle ||
+      description !== enteredDescription ||
+      anonimous !== isAnonimous ||
+      helpers !== enteredVolunteers ||
+      difficulty !== enteredDifficulty ||
+      requestType !== enteredType ||
+      requestActive !== isActive)
+  ) {
+    changesMade = true;
+  }
+
+  const onSubmitChangesHandler = (requestId) => {
     if (!formIsValid) {
+      return;
+    }
+
+    if (!changesMade) {
       return;
     }
 
     setIsLoading(true);
 
-    //mandar ao servidor mudanças
-    setRefresh(true);
-    setIsLoading(false);
-    setIsEditing("");
+    const formData = new FormData();
+
+    const formInfo = {
+      title: enteredTitle,
+      id: requestId,
+      description: enteredDescription,
+      difficulty: enteredDifficulty,
+      anonymousOwner: isAnonimous,
+      helpersCapacity: enteredVolunteers,
+      type: enteredType,
+    };
+    console.log(enteredType);
+    console.log(formInfo);
+
+    formData.append(
+      "info",
+      new Blob([JSON.stringify(formInfo)], { type: "application/json" })
+    );
+
+    changeMarker(formData).then(
+      (response) => {
+        setRefresh(true);
+        setIsLoading(false);
+        setIsEditing("");
+      },
+      (error) => {
+        console.log(error);
+        setIsLoading(false);
+      }
+    );
   };
 
   const onDeleteRequestHandler = (requestId) => {
@@ -298,6 +339,12 @@ const BackOfficeRequests = () => {
     }
   };
 
+  const searchBarClass =
+    byParam === TITLE ? classes.searchBar : classes.searchBarHidden;
+
+  const autoComplete =
+    byParam === LOCATION ? classes.autoComplete : classes.autoCompleteHidden;
+
   const navButtonClass = isLoading ? classes.hideButton : classes.navPage;
   const sizeButtonClass = isLoading ? classes.hideButton : classes.sizeButtons;
 
@@ -312,6 +359,8 @@ const BackOfficeRequests = () => {
         disabled={disableSelect}
       >
         <option value={ALL}>Mostrar Tudo</option>
+        <option value={TITLE}>Título</option>
+        <option value={LOCATION}>Distrito</option>
       </select>
     </div>
   );
@@ -357,7 +406,7 @@ const BackOfficeRequests = () => {
         onClick={prevPageHandler}
         className={classes.navArrow}
       />
-      <span className={classes.pageNumber}>{pageNumber+1}</span>
+      <span className={classes.pageNumber}>{pageNumber + 1}</span>
       <img
         src={rightArrowIcon}
         alt="página-seguinte"
@@ -391,6 +440,8 @@ const BackOfficeRequests = () => {
     </thead>
   );
 
+  const imageClass = changesMade ? classes.iconRow : classes.iconRowDisabled;
+
   return (
     <div className={classes.container}>
       <h1 className={classes.title}>Informação sobre Pedidos</h1>
@@ -408,6 +459,25 @@ const BackOfficeRequests = () => {
           onClick={onRefreshHandler}
           className={classes.refresh}
         />
+        <div className={autoComplete}>
+          <Autocomplete
+            style={{ width: "15em" }}
+            apiKey="AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU"
+            onPlaceSelected={(place) => {
+              if (place.address_components !== undefined) {
+                setSearch(place.address_components[0].long_name);
+              }
+            }}
+          />
+        </div>
+        <div className={searchBarClass}>
+          <SearchBar
+            input={search}
+            setInput={setSearch}
+            placeholder="Procurar..."
+          />
+        </div>
+
         <table className={classes.subContainer}>
           {tableHead}
           <tbody>
@@ -449,7 +519,9 @@ const BackOfficeRequests = () => {
                           request.helperUsernames.length > 0 &&
                           request.helperUsernames.map((user, idx) => (
                             <li key={idx}>
-                              <Link to={`/verperfil/${user}`}>{user}</Link>
+                              <Link to={`/juntos/verperfil/${user}`}>
+                                {user}
+                              </Link>
                             </li>
                           ))}
                       </ul>
@@ -485,10 +557,10 @@ const BackOfficeRequests = () => {
                         className={classes.iconRow}
                         onClick={() => editRequestHandler(request.id)}
                       />
-                      <Link to={`/editar/${request.id}`}>
+                      <Link to={`/juntos/editar/${request.id}`}>
                         <img
                           src={shareIcon}
-                          alt="link-perfil"
+                          alt="link-editar"
                           className={classes.iconRow}
                         />
                       </Link>
@@ -597,7 +669,9 @@ const BackOfficeRequests = () => {
                           request.helperUsernames.length > 0 &&
                           request.helperUsernames.map((user, idx) => (
                             <li key={idx}>
-                              <Link to={`/verperfil/${user}`}>{user}</Link>
+                              <Link to={`/juntos/verperfil/${user}`}>
+                                {user}
+                              </Link>
                             </li>
                           ))}
                       </ul>
@@ -605,21 +679,28 @@ const BackOfficeRequests = () => {
                     <td className={classes.localContainer}>
                       {request.location}
                     </td>
-                    <td className={classes.difficultyContainer}>
-                      <input
-                        type="number"
-                        id="numberVolunteers"
-                        value={enteredDifficulty}
-                        onChange={enteredDifficultyChangeHandler}
-                        onBlur={enteredDifficultyBlurHandler}
-                        min="1"
-                      />
-                      {enteredDifficultyHasError && (
-                        <p className={classes.inputError}>
-                          Por favor insira uma dificuldade
-                        </p>
-                      )}
-                    </td>
+                    {enteredType === ACTION ? (
+                      <td className={classes.difficultyContainer}>
+                        <input
+                          type="number"
+                          id="numberVolunteers"
+                          value={enteredDifficulty}
+                          onChange={enteredDifficultyChangeHandler}
+                          onBlur={enteredDifficultyBlurHandler}
+                          min="1"
+                          max="5"
+                        />
+                        {enteredDifficultyHasError && (
+                          <p className={classes.inputError}>
+                            Por favor insira uma dificuldade
+                          </p>
+                        )}
+                      </td>
+                    ) : (
+                      <td className={classes.difficultyContainer}>
+                        {request.difficulty}
+                      </td>
+                    )}
                     <td className={classes.dateContainer}>
                       {formatDate(request.creationDate)}
                     </td>
@@ -642,9 +723,9 @@ const BackOfficeRequests = () => {
                       <img
                         src={checkIcon}
                         alt="aceitar"
-                        className={classes.iconRow}
-                        onClick={onSubmitChangesHandler}
-                      />{" "}
+                        className={imageClass}
+                        onClick={() => onSubmitChangesHandler(request.id)}
+                      />
                       <img
                         src={closeIcon}
                         alt="fechar"
@@ -657,9 +738,9 @@ const BackOfficeRequests = () => {
               )}
           </tbody>
         </table>
+        {navPageButtons}
+        {sizeButtons}
       </div>
-      {navPageButtons}
-      {sizeButtons}
     </div>
   );
 };

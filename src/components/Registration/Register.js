@@ -145,7 +145,7 @@ const Register = (props) => {
       firstName: enteredFirstName,
       lastName: enteredLastName,
       privacy,
-      isCompany,
+      company: isCompany,
       favTopics: topics,
     };
 

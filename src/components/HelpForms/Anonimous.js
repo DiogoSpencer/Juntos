@@ -1,4 +1,4 @@
-import SideButtons from "../UI/SIdeButtons";
+import SideBySideButtons from "../UI/SideBySideButtons";
 import classes from "./Anonimous.module.css";
 import avatarIcon from "../../img/userblue.png";
 import helpIcon from "../../img/logo.png";
@@ -45,7 +45,7 @@ const Anonimous = (props) => {
       <h3 className={classes.title}>Queres Ficar Anónimo?</h3>
       <p className={classes.text}>Queres esconder a tua foto e último nome?</p>
       <div className={classes.buttons}>
-        <SideButtons
+        <SideBySideButtons
           button1="Sim"
           button2="Não"
           onClick1={props.yesAnonimous}

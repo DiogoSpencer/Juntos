@@ -117,7 +117,7 @@ const HelpDetails = () => {
   useEffect(() => {
     if (responseData && responseData.length > 0) {
       if (
-        match.path === "/minhasajudas/participacoes/:requestId" &&
+        match.path === "/juntos/minhasajudas/participacoes/:requestId" &&
         !isHelper
       ) {
         history.replace(
