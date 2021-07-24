@@ -2,15 +2,19 @@ import { useState } from "react";
 import useInput from "../hooks/use-input";
 import classes from "./Contacts.module.css";
 import Button from "../UI/Button";
+import { createTicket } from "../../services/http";
 
 const PARTNERSHIP = "PARTNERSHIP";
-const SUGESTIONS = "SUGESTIONS";
-const ISSUES = "ISSUES";
+const SUGGESTIONS = "SUGGESTIONS";
+const PROBLEMS = "PROBLEMS";
 
-const isNotEmpty = (value) => value.trim() !== "";
+const isName = (value) => value.trim().length >= 2 && value.trim().length <= 13;
+const isEmail = (value) => value.trim().match("^(.+)@(.+)$");
+const isDescription = (value) =>
+  value.trim().length >= 10 && value.trim().length <= 1000;
 
 const Contacts = () => {
-  const [subject, setSubject] = useState(SUGESTIONS);
+  const [subject, setSubject] = useState(SUGGESTIONS);
 
   const {
     value: enteredName,
@@ -19,7 +23,7 @@ const Contacts = () => {
     valueChangeHandler: nameChangeHandler,
     inputBlurHandler: nameBlurHandler,
     reset: resetNameInput,
-  } = useInput(isNotEmpty);
+  } = useInput(isName);
 
   const {
     value: enteredEmail,
@@ -28,7 +32,7 @@ const Contacts = () => {
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
     reset: resetEmailInput,
-  } = useInput(isNotEmpty);
+  } = useInput(isEmail);
 
   const {
     value: enteredDescription,
@@ -37,16 +41,7 @@ const Contacts = () => {
     valueChangeHandler: descriptionChangeHandler,
     inputBlurHandler: descriptionBlurHandler,
     reset: resetDescriptionInput,
-  } = useInput(isNotEmpty);
-
-  const {
-    value: enteredUrl,
-    isValid: enteredUrlIsValid,
-    hasError: urlHasError,
-    valueChangeHandler: urlChangeHandler,
-    inputBlurHandler: urlBlurHandler,
-    reset: resetUrlInput,
-  } = useInput(isNotEmpty);
+  } = useInput(isDescription);
 
   const subjectHandler = (event) => {
     setSubject(event.target.value);
@@ -54,20 +49,7 @@ const Contacts = () => {
 
   let formIsValid = false;
 
-  if (
-    subject !== PARTNERSHIP &&
-    enteredEmailIsValid &&
-    enteredNameIsValid &&
-    enteredDescriptionIsValid
-  ) {
-    formIsValid = true;
-  } else if (
-    subject === PARTNERSHIP &&
-    enteredEmailIsValid &&
-    enteredNameIsValid &&
-    enteredDescriptionIsValid &&
-    enteredUrlIsValid
-  ) {
+  if (enteredEmailIsValid && enteredNameIsValid && enteredDescriptionIsValid) {
     formIsValid = true;
   }
 
@@ -78,13 +60,24 @@ const Contacts = () => {
       return;
     }
 
-    //TODO: send to server
+    const ticketBody = {
+      email: enteredEmail,
+      text: enteredDescription,
+      title: enteredName,
+      type: subject,
+    };
 
-    resetNameInput();
-    resetEmailInput();
-    resetDescriptionInput();
-    resetUrlInput();
-    setSubject(SUGESTIONS);
+    createTicket(ticketBody).then(
+      (response) => {
+        resetNameInput();
+        resetEmailInput();
+        resetDescriptionInput();
+        setSubject(SUGGESTIONS);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   };
 
   return (
@@ -99,9 +92,9 @@ const Contacts = () => {
             onChange={subjectHandler}
             className={classes.selectSub}
           >
-            <option value={SUGESTIONS}>Sugestões</option>
+            <option value={SUGGESTIONS}>Sugestões</option>
             <option value={PARTNERSHIP}>Parcerias</option>
-            <option value={ISSUES}>Problemas</option>
+            <option value={PROBLEMS}>Problemas</option>
           </select>
         </div>
         <div className={classes.name}>
@@ -112,6 +105,7 @@ const Contacts = () => {
             value={enteredName}
             onChange={nameChangeHandler}
             onBlur={nameBlurHandler}
+            maxLength={50}
           />
           {nameHasError && (
             <p className={classes.formError}>Por favor insira um nome.</p>
@@ -125,6 +119,7 @@ const Contacts = () => {
             value={enteredEmail}
             onChange={emailChangeHandler}
             onBlur={emailBlurHandler}
+            maxLength={254}
           />
           {emailHasError && (
             <p className={classes.formError}>Por favor insira um e-mail.</p>
@@ -134,9 +129,9 @@ const Contacts = () => {
           <label htmlFor="help">Como podemos ajudar?</label>
           <textarea
             id="help"
-            rows="4"
-            minLength="10"
-            maxLength="5000"
+            rows={4}
+            minLength={10}
+            maxLength={1000}
             value={enteredDescription}
             onChange={descriptionChangeHandler}
             onBlur={descriptionBlurHandler}
@@ -144,26 +139,11 @@ const Contacts = () => {
             Descrição...
           </textarea>
           {descriptionHasError && (
-            <p className={classes.formError}>Por favor insira uma descrição.</p>
+            <p className={classes.formError}>
+              Por favor insira uma descrição (entre 10 e 2000 caracteres).
+            </p>
           )}
         </div>
-        {subject === PARTNERSHIP && (
-          <div className={classes.urlDiv}>
-            <label htmlFor="url">Endereço de Web:</label>
-            <input
-              type="text"
-              id="url"
-              value={enteredUrl}
-              onChange={urlChangeHandler}
-              onBlur={urlBlurHandler}
-            />
-            {urlHasError && (
-              <p className={classes.formError}>
-                Por favor insira um endereço válido.
-              </p>
-            )}
-          </div>
-        )}
       </div>
       <div className={classes.buttonContainer}>
         <Button disabled={!formIsValid} text="Enviar" />

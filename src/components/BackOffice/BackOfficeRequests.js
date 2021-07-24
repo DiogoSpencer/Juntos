@@ -28,11 +28,15 @@ const DESC = "DESC";
 const DATE = "creationDate";
 const ALL = "all";
 const TITLE = "title";
-const TOPICS = "topics";
 const LOCATION = "location";
 const VOLUNTEER_NUMBER = 1;
+const orderParam = DATE;
 
-const isNotEmpty = (value) => value.trim() !== "";
+const isTitle = (value) =>
+  value.trim().length <= 30 && value.trim().length >= 3;
+
+const isDescription = (value) =>
+  value.trim().length >= 5 && value.trim().length <= 1000;
 
 const isVolunteerNumber = (value) => {
   if (value >= 1) {
@@ -58,10 +62,10 @@ let anonimous = false;
 let requestType = "";
 let helpers = 1;
 
+
 const BackOfficeRequests = () => {
   const [responseData, setResponseData] = useState(null);
   const [byParam, setByParam] = useState(ALL);
-  const [orderParam, setOrderParam] = useState(DATE); //neste momento so suporta creationDate
   const [dirParam, setDirParam] = useState(DESC);
   const [pageNumber, setPageNumber] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -102,7 +106,7 @@ const BackOfficeRequests = () => {
         }
       );
     }
-  }, [pageNumber, byParam, orderParam, dirParam, pageSize, refresh, search]);
+  }, [refresh]);
 
   useEffect(() => {
     if (responseData) {
@@ -170,7 +174,7 @@ const BackOfficeRequests = () => {
     valueChangeHandler: titleChangeHandler,
     inputBlurHandler: titleBlurHandler,
     setValueHandler: setTitleValueHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isTitle);
 
   const {
     value: enteredDescription,
@@ -179,7 +183,7 @@ const BackOfficeRequests = () => {
     valueChangeHandler: descriptionChangeHandler,
     inputBlurHandler: descriptionBlurHandler,
     setValueHandler: setDescriptionValueHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isDescription);
 
   const {
     value: enteredVolunteers,
@@ -624,6 +628,8 @@ const BackOfficeRequests = () => {
                         value={enteredTitle}
                         onChange={titleChangeHandler}
                         onBlur={titleBlurHandler}
+                        minLength={3}
+                        maxLength={30}
                       />
                       {titleNameHasError && <p>Por favor insira um título.</p>}
                     </td>
@@ -634,6 +640,8 @@ const BackOfficeRequests = () => {
                         value={enteredDescription}
                         onChange={descriptionChangeHandler}
                         onBlur={descriptionBlurHandler}
+                        minLength={10}
+                        maxLength={1000}
                       />
                       {descriptionHasError && (
                         <p>Por favor insira uma descrição.</p>

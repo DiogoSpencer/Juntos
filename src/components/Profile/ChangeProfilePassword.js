@@ -10,7 +10,8 @@ import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 
 //out of rendering cycle - functions to verify input
-const isNotEmpty = (value) => value.trim() !== "";
+const isPassword = (value) =>
+  value.trim().match("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$");
 
 const ChangeProfilePassword = (props) => {
   //fazer isto com useReducer -> muitos state
@@ -27,7 +28,7 @@ const ChangeProfilePassword = (props) => {
     hasError: oldPasswordHasError,
     valueChangeHandler: oldPasswordChangeHandler,
     inputBlurHandler: oldPasswordBlurHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isPassword);
 
   const {
     value: enteredPassword,
@@ -35,7 +36,7 @@ const ChangeProfilePassword = (props) => {
     hasError: passwordHasError,
     valueChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
-  } = useInput(isNotEmpty); //pass func to validate
+  } = useInput(isPassword); //pass func to validate
 
   const {
     value: enteredConfirmation,
@@ -43,7 +44,7 @@ const ChangeProfilePassword = (props) => {
     hasError: confirmationHasError,
     valueChangeHandler: confirmationChangeHandler,
     inputBlurHandler: confirmationBlurHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isPassword);
 
   let formIsValid = false;
 
@@ -90,7 +91,7 @@ const ChangeProfilePassword = (props) => {
           alert("Sessão expirou");
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
-          history.go(0)
+          history.go(0);
         } else {
           setError(true);
         }
@@ -119,6 +120,7 @@ const ChangeProfilePassword = (props) => {
             onChange={oldPasswordChangeHandler}
             onBlur={oldPasswordBlurHandler}
             className={classes.formInputOldPassword}
+            minLength={4}
           />
           {oldPasswordHasError && (
             <p className={classes.formError}>
@@ -135,13 +137,18 @@ const ChangeProfilePassword = (props) => {
             onChange={passwordChangeHandler}
             onBlur={passwordBlurHandler}
             className={classes.formInputPassword}
+            minLength={4}
           />
           {passwordHasError && (
             <p className={classes.formError}>
-              Por favor insira uma password válida.
+              Password tem de conter pelo menos 4 carácteres, uma letra
+              maiúscula, uma minúscula e um número.
             </p>
           )}
-          <label htmlFor="confirmation" className={classes.formLabelConfirmation}>
+          <label
+            htmlFor="confirmation"
+            className={classes.formLabelConfirmation}
+          >
             Confirmação
           </label>
           <input
@@ -151,6 +158,7 @@ const ChangeProfilePassword = (props) => {
             onChange={confirmationChangeHandler}
             onBlur={confirmationBlurHandler}
             className={classes.formInputConfirmation}
+            minLength={4}
           />
           {confirmationHasError && (
             <p className={classes.formError}>

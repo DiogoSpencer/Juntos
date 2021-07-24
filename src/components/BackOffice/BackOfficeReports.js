@@ -47,7 +47,6 @@ const BackOfficeReports = () => {
         `?by=${REPORTS}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}&value=${reportLimit}`
       ).then(
         (response) => {
-          console.log(response.data);
           setRefresh(false);
           setIsLoading(false);
 

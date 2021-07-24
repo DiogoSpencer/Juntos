@@ -19,6 +19,9 @@ const ReceiveRegister = React.lazy(() =>
   import("./components/Registration/ReceiveRegister")
 );
 const Contacts = React.lazy(() => import("./components/Contacts/Contacts"));
+const TicketDetails = React.lazy(() =>
+  import("./components/BackOffice/TicketDetails")
+);
 const ChangePassword = React.lazy(() =>
   import("./components/Password/ChangePassword")
 );
@@ -59,11 +62,11 @@ const BackOfficeRequests = React.lazy(() =>
 const BackOfficeStats = React.lazy(() =>
   import("./components/BackOffice/BackOfficeStats")
 );
-const BackOfficeTable = React.lazy(() =>
-  import("./components/BackOffice/BackOfficeTable")
-);
 const BackOfficeReports = React.lazy(() =>
   import("./components/BackOffice/BackOfficeReports")
+);
+const BackOfficeTickets = React.lazy(() =>
+  import("./components/BackOffice/BackOfficeTickets")
 );
 
 function App() {
@@ -165,13 +168,16 @@ function App() {
           <Route path="/recuperarpassword/:code">
             <ChangePassword />
           </Route>
-          <Route path="/heroisForm/:code">
-            <HeroiForm />
-          </Route>
           <Route path="/registercomplete/:code">
             <ReceiveRegister />
           </Route>
 
+          <Route path="juntos/heroisForm/:code">
+            <HeroiForm />
+          </Route>
+          <Route path="/juntos/vercontacto/:ticketId">
+            <TicketDetails />
+          </Route>
           <Route path="/juntos/verperfil/:username">
             <UserProfile />
           </Route>
@@ -232,8 +238,8 @@ function App() {
           <Route path="/backoffice/organizacoes">
             <BackOfficeCompany />
           </Route>
-          <Route path="/backoffice/mails">
-            <BackOfficeCompany />
+          <Route path="/backoffice/tickets">
+            <BackOfficeTickets />
           </Route>
 
           <Route path="*">

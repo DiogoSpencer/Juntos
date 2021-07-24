@@ -79,7 +79,7 @@
 }
 
 .buttonContainer {
-  margin-left: 2em;
+  margin-left: 6em;
   display: grid;
   grid-template-columns: 0.7fr 1fr;
   grid-template-rows: auto;

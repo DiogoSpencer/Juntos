@@ -14,7 +14,8 @@ import FacebookLogin from "react-facebook-login";
 //import CustomizedSnackbars from "../AddOns/CustomizedSnackbars";
 
 //out of rendering cycle - functions to verify input
-const isNotEmpty = (value) => value.trim() !== "";
+const isEmail = (value) => value.trim().match("^(.+)@(.+)$");
+const isPassword = (value) => value.trim().match("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$");
 
 const Login = (props) => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const Login = (props) => {
     hasError: emailHasError,
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
-  } = useInput(isNotEmpty); //pass func to validate
+  } = useInput(isEmail); //pass func to validate
 
   const {
     value: enteredPassword,
@@ -38,7 +39,7 @@ const Login = (props) => {
     hasError: passwordHasError,
     valueChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isPassword);
 
   let formIsValid = false;
 

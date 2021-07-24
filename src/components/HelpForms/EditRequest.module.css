@@ -109,7 +109,7 @@
 .firstNext {
   grid-area: nx;
   justify-self: start;
-  padding-left: 1em;
+  padding-left: 4em;
 }
 
 @media all and (max-width: 60em) {

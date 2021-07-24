@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 5;
+  z-index: 10;
 }
 
 .hideButton {
@@ -37,8 +37,8 @@
   display: grid;
   row-gap: 1em;
   grid-template-areas:
-    "rf ob fb sc"
-    "mt mt mt mt"
+    " rf ob fb sc"
+    " mt mt mt mt"
     "np np sb sb";
 }
 
@@ -117,13 +117,6 @@
   height: 2em;
   width: 2em;
   cursor: pointer;
-  object-fit: cover;
-}
-
-.iconRowDisabled {
-  height: 2em;
-  width: 2em;
-  cursor: not-allowed;
   object-fit: cover;
 }
 
@@ -224,4 +217,20 @@
 
 .refresh:hover {
   box-shadow: 0 0 8px #719ece;
+}
+
+@media all and (max-width: 60em) {
+}
+
+@media all and (max-width: 60em) {
+}
+
+@media all and (max-width: 40em) {
+  .container {
+    font-size: 0.65em;
+    margin-left: 10em;
+  }
+}
+
+@media all and (max-width: 40em) and (orientation: landscape) {
 }

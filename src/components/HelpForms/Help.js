@@ -21,7 +21,16 @@ const PEDIR = "Pedir Ajuda";
 const DOAR = "Doar";
 const ACOES = "Ações";
 
-const isNotEmpty = (value) => value.trim() !== "";
+const isMarkerPassword = (value) => value.trim().length >= 3 && value.trim().length <= 128;
+
+const isTitle = (value) =>
+  value.trim().length <= 30 && value.trim().length >= 3;
+
+const isDescription = (value) =>
+  value.trim().length >= 10 && value.trim().length <= 1000;
+
+
+
 const isVolunteerNumber = (value) => {
   if (value > 0) {
     return true;
@@ -170,7 +179,7 @@ const Help = () => {
     hasError: titleHasError,
     valueChangeHandler: titleChangeHandler,
     inputBlurHandler: titleBlurHandler,
-  } = useInput(isNotEmpty); //pass func to validate
+  } = useInput(isTitle); //pass func to validate
 
   const {
     value: enteredDescription,
@@ -178,7 +187,7 @@ const Help = () => {
     hasError: descriptionHasError,
     valueChangeHandler: descriptionChangeHandler,
     inputBlurHandler: descriptionBlurHandler,
-  } = useInput(isNotEmpty); //pass func to validate
+  } = useInput(isDescription); //pass func to validate
 
   const {
     value: enteredNumberVolunteers,
@@ -194,7 +203,7 @@ const Help = () => {
     hasError: passHasError,
     valueChangeHandler: passChangeHandler,
     inputBlurHandler: passBlurHandler,
-  } = useInput(isNotEmpty); //pass func to validate
+  } = useInput(isMarkerPassword); //pass func to validate
 
   const {
     value: enteredDifficulty,

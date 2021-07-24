@@ -30,12 +30,18 @@ const NavBar = () => {
       history.location.pathname === "/backoffice" &&
       (role === "USER" || !role)
     ) {
-      history.replace("/home");
+      const token = localStorage.getItem(gS.storage.token);
+      if (!token) {
+        history.replace("/home");
+      }
     } else if (
       history.location.pathname.includes("/backoffice") &&
       (role === "USER" || role === "PARTNER")
     ) {
-      history.replace("/home");
+      const token = localStorage.getItem(gS.storage.token);
+      if (!token) {
+        history.replace("/home");
+      }
     }
     // eslint-disable-next-line
   }, [history.location.pathname, role, isLogged]);

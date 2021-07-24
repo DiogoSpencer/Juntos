@@ -8,7 +8,7 @@ import useInput from "../hooks/use-input";
 import { changeComment } from "../../services/http";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
-const isNotEmpty = (value) => value.trim() !== "";
+const isComment = (value) => value.trim().length >= 3 && value.trim().length <= 600;
 
 //set the text of the new comment
 const EditComment = (props) => {
@@ -17,7 +17,7 @@ const EditComment = (props) => {
   const authImg = useSelector((state) => state.auth.profileImg);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
-  console.log(props.images)
+  console.log(props.images);
 
   useEffect(() => {
     props.images && setSelectedFiles(props.images);
@@ -31,7 +31,7 @@ const EditComment = (props) => {
     valueChangeHandler: editCommentChangeHandler,
     setValueHandler: setEditCommentValueHandler,
     reset: resetEditCommentInput,
-  } = useInput(isNotEmpty);
+  } = useInput(isComment);
 
   let editIsValid = false;
 
@@ -129,8 +129,8 @@ const EditComment = (props) => {
           onChange={editCommentChangeHandler}
           className={classes.newComment}
           rows="3"
-          minLength="10"
-          maxLength="1000"
+          minLength="3"
+          maxLength="600"
         />
         {props.buttonText === "Alterar" && (
           <svg

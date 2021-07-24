@@ -7,7 +7,7 @@ import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import { useDispatch } from "react-redux";
 
-const isNotEmpty = (value) => value.trim() !== "";
+const isMarkerPassword = (value) => value.trim().length >= 3 && value.trim().length <= 128;
 
 const InputPassword = (props) => {
   const [rating, setRating] = useState(0);
@@ -20,7 +20,7 @@ const InputPassword = (props) => {
     hasError: passHasError,
     valueChangeHandler: passChangeHandler,
     inputBlurHandler: passBlurHandler,
-  } = useInput(isNotEmpty); //pass func to validate
+  } = useInput(isMarkerPassword); //pass func to validate
 
   const passwordSubmitHandler = (event) => {
     event.preventDefault();
@@ -70,6 +70,8 @@ const InputPassword = (props) => {
           onBlur={passBlurHandler}
           className={classes.inputPass}
           disabled={props.isOwner}
+          minLength={3}
+          maxLength={128}
         />
         {passHasError && (
           <p className={classes.errorPass}>

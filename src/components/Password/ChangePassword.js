@@ -7,7 +7,7 @@ import juntosIcon from "../../img/logo.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { useState } from "react";
 
-const isNotEmpty = (value) => value.trim() !== "";
+const isPassword = (value) => value.trim().match("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$");
 
 const ChangePassword = (props) => {
   const history = useHistory();
@@ -22,7 +22,7 @@ const ChangePassword = (props) => {
     hasError: passwordHasError,
     valueChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isPassword);
 
   const {
     value: enteredConfirmation,
@@ -30,7 +30,7 @@ const ChangePassword = (props) => {
     hasError: confirmationHasError,
     valueChangeHandler: confirmationChangeHandler,
     inputBlurHandler: confirmationBlurHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isPassword);
 
   let formIsValid = false;
 
@@ -82,6 +82,7 @@ const ChangePassword = (props) => {
             value={enteredPassword}
             onChange={passwordChangeHandler}
             onBlur={passwordBlurHandler}
+            minLength={4}
           />
           {passwordHasError && (
             <p className={classes.passError}>
@@ -97,6 +98,7 @@ const ChangePassword = (props) => {
             value={enteredConfirmation}
             onChange={confirmationChangeHandler}
             onBlur={confirmationBlurHandler}
+            minLength={4}
           />
           {confirmationHasError && (
             <p className={classes.passError}>

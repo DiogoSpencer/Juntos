@@ -22,7 +22,7 @@ import Button from "../UI/Button";
 import MapHelpDetails from "./MapHelpDetails";
 import ParticipantsList from "./ParticipantsList";
 
-const isNotEmpty = (value) => value.trim() !== "";
+const isMarkerPassword = (value) => value.trim().length >= 3 && value.trim().length <= 128;
 
 const RESQUEST = "REQUEST";
 const OFFER = "OFFER";
@@ -100,7 +100,7 @@ const HelpDetailsOwner = () => {
     hasError: passHasError,
     valueChangeHandler: passChangeHandler,
     inputBlurHandler: passBlurHandler,
-  } = useInput(isNotEmpty); //pass func to validate
+  } = useInput(isMarkerPassword); //pass func to validate
 
   useEffect(() => {
     if (!isOwner) {
@@ -326,10 +326,12 @@ const HelpDetailsOwner = () => {
                 onChange={passChangeHandler}
                 onBlur={passBlurHandler}
                 className={classes.inputPass}
+                minLength={3}
+                maxLength={128}
               />
               {passHasError && (
                 <p className={classes.errorPass}>
-                  Por favor insere uma password válida
+                  Por favor insere uma password válida entre 3 e 128 caracteres
                 </p>
               )}
               <button

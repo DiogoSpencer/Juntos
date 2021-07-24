@@ -10,8 +10,12 @@ import juntosIcon from "../../img/logo.png";
 const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
 const isProfile = false;
-const isNotEmpty = (value) => value.trim() !== "";
-const isRegex = (value) => value.trim().match("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,50}$");
+
+const isName = (value) => value.trim().length >= 2 && value.trim().length <= 13;
+const isEmail = (value) => value.trim().match("^(.+)@(.+)$");
+const isPassword = (value) =>
+  value.trim().match("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$");
+
 const interests = ["HELP_OFFER", "HELP_REQUEST", "DONATE", "ACTION"];
 const showInterest = ["Ofertas Ajuda", "Pedidos Ajuda", "Doações", "Ações"];
 //TODO: #3 Verify if image is one of these types
@@ -36,7 +40,7 @@ const Register = (props) => {
     hasError: emailHasError,
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
-  } = useInput(isNotEmpty); //pass func to validate
+  } = useInput(isEmail); //pass func to validate
 
   const {
     value: enteredPassword,
@@ -44,7 +48,7 @@ const Register = (props) => {
     hasError: passwordHasError,
     valueChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
-  } = useInput(isNotEmpty && isRegex);
+  } = useInput(isPassword);
 
   const {
     value: enteredConfirmation,
@@ -52,7 +56,7 @@ const Register = (props) => {
     hasError: confirmationHasError,
     valueChangeHandler: confirmationChangeHandler,
     inputBlurHandler: confirmationBlurHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isPassword);
 
   const {
     value: enteredFirstName,
@@ -60,7 +64,7 @@ const Register = (props) => {
     hasError: firstNameHasError,
     valueChangeHandler: firstNameChangeHandler,
     inputBlurHandler: firstNameBlurHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isName);
 
   const {
     value: enteredLastName,
@@ -68,7 +72,7 @@ const Register = (props) => {
     hasError: lastNameHasError,
     valueChangeHandler: lastNameChangeHandler,
     inputBlurHandler: lastNameBlurHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isName);
 
   const privacyChangeHandler = () => {
     if (privacy === PUBLIC) {
@@ -215,10 +219,13 @@ const Register = (props) => {
           value={enteredPassword}
           onChange={passwordChangeHandler}
           onBlur={passwordBlurHandler}
+          minLength={4}
         />
         {passwordHasError && (
-          <p className={classes.registError}>Password tem de conter pelo menos 4
-            carácteres, uma letra maiúscula, uma minúscula e um número.</p>
+          <p className={classes.registError}>
+            Password tem de ter minimo 4 caracteres uma maiúscula, uma minúscula
+            e um número.
+          </p>
         )}
       </div>
       <div className={classes.confirmDiv}>
@@ -231,11 +238,10 @@ const Register = (props) => {
           value={enteredConfirmation}
           onChange={confirmationChangeHandler}
           onBlur={confirmationBlurHandler}
+          minLength={4}
         />
         {confirmationHasError && (
-          <p className={classes.registError}>
-            Por favor insira a confirmação.
-          </p>
+          <p className={classes.registError}>Por favor insira a confirmação.</p>
         )}
         {enteredConfirmationIsValid && !passConfirmed && (
           <p className={classes.registError}>
@@ -253,6 +259,8 @@ const Register = (props) => {
           value={enteredFirstName}
           onChange={firstNameChangeHandler}
           onBlur={firstNameBlurHandler}
+          minLength={2}
+          maxLength={13}
         />
         {firstNameHasError && (
           <p className={classes.registError}>Por favor insira um nome.</p>
@@ -268,6 +276,8 @@ const Register = (props) => {
           value={enteredLastName}
           onChange={lastNameChangeHandler}
           onBlur={lastNameBlurHandler}
+          minLength={2}
+          maxLength={13}
         />
         {lastNameHasError && (
           <p className={classes.registError}>Por favor insira um apelido.</p>
@@ -284,6 +294,8 @@ const Register = (props) => {
           onChange={emailChangeHandler}
           onBlur={emailBlurHandler}
           className={classes.emailInput}
+          minLength={2}
+          maxLength={254}
         />
         {emailHasError && (
           <p className={classes.registError}>Por favor insira um e-mail.</p>

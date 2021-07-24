@@ -8,7 +8,7 @@ import useInput from "../hooks/use-input";
 import { createComment } from "../../services/http";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
-const isNotEmpty = (value) => value.trim() !== "";
+const isComment = (value) => value.trim().length >= 3 && value.trim().length <= 600;
 
 //set the text of the new comment
 const NewComment = (props) => {
@@ -24,7 +24,7 @@ const NewComment = (props) => {
     hasError: NewCommentHasError,
     valueChangeHandler: newCommentChangeHandler,
     reset: resetNewCommentInput,
-  } = useInput(isNotEmpty);
+  } = useInput(isComment);
 
   let formIsValid = false;
 
@@ -103,8 +103,8 @@ const NewComment = (props) => {
           onChange={newCommentChangeHandler}
           className={classes.newComment}
           rows="3"
-          minLength="10"
-          maxLength="1000"
+          minLength="3"
+          maxLength="600"
         />
         {props.buttonText === "Alterar" && (
           <svg

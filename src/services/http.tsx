@@ -446,3 +446,44 @@ export async function activateAccount(code: string) {
     throw error.response;
   }
 }
+
+export async function createTicket(ticketBody: any) {
+  try {
+    return await axios.post(`${url}/rest/clock/ticket`, ticketBody);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function deleteTicket(heroForm: FormData) {
+  try {
+    console.log(heroForm);
+    return await axios.post(`${url}/rest/clock/hero`, heroForm);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function listTickets(urlParams: string) {
+  try {
+    return await axios.get(`${url}/rest/clock/ticket/list${urlParams}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function getTicket(ticketId: string) {
+  try {
+    return await axios.get(`${url}/rest/clock/ticket/${ticketId}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function createHero(ticketId: string) {
+  try {
+    return await axios.delete(`${url}/rest/clock/ticket/${ticketId}`);
+  } catch (error) {
+    throw error.response;
+  }
+}

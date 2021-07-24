@@ -21,7 +21,13 @@ const ACTION = "ACTION";
 let initialPoints = [];
 let initialDangers = [];
 let initialInterests = [];
-const isNotEmpty = (value) => value.trim() !== "";
+
+const isDescription = (value) =>
+  value.trim().length >= 10 && value.trim().length <= 1000;
+  
+const isTitle = (value) =>
+  value.trim().length <= 30 && value.trim().length >= 3;
+
 const isVolunteerNumber = (value) => {
   if (value > 0 && value <= 10) {
     return true;
@@ -48,6 +54,7 @@ const EditRequest = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState(false);
   const [responseData, setResponseData] = useState([]);
+  const [passwordValue, setPasswordValue] = useState("");
 
   const history = useHistory();
   const match = useRouteMatch();
@@ -136,6 +143,7 @@ const EditRequest = () => {
         setDescriptionValueHandler(response.data.description);
         setSelectedFiles(response.data.photoGalery);
         setAnonimousValue(response.data.anonymousOwner);
+        setPasswordValue(response.data.password);
         let responsePoints = response.data.points;
         for (const point of responsePoints) {
           //.map((point) => (
@@ -206,7 +214,7 @@ const EditRequest = () => {
     valueChangeHandler: titleChangeHandler,
     inputBlurHandler: titleBlurHandler,
     setValueHandler: setTitleValueHandler,
-  } = useInput(isNotEmpty); //pass func to validate
+  } = useInput(isTitle); //pass func to validate
 
   const {
     value: enteredDescription,
@@ -215,7 +223,7 @@ const EditRequest = () => {
     valueChangeHandler: descriptionChangeHandler,
     inputBlurHandler: descriptionBlurHandler,
     setValueHandler: setDescriptionValueHandler,
-  } = useInput(isNotEmpty); //pass func to validate
+  } = useInput(isDescription); //pass func to validate
 
   const {
     value: enteredNumberVolunteers,
@@ -525,7 +533,7 @@ const EditRequest = () => {
                 images={selectedFiles}
                 hasImage={selectedFiles.length <= 0 ? true : false}
                 editing={editing}
-                enteredPass={responseData.password}
+                enteredPass={passwordValue}
               />
             </div>
           )}

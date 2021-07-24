@@ -1,5 +1,5 @@
 .container {
-  padding-top: 8em;
+  padding-top: 12em;
   font-size: 0.8em;
   display: grid;
   grid-template-areas: "tt" "mc";

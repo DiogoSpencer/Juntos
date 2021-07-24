@@ -7,18 +7,14 @@ import usersIcon from "../../img/users.png";
 import reportOfficeIcon from "../../img/reportoffice.png";
 import emailIcon from "../../img/email.png";
 import classes from "./OfficeBar.module.css";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Fragment } from "react";
 
+const show = true;
+
 const OfficeBar = () => {
   const userRole = useSelector((state) => state.auth.role);
-  const [show, setShow] = useState(true); //deve começar a false se meter seta para abrir
-
-  const hideSideBarHandler = () => {
-    setShow((prevState) => !prevState);
-  };
 
   const checkRole = (role) => {
     if (role === "ADMIN" || role === "MOD") {
@@ -79,7 +75,7 @@ const OfficeBar = () => {
               </Link>
             </li>
             <li className={classes.navItem}>
-              <Link to="/backoffice/mails">
+              <Link to="/backoffice/tickets">
                 <img src={emailIcon} alt="clock" className={classes.navIcon} />
               </Link>
             </li>
@@ -93,25 +89,3 @@ const OfficeBar = () => {
 };
 
 export default OfficeBar;
-
-// barra/menu que vai ficar a direita quando se entra no backoffice para escolher operações de users, pedidos, administração, etc...
-
-/*
-      <img
-        src={show ? close : iconList}
-        alt="sidebar-show-hide"
-        className={classes.iconList}
-        onClick={hideSideBarHandler}
-      />
-
-
-                  <li className={classes.navItem}>
-              <Link to="/backoffice/notificacoes">
-                <img
-                  src={notificationsIcon}
-                  alt="notificacoes"
-                  className={classes.navIcon}
-                />
-              </Link>
-            </li>
-*/

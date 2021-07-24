@@ -9,6 +9,7 @@
 }
 
 .heroiTitle {
+  padding-top: 2em;
   grid-area: tt;
   color: #e6513e;
   font-weight: 700;

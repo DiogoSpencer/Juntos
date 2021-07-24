@@ -7,22 +7,30 @@ de stats vs dentro de home? -> Mudar no titulo + dentro do texto
 7. Mudar titulo de contactos
 8. .? perfil e em todos os sitios em que temos fetch data
 9. galeria herois
-11. login e register -> fazer regex de verificaçao de input
 14. faq -> perguntas e respostas
 16. HeroisHome - fetch data dos 3 herois do ultimo mes
 21. redes sociais
-22. falta verificar os limites quando se submete - titulo + textBox -> quando fizer os regex
 24. Modificar o alert depois de inserir mais de 5 imagens
-26. fazer pagina de participaçoes nos pedidos para o owner
 28. honeypots para os forms
-29. backoffice para company aceitar/recusar
-30. recuperaçao de passes
-31. back office reports de comments
-32. mudar a cena do estas a participar....
-33. ver se ja conclui e mudar as coisas nos pedidos...
 34. apanhar os erros que nao sao 401 -> especialmente no chat e assim
  -> erro = load infinito
 
+const isName = (value) => value.trim().length >= 2 && value.trim().length <= 13;
+
+const isEmail = (value) => value.trim().match("^(.+)@(.+)$");
+
+const isDescription = (value) =>
+  value.trim().length >= 10 && value.trim().length <= 1000;
+
+const isComment = (value) => value.trim().length >= 3 && value.trim().length <= 600;
+
+const isMarkerPassword = (value) => value.trim().length >= 3 && value.trim().length <= 128;
+
+const isTitle = (value) =>
+  value.trim().length <= 30 && value.trim().length >= 3;
+
+const isDescription = (value) =>
+  value.trim().length >= 10 && value.trim().length <= 1000;
 
 
 #FF9F36

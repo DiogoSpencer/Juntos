@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useInput from "../hooks/use-input";
 import Button from "..//UI/Button";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,9 +18,11 @@ const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
 const isProfile = true;
 let initialTopics = [];
-const isNotEmpty = (value) => value.trim() !== "";
 const interests = ["HELP_OFFER", "HELP_REQUEST", "DONATE", "ACTION"];
 const showInterest = ["Ofertas Ajuda", "Pedidos Ajuda", "Doações", "Ações"];
+
+const isEmail = (value) => value.trim().match("^(.+)@(.+)$");
+const isName = (value) => value.trim().length >= 2 && value.trim().length <= 13;
 
 const Profile = () => {
   const authUsername = useSelector((state) => state.auth.username);
@@ -49,7 +51,7 @@ const Profile = () => {
     value: enteredEmail,
     hasError: emailHasError,
     setValueHandler: setEmailValueHandler,
-  } = useInput(isNotEmpty); //pass func to validate
+  } = useInput(isEmail); //pass func to validate
 
   const {
     value: enteredFirstName,
@@ -58,7 +60,7 @@ const Profile = () => {
     valueChangeHandler: firstNameChangeHandler,
     inputBlurHandler: firstNameBlurHandler,
     setValueHandler: setFirstNameValueHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isName);
 
   const {
     value: enteredLastName,
@@ -67,7 +69,7 @@ const Profile = () => {
     valueChangeHandler: lastNameChangeHandler,
     inputBlurHandler: lastNameBlurHandler,
     setValueHandler: setLastNameValueHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isName);
 
   //queremos so fazer useEffect onMount -> []
   useEffect(() => {
@@ -171,6 +173,7 @@ const Profile = () => {
       privacy,
       favTopics: topics,
       deleteImg: deleteImg,
+      username: authUsername,
     };
 
     formData.append(
@@ -326,6 +329,8 @@ const Profile = () => {
               value={enteredFirstName}
               onChange={firstNameChangeHandler}
               onBlur={firstNameBlurHandler}
+              minLength={2}
+              maxLength={13}
             />
             {firstNameHasError && <p>Por favor insira um nome.</p>}
           </div>
@@ -337,6 +342,8 @@ const Profile = () => {
               value={enteredLastName}
               onChange={lastNameChangeHandler}
               onBlur={lastNameBlurHandler}
+              minLength={2}
+              maxLength={13}
             />
             {lastNameHasError && <p>Por favor insira um apelido.</p>}
           </div>

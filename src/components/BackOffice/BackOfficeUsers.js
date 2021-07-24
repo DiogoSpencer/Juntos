@@ -37,7 +37,7 @@ let userRole = USER;
 let accountState = ENABLE;
 let initialImage = false;
 
-const isNotEmpty = (value) => value.trim() !== "";
+const isName = (value) => value.trim().length >= 2 && value.trim().length <= 13;
 
 const isHelpNumber = (value) => {
   if (value >= 0) {
@@ -55,7 +55,6 @@ const formatDate = (longDate) => {
 const BackOfficeUsers = () => {
   const [responseData, setResponseData] = useState(null);
   const [byParam, setByParam] = useState(ALL);
-  const [orderParam, setOrderParam] = useState(DATE); //neste momento so suporta creationDate
   const [dirParam, setDirParam] = useState(DESC);
   const [pageNumber, setPageNumber] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -86,7 +85,7 @@ const BackOfficeUsers = () => {
       setIsLoading(true);
 
       getAllUsers(
-        `?by=${byParam}&value=${search}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+        `?by=${byParam}&value=${search}&order=${DATE}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
       ).then(
         (response) => {
           setRefresh(false);
@@ -101,7 +100,7 @@ const BackOfficeUsers = () => {
       );
     }
     // eslint-disable-next-line
-  }, [pageNumber, byParam, orderParam, dirParam, pageSize, refresh, search]);
+  }, [pageNumber, byParam, dirParam, pageSize, refresh, search]);
 
   useEffect(() => {
     setIsLoading(false);
@@ -176,7 +175,7 @@ const BackOfficeUsers = () => {
     valueChangeHandler: firstNameChangeHandler,
     inputBlurHandler: firstNameBlurHandler,
     setValueHandler: setFirstNameValueHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isName);
 
   const {
     value: enteredLastName,
@@ -185,7 +184,7 @@ const BackOfficeUsers = () => {
     valueChangeHandler: lastNameChangeHandler,
     inputBlurHandler: lastNameBlurHandler,
     setValueHandler: setLastNameValueHandler,
-  } = useInput(isNotEmpty);
+  } = useInput(isName);
 
   const {
     value: enteredHelps,
@@ -586,6 +585,8 @@ const BackOfficeUsers = () => {
                         value={enteredFirstName}
                         onChange={firstNameChangeHandler}
                         onBlur={firstNameBlurHandler}
+                        maxLength={13}
+                        minLength={2}
                       />
                       {firstNameHasError && <p>Por favor insira um nome.</p>}
                     </td>
@@ -596,6 +597,8 @@ const BackOfficeUsers = () => {
                         value={enteredLastName}
                         onChange={lastNameChangeHandler}
                         onBlur={lastNameBlurHandler}
+                        maxLength={13}
+                        minLength={2}
                       />
                       {lastNameHasError && <p>Por favor insira um apelido.</p>}
                     </td>

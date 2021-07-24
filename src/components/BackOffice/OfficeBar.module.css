@@ -1,4 +1,5 @@
 .navList {
+  margin-top: 2em;
   list-style: none;
   display: flex;
   flex-direction: row;
