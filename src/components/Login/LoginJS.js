@@ -15,8 +15,7 @@ import { snackActions } from "../../store/snackBar/snack";
 
 //out of rendering cycle - functions to verify input
 const isEmail = (value) => value.trim().match("^(.+)@(.+)$");
-const isPassword = (value) =>
-  value.trim().match("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$");
+const isPassword = (value) => value.trim().length > 0;
 
 const Login = (props) => {
   const dispatch = useDispatch();

@@ -72,6 +72,8 @@ const BackOfficeTickets = React.lazy(() =>
 );
 
 function App() {
+  //console.log = console.warn = console.error = () => {};
+
   const dispatch = useDispatch();
   const isLogged = useSelector((state) => state.auth.isLogged);
   //verificar aqui se tokens sao iguais - redux e localstorage -> se nao for -> logout

@@ -485,9 +485,9 @@ export async function getTicket(ticketId: string) {
   }
 }
 
-export async function createHero(ticketId: string) {
+export async function createHero(heroForm: FormData) {
   try {
-    return await axios.delete(`${url}/rest/clock/ticket/${ticketId}`);
+    return await axios.post(`${url}/rest/clock/hero`, heroForm);
   } catch (error) {
     throw error.response;
   }
