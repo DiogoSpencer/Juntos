@@ -72,7 +72,7 @@ const BackOfficeTickets = React.lazy(() =>
 );
 
 function App() {
-  //console.log = console.warn = console.error = () => {};
+  console.log = console.warn = console.error = () => {};
 
   const dispatch = useDispatch();
   const isLogged = useSelector((state) => state.auth.isLogged);

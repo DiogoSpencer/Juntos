@@ -57,15 +57,12 @@ const HeroiForm = () => {
     if (selectedFile !== null) {
       formData.append("img", selectedFile);
     }
-    console.log(selectedFile);
 
     const heroForm = {
       description: enteredDescription,
       title: enteredName,
       code: urlCode,
     };
-
-    console.log(heroForm);
 
     formData.append(
       "form",
