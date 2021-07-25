@@ -7,7 +7,9 @@ import { useEffect, useState } from "react";
 const Agradecimentos = (props) => {
   const [partnerData, setPartnerData] = useState([]);
 
-  useEffect(() => {}, [props.partnerImgs]);
+  useEffect(() => {
+    setPartnerData(props.partnerImgs);
+  }, [props.partnerImgs]);
 
   return (
     <div id="parceiros" className={classes.mainParceiros}>
@@ -17,9 +19,9 @@ const Agradecimentos = (props) => {
         <span className={classes.juntos}>juntos</span>
       </p>
       <ul className={classes.allLogos1}>
-        {props.responseData &&
-          props.responseData.length > 0 &&
-          props.responseData.map(
+        {partnerData &&
+          partnerData.length > 0 &&
+          partnerData.map(
             (partner, index) =>
               index % 2 === 0 && (
                 <li key={index}>
@@ -33,9 +35,9 @@ const Agradecimentos = (props) => {
           )}
       </ul>
       <ul className={classes.allLogos2}>
-        {props.responseData &&
-          props.responseData.length > 0 &&
-          props.responseData.map(
+        {partnerData &&
+          partnerData.length > 0 &&
+          partnerData.map(
             (partner, index) =>
               index % 2 !== 0 && (
                 <li key={index}>
