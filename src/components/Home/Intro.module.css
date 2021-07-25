@@ -33,6 +33,8 @@
 }
 
 .mainContent {
+  height: 20em;
+  padding-top: 6em;
   width: 100%;
   grid-area: ct;
   align-self: center;
@@ -48,12 +50,6 @@
   font-weight: 700;
 }
 
-.mainVideo {
-  grid-area: vd;
-  align-self: center;
-  justify-self: center;
-}
-
 .navLinkHidden {
   display: none;
 }
@@ -62,11 +58,10 @@
   .containerDiv {
     display: grid;
     grid-template-columns: auto;
-    grid-template-rows: auto 1fr 1fr;
+    grid-template-rows: auto 1fr;
     grid-template-areas:
       "im"
-      "ct"
-      "vd";
+      "ct";
   }
 }
 
@@ -74,11 +69,10 @@
   .containerDiv {
     display: grid;
     grid-template-columns: auto;
-    grid-template-rows: auto 1fr 1fr;
+    grid-template-rows: auto 1fr;
     grid-template-areas:
       "im"
-      "ct"
-      "vd";
+      "ct";
   }
 
   .mainImageDiv {
@@ -90,11 +84,10 @@
   .containerDiv {
     display: grid;
     grid-template-columns: auto;
-    grid-template-rows: auto 1fr 1fr;
+    grid-template-rows: auto 1fr;
     grid-template-areas:
       "im"
-      "ct"
-      "vd";
+      "ct";
   }
 
   .mainImageDiv {

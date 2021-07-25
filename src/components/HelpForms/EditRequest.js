@@ -316,9 +316,9 @@ const EditRequest = () => {
       responseData.difficulty !== enteredDifficulty ||
       (point.length > 0 &&
         JSON.stringify(initialPoints) !== JSON.stringify(point)) ||
-      (dangerPoint.length > 0 &&
+      (dangerPoint.length >= 0 &&
         JSON.stringify(initialDangers) !== JSON.stringify(dangerPoint)) ||
-      (interestPoint.length > 0 &&
+      (interestPoint.length >= 0 &&
         JSON.stringify(initialInterests) !== JSON.stringify(interestPoint)))
   ) {
     changesMade = true;

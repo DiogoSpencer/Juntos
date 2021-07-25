@@ -229,7 +229,6 @@ function Map(props: MapProps) {
   useEffect(() => {
     if (!props.editRe)
       setOpenDanger({ index: dangerPoint.length - 1, openIn: true });
-    else setOpenDanger({ index: dangerPoint.length - 1, openIn: false });
   }, [dangerPoint]);
 
   useEffect(() => {
@@ -322,11 +321,11 @@ function Map(props: MapProps) {
   const handleLoad = (map: any) => {
     mapRef.current = map;
   };
-
   const handleDanger = (ev: any, index: number) => {
     if (props.callbackDanger) {
-      dangerPoint[index].description = ev.target.value;
-      props.callbackDanger(dangerPoint);
+      let newPoint: Point[] = [...dangerPoint];
+      newPoint[index].description = ev.target.value;
+      props.callbackDanger(newPoint);
     }
   };
   const handleInterest = (ev: any, index: number) => {

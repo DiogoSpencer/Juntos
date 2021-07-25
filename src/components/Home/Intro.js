@@ -32,9 +32,6 @@ const Intro = () => {
         </p>
       </div>
       <div className={classes.mainVideo}>
-        <video width="320" height="240" controls>
-          <source src="" type="video/mp4" />O teu browser não suporta video
-        </video>
       </div>
     </div>
   );
