@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../UI/Button";
 import Comment from "./Comment";
 import NewComment from "./NewComment";
@@ -13,6 +13,7 @@ import {
 import { useHistory, useRouteMatch } from "react-router";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import EditComment from "./EditComment";
+import { snackActions } from "../../store/snackBar/snack";
 
 const DESC = "DESC";
 const DATE = "creationDate";
@@ -70,7 +71,9 @@ const CommentList = (props) => {
   const match = useRouteMatch();
   const requestId = match.params.requestId;
   const authRole = useSelector((state) => state.auth.role);
+  const authUsername = useSelector((state) => state.auth.username);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const messagesEndRef = useRef(null);
 
@@ -96,48 +99,83 @@ const CommentList = (props) => {
         }&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}&value=${requestId}`
       ).then(
         (response) => {
-          setIsLoading(false);
           setResponseSize(response.data.content.length);
-          console.log(response.data);
           if (match.path.includes("comentarios")) {
-            moreComments
+            //comentarios
+            moreComments //carregar mais
               ? setResponseData((prevState) =>
                   prevState.concat(response.data.content)
                 )
-              : setResponseData(response.data.content);
+              : setResponseData(response.data.content); //editar, comentar, reportar, apagar
           } else {
+            //chat
             if (moreComments) {
-              setResponseData(
-                (prevState) =>
-                  response.data.content &&
-                  response.data.content.length > 0 &&
-                  reverseItems(response.data.content).concat(prevState)
-              );
+              //carregar mais
+              setResponseData((prevState) => {
+                if (response.data.content && response.data.content.length > 0) {
+                  return reverseItems(response.data.content).concat(prevState);
+                } else {
+                  return prevState;
+                }
+              });
             } else {
-              response.data.content &&
-                response.data.content.length > 0 &&
+              //editar, comentar, reportar, apagar
+              if (response.data.content && response.data.content.length > 0) {
                 setResponseData(reverseItems(response.data.content));
+              }
               scrollToBottom();
             }
           }
+
+          setIsLoading(false);
+          setDisableButton(false);
+          setRefresh(false);
+          setMoreComments(false);
+          setIsEditing(false);
         },
         (error) => {
           setIsLoading(false);
+          setRefresh(false);
+          setMoreComments(false);
+
           //se houver erro da para fazer pedido outra vez?
           if (error && error.status === 403) {
-            history.replace("/conversas");
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Não estás inscrito neste chat.",
+              })
+            );
+            history.replace("/juntos/conversas");
+          } else if (error && error.status === 401) {
+          } else if (error && error.status === 404) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage: "Pedido não encontrado.",
+              })
+            );
+          } else {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
           }
-          console.log(error);
         }
       );
     }
   }, [pageNumber, requestId, refresh, moreComments, match.path]);
 
-  useEffect(() => {
-    isLoading && setIsLoading(false);
-    refresh && setRefresh(false);
-    moreComments && setMoreComments(false);
-  }, [responseData]);
+  const onRefreshHandler = () => {
+    setPageNumber(0);
+    setRefresh(true);
+  };
 
   const loadNextPageHandler = () => {
     setPageNumber((prevState) => {
@@ -151,25 +189,6 @@ const CommentList = (props) => {
     });
   };
 
-  const reportHandler = (commentId) => {
-    setIsLoading(true);
-
-    reportComment(commentId).then(
-      (response) => {
-        setRefresh(true);
-      },
-      (error) => {
-        setIsLoading(false);
-        console.log(error);
-      }
-    );
-  };
-
-  const onRefreshHandler = () => {
-    setPageNumber(0);
-    setRefresh(true);
-  };
-
   const startEditingHandler = (commentId) => {
     setIsEditing(commentId);
   };
@@ -178,15 +197,96 @@ const CommentList = (props) => {
     setIsEditing("");
   };
 
+  const reportHandler = (commentId) => {
+    setIsLoading(true);
+
+    reportComment(commentId).then(
+      (response) => {
+        onRefreshHandler();
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Comentário reportado com sucesso!",
+          })
+        );
+      },
+      (error) => {
+        setIsLoading(false);
+        if (error && error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "Comentário não encontrado!",
+            })
+          );
+        } else if (error && error.status === 401) {
+        } else if (error && error.status === 409) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage:
+                "Não podes reportar o mesmo comentário múltiplas vezes",
+            })
+          );
+        } else if (error) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
+        }
+      }
+    );
+  };
+
   const deleteCommentHandler = (commentId) => {
     setIsLoading(true);
     deleteComment(commentId).then(
       (response) => {
-        setRefresh(true);
+        onRefreshHandler();
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Comentário apagado com sucesso!",
+          })
+        );
       },
       (error) => {
         setIsLoading(false);
-        console.log(error);
+        if (error && error.status === 400) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Não podes apagar comentários de outras pessoas",
+            })
+          );
+        } else if (error && error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "Comentário não encontrado!",
+            })
+          );
+        } else if (error && error.status === 401) {
+        } else if (error) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
+        }
       }
     );
   };
@@ -229,9 +329,10 @@ const CommentList = (props) => {
                   images={comment.photos}
                   reportHandler={reportHandler}
                   onDeleteComment={deleteCommentHandler}
-                  isOwner={props.isOwner}
+                  isOwner={comment.owner === authUsername}
                   authRole={authRole}
                   editCommentHandler={startEditingHandler}
+                  isChat={false}
                 />
               ) : (
                 <Fragment>
@@ -242,6 +343,7 @@ const CommentList = (props) => {
                     closeEditHandler={closeEditHandler}
                     commentId={comment.id}
                     setRefresh={onRefreshHandler}
+                    isChat={false}
                   />
                 </Fragment>
               )}
@@ -284,9 +386,10 @@ const CommentList = (props) => {
                   images={comment.photos}
                   reportHandler={reportHandler}
                   onDeleteComment={deleteCommentHandler}
-                  isOwner={props.isOwner}
+                  isOwner={comment.owner === authUsername}
                   authRole={authRole}
                   editCommentHandler={startEditingHandler}
+                  isChat={true}
                 />
               ) : (
                 <Fragment>
@@ -297,6 +400,7 @@ const CommentList = (props) => {
                     closeEditHandler={closeEditHandler}
                     commentId={comment.id}
                     setRefresh={onRefreshHandler}
+                    isChat={true}
                   />
                 </Fragment>
               )}

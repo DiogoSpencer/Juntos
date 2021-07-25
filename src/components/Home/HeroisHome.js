@@ -1,46 +1,57 @@
 import { Link } from "react-router-dom";
-import oceanSaving from "../../img/oceanSaving.jpg";
-import boxesVolunteer from "../../img/boxesVolunteer.jpg";
-import foodVolunteer from "../../img/foodVolunteer.jpg";
 import classes from "./HeroisHome.module.css";
+import { Fragment } from "react";
 
 //falta fetch data herois do mes
 //se calhar op que vai buscar so os 3 mais recentes?
 //se nao o home poderia demorar mt tempo a carregar
 
-const HeroisHome = () => {
+const HeroisHome = (props) => {
   return (
     <div id="herois" className={classes.mainHeroisHome}>
       <h1 className={classes.mainHeroisTitle}>
         Nem Todos os Heróis Vestem Capas
       </h1>
-      <Link to="/herois/heroi1" className={classes.linkHerois1}>
-        <img
-          src={boxesVolunteer}
-          alt="Heroi-do-mes-1"
-          className={classes.heroisImg}
-        />
-        <br/>
-        Nome Héroi 1
-      </Link>
-      <Link to="/herois/heroi2" className={classes.linkHerois2}>
-        <img
-          src={oceanSaving}
-          alt="Heroi-do-mes-2"
-          className={classes.heroisImg}
-        />
-        <br/>
-        Nome Héroi 2
-      </Link>
-      <Link to="/herois/heroi3" className={classes.linkHerois3}>
-        <img
-          src={foodVolunteer}
-          alt="Heroi-do-mes-3"
-          className={classes.heroisImg}
-        />
-        <br/>
-        Nome Héroi 3
-      </Link>
+      {props.heroes && props.heroes.length === 3 && (
+        <Fragment>
+          <Link
+            to={`/herois/${props.heroes[0].heroId}`}
+            className={classes.linkHerois1}
+          >
+            <img
+              src={props.heroes[0].img}
+              alt="Heroi-do-mes-1"
+              className={classes.heroisImg}
+            />
+            <br />
+            {props.heroes[0].firstName} {props.heroes[0].lastName}
+          </Link>
+          <Link
+            to={`/herois/${props.heroes[1].heroId}`}
+            className={classes.linkHerois2}
+          >
+            <img
+              src={props.heroes[1].img}
+              alt="Heroi-do-mes-2"
+              className={classes.heroisImg}
+            />
+            <br />
+            {props.heroes[1].firstName} {props.heroes[1].lastName}
+          </Link>
+          <Link
+            to={`/herois/${props.heroes[2].heroId}`}
+            className={classes.linkHerois3}
+          >
+            <img
+              src={props.heroes[2].img}
+              alt="Heroi-do-mes-3"
+              className={classes.heroisImg}
+            />
+            <br />
+            {props.heroes[2].firstName} {props.heroes[2].lastName}
+          </Link>
+        </Fragment>
+      )}
     </div>
   );
 };

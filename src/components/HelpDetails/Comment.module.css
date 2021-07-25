@@ -88,3 +88,10 @@
   max-height: 10em;
   max-width: 10em;
 }
+
+.imageChat {
+  max-height: 5em;
+  max-width: 5em;
+  margin-left: 2em;
+  margin-right: 2em;
+}

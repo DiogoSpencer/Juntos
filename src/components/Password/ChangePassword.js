@@ -6,13 +6,17 @@ import classes from "./ChangePassword.module.css";
 import juntosIcon from "../../img/logo.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { snackActions } from "../../store/snackBar/snack";
 
-const isPassword = (value) => value.trim().match("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$");
+const isPassword = (value) =>
+  value.trim().match("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$");
 
 const ChangePassword = (props) => {
   const history = useHistory();
   const match = useRouteMatch();
   const urlCode = match.params.code;
+  const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,11 +60,35 @@ const ChangePassword = (props) => {
     recoverPassword(urlCode, enteredPassword, enteredConfirmation).then(
       (response) => {
         setIsLoading(false);
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Password modificada com sucesso!",
+          })
+        );
         history.replace("/home");
       },
       (error) => {
         setIsLoading(false);
-        console.log(error);
+        if (error && error.status === 403) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "A password antiga está incorrecta.",
+            })
+          );
+        } else if (error && error.status !== 401) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
+        }
       }
     );
   };

@@ -3,11 +3,11 @@ import { completeMarker } from "../../services/http";
 import useInput from "../hooks/use-input";
 import classes from "./InputPassword.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
-import { authActions } from "../../store/session/auth";
-import gS from "../../services/generalServices.json";
+import { snackActions } from "../../store/snackBar/snack";
 import { useDispatch } from "react-redux";
 
-const isMarkerPassword = (value) => value.trim().length >= 3 && value.trim().length <= 128;
+const isMarkerPassword = (value) =>
+  value.trim().length >= 3 && value.trim().length <= 128;
 
 const InputPassword = (props) => {
   const [rating, setRating] = useState(0);
@@ -34,18 +34,46 @@ const InputPassword = (props) => {
     completeMarker(props.markerId, enteredPass, rating).then(
       (response) => {
         setIsLoading(false);
+        props.refreshHandler(true);
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Evento completado com sucesso!",
+          })
+        );
       },
       (error) => {
-        console.log(error);
         setIsLoading(false);
-        if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
+        if (error && error.status === 400) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Password Errada.",
+            })
+          );
+        } else if (error && error.status === 403) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage:
+                "Não podes completar um evento do qual não fizeste parte.",
+            })
+          );
+        } else if (error && error.status !== 401) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
         }
       }
     );
-    //Mandar pass ao server por email ou username
   };
 
   return (

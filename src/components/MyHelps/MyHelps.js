@@ -12,6 +12,8 @@ import volunteersIcon from "../../img/volunteersdonate.jpg";
 import { Link, useRouteMatch } from "react-router-dom";
 import refreshIcon from "../../img/refresh.png";
 import Autocomplete from "react-google-autocomplete";
+import { useDispatch } from "react-redux";
+import { snackActions } from "../../store/snackBar/snack";
 
 const ASC = "ASC";
 const DESC = "DESC";
@@ -104,6 +106,8 @@ const MyHelps = () => {
   const [disableSelect, setDisableSelect] = useState(false);
   const [pageSize, setPageSize] = useState(5);
   const [refresh, setRefresh] = useState(true);
+  const [searchLocation, setSearchLocation] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setByParam(ALL);
@@ -114,6 +118,7 @@ const MyHelps = () => {
 
   useEffect(() => {
     setSearch("");
+    //setSearchLocation("");
   }, [byParam]);
 
   useEffect(() => {
@@ -127,7 +132,9 @@ const MyHelps = () => {
       setIsLoading(true);
 
       listMarker(
-        `?by=${byParam}&value=${search}&order=${orderParam}&isFirst=${isFirst}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+        `?by=${byParam}&value=${
+          byParam === location ? searchLocation : search
+        }&order=${orderParam}&isFirst=${isFirst}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
       ).then(
         (response) => {
           setResponseData(response.data.content);
@@ -138,6 +145,17 @@ const MyHelps = () => {
           if (error) {
             setIsLoading(false);
             setRefresh(false);
+            if (error && error.status === 401) {
+            } else {
+              dispatch(
+                snackActions.setSnackbar({
+                  snackBarOpen: true,
+                  snackBarType: "error",
+                  snackBarMessage:
+                    "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+                })
+              );
+            }
           }
         }
       );
@@ -200,6 +218,11 @@ const MyHelps = () => {
 
   const searchHandler = (value) => {
     setSearch(value);
+    setRefresh(true);
+  };
+
+  const searchLocationHandler = (value) => {
+    setSearchLocation(value);
     setRefresh(true);
   };
 
@@ -437,7 +460,7 @@ const MyHelps = () => {
             apiKey="AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU"
             onPlaceSelected={(place) => {
               if (place.address_components !== undefined) {
-                setSearch(place.address_components[0].long_name);
+                searchLocationHandler(place.address_components[0].long_name);
               }
             }}
           />

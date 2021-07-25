@@ -34,9 +34,9 @@ const AppHome = () => {
       />
       <div className={classes.appText}>
         <p>Ajudar alguém? Precisas de ajuda? Doar roupas de criança?</p>
-        <Link className={classes.appLink} to="/app">
-          Vê aqui o que podemos fazer <span className={classes.juntos}>juntos</span>
-        </Link>
+        <div className={classes.appLink}>
+          Descarrega a nossa app e vê o que podemos fazer <span className={classes.juntos}>juntos</span>
+        </div>
         <div className={classes.appButton}>
           <IconButton text="Descarrega Aqui!" />
         </div>

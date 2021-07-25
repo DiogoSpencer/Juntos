@@ -29,6 +29,7 @@ axios.interceptors.response.use(
     }
     return response;
   },
+
   function (error: any) {
     if (error.response.status === 401) {
       alert("A sua sessão expirou, por favor efectue novo login");
@@ -349,8 +350,8 @@ export async function officeDetailAppEngine(
       params: {
         end: end,
         filter: filter,
-        merge: merge,
         start: start,
+        merge: merge,
       },
     });
   } catch (error) {
@@ -403,13 +404,10 @@ export async function homeData() {
 
 export async function verifyCompany(email: string, verify: boolean) {
   try {
-    return (
-      await axios.put(`${url}/rest/user/verify`),
-      {
-        email: email,
-        verified: verify,
-      }
-    );
+    return await axios.put(`${url}/rest/user/verify`, {
+      email: email,
+      verified: verify,
+    });
   } catch (error) {
     throw error.response;
   }
@@ -463,10 +461,9 @@ export async function hallOfFame(urlParams: string) {
   }
 }
 
-export async function deleteTicket(heroForm: FormData) {
+export async function deleteTicket(ticketId: string) {
   try {
-    console.log(heroForm);
-    return await axios.post(`${url}/rest/clock/hero`, heroForm);
+    return await axios.delete(`${url}/rest/clock/ticket/${ticketId}`);
   } catch (error) {
     throw error.response;
   }
@@ -491,6 +488,14 @@ export async function getTicket(ticketId: string) {
 export async function createHero(ticketId: string) {
   try {
     return await axios.delete(`${url}/rest/clock/ticket/${ticketId}`);
+  } catch (error) {
+    throw error.response;
+  }
+}
+
+export async function getHero(username: string) {
+  try {
+    return await axios.get(`${url}/rest/clock/heroes/${username}`);
   } catch (error) {
     throw error.response;
   }

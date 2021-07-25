@@ -73,13 +73,14 @@ interface MapProps {
   markerTypeSelected?: string;
   moveTypeSelected?: string;
   cluster?: boolean;
-  showDelete?:boolean;
+  showDelete?: boolean;
+  editRe?: boolean;
 }
-function usePrevious(value: number) : number {
-  const ref = useRef<number>()
-  useEffect(()=>{
+function usePrevious(value: number): number {
+  const ref = useRef<number>();
+  useEffect(() => {
     ref.current = value;
-  })
+  });
   return ref.current as number;
 }
 
@@ -91,11 +92,10 @@ function Map(props: MapProps) {
     props.interestPoints
   );
 
-  const [zoom, setZoom] = useState<number>(10)
-  const previous = usePrevious(zoom)
+  const [zoom, setZoom] = useState<number>(10);
+  const previous = usePrevious(zoom);
   const [center, setCenter] = useState<Center>(props.center);
   const geocoder = new google.maps.Geocoder();
-
   const [bounds, setBounds] = useState<Bounds>(props.bounds);
   const [open, setOpen] = useState<infoOpen>({
     index: 0,
@@ -103,7 +103,7 @@ function Map(props: MapProps) {
   });
   const [openDanger, setOpenDanger] = useState<infoOpen>({
     index: 0,
-    openIn: true,
+    openIn: false,
   });
   const [openInterest, setOpenInterest] = useState<infoOpen>({
     index: 0,
@@ -112,18 +112,21 @@ function Map(props: MapProps) {
   const [directions, setDirections] =
     useState<google.maps.DirectionsResult | null>(null);
   const client = new google.maps.DirectionsService();
-  useEffect(()=>{
-    if (props.zoom){
-      setZoom(props.zoom)
+  useEffect(() => {
+    if (props.zoom) {
+      setZoom(props.zoom);
     }
-  },[])
+  }, []);
   const onClick = (ev: any) => {
     if (ev.latLng !== null && !props.noAdd) {
       if (props.markerTypeSelected === "MARKER") {
         if (!props.unique)
           props.callback([
             ...points,
-            { lat: ev.latLng.lat() + (Math.random()/10000), lon: ev.latLng.lng() + (Math.random()/10000)},
+            {
+              lat: ev.latLng.lat() + Math.random() / 10000,
+              lon: ev.latLng.lng() + Math.random() / 10000,
+            },
           ]);
         else {
           props.callback([{ lat: ev.latLng.lat(), lon: ev.latLng.lng() }]);
@@ -153,47 +156,45 @@ function Map(props: MapProps) {
           lat: mapRef.current.getCenter().toJSON().lat,
           lng: mapRef.current.getCenter().toJSON().lng,
         });
-        var bounds :google.maps.LatLngBounds = mapRef.current.getBounds()
+        var bounds: google.maps.LatLngBounds = mapRef.current.getBounds();
         props.callbackBounds({
           latLower: bounds.getSouthWest().lat(),
-          lngLower:  bounds.getSouthWest().lng(),
+          lngLower: bounds.getSouthWest().lng(),
           latTop: bounds.getNorthEast().lat(),
           lngTop: bounds.getNorthEast().lng(),
-        })
-       ;;
+        });
       }
     }
   };
 
-  useEffect(()=>{
-    if(mapRef.current !== null && props.callbackBounds) {
-      setZoom(mapRef.current.getZoom())
-      var bounds :google.maps.LatLngBounds = mapRef.current.getBounds()
+  useEffect(() => {
+    if (mapRef.current !== null && props.callbackBounds) {
+      setZoom(mapRef.current.getZoom());
+      var bounds: google.maps.LatLngBounds = mapRef.current.getBounds();
       props.callbackBounds({
         latLower: bounds.getSouthWest().lat(),
-        lngLower:  bounds.getSouthWest().lng(),
+        lngLower: bounds.getSouthWest().lng(),
         latTop: bounds.getNorthEast().lat(),
         lngTop: bounds.getNorthEast().lng(),
-      })
+      });
     }
-  }, [mapRef])
-  useEffect(()=>{
-    if (mapRef.current !== null && props.callbackBounds && previous > zoom ) {
-      console.log(previous)
-      console.log(mapRef.current.getZoom())
-      let bounds :google.maps.LatLngBounds = mapRef.current.getBounds()
+  }, [mapRef]);
+  useEffect(() => {
+    if (mapRef.current !== null && props.callbackBounds && previous > zoom) {
+      console.log(previous);
+      console.log(mapRef.current.getZoom());
+      let bounds: google.maps.LatLngBounds = mapRef.current.getBounds();
       props.callbackBounds({
         latLower: bounds.getSouthWest().lat(),
-        lngLower:  bounds.getSouthWest().lng(),
+        lngLower: bounds.getSouthWest().lng(),
         latTop: bounds.getNorthEast().lat(),
         lngTop: bounds.getNorthEast().lng(),
-      })
-      ;
+      });
     }
-  }, [zoom])
+  }, [zoom]);
   const handleZoomChanged = () => {
     if (mapRef.current !== null) {
-      setZoom(Math.min(zoom, mapRef.current.getZoom()))
+      setZoom(Math.min(zoom, mapRef.current.getZoom()));
     }
   };
   const onRightClick = (index: number) => {
@@ -228,11 +229,15 @@ function Map(props: MapProps) {
   }, [props.dangerPoints]);
 
   useEffect(() => {
-    setOpenDanger({ index: dangerPoint.length - 1, openIn: true });
+    if (!props.editRe)
+      setOpenDanger({ index: dangerPoint.length - 1, openIn: true });
+    else setOpenDanger({ index: dangerPoint.length - 1, openIn: false });
   }, [dangerPoint]);
 
   useEffect(() => {
-    setOpenInterest({ index: interestPoint.length - 1, openIn: true });
+    if (!props.editRe)
+      setOpenInterest({ index: interestPoint.length - 1, openIn: true });
+    else setOpenInterest({ index: interestPoint.length - 1, openIn: false });
   }, [interestPoint]);
 
   useEffect(() => {
@@ -244,20 +249,18 @@ function Map(props: MapProps) {
   }, [props.center]);
 
   useEffect(() => {
-      if(props.callbackBounds && mapRef.current && mapRef.current.getBounds() ) {
-          let bounds: google.maps.LatLngBounds = mapRef.current.getBounds()
-          props.callbackBounds({
-              latLower: bounds.getSouthWest().lat(),
-              lngLower: bounds.getSouthWest().lng(),
-              latTop: bounds.getNorthEast().lat(),
-              lngTop: bounds.getNorthEast().lng(),
-          })
-      }
-
-    }, [center]);
+    if (props.callbackBounds && mapRef.current && mapRef.current.getBounds()) {
+      let bounds: google.maps.LatLngBounds = mapRef.current.getBounds();
+      props.callbackBounds({
+        latLower: bounds.getSouthWest().lat(),
+        lngLower: bounds.getSouthWest().lng(),
+        latTop: bounds.getNorthEast().lat(),
+        lngTop: bounds.getNorthEast().lng(),
+      });
+    }
+  }, [center]);
 
   useEffect(() => {
-    console.log(props.bounds)
     setBounds(props.bounds);
   }, [props.bounds]);
 
@@ -274,18 +277,6 @@ function Map(props: MapProps) {
     let move = google.maps.TravelMode.WALKING;
     if (props.moveTypeSelected === "DRIVING")
       move = google.maps.TravelMode.DRIVING;
-    if (points.length > 0) {
-      let locationPo = new google.maps.LatLng(points[0].lat, points[0].lon);
-      let admin = "administrative_area_level_1";
-      geocoder
-        .geocode({ location: locationPo, componentRestrictions: {} }, null)
-        .then((response) => {
-          let res = response.results.filter((res) => {return res.types.includes(admin)});
-          if (res.length > 0 && props.callbackLo) {
-            props.callbackLo(res[0].address_components[0].long_name);
-          }
-        });
-    }
     if (points.length > 1 && !props.noRoute)
       client.route(
         {
@@ -327,11 +318,9 @@ function Map(props: MapProps) {
 
   const clickDelete = () => {
     props.callback([]);
-    if(props.callbackDanger)
-    props.callbackDanger([]);
-    if(props.callbackInterest)
-    props.callbackInterest([]);
-  }
+    if (props.callbackDanger) props.callbackDanger([]);
+    if (props.callbackInterest) props.callbackInterest([]);
+  };
   const handleLoad = (map: any) => {
     mapRef.current = map;
   };
@@ -345,7 +334,7 @@ function Map(props: MapProps) {
   const handleInterest = (ev: any, index: number) => {
     if (props.callbackInterest) {
       interestPoint[index].description = ev.target.value;
-      props.callbackInterest(dangerPoint);
+      props.callbackInterest(interestPoint);
     }
   };
   const match = useRouteMatch();
@@ -358,8 +347,8 @@ function Map(props: MapProps) {
   };
 
   return (
-    <div> 
-{!props.noPlaces && (
+    <div>
+      {!props.noPlaces && (
         <Autocomplete
           apiKey="AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU"
           style={{ width: "50%" }}
@@ -377,113 +366,169 @@ function Map(props: MapProps) {
           }}
         />
       )}
-<GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={zoom}
-            onLoad={handleLoad}
-            onClick={onClick}
-            onCenterChanged={handleCenterChanged}
-            onZoomChanged={handleZoomChanged}
-        >
-          {directions !== null && <DirectionsRenderer directions={directions} options = {{suppressMarkers : true}} />}
-            /* Child components, such as markers, info windows, etc. */
-          {props.cluster ?
-            <MarkerClusterer options={options} averageCenter ignoreHidden>
-              {(clusterer) =>
-                  points.map(
-                      (point: Point, index: number) =>
-                          point.generalType === props.typeSelected && (
-                              <Marker
-                                  position={{lat: point.lat, lng: point.lon}}
-                                  onRightClick={() => onRightClick(index)}
-                                  onClick={() => clickMarker(index)}
-                                  key={index}
-                                  clusterer={clusterer}
-                                  icon={point.type === "HELP_REQUEST" ? {url: requestIcon, scaledSize: new google.maps.Size(30,30)}
-                                      : point.type === "HELP_OFFER" ? {url: helpIcon, scaledSize: new google.maps.Size(30,30)}
-                                          : point.type === "DONATE" ? {url: donateIcon, scaledSize: new google.maps.Size(30,30)}
-                                              : point.type === "ACTION" ? {url: actionIcon, scaledSize: new google.maps.Size(30,30)}
-                                                  :undefined}
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={zoom}
+        onLoad={handleLoad}
+        onClick={onClick}
+        onCenterChanged={handleCenterChanged}
+        onZoomChanged={handleZoomChanged}
+      >
+        {directions !== null && (
+          <DirectionsRenderer
+            directions={directions}
+            options={{ suppressMarkers: true }}
+          />
+        )}
+        /* Child components, such as markers, info windows, etc. */
+        {props.cluster ? (
+          <MarkerClusterer options={options} averageCenter ignoreHidden>
+            {(clusterer) =>
+              points.map(
+                (point: Point, index: number) =>
+                  point.generalType === props.typeSelected && (
+                    <Marker
+                      position={{ lat: point.lat, lng: point.lon }}
+                      onRightClick={() => onRightClick(index)}
+                      onClick={() => clickMarker(index)}
+                      key={index}
+                      clusterer={clusterer}
+                      icon={
+                        point.type === "HELP_REQUEST"
+                          ? {
+                              url: requestIcon,
+                              scaledSize: new google.maps.Size(30, 30),
+                            }
+                          : point.type === "HELP_OFFER"
+                          ? {
+                              url: helpIcon,
+                              scaledSize: new google.maps.Size(30, 30),
+                            }
+                          : point.type === "DONATE"
+                          ? {
+                              url: donateIcon,
+                              scaledSize: new google.maps.Size(30, 30),
+                            }
+                          : point.type === "ACTION"
+                          ? {
+                              url: actionIcon,
+                              scaledSize: new google.maps.Size(30, 30),
+                            }
+                          : undefined
+                      }
+                    >
+                      {open.openIn && open.index === index ? (
+                        <InfoWindow
+                          onCloseClick={() =>
+                            setOpen({ index: index, openIn: false })
+                          }
+                        >
+                          <div>
+                            <span className="info-title-wrapper">
+                              {point.title}
+                            </span>
+                            <br />
+                            {point.generalType === "REQUEST" && (
+                              <Link
+                                to={`/juntos/ajudas/pedidos/${point.id}`}
+                                className={classes.linkContacts}
                               >
-                                {open.openIn && open.index === index ? (
-                                    <InfoWindow
-                                        onCloseClick={() =>
-                                            setOpen({index: index, openIn: false})
-                                        }
-                                    >
-                                      <div>
-                                        <span className='info-title-wrapper'>{point.title}</span>
-                                        <br/>
-                                        {point.generalType === 'REQUEST' &&
-                                        <Link to={`/juntos/ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
-                                          <Button text="Detalhes"/>
-                                        </Link>
-                                        }
-                                        {point.generalType === 'OFFER' &&
-                                        <Link to={`/juntos/ajudas/ofertas/${point.id}`} className={classes.linkContacts}>
-                                          <Button text="Detalhes"/>
-                                        </Link>
-                                        }
-                                      </div>
-                                    </InfoWindow>
-                                ) : (
-                                    <div></div>
-                                )}
-                              </Marker>
-                          )
-                  )
-              }
-            </MarkerClusterer>
-              : points.map(
-                  (point: Point, index: number) =>
-                       point.generalType === props.typeSelected && (
-                          <Marker
-                              position={{lat: point.lat, lng: point.lon}}
-                              onRightClick={() => onRightClick(index)}
-                              onClick={() => clickMarker(index)}
-                              key={index}
-                              icon={point.type === "HELP_REQUEST" ? {url: requestIcon, scaledSize: new google.maps.Size(30,30)}
-                                  : point.type === "HELP_OFFER" ? {url: helpIcon, scaledSize: new google.maps.Size(30,30)}
-                                  : point.type === "DONATE" ? {url: donateIcon, scaledSize: new google.maps.Size(30,30)}
-                                  : point.type === "ACTION" ? {url: actionIcon, scaledSize: new google.maps.Size(30,30)}
-                              :undefined}
-                          >
-                            {open.openIn && open.index === index ? (
-                                <InfoWindow
-                                    onCloseClick={() =>
-                                        setOpen({index: index, openIn: false})
-                                    }
-                                >
-                                  <div>
-                                    <span>{point.title}</span>
-                                    <br/>
-                                    {point.generalType === 'REQUEST' &&
-                                    <Link to={`/juntos/ajudas/pedidos/${point.id}`} className={classes.linkContacts}>
-                                      <Button text="Detalhes"/>
-                                    </Link>
-                                    }
-                                    {point.generalType === 'OFFER' &&
-                                    <Link to={`/juntos/ajudas/ofertas/${point.id}`} className={classes.linkContacts}>
-                                      <Button text="Detalhes"/>
-                                    </Link>
-                                    }
-                                  </div>
-                                </InfoWindow>
-                            ) : (
-                                <div></div>
+                                <Button text="Detalhes" />
+                              </Link>
                             )}
-                          </Marker>
-                      )
+                            {point.generalType === "OFFER" && (
+                              <Link
+                                to={`/juntos/ajudas/ofertas/${point.id}`}
+                                className={classes.linkContacts}
+                              >
+                                <Button text="Detalhes" />
+                              </Link>
+                            )}
+                          </div>
+                        </InfoWindow>
+                      ) : (
+                        <div></div>
+                      )}
+                    </Marker>
+                  )
               )
-          }
-	{dangerPoint.map((point: Point, index: number) => (
+            }
+          </MarkerClusterer>
+        ) : (
+          points.map(
+            (point: Point, index: number) =>
+              point.generalType === props.typeSelected && (
+                <Marker
+                  position={{ lat: point.lat, lng: point.lon }}
+                  onRightClick={() => onRightClick(index)}
+                  onClick={() => clickMarker(index)}
+                  key={index}
+                  icon={
+                    point.type === "HELP_REQUEST"
+                      ? {
+                          url: requestIcon,
+                          scaledSize: new google.maps.Size(30, 30),
+                        }
+                      : point.type === "HELP_OFFER"
+                      ? {
+                          url: helpIcon,
+                          scaledSize: new google.maps.Size(30, 30),
+                        }
+                      : point.type === "DONATE"
+                      ? {
+                          url: donateIcon,
+                          scaledSize: new google.maps.Size(30, 30),
+                        }
+                      : point.type === "ACTION"
+                      ? {
+                          url: actionIcon,
+                          scaledSize: new google.maps.Size(30, 30),
+                        }
+                      : undefined
+                  }
+                >
+                  {open.openIn && open.index === index ? (
+                    <InfoWindow
+                      onCloseClick={() =>
+                        setOpen({ index: index, openIn: false })
+                      }
+                    >
+                      <div>
+                        <span>{point.title}</span>
+                        <br />
+                        {point.generalType === "REQUEST" && (
+                          <Link
+                            to={`/juntos/ajudas/pedidos/${point.id}`}
+                            className={classes.linkContacts}
+                          >
+                            <Button text="Detalhes" />
+                          </Link>
+                        )}
+                        {point.generalType === "OFFER" && (
+                          <Link
+                            to={`/juntos/ajudas/ofertas/${point.id}`}
+                            className={classes.linkContacts}
+                          >
+                            <Button text="Detalhes" />
+                          </Link>
+                        )}
+                      </div>
+                    </InfoWindow>
+                  ) : (
+                    <div></div>
+                  )}
+                </Marker>
+              )
+          )
+        )}
+        {dangerPoint.map((point: Point, index: number) => (
           <Marker
             position={{ lat: point.lat, lng: point.lon }}
             onRightClick={() => onRightClickDanger(index)}
             onClick={() => clickMarkerDanger(index)}
             key={index}
-            icon={{url: pin, scaledSize: new google.maps.Size(30,30)}}
+            icon={{ url: pin, scaledSize: new google.maps.Size(30, 30) }}
           >
             {openDanger.openIn && openDanger.index === index ? (
               <InfoWindow
@@ -521,55 +566,57 @@ function Map(props: MapProps) {
             )}
           </Marker>
         ))}
- {interestPoint.map((point: Point, index: number) => (
+        {interestPoint.map((point: Point, index: number) => (
           <Marker
             position={{ lat: point.lat, lng: point.lon }}
             onRightClick={() => onRightClickInterest(index)}
             onClick={() => clickMarkerInterest(index)}
             key={index}
-            icon={{url: interest, scaledSize: new google.maps.Size(30,30)}}
+            icon={{ url: interest, scaledSize: new google.maps.Size(30, 30) }}
           >
             {openInterest.openIn && openInterest.index === index ? (
-                <InfoWindow
-                    onCloseClick={() =>
-                        setOpenInterest({ index: index, openIn: false })
-                    }
-                >
-                  {props.edit ? (
-                      <Form>
-                        <Form.Group controlId="descriptionForm">
-                          <Form.Label>Descrição</Form.Label>
-                          <Form.Control
-                              type="descrição"
-                              size="sm"
-                              className="input-text-wrapper"
-                              as="textarea"
-                              maxLength={100}
-                              value={
-                                point.description !== ""
-                                    ? point.description
-                                    : undefined
-                              }
-                              onChange={(event: any) => handleDanger(event, index)}
-                          />
-                        </Form.Group>
-                      </Form>
-                  ) : (
-                      <span className="info-title-wrapper">
+              <InfoWindow
+                onCloseClick={() =>
+                  setOpenInterest({ index: index, openIn: false })
+                }
+              >
+                {props.edit ? (
+                  <Form>
+                    <Form.Group controlId="descriptionForm">
+                      <Form.Label>Descrição</Form.Label>
+                      <Form.Control
+                        type="descrição"
+                        size="sm"
+                        className="input-text-wrapper"
+                        as="textarea"
+                        maxLength={100}
+                        value={
+                          point.description !== ""
+                            ? point.description
+                            : undefined
+                        }
+                        onChange={(event: any) => handleInterest(event, index)}
+                      />
+                    </Form.Group>
+                  </Form>
+                ) : (
+                  <span className="info-title-wrapper">
                     {point.description}
                   </span>
-                  )}
-                </InfoWindow>
+                )}
+              </InfoWindow>
             ) : (
-                <div></div>
+              <div></div>
             )}
           </Marker>
         ))}
       </GoogleMap>
-{props.showDelete &&
-        <Button text="Apagar todos os pontos" onClick = {clickDelete}/>}
-</div>)}
-
+      {props.showDelete && (
+        <Button text="Apagar todos os pontos" onClick={clickDelete} />
+      )}
+    </div>
+  );
+}
 
 export default React.memo(Map);
 /*

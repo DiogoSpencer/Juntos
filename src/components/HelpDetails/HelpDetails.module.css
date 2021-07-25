@@ -104,6 +104,14 @@
   border-bottom: 1px solid #b9e1ff;
 }
 
+.passText {
+  text-align: center;
+  align-self: center;
+  justify-self: center;
+  font-weight: 600;
+  color: #3385d9;
+}
+
 .buttonDisplay {
   grid-area: bd;
   align-self: center;

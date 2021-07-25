@@ -23,9 +23,13 @@ const Home = () => {
     <Fragment>
       <Intro />
       <AppHome />
-      <Stats />
-      <HeroisHome />
-      <Agradecimentos />
+      <Stats
+        numHeroes={responseData.numHeroes}
+        numPartner={responseData.numPartner}
+        totalNumHelps={responseData.totalNumHelps}
+      />
+      <HeroisHome heroes={responseData.heroes} />
+      <Agradecimentos partnerImgs={responseData.partnerImgs} />
     </Fragment>
   );
 };

@@ -9,6 +9,8 @@ import binIcon from "../../img/bin.png";
 import checkIcon from "../../img/check.png";
 import { Link } from "react-router-dom";
 import shareIcon from "../../img/share.png";
+import { useDispatch } from "react-redux";
+import { snackActions } from "../../store/snackBar/snack";
 
 const DESC = "DESC";
 const ASC = "ASC";
@@ -37,7 +39,8 @@ const BackOfficeReports = () => {
   const [responseData, setResponseData] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const [disableSelect, setDisableSelect] = useState(false);
-  const [reportLimit, setReportLimit] = useState(1);
+  const [reportLimit, setReportLimit] = useState(5);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setDisableSelect(false);
@@ -55,6 +58,33 @@ const BackOfficeReports = () => {
         (error) => {
           setRefresh(false);
           setIsLoading(false);
+
+          if (error && error.status === 403) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Não estás inscrito neste chat.",
+              })
+            );
+          } else if (error && error.status === 404) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage: "Pedido não encontrado.",
+              })
+            );
+          } else if (error && error.status !== 401) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
+          }
         }
       );
     }
@@ -114,11 +144,45 @@ const BackOfficeReports = () => {
 
     deleteCommentMod(commentId, toRemove).then(
       (response) => {
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Sucesso!",
+          })
+        );
         setRefresh(true);
       },
       (error) => {
         setIsLoading(false);
-        console.log(error);
+
+        if (error && error.status === 400) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage:
+                "Só podes apagar comentários de contas com roles abaixo de ti.",
+            })
+          );
+        } else if (error && error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "Pedido não encontrado.",
+            })
+          );
+        } else if (error && error.status !== 401) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
+        }
       }
     );
   };
@@ -166,7 +230,6 @@ const BackOfficeReports = () => {
         className={classes.selectSub}
         disabled={disableSelect}
       >
-        <option value={1}>1</option>
         <option value={5}>5</option>
         <option value={10}>10</option>
         <option value={15}>15</option>

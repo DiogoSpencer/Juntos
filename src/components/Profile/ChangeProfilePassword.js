@@ -6,8 +6,7 @@ import { useHistory } from "react-router-dom";
 import classes from "./ChangeProfilePassword.module.css";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { useDispatch } from "react-redux";
-import { authActions } from "../../store/session/auth";
-import gS from "../../services/generalServices.json";
+import { snackActions } from "../../store/snackBar/snack";
 
 //out of rendering cycle - functions to verify input
 const isPassword = (value) =>
@@ -79,21 +78,45 @@ const ChangeProfilePassword = (props) => {
     changePass(enteredOldPassword, enteredPassword, enteredConfirmation).then(
       (response) => {
         props.setIsLoading(false);
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Password modificada com sucesso!",
+          })
+        );
         props.onCloseModal();
       },
       (error) => {
         props.setIsLoading(false);
         if (error.status === 400) {
           setInvalidInput(true);
-        } else if (error.status === 403) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "Password inserida inválida.",
+            })
+          );
+        } else if (error && error.status === 403) {
           setOldPasswordWrong(true);
-        } else if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
-          history.go(0);
-        } else {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "A password antiga está incorrecta.",
+            })
+          );
+        } else if (error && error.status !== 401) {
           setError(true);
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
         }
       }
     );

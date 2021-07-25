@@ -1,5 +1,5 @@
 import classes from "./NewComment.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MultipleUpload from "../HelpForms/MultipleUpload";
 import donateIcon from "../../img/volunteersdonate.jpg";
 import userIcon from "../../img/userblue.png";
@@ -7,8 +7,10 @@ import { useState } from "react";
 import useInput from "../hooks/use-input";
 import { createComment } from "../../services/http";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import { snackActions } from "../../store/snackBar/snack";
 
-const isComment = (value) => value.trim().length >= 3 && value.trim().length <= 600;
+const isComment = (value) =>
+  value.trim().length >= 3 && value.trim().length <= 600;
 
 //set the text of the new comment
 const NewComment = (props) => {
@@ -17,6 +19,7 @@ const NewComment = (props) => {
   const authImg = useSelector((state) => state.auth.profileImg);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const dispatch = useDispatch();
 
   const {
     value: enteredNewComment,
@@ -61,15 +64,48 @@ const NewComment = (props) => {
 
     createComment(formData).then(
       (response) => {
-        console.log(response);
         setSelectedFiles([]);
         props.setRefresh();
         resetNewCommentInput();
         setIsLoading(false);
       },
       (error) => {
-        console.log(error);
         setIsLoading(false);
+        if (error && error.status === 400) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "O comentário não é válido.",
+            })
+          );
+        } else if (error && error.status === 401) {
+        } else if (error && error.status === 403) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Não tens permissão para comentar aqui",
+            })
+          );
+        } else if (error && error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "Pedido não encontrado",
+            })
+          );
+        } else if (error) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
+        }
       }
     );
   };

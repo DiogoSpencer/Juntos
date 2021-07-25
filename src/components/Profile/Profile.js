@@ -13,6 +13,7 @@ import logoIcon from "../../img/logo.png";
 import PassModal from "./PassModal";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import verifiedIcon from "../../img/verified.png";
+import { snackActions } from "../../store/snackBar/snack";
 
 const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
@@ -80,7 +81,6 @@ const Profile = () => {
         getUserUsername(authUsername).then(
           (response) => {
             setRefresh(false);
-            console.log(response.data);
             setResponseData(response.data);
             setEmailValueHandler(response.data.email);
             setLastNameValueHandler(response.data.lastName);
@@ -104,11 +104,25 @@ const Profile = () => {
             setIsCheckedInterest(initialTopics);
           },
           (error) => {
-            if (error.status === 401) {
-              alert("Sessão expirou");
-              dispatch(authActions.logout());
-              localStorage.removeItem(gS.storage.token);
-              history.replace("/home");
+            setIsLoading(false);
+            if (error.status === 404) {
+              dispatch(
+                snackActions.setSnackbar({
+                  snackBarOpen: true,
+                  snackBarType: "error",
+                  snackBarMessage: "Utilizador não encontrado.",
+                })
+              );
+            } else if (error && error.status !== 401) {
+              setError(true);
+              dispatch(
+                snackActions.setSnackbar({
+                  snackBarOpen: true,
+                  snackBarType: "error",
+                  snackBarMessage:
+                    "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+                })
+              );
             }
           }
         );
@@ -149,7 +163,6 @@ const Profile = () => {
 
     const formData = new FormData();
     if (selectedFile) {
-      console.log("img");
       formData.append("profileImg", selectedFile);
     }
 
@@ -186,13 +199,43 @@ const Profile = () => {
         initialTopics = isCheckedInterest;
         formIsValid = false;
         setIsLoading(false);
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Alterações efectuadas com sucesso",
+          })
+        );
         setRefresh(true);
       },
       (error) => {
-        if (error.status === 400) {
+        if (error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "Utilizador não encontrado.",
+            })
+          );
+        } else if (error && error.status === 400) {
           setInvalidInput(true);
-        } else {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Informação inserida inválida",
+            })
+          );
+        } else if (error && error.status !== 401) {
           setError(true);
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
         }
         setIsLoading(false);
       }
@@ -221,19 +264,51 @@ const Profile = () => {
         "Tem a certeza que pretende apagar a sua conta? Esta ação é irreversível."
       )
     ) {
-      console.log(authUsername)
       setIsLoading(true);
       deleteUser(authUsername).then(
         (response) => {
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "success",
+              snackBarMessage: "Conta apagada com sucesso!",
+            })
+          );
           history.replace("/home");
         },
         (error) => {
-          if (error) {
-            console.log(error);
-            setDeleteError(true);
+          if (error.status === 404) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage: "Utilizador não encontrado.",
+              })
+            );
+          } else if (error && error.status === 400) {
+            setInvalidInput(true);
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage:
+                  "Não tens permissão para executar este pedido.",
+              })
+            );
+          } else if (error && error.status !== 401) {
+            setError(true);
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
           }
+          setDeleteError(true);
         }
       );
       setIsLoading(false);

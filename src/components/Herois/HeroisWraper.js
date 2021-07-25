@@ -1,34 +1,70 @@
 //import { useRouteMatch } from "react-router";
 import classes from "./HeroisWrapper.module.css";
-import volunteer1 from "../../img/boxesVolunteer.jpg";
 import Button from "../UI/Button";
 
-import { Link} from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getHero } from "../../services/http";
+import { useDispatch } from "react-redux";
+import { snackActions } from "../../store/snackBar/snack";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
 //ir buscar todos aqui ou em slides?
 //ir buscar o do endereço por id
-const dummy = {
-  img: "../../img/boxesVolunteer.jpg",
-  alt: "heroi-1",
-  title: "Heroi",
-  id: "heroi1",
-  text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent finibus, leo sed luctus luctus, ante ante mollis justo, et mollis turpis nibh sit amet tortor. Maecenas vel sapien at risus dignissim accumsan. Vestibulum sit amet luctus ipsum. Nam egestas vehicula sem, eu accumsan tellus volutpat et. Pellentesque tempus orci eu nibh lobortis ullamcorper. Nam et magna nec eros efficitur fringilla pretium commodo ipsum. Nam diam urna, gravida a rhoncus facilisis, commodo at lectus. Nam placerat lorem at risus aliquet congue. In hac habitasse platea dictumst. Quisque egestas tristique augue, ac elementum tortor vehicula eget. Aliquam in sapien eu nisi ultricies pharetra a ut ex. Fusce sed condimentum turpis, vitae suscipit dui. Nulla a sollicitudin ex, nec tincidunt orci. In vestibulum, velit ut dictum posuere, purus ipsum efficitur leo, eget condimentum elit tortor id velit. Aenean varius laoreet luctus. Quisque pulvinar, lectus ut consequat malesuada, nisi est placerat urna, nec blandit lectus nisi et ex",
-};
 
 const HeroisWraper = () => {
-  //const match = useRouteMatch();
+  const match = useRouteMatch();
+  const heroiId = match.params.heroiId;
+  const [responseData, setResponseData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  //ir buscar data com este id ao server
-  //const id = match.params.heroId;
+  useEffect(() => {
+    setIsLoading(true);
+    getHero(heroiId).then(
+      (response) => {
+        setIsLoading(false);
+        setResponseData(response.data);
+      },
+      (error) => {
+        setIsLoading(false);
+        if (error && error.status === 401) {
+        } else {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
+        }
+      }
+    );
+  }, [heroiId]);
 
   return (
     <div className={classes.container}>
-      <div className={classes.heroiContainer}>
-        <h1 className={classes.title}>{dummy.title}</h1>
-        <p className={classes.info}>{dummy.text}</p>
-        <img src={volunteer1} alt={dummy.alt} className={classes.image} />
-      </div>
-      <Link to="/HallOfFame"className={classes.slidesContainer}>
+      {isLoading && (
+        <div className={classes.spinner}>
+          <LoadingSpinner />
+        </div>
+      )}
+      {responseData && (
+        <div className={classes.heroiContainer}>
+          <h1 className={classes.title}>{responseData.title}</h1>
+          <h6 className={classes.name}>
+            {responseData.firstName} {responseData.lastName}
+          </h6>
+          <p className={classes.info}>{responseData.text}</p>
+          <img
+            src={responseData.img}
+            alt="heroi-do-mes"
+            className={classes.image}
+          />
+        </div>
+      )}
+      <Link to="/HallOfFame" className={classes.slidesContainer}>
         <Button className={classes.seeOthers} text="Ver Outros Heróis" />
       </Link>
     </div>

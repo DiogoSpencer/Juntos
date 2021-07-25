@@ -106,6 +106,12 @@ const HelpTitle = (props) => {
         <p className={classes.type}>{typeHandler(props.helpType)}</p>
         <p className={classes.creationDate}>{formatDate(props.creationDate)}</p>
       </div>
+      {props.rating !== 0 && (
+        <div className={classes.difficultyContainer}>
+          <p className={classes.type}>Pontuação</p>
+          <p className={classes.creationDate}>{props.rating}</p>
+        </div>
+      )}
       <img
         src={typeIconHandler(props.helpType)}
         alt={typeHandler(props.helpType)}

@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
 import classes from "./Agradecimentos.module.css";
-import heart from "../../img/heart.png"
-import nova from "../../img/nova_4.png"
+import heart from "../../img/heart.png";
+import nova from "../../img/nova_4.png";
+import { useEffect, useState } from "react";
 
+const Agradecimentos = (props) => {
+  const [partnerData, setPartnerData] = useState([]);
 
-const Agradecimentos = () => {
-  //todos estes divs vao ser links para paginas dos parceiros
+  useEffect(() => {}, [props.partnerImgs]);
+
   return (
     <div id="parceiros" className={classes.mainParceiros}>
       <h1 className={classes.mainTitle}>Agradecimentos</h1>
@@ -13,28 +16,38 @@ const Agradecimentos = () => {
         Estes são os nossos parceiros, sem eles não estaríamos{" "}
         <span className={classes.juntos}>juntos</span>
       </p>
-      <div className={classes.allLogos1}>
-        <Link to={{ pathname: "https://www.fct.unl.pt/" }} target="_blank" className={classes.logo}>
-          <img src={nova} alt="logo-1" className={classes.logoImg} />
-        </Link>
-        <Link to={{ pathname: "https://www.fct.unl.pt/" }} target="_blank" className={classes.logo}>
-          <img src={nova} alt="logo-1" className={classes.logoImg} />
-        </Link>
-        <Link to={{ pathname: "https://www.fct.unl.pt/" }} target="_blank" className={classes.logo}>
-          <img src={nova} alt="logo-1" className={classes.logoImg} />
-        </Link>
-      </div>
-      <div className={classes.allLogos2}>
-        <Link to={{ pathname: "https://www.fct.unl.pt/" }} target="_blank" className={classes.logo}>
-          <img src={nova} alt="logo-2" className={classes.logoImg} />
-        </Link>
-        <Link to={{ pathname: "https://www.fct.unl.pt/" }} target="_blank" className={classes.logo}>
-          <img src={nova} alt="logo-2" className={classes.logoImg} />
-        </Link>
-        <Link to={{ pathname: "https://www.fct.unl.pt/" }} target="_blank" className={classes.logo}>
-          <img src={nova} alt="logo-2" className={classes.logoImg} />
-        </Link>
-      </div>
+      <ul className={classes.allLogos1}>
+        {props.responseData &&
+          props.responseData.length > 0 &&
+          props.responseData.map(
+            (partner, index) =>
+              index % 2 === 0 && (
+                <li key={index}>
+                  <img
+                    src={partner}
+                    alt={`parceria-${index}`}
+                    className={classes.logoImg}
+                  />
+                </li>
+              )
+          )}
+      </ul>
+      <ul className={classes.allLogos2}>
+        {props.responseData &&
+          props.responseData.length > 0 &&
+          props.responseData.map(
+            (partner, index) =>
+              index % 2 !== 0 && (
+                <li key={index}>
+                  <img
+                    src={partner}
+                    alt={`parceria-${index}`}
+                    className={classes.logoImg}
+                  />
+                </li>
+              )
+          )}
+      </ul>
       <div className={classes.thanks}>
         <h3 className={classes.thanksText}>Obrigado</h3>
         <img src={heart} alt="heart" className={classes.heartImg} />

@@ -6,10 +6,18 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 import userIcon from "../../img/userblue.png";
 import logoHelps from "../../img/logo.png";
 import verifiedIcon from "../../img/verified.png";
+import { useDispatch } from "react-redux";
+import { snackActions } from "../../store/snackBar/snack";
+
+const formatDate = (longDate) => {
+  const date = new Date(longDate);
+  return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+};
 
 const UserProfile = () => {
   const [responseData, setResponseData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const match = useRouteMatch();
   const username = match.params.username;
@@ -18,13 +26,36 @@ const UserProfile = () => {
     setIsLoading(true);
     getUserUsername(username).then(
       (response) => {
+        setIsLoading(false);
         setResponseData(response.data);
-        console.log(response.data);
       },
       (error) => {
         setIsLoading(false);
-        if (error.status === 401) {
-          console.log(error);
+        if (error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "Utilizador não encontrado.",
+            })
+          );
+        } else if (error && error.status === 400) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Informação inserida inválida",
+            })
+          );
+        } else if (error && error.status !== 401) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
         }
       }
     );
@@ -33,11 +64,6 @@ const UserProfile = () => {
   useEffect(() => {
     setIsLoading(false);
   }, [responseData]);
-
-  const formatDate = (longDate) => {
-    const date = new Date(longDate);
-    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-  };
 
   return (
     <div className={classes.mainContainer}>

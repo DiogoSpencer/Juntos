@@ -178,3 +178,8 @@
   display: flex;
   margin-top: 2em;
 }
+
+.google {
+  width: 40%;
+  height: 80%;
+}

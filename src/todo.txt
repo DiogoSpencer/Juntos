@@ -8,12 +8,13 @@ de stats vs dentro de home? -> Mudar no titulo + dentro do texto
 8. .? perfil e em todos os sitios em que temos fetch data
 9. galeria herois
 14. faq -> perguntas e respostas
-16. HeroisHome - fetch data dos 3 herois do ultimo mes
 21. redes sociais
 24. Modificar o alert depois de inserir mais de 5 imagens
 28. honeypots para os forms
-34. apanhar os erros que nao sao 401 -> especialmente no chat e assim
- -> erro = load infinito
+
+backoffice request -> passar activo para inactivo 
+ver o codigo quando se reactivate -> owner
+
 
 const isName = (value) => value.trim().length >= 2 && value.trim().length <= 13;
 

@@ -7,16 +7,16 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 
 const HELP_REQUEST = "REQUEST";
 const HELP_OFFER = "OFFER";
-const initialBounds : Bounds = {
+const initialBounds: Bounds = {
   latLower: 38.575291199755526,
   lngLower: -9.428419410934456,
   latTop: 38.83652687020928,
   lngTop: -8.84256058906556,
-}
-const initialCenter : Center ={
+};
+const initialCenter: Center = {
   lat: 38.7071,
-  lng: -9.13549
-}
+  lng: -9.13549,
+};
 
 function TodasAjudas() {
   const [point, setPoint] = useState<Point[]>([]);
@@ -25,8 +25,6 @@ function TodasAjudas() {
 
   const [bounds, setBounds] = useState<Bounds>(initialBounds);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const callbackBound = useCallback(
     (bound: Bounds) => {
       setBounds(bound);
@@ -34,14 +32,18 @@ function TodasAjudas() {
     [bounds]
   );
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      setCenter({lat: position.coords.latitude,lng: position.coords.longitude})
-        },
-        function(error) {
-          console.error("Error Code = " + error.code + " - " + error.message);
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        setCenter({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         });
-
-  }, [])
+      },
+      function (error) {
+        console.error("Error Code = " + error.code + " - " + error.message);
+      }
+    );
+  }, []);
 
   const callbackC = useCallback(
     (center: Center) => {
@@ -58,7 +60,6 @@ function TodasAjudas() {
     [point]
   );
   useEffect(() => {
-    setIsLoading(true);
     getMarkers(
       bounds.latLower,
       bounds.lngLower,
@@ -70,14 +71,12 @@ function TodasAjudas() {
         for (let i = 0; i < newVec.length; i++) {
           newVec[i].lat = parseFloat(response.data[i].points[0].lat);
           newVec[i].lon = parseFloat(response.data[i].points[0].lon);
-          newVec[i].type = response.data[i].type
+          newVec[i].type = response.data[i].type;
         }
         setPoint(newVec);
-        setIsLoading(false);
       },
       (error) => {
         console.log(error);
-        setIsLoading(false);
       }
     );
   }, [bounds]);
@@ -92,12 +91,7 @@ function TodasAjudas() {
 
   return (
     <div className={classes.mainContainer}>
-      <h1 className={classes.title}>Ajudas Disponíveis</h1>
-      {isLoading && (
-        <div className={classes.spinner}>
-          <LoadingSpinner />
-        </div>
-      )}
+      <h1 className={classes.title}>Ajudas DisponÃ­veis</h1>
       <div className={classes.subContainer}>
         <div className={classes.sideButtons}>
           <SideBySideButtons

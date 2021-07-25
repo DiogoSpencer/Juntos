@@ -18,6 +18,8 @@ import { Link } from "react-router-dom";
 import shareIcon from "../../img/share.png";
 import SearchBar from "../UI/SearchBar";
 import Autocomplete from "react-google-autocomplete";
+import { useDispatch } from "react-redux";
+import { snackActions } from "../../store/snackBar/snack";
 
 const HELP_REQUEST = "HELP_REQUEST";
 const HELP_OFFER = "HELP_OFFER";
@@ -62,7 +64,6 @@ let anonimous = false;
 let requestType = "";
 let helpers = 1;
 
-
 const BackOfficeRequests = () => {
   const [responseData, setResponseData] = useState(null);
   const [byParam, setByParam] = useState(ALL);
@@ -72,6 +73,7 @@ const BackOfficeRequests = () => {
   const [disableSelect, setDisableSelect] = useState(false);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState("");
+  const [searchLocation, setSearchLocation] = useState("");
   const [isEditing, setIsEditing] = useState("");
   const [enteredType, setEnteredType] = useState("");
   const [refresh, setRefresh] = useState(true);
@@ -79,40 +81,46 @@ const BackOfficeRequests = () => {
   const [isAnonimous, setIsAnonimous] = useState(false);
   const [generalType, setGeneralType] = useState("");
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     setSearch("");
   }, [byParam]);
 
   useEffect(() => {
     setDisableSelect(false);
+
     if (refresh) {
       setIsLoading(true);
-      console.log(
-        `?by=${byParam}&value=${search}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
-      );
+
       listOfficeMarker(
-        `?by=${byParam}&value=${search}&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
+        `?by=${byParam}&value=${
+          byParam === LOCATION ? searchLocation : search
+        }&order=${orderParam}&dir=${dirParam}&number=${pageNumber}&size=${pageSize}`
       ).then(
         (response) => {
           setIsEditing("");
           setRefresh(false);
-          console.log(response.data);
+          setIsLoading(false);
           setResponseData(response.data.content);
         },
         (error) => {
           setIsLoading(false);
           setRefresh(false);
-          console.log(error);
+          if (error && error.status !== 401) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
+          }
         }
       );
     }
   }, [refresh]);
-
-  useEffect(() => {
-    if (responseData) {
-      setIsLoading(false);
-    }
-  }, [responseData]);
 
   const changeFilterHandler = (event) => {
     setByParam(event.target.value);
@@ -250,6 +258,16 @@ const BackOfficeRequests = () => {
     setRefresh(true);
   };
 
+  const searchHandler = (value) => {
+    setSearch(value);
+    setRefresh(true);
+  };
+
+  const searchLocationHandler = (value) => {
+    setSearchLocation(value);
+    setRefresh(true);
+  };
+
   let formIsValid = false;
 
   if (
@@ -298,8 +316,8 @@ const BackOfficeRequests = () => {
       anonymousOwner: isAnonimous,
       helpersCapacity: enteredVolunteers,
       type: enteredType,
+      activeMarker: isActive,
     };
-    console.log(enteredType);
     console.log(formInfo);
 
     formData.append(
@@ -312,10 +330,34 @@ const BackOfficeRequests = () => {
         setRefresh(true);
         setIsLoading(false);
         setIsEditing("");
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Pedido editado com sucesso!",
+          })
+        );
       },
       (error) => {
-        console.log(error);
         setIsLoading(false);
+        if (error && error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "Conta não encontrada!",
+            })
+          );
+        } else if (error && error.status !== 401) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o erro persistir contacta-nos",
+            })
+          );
+        }
       }
     );
   };
@@ -332,10 +374,44 @@ const BackOfficeRequests = () => {
         (response) => {
           setIsLoading(false);
           setRefresh(true);
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "success",
+              snackBarMessage: "Evento apagado com sucesso!",
+            })
+          );
         },
         (error) => {
           setIsLoading(false);
-          console.log(error);
+          if (error && error.status === 404) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage: "Conta não encontrada!",
+              })
+            );
+          } else if (error && error.status === 400) {
+            if (error && error.status === 404) {
+              dispatch(
+                snackActions.setSnackbar({
+                  snackBarOpen: true,
+                  snackBarType: "warning",
+                  snackBarMessage: "Não tens permissão para apagar este evento",
+                })
+              );
+            } else if (error && error.status !== 401) {
+              dispatch(
+                snackActions.setSnackbar({
+                  snackBarOpen: true,
+                  snackBarType: "error",
+                  snackBarMessage:
+                    "Algo inesperado aconteceu, por favor tenta novamente. Se o erro persistir contacta-nos",
+                })
+              );
+            }
+          }
         }
       );
     } else {
@@ -469,7 +545,7 @@ const BackOfficeRequests = () => {
             apiKey="AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU"
             onPlaceSelected={(place) => {
               if (place.address_components !== undefined) {
-                setSearch(place.address_components[0].long_name);
+                searchLocationHandler(place.address_components[0].long_name);
               }
             }}
           />
@@ -477,7 +553,7 @@ const BackOfficeRequests = () => {
         <div className={searchBarClass}>
           <SearchBar
             input={search}
-            setInput={setSearch}
+            setInput={searchHandler}
             placeholder="Procurar..."
           />
         </div>

@@ -3,6 +3,8 @@ import { useRouteMatch } from "react-router";
 import { getTicket } from "../../services/http";
 import useInput from "../hooks/use-input";
 import classes from "../Contacts/Contacts.module.css";
+import { useDispatch } from "react-redux";
+import { snackActions } from "../../store/snackBar/snack";
 
 const PARTNERSHIP = "PARTNERSHIP";
 const SUGGESTIONS = "SUGGESTIONS";
@@ -13,19 +15,37 @@ const isNotEmpty = (value) => value.trim() !== "";
 const TicketDetails = () => {
   const match = useRouteMatch();
   const ticketId = match.params.ticketId;
+  const dispatch = useDispatch();
 
   const [subject, setSubject] = useState(SUGGESTIONS);
 
   useEffect(() => {
     getTicket(ticketId).then(
       (response) => {
-        setNameValue(response.data.id);
+        setNameValue(response.data.title);
         setDescriptionValue(response.data.text);
         setEmailValue(response.data.email);
         setSubject(response.data.type);
       },
       (error) => {
-        console.log(error);
+        if (error && error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "Contacto não encontrado!",
+            })
+          );
+        } else if (error && error.status !== 401) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
+        }
       }
     );
   }, [ticketId]);

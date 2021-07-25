@@ -10,26 +10,24 @@ import Info from "./Info";
 import classes from "./Help.module.css";
 import { createMarker } from "../../services/http";
 import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "../../store/session/auth";
-import gS from "../../services/generalServices.json";
 import Map from "../Map/Map";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import MapDetails from "./MapDetails";
+import { snackActions } from "../../store/snackBar/snack";
 
 const AJUDAR = "Oferecer Ajuda";
 const PEDIR = "Pedir Ajuda";
 const DOAR = "Doar";
 const ACOES = "Ações";
 
-const isMarkerPassword = (value) => value.trim().length >= 3 && value.trim().length <= 128;
+const isMarkerPassword = (value) =>
+  value.trim().length >= 3 && value.trim().length <= 128;
 
 const isTitle = (value) =>
   value.trim().length <= 30 && value.trim().length >= 3;
 
 const isDescription = (value) =>
   value.trim().length >= 10 && value.trim().length <= 1000;
-
-
 
 const isVolunteerNumber = (value) => {
   if (value > 0) {
@@ -47,8 +45,6 @@ const isDifficultyNumber = (value) => {
   }
 };
 
-let typeOfHelp;
-
 const ensureLeave =
   "Tem a certeza que quer sair? Toda a informação inserida irá ser perdida.";
 
@@ -61,6 +57,9 @@ const Help = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState(false);
+  const [typeOfHelp, setTypeOfHelp] = useState("");
+  const [location, setLocation] = useState("");
+
   const bounds = {
     latLower: 38.575291199755526,
     lngLower: -9.428419410934456,
@@ -77,25 +76,29 @@ const Help = () => {
   const [interestPoint, setInterestPoint] = useState([]);
 
   const [distance, setDistance] = useState(0);
-  const [location, setLocation] = useState("");
   const [center, setCenter] = useState({
     lat: 38.7071,
     lng: -9.13549,
   });
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function(position) {
-          setCenter({lat: position.coords.latitude,lng: position.coords.longitude})
-        },
-        function(error) {
-          console.error("Error Code = " + error.code + " - " + error.message);
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        setCenter({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         });
-
-  }, [])
+      },
+      function (error) {
+        console.error("Error Code = " + error.code + " - " + error.message);
+      }
+    );
+  }, []);
 
   const handleMarkerChange = (event) => {
     setMarker(event.target.value);
   };
+
   const handleMove = (event) => {
     setMove(event.target.value);
   };
@@ -138,13 +141,6 @@ const Help = () => {
     // eslint-disable-next-line
     [distance]
   );
-  const locationCallback = useCallback(
-    (location) => {
-      setLocation(location);
-    },
-    // eslint-disable-next-line
-    [location]
-  );
 
   /************/
   const history = useHistory();
@@ -156,27 +152,27 @@ const Help = () => {
   useEffect(() => {
     if (status) {
       setIsLoading(false);
-      history.go(0);
+      history.push("/juntos/minhasajudas");
     }
-  }, [status, history]);
+  }, [status]);
 
   const onSelectChangeHandler = (selectedAction) => {
     switch (selectedAction) {
       case AJUDAR:
         setSelected(AJUDAR);
-        typeOfHelp = "HELP_OFFER";
+        setTypeOfHelp("HELP_OFFER");
         break;
       case PEDIR:
         setSelected(PEDIR);
-        typeOfHelp = "HELP_REQUEST";
+        setTypeOfHelp("HELP_REQUEST");
         break;
       case DOAR:
         setSelected(DOAR);
-        typeOfHelp = "DONATE";
+        setTypeOfHelp("DONATE");
         break;
       case ACOES:
         setSelected(ACOES);
-        typeOfHelp = "ACTION";
+        setTypeOfHelp("ACTION");
         break;
       default:
         setSelected("");
@@ -286,6 +282,117 @@ const Help = () => {
     }
   }
 
+  useEffect(() => {
+    if (location !== "") {
+      if (!formIsValid) {
+        return;
+      }
+
+      if (!pointIsValid) {
+        return;
+      }
+
+      setIsLoading(true);
+
+      const formData = new FormData();
+
+      if (selectedFiles.length > 0) {
+        for (const image of selectedFiles) {
+          formData.append("img", image);
+        }
+      }
+
+      let generalType;
+
+      if (typeOfHelp === "HELP_OFFER" || typeOfHelp === "DONATE") {
+        generalType = "OFFER";
+      } else {
+        generalType = "REQUEST";
+      }
+
+      let difficulty = 1;
+      let helpersCapactiy = 1;
+
+      if (selected === ACOES) {
+        difficulty = enteredDifficulty;
+        helpersCapactiy = enteredNumberVolunteers;
+      }
+
+      if (helpersCapactiy < 1) {
+        helpersCapactiy = 1;
+      }
+
+      const formInfo = {
+        title: enteredTitle,
+        description: enteredDescription,
+        points: point,
+        owner: ownerEmail,
+        type: typeOfHelp,
+        password: enteredPass,
+        anonymousOwner: anonimousValue,
+        generalType,
+        difficulty: difficulty,
+        helpersCapacity: helpersCapactiy,
+        interests: interestPoint,
+        dangers: dangerPoint,
+        location: location,
+      };
+
+      if (selected !== ACOES) {
+        formInfo.dangers = [];
+        formInfo.interests = [];
+      }
+
+      formData.append(
+        "marker",
+        new Blob([JSON.stringify(formInfo)], { type: "application/json" })
+      );
+
+      createMarker(formData).then(
+        (response) => {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "success",
+              snackBarMessage: "Pedido criado com sucesso!",
+            })
+          );
+          setStatus(true);
+        },
+        (error) => {
+          setIsLoading(false);
+          if (error && error.status === 403) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Descrição inválida.",
+              })
+            );
+          } else if (error && error.status === 406) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Localização inválida.",
+              })
+            );
+          } else if (error && error.status === 401) {
+          } else if (error) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
+          }
+        }
+      );
+    }
+  }, [location]);
+
   const formSubmissionHandler = (event) => {
     event.preventDefault();
 
@@ -299,67 +406,30 @@ const Help = () => {
 
     setIsLoading(true);
 
-    const formData = new FormData();
-    if (selectedFiles.length > 0) {
-      for (const image of selectedFiles) {
-        formData.append("img", image);
-      }
+    const geocoder = new window.google.maps.Geocoder();
+
+    if (point.length > 0) {
+      let locationPo = new window.google.maps.LatLng(
+        point[0].lat,
+        point[0].lon
+      );
+      let admin = "administrative_area_level_1";
+      geocoder
+        .geocode({ location: locationPo, componentRestrictions: {} }, null)
+        .then(
+          (response) => {
+            let res = response.results.filter((res) => {
+              return res.types.includes(admin);
+            });
+            if (res.length > 0) {
+              setLocation(res[0].address_components[0].long_name);
+            } else setLocation("");
+          },
+          (error) => {
+            setLocation("");
+          }
+        );
     }
-
-    let generalType;
-
-    if (typeOfHelp === "HELP_OFFER" || typeOfHelp === "DONATE") {
-      generalType = "OFFER";
-    } else {
-      generalType = "REQUEST";
-    }
-
-    let difficulty = 1;
-    let helpersCapactiy = 1;
-
-    if (selected === ACOES) {
-      difficulty = enteredDifficulty;
-      helpersCapactiy = enteredNumberVolunteers;
-    }
-    const formInfo = {
-      title: enteredTitle,
-      description: enteredDescription,
-      points: point,
-      owner: ownerEmail,
-      type: typeOfHelp,
-      password: enteredPass,
-      anonymousOwner: anonimousValue,
-      generalType,
-      difficulty: difficulty,
-      helpersCapacity: helpersCapactiy,
-      interests: interestPoint,
-      dangers: dangerPoint,
-      location: location,
-    };
-
-    if (selected !== ACOES) {
-      formInfo.dangers = [];
-      formInfo.interests = [];
-    }
-
-    formData.append(
-      "marker",
-      new Blob([JSON.stringify(formInfo)], { type: "application/json" })
-    );
-    createMarker(formData).then(
-      (response) => {
-        setStatus(true);
-      },
-      (error) => {
-        if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
-        }
-        console.log(error);
-        setIsLoading(false);
-      }
-    );
   };
 
   //formConcludedHandler
@@ -421,7 +491,6 @@ const Help = () => {
         interestPoints={[]}
         callback={pointsCallback}
         callbackC={callbackC}
-        callbackLo={locationCallback}
         markerTypeSelected={"MARKER"}
       />
     </div>
@@ -440,20 +509,19 @@ const Help = () => {
         <span className={classes.selectedTitle}>{selected}</span>
       </h1>
       <Map
-          points={point}
-          remove
-          edit
-          bounds={bounds}
-          dangerPoints={dangerPoint}
-          interestPoints={interestPoint}
-          callback={pointsCallback}
-          center={center}
-          callbackC={callbackC}
-          callbackLo={locationCallback}
-          callbackD={distanceCallback}
-          callbackDanger={dangerPointsCallback}
-          callbackInterest={interestPointsCallback}
-          markerTypeSelected={marker}
+        points={point}
+        remove
+        edit
+        bounds={bounds}
+        dangerPoints={dangerPoint}
+        interestPoints={interestPoint}
+        callback={pointsCallback}
+        center={center}
+        callbackC={callbackC}
+        callbackD={distanceCallback}
+        callbackDanger={dangerPointsCallback}
+        callbackInterest={interestPointsCallback}
+        markerTypeSelected={marker}
       />
       <div>
         <MapDetails

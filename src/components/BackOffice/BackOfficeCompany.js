@@ -8,6 +8,8 @@ import refreshIcon from "../../img/refresh.png";
 import binIcon from "../../img/bin.png";
 import checkIcon from "../../img/check.png";
 import { getAllUsers, verifyCompany } from "../../services/http";
+import { snackActions } from "../../store/snackBar/snack";
+import { useDispatch } from "react-redux";
 
 const ASC = "ASC";
 const DESC = "DESC";
@@ -29,6 +31,8 @@ const BackOfficeCompany = () => {
   const [pageSize, setPageSize] = useState(5);
   const [refresh, setRefresh] = useState(true);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     setDisableSelect(false);
     if (refresh) {
@@ -40,13 +44,29 @@ const BackOfficeCompany = () => {
         (response) => {
           setIsLoading(false);
           setRefresh(false);
-          console.log(response.data);
           setResponseData(response.data.content);
         },
         (error) => {
           setIsLoading(false);
           setRefresh(false);
-          console.log(error);
+          if (error && error.status === 400) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Não tens permissão para ver este recurso.",
+              })
+            );
+          } else if (error && error.status !== 401) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
+          }
         }
       );
     }
@@ -96,10 +116,37 @@ const BackOfficeCompany = () => {
       setIsLoading(true);
       verifyCompany(email, verify).then(
         (response) => {
+          setIsLoading(false);
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "success",
+              snackBarMessage: "Organização verificada com sucesso!",
+            })
+          );
           setRefresh(true);
         },
         (error) => {
-          console.log(error);
+          setIsLoading(false);
+          setRefresh(false);
+          if (error && error.status === 404) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Conta não encontrada.",
+              })
+            );
+          } else if (error && error.status !== 401) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
+          }
         }
       );
     } else {
@@ -111,10 +158,36 @@ const BackOfficeCompany = () => {
         setIsLoading(true);
         verifyCompany(email, verify).then(
           (response) => {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "success",
+                snackBarMessage: "Conta apagada com sucesso!",
+              })
+            );
             setRefresh(true);
           },
           (error) => {
-            console.log(error);
+            setIsLoading(false);
+            setRefresh(false);
+            if (error && error.status === 404) {
+              dispatch(
+                snackActions.setSnackbar({
+                  snackBarOpen: true,
+                  snackBarType: "warning",
+                  snackBarMessage: "Conta não encontrada.",
+                })
+              );
+            } else if (error && error.status !== 401) {
+              dispatch(
+                snackActions.setSnackbar({
+                  snackBarOpen: true,
+                  snackBarType: "error",
+                  snackBarMessage:
+                    "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+                })
+              );
+            }
           }
         );
       }

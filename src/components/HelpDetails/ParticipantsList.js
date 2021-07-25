@@ -3,7 +3,8 @@ import { getAllUsers } from "../../services/http";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import PartcipantItem from "./ParticipantItem";
 import classes from "./ParticipantsList.module.css";
-import Button from "../UI/Button";
+import { useDispatch } from "react-redux";
+import { snackActions } from "../../store/snackBar/snack";
 
 const pageSize = 10;
 
@@ -14,6 +15,7 @@ const ParticipantsList = (props) => {
   const [moreComments, setMoreComments] = useState(true);
   const [disableButton, setDisableButton] = useState(false);
   const [responseSize, setResponseSize] = useState(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (moreComments) {
@@ -33,7 +35,24 @@ const ParticipantsList = (props) => {
         },
         (error) => {
           setIsLoading(false);
-          console.log(error);
+          if (error && error.status === 404) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Voluntário não existe.",
+              })
+            );
+          } else if (error && error.status !== 401) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
+          }
         }
       );
     }

@@ -1,5 +1,5 @@
 import useInput from "../hooks/use-input";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import classes from "./HeroiForm.module.css";
 import { useState } from "react";
 import Button from "../UI/Button";
@@ -7,6 +7,7 @@ import HeroiUpload from "./HeroiUpload";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { useHistory, useRouteMatch } from "react-router";
 import { createHero } from "../../services/http";
+import { snackActions } from "../../store/snackBar/snack";
 
 const isName = (value) => value.trim().length >= 2 && value.trim().length <= 60;
 const isDescription = (value) => value.trim().length >= 10;
@@ -19,6 +20,7 @@ const HeroiForm = () => {
   const match = useRouteMatch();
   const urlCode = match.params.code;
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const {
     value: enteredName,
@@ -69,18 +71,38 @@ const HeroiForm = () => {
 
     createHero(formData).then(
       (response) => {
-        console.log(response);
-        history.replace("/home")
+        setIsLoading(false);
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Formulário submetido com sucesso!",
+          })
+        );
+        history.replace("/home");
       },
       (error) => {
         setIsLoading(false);
-        console.log(error);
+        if (error && error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "Herói não encontrado.",
+            })
+          );
+        } else if (error && error.status !== 401) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
+        }
       }
     );
-
-    setIsLoading(true);
-
-    setIsLoading(false);
   };
 
   return (

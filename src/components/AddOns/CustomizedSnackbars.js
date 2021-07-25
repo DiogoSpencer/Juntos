@@ -1,42 +1,50 @@
-import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Snackbar from "@material-ui/core/Snackbar";
-import { SnackbarContent } from "@material-ui/core";
-//import MuiAlert from "@material-ui/lab/Alert";
-/*
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-*/
-export default function CustomizedSnackbars(props) {
-  const [open, setOpen] = React.useState(false);
+import Alert from "@material-ui/lab/Alert";
+import { makeStyles } from "@material-ui/core/styles";
+import { snackActions } from "../../store/snackBar/snack";
 
-  useEffect(() => {
-    setOpen(props.open);
-  }, [props.open]);
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+    "& > * + *": {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
 
-  const handleClick = () => {
-    setOpen(true);
-  };
+const CustomizedSnackbars = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const snackbarOpen = useSelector((state) => state.snack.snackbarOpen);
+  const snackbarType = useSelector((state) => state.snack.snackbarType);
+  const snackbarMessage = useSelector((state) => state.snack.snackbarMessage);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-
-    setOpen(false);
+    dispatch(snackActions.setSnackbar(false, snackbarType, snackbarMessage));
   };
 
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-      <SnackbarContent message={<>{props.text}</>} />
-    </Snackbar>
+    <div className={classes.root}>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleClose}
+      >
+        <Alert
+          elevation={6}
+          variant="filled"
+          onClose={handleClose}
+          color={snackbarType}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+    </div>
   );
-}
+};
 
-/*
-      <Alert severity="error">This is an error message!</Alert>
-      <Alert severity="warning">This is a warning message!</Alert>
-      <Alert severity="info">This is an information message!</Alert>
-      <Alert severity="success">This is a success message!</Alert>
-
-*/
+export default CustomizedSnackbars;

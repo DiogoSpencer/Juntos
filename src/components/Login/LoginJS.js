@@ -11,12 +11,12 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 import juntosIcon from "../../img/logo.png";
 import { GoogleLogin } from "react-google-login";
 import FacebookLogin from "react-facebook-login";
+import { snackActions } from "../../store/snackBar/snack";
 
 //out of rendering cycle - functions to verify input
 const isEmail = (value) => value.trim().match("^(.+)@(.+)$");
-const isPassword = (value) => value.trim().match("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$");
-
-
+const isPassword = (value) =>
+  value.trim().match("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$");
 
 const Login = (props) => {
   const dispatch = useDispatch();
@@ -47,96 +47,186 @@ const Login = (props) => {
   if (enteredEmailIsValid && enteredPasswordIsValid) {
     formIsValid = true;
   }
-  const failureGoogle = () => {
-
-  }
-    const responseFacebook = (responseG) => {
-        if(responseG.status !== "unknown") {
-            loginExternal(responseG.email,
-                responseG.first_name,
-                responseG.id,
-                responseG.picture.data.url,
-                responseG.last_name,
-                'FACEBOOK').then((response) => {
-                    props.setIsLoading(false);
-                    const token = response.headers.authorization;
-                    const parsedToken = jwt_decode(token);
-                    dispatch(
-                        authActions.login({
-                            isLogged: true,
-                            token: token,
-                            username: parsedToken.username,
-                            role: parsedToken.role,
-                            email: parsedToken.email,
-                            firstName: response.data.firstName,
-                            lastName: response.data.lastName,
-                            numHelps: response.data.numHelps,
-                            profileImg: response.data.profileImg,
-                        })
-                    );
-                    localStorage.setItem("token", token);
-                    props.onCloseModal();
-                },
-                (error) => {
-                    props.setIsLoading(false);
-                    if (error.status === 400) {
-                        setError("Credenciais Inválidas")
-                    } else if (error.status === 403) {
-                        setError("Esta conta está desativada")
-                    } else if (error.status === 404) {
-                        setError("Não existe um utilizador registado com este e-mail")
-                    } else {
-                        setError("Algo Inesperado aconteceu, tente novamente");
-                        console.log(error)
-                    }
-                }
-            )
+  const failureGoogle = () => {};
+  const responseFacebook = (responseG) => {
+    if (responseG.status !== "unknown") {
+      loginExternal(
+        responseG.email,
+        responseG.first_name,
+        responseG.id,
+        responseG.picture.data.url,
+        responseG.last_name,
+        "FACEBOOK"
+      ).then(
+        (response) => {
+          props.setIsLoading(false);
+          const token = response.headers.authorization;
+          const parsedToken = jwt_decode(token);
+          dispatch(
+            authActions.login({
+              isLogged: true,
+              token: token,
+              username: parsedToken.username,
+              role: parsedToken.role,
+              email: parsedToken.email,
+              firstName: response.data.firstName,
+              lastName: response.data.lastName,
+              numHelps: response.data.numHelps,
+              profileImg: response.data.profileImg,
+            })
+          );
+          localStorage.setItem("token", token);
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "success",
+              snackBarMessage: "Login efectuado com sucesso!",
+            })
+          );
+          props.onCloseModal();
+        },
+        (error) => {
+          props.setIsLoading(false);
+          if (error.status === 400) {
+            setError("Credenciais Inválidas");
+            setError("Credênciais inválidas");
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Credênciais Inválidas",
+              })
+            );
+          } else if (error.status === 403) {
+            setError("Esta conta está desativada");
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Esta conta está desativada",
+              })
+            );
+          } else if (error.status === 404) {
+            setError("Não existe um utilizador registado com este e-mail");
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Não existe um utilizador registado com este e-mail",
+              })
+            );
+          } else {
+            setError("Algo Inesperado aconteceu, tente novamente");
+            console.log(error);
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, teste novamente se o erro persistir contacte-nos",
+              })
+            );
+          }
         }
+      );
     }
+  };
 
-    const responseGoogle = (responseG) => {
-        if(responseG !== undefined){
-        loginExternal(responseG.profileObj.email,
-            responseG.profileObj.givenName,
-            responseG.profileObj.googleId,
-            responseG.profileObj.imgUrl,
-            responseG.profileObj.familyName,
-            'GOOGLE').then((response) => {
-                props.setIsLoading(false);
-                const token = response.headers.authorization;
-                const parsedToken = jwt_decode(token);
-                dispatch(
-                    authActions.login({
-                        isLogged: true,
-                        token: token,
-                        username: parsedToken.username,
-                        role: parsedToken.role,
-                        email: parsedToken.email,
-                        firstName: response.data.firstName,
-                        lastName: response.data.lastName,
-                        numHelps: response.data.numHelps,
-                        profileImg: response.data.profileImg,
-                    })
-                );
-                localStorage.setItem("token", token);
-                props.onCloseModal();
-            },
-            (error) => {
-                props.setIsLoading(false);
-                if (error.status === 409) {
-                    setError("Conta externa já está associada com outra conta juntos")
-                } else if (error.status === 403) {
-                    setError("Esta conta está desativada")
-                } else if (error.status === 400) {
-                    setError("Não existe um utilizador registado com este e-mail")
-                } else {
-                    setError("Algo Inesperado aconteceu, tente novamente");
-                    console.log(error)
-                }
-            }
-        )
+  const responseGoogle = (responseG) => {
+    if (responseG !== undefined) {
+      loginExternal(
+        responseG.profileObj.email,
+        responseG.profileObj.givenName,
+        responseG.profileObj.googleId,
+        responseG.profileObj.imgUrl,
+        responseG.profileObj.familyName,
+        "GOOGLE"
+      ).then(
+        (response) => {
+          props.setIsLoading(false);
+          const token = response.headers.authorization;
+          const parsedToken = jwt_decode(token);
+          dispatch(
+            authActions.login({
+              isLogged: true,
+              token: token,
+              username: parsedToken.username,
+              role: parsedToken.role,
+              email: parsedToken.email,
+              firstName: response.data.firstName,
+              lastName: response.data.lastName,
+              numHelps: response.data.numHelps,
+              profileImg: response.data.profileImg,
+            })
+          );
+          localStorage.setItem("token", token);
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "success",
+              snackBarMessage: "Login efectuado com sucesso!",
+            })
+          );
+          props.onCloseModal();
+        },
+        (error) => {
+          props.setIsLoading(false);
+          if (error.status === 409) {
+            setError("Esta conta já está associada a outra conta juntos");
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage:
+                  "Esta conta já está associada a outra conta juntos",
+              })
+            );
+          } else if (error.status === 403) {
+            setError("Esta conta está desativada");
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Esta conta está desativada",
+              })
+            );
+          } else if (error.status === 400) {
+            setError("Credênciais inválidas");
+            setError("Credênciais inválidas");
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Credênciais Inválidas",
+              })
+            );
+          } else if (error.status === 404) {
+            setError("Não existe um utilizador registado com este e-mail");
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Não existe um utilizador registado com este e-mail",
+              })
+            );
+          } else {
+            setError("Algo Inesperado aconteceu, tente novamente");
+            console.log(error);
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, teste novamente se o erro persistir contacte-nos",
+              })
+            );
+          }
         }
+      );
     }
+  };
 
   const formSubmissionHandler = (event) => {
     event.preventDefault();
@@ -168,20 +258,67 @@ const Login = (props) => {
           })
         );
         localStorage.setItem("token", token);
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Login efectuado com sucesso!",
+          })
+        );
         props.onCloseModal();
       },
       (error) => {
         props.setIsLoading(false);
-          if (error.status === 409) {
-              setError("Conta externa já está associada com outra conta juntos")
-          } else if (error.status === 403) {
-              setError("Esta conta está desativada")
-          } else if (error.status === 400) {
-              setError("Não existe um utilizador registado com este e-mail")
-          } else {
-              setError("Algo Inesperado aconteceu, tente novamente");
-              console.log(error)
-          }
+        if (error.status === 409) {
+          setError("Esta conta já está associada a outra conta juntos");
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage:
+                "Esta conta já está associada a outra conta juntos",
+            })
+          );
+        } else if (error.status === 403) {
+          setError("Esta conta está desativada");
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Esta conta está desativada",
+            })
+          );
+        } else if (error.status === 400) {
+          setError("Credênciais inválidas");
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Credênciais Inválidas",
+            })
+          );
+        } else if (error.status === 404) {
+          setError("Não existe um utilizador registado com este e-mail");
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Não existe um utilizador registado com este e-mail",
+            })
+          );
+        } else {
+          setError("Algo Inesperado aconteceu, tente novamente");
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, teste novamente se o erro persistir contacte-nos",
+            })
+          );
+          console.log(error);
+        }
       }
     );
   };
@@ -301,14 +438,14 @@ const Login = (props) => {
               <Button disabled={!formIsValid} text={"Entrar"} />
             </div>
             <div className={classes.buttonsWrap}>
-                <GoogleLogin
-                    clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
-                    buttonText=""
-                    onSuccess={responseGoogle}
-                    onFailure={failureGoogle}
-                    cookiePolicy={"single_host_origin"}
-                    className={classes.google}
-                />
+              <GoogleLogin
+                clientId="1087498360674-5pmmlrc59713befeuscgq6g1uo6jmjdn.apps.googleusercontent.com"
+                buttonText=""
+                onSuccess={responseGoogle}
+                onFailure={failureGoogle}
+                cookiePolicy={"single_host_origin"}
+                className={classes.google}
+              />
               <FacebookLogin
                 buttonStyle={{
                   width: "40%",
@@ -382,7 +519,6 @@ const Login = (props) => {
         Recuperar Password
       </p>
     </div>
-
   );
 
   return (

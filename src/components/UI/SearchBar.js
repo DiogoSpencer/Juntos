@@ -7,7 +7,6 @@ const SearchBar = (props) => {
   
   useEffect(() => {
     if (props.input !== inputSearch) {
-      console.log("here")
       setInputSearch(props.input);
     }
   }, [props.input]);
@@ -18,7 +17,6 @@ const SearchBar = (props) => {
 
   const searchHandler = (event) => {
     event.preventDefault();
-    console.log(inputSearch);
     props.setInput(inputSearch);
   };
 

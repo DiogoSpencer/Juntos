@@ -11,9 +11,7 @@ import requestHelpIcon from "../../img/hand.png";
 import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
-import gS from "../../services/generalServices.json";
 import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "../../store/session/auth";
 import { deleteMarker } from "../../services/http";
 import Map from "../Map/Map";
 import juntosIcon from "../../img/logo.png";
@@ -21,8 +19,10 @@ import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
 import MapHelpDetails from "./MapHelpDetails";
 import ParticipantsList from "./ParticipantsList";
+import { snackActions } from "../../store/snackBar/snack";
 
-const isMarkerPassword = (value) => value.trim().length >= 3 && value.trim().length <= 128;
+const isMarkerPassword = (value) =>
+  value.trim().length >= 3 && value.trim().length <= 128;
 
 const RESQUEST = "REQUEST";
 const OFFER = "OFFER";
@@ -117,11 +117,9 @@ const HelpDetailsOwner = () => {
     setIsLoading(true);
     markerDetails(helpId).then(
       (response) => {
-        console.log(response.data);
         setResponseData(response.data);
         let responsePoints = response.data.points;
         for (const point of responsePoints) {
-          console.log(point);
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
           point.type = response.data.type;
@@ -141,10 +139,28 @@ const HelpDetailsOwner = () => {
           point.lon = parseFloat(point.lon);
         }
         setInterestPoint(responseInterest);
+        setIsLoading(false);
       },
       (error) => {
         setIsLoading(false);
-        console.log(error);
+        if (error && error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Evento não encontrado.",
+            })
+          );
+        } else if (error && error.status !== 401) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
+        }
       }
     );
   }, [helpId]);
@@ -171,11 +187,45 @@ const HelpDetailsOwner = () => {
       deleteMarker(helpId).then(
         (response) => {
           setIsLoading(false);
-          history.replace("/minhasajudas");
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "success",
+              snackBarMessage: "Evento apagado com sucesso!",
+            })
+          );
+          history.replace("/juntos/minhasajudas");
         },
         (error) => {
           setIsLoading(false);
           setDeleteError(true);
+          if (error && error.status === 400) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "info",
+                snackBarMessage: "Não podes apagar eventos de outras pessoas.",
+              })
+            );
+          } else if (error && error.status === 401) {
+          } else if (error && error.status === 404) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Evento não encontrado",
+              })
+            );
+          } else {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
+          }
         }
       );
     }
@@ -187,17 +237,51 @@ const HelpDetailsOwner = () => {
       (response) => {
         setBeginAction(true);
         setIsLoading(false);
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Evento concluido com sucesso!",
+          })
+        );
       },
       (error) => {
         setIsLoading(false);
-        if (error.status === 401) {
-          alert(
-            "Sessão expirou! Efetue login novamente para concluir a operação"
+        if (error && error.status === 400) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "info",
+              snackBarMessage: "Não podes concluir um evento sem voluntários.",
+            })
           );
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
+        } else if (error && error.status === 401) {
+        } else if (error && error.status === 403) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Não és o criador deste evento",
+            })
+          );
+        } else if (error && error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Evento não encontrado",
+            })
+          );
+        } else {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
         }
-        console.log(error);
       }
     );
   };
@@ -206,19 +290,46 @@ const HelpDetailsOwner = () => {
     setIsLoading(true);
     restartMarker(helpId, enteredPass).then(
       (response) => {
+        console.log(response);
         setIsLoading(false);
-        history.go(0);
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Evento reactivado com sucesso!",
+          })
+        );
+        history.push(`/juntos/minhasajudas/criadas/${response.data.id}`);
       },
       (error) => {
         setIsLoading(false);
-        if (error.status === 401) {
-          alert(
-            "Sessão expirou! Efetue login novamente para concluir a operação"
+        if (error && error.status === 400) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Não tens permissão para recomeçar este evento.",
+            })
           );
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
+        } else if (error && error.status === 401) {
+        } else if (error && error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "Pedido não encontrado",
+            })
+          );
+        } else {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
         }
-        console.log(error);
       }
     );
   };
@@ -268,6 +379,7 @@ const HelpDetailsOwner = () => {
               move={move}
               zoom={16}
               handleMove={handleMove}
+              rating={responseData.rating}
             />
           </div>
           <div className={classes.userDisplay}>

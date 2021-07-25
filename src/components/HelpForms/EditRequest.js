@@ -9,8 +9,7 @@ import Info from "./Info";
 import classes from "./EditRequest.module.css";
 import { changeMarker } from "../../services/http";
 import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "../../store/session/auth";
-import gS from "../../services/generalServices.json";
+import { snackActions } from "../../store/snackBar/snack";
 import Map from "../Map/Map";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { markerDetails } from "../../services/http";
@@ -24,7 +23,7 @@ let initialInterests = [];
 
 const isDescription = (value) =>
   value.trim().length >= 10 && value.trim().length <= 1000;
-  
+
 const isTitle = (value) =>
   value.trim().length <= 30 && value.trim().length >= 3;
 
@@ -52,9 +51,9 @@ const EditRequest = () => {
   const [anonimousValue, setAnonimousValue] = useState(false);
   const [volunteersValue, setVolunteersValue] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState(false);
   const [responseData, setResponseData] = useState([]);
   const [passwordValue, setPasswordValue] = useState("");
+  const [type, setType] = useState("");
 
   const history = useHistory();
   const match = useRouteMatch();
@@ -69,6 +68,8 @@ const EditRequest = () => {
   const [point, setPoint] = useState([]);
   const [dangerPoint, setDangerPoint] = useState([]);
   const [interestPoint, setInterestPoint] = useState([]);
+  const [location, setLocation] = useState("");
+  const [distance, setDistance] = useState(0);
 
   const [center, setCenter] = useState({
     lat: 38.7071,
@@ -90,7 +91,6 @@ const EditRequest = () => {
     setMoveChange(true);
   };
 
-  const [distance, setDistance] = useState(0);
   const distanceCallback = useCallback(
     (distance) => {
       setDistance(distance);
@@ -135,55 +135,57 @@ const EditRequest = () => {
 
   useEffect(() => {
     setIsLoading(true);
+
     markerDetails(helpId).then(
       (response) => {
-        console.log(response.data);
         setResponseData(response.data);
         setTitleValueHandler(response.data.title);
         setDescriptionValueHandler(response.data.description);
         setSelectedFiles(response.data.photoGalery);
         setAnonimousValue(response.data.anonymousOwner);
         setPasswordValue(response.data.password);
+        setType(response.data.type);
         let responsePoints = response.data.points;
         for (const point of responsePoints) {
-          //.map((point) => (
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
         }
-        //));
+
         initialPoints = responsePoints;
         setPoint(responsePoints);
-
+        setCenter({ lat: responsePoints[0].lat, lng: responsePoints[0].lon });
         let responseDanger = response.data.dangers;
         for (const point of responseDanger) {
-          //.map((point) => (
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
         }
-        //);
+
         setDangerPoint(responseDanger);
         initialDangers = responseDanger;
 
         let responseInterest = response.data.interests;
         for (const point of responseInterest) {
-          //.map((point) => (
           point.lat = parseFloat(point.lat);
           point.lon = parseFloat(point.lon);
         }
-        //));
+
         setInterestPoint(responseInterest);
         initialInterests = responseInterest;
-
         setVolunteersValueHandler(response.data.helpersCapacity);
         setDifficultyValueHandler(response.data.difficulty);
+        setIsLoading(false);
       },
       (error) => {
-        console.log(error);
         setIsLoading(false);
-        if (error.status === 401) {
-          alert("Sessão expirou");
-          dispatch(authActions.logout());
-          localStorage.removeItem(gS.storage.token);
+        if (error && error.status !== 401) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, tenta novamente e se persistir contacta-nos",
+            })
+          );
         }
       }
     );
@@ -193,19 +195,18 @@ const EditRequest = () => {
   useEffect(() => {
     if (authUsername !== responseData.owner) {
       if (authRole === "USER" || authRole === "PARTNER") {
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "info",
+            snackBarMessage: "Só podes editar os teus próprios pedidos",
+          })
+        );
         history.goBack();
       }
     }
     // eslint-disable-next-line
   }, [responseData, authRole, authUsername]);
-
-  useEffect(() => {
-    setIsLoading(false);
-    if (status) {
-      history.replace(`/minhasajudas/criadas/${helpId}`);
-    }
-    // eslint-disable-next-line
-  }, [responseData, status, helpId]);
 
   const {
     value: enteredTitle,
@@ -323,6 +324,126 @@ const EditRequest = () => {
     changesMade = true;
   }
 
+  useEffect(() => {
+    if (location !== "") {
+      if (!formIsValid) {
+        return;
+      }
+
+      if (!pointIsValid) {
+        return;
+      }
+
+      setIsLoading(true);
+
+      const formData = new FormData();
+
+      if (
+        selectedFiles.length > 0 &&
+        JSON.stringify(responseData.photoGalery) !==
+          JSON.stringify(selectedFiles)
+      ) {
+        for (const image of selectedFiles) {
+          if (image.type) {
+            formData.append("Imgs", image);
+          }
+        }
+      }
+
+      let difficulty = 1;
+
+      if (responseData.type === ACTION) {
+        difficulty = enteredDifficulty;
+      }
+
+      let toRemove = [];
+
+      if (
+        responseData.photoGalery &&
+        responseData.photoGalery.length > 0 &&
+        selectedFiles &&
+        selectedFiles.length > 0
+      ) {
+        toRemove = responseData.photoGalery.filter(
+          (photo) => !selectedFiles.includes(photo)
+        );
+      }
+
+      let numberVolunteers = enteredNumberVolunteers;
+
+      if (numberVolunteers < 1) {
+        numberVolunteers = 1;
+      }
+
+      const formInfo = {
+        type: type,
+        title: enteredTitle,
+        id: helpId,
+        description: enteredDescription,
+        points: point,
+        difficulty: difficulty,
+        imgsToDelete: toRemove,
+        anonymousOwner: anonimousValue,
+        helpersCapacity: numberVolunteers,
+        location: location,
+      };
+
+      if (responseData.type === ACTION) {
+        formInfo.dangers = dangerPoint;
+        formInfo.interests = interestPoint;
+      }
+
+      formData.append(
+        "info",
+        new Blob([JSON.stringify(formInfo)], { type: "application/json" })
+      );
+
+      changeMarker(formData).then(
+        (response) => {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "success",
+              snackBarMessage: "Edição completa com sucesso!",
+            })
+          );
+          history.replace(`/juntos/minhasajudas/criadas/${helpId}`);
+        },
+        (error) => {
+          setIsLoading(false);
+          if (error && error.status === 400) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "warning",
+                snackBarMessage: "Só podes editar pedidos da tua própria conta",
+              })
+            );
+          } else if (error && error.status === 401) {
+          } else if (error && error.status === 404) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "O pedido que estás a tentar editar não existe",
+              })
+            );
+          } else {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, tenta novamente se persistir contacta-nos",
+              })
+            );
+          }
+        }
+      );
+    }
+  }, [location]);
+
   const formSubmissionHandler = (event) => {
     event.preventDefault();
 
@@ -340,68 +461,30 @@ const EditRequest = () => {
 
     setIsLoading(true);
 
-    const formData = new FormData();
+    const geocoder = new window.google.maps.Geocoder();
 
-    if (
-      selectedFiles.length > 0 &&
-      JSON.stringify(responseData.photoGalery) !== JSON.stringify(selectedFiles)
-    ) {
-      for (const image of selectedFiles) {
-        if (image.type) {
-          formData.append("Imgs", image);
-        }
-      }
-    }
-
-    let difficulty = 1;
-
-    if (responseData.type === ACTION) {
-      difficulty = enteredDifficulty;
-    }
-
-    let toRemove = "";
-
-    if (
-      responseData.photoGalery &&
-      responseData.photoGalery.length > 0 &&
-      selectedFiles &&
-      selectedFiles.length > 0
-    ) {
-      toRemove = responseData.photoGalery.filter(
-        (photo) => !selectedFiles.includes(photo)
+    if (point.length > 0) {
+      let locationPo = new window.google.maps.LatLng(
+        point[0].lat,
+        point[0].lon
       );
+      let admin = "administrative_area_level_1";
+      geocoder
+        .geocode({ location: locationPo, componentRestrictions: {} }, null)
+        .then(
+          (response) => {
+            let res = response.results.filter((res) => {
+              return res.types.includes(admin);
+            });
+            if (res.length > 0) {
+              setLocation(res[0].address_components[0].long_name);
+            } else setLocation("");
+          },
+          (error) => {
+            setLocation("");
+          }
+        );
     }
-
-    const formInfo = {
-      title: enteredTitle,
-      id: helpId,
-      description: enteredDescription,
-      points: point,
-      difficulty: difficulty,
-      imgsToDelete: toRemove,
-      anonymousOwner: anonimousValue,
-      helpersCapacity: enteredNumberVolunteers,
-    };
-
-    if (responseData.type !== ACTION) {
-      formInfo.dangers = dangerPoint;
-      formInfo.interests = interestPoint;
-    }
-
-    formData.append(
-      "info",
-      new Blob([JSON.stringify(formInfo)], { type: "application/json" })
-    );
-
-    changeMarker(formData).then(
-      (response) => {
-        setStatus(true);
-      },
-      (error) => {
-        console.log(error);
-        setIsLoading(false);
-      }
-    );
   };
 
   //formConcludedHandler
@@ -452,7 +535,6 @@ const EditRequest = () => {
         unique
         center={center}
         bounds={bounds}
-        zoom={16}
         points={point.length <= 0 ? [] : [point[0]]}
         dangerPoints={[]}
         interestPoints={[]}
@@ -478,10 +560,10 @@ const EditRequest = () => {
       <Map
         points={point}
         remove
-        bounds={bounds}
         edit
+        editRe
+        bounds={bounds}
         showDelete
-        zoom={13}
         dangerPoints={dangerPoint}
         interestPoints={interestPoint}
         callback={pointsCallback}
@@ -501,6 +583,10 @@ const EditRequest = () => {
           difficultyBlurHandler={difficultyBlurHandler}
           difficultyHasError={difficultyHasError}
           distance={distance}
+          interests={interestPoint}
+          interestsHandler={setInterestPoint}
+          dangers={dangerPoint}
+          dangersHandler={setDangerPoint}
         />
       </div>
     </div>

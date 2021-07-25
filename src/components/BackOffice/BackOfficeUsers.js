@@ -10,10 +10,11 @@ import closeIcon from "../../img/closered.png";
 import checkIcon from "../../img/check.png";
 import refreshIcon from "../../img/refresh.png";
 import useInput from "../hooks/use-input";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { Link } from "react-router-dom";
 import SearchBar from "../UI/SearchBar";
+import { snackActions } from "../../store/snackBar/snack";
 
 const ASC = "ASC";
 const DESC = "DESC";
@@ -73,6 +74,7 @@ const BackOfficeUsers = () => {
   const [refresh, setRefresh] = useState(true);
 
   const authRole = useSelector((state) => state.auth.role);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setSearch("");
@@ -95,7 +97,16 @@ const BackOfficeUsers = () => {
         (error) => {
           setIsLoading(false);
           setRefresh(false);
-          console.log(error);
+          if (error && error.status !== 401) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
+          }
         }
       );
     }
@@ -309,11 +320,33 @@ const BackOfficeUsers = () => {
       (response) => {
         setRefresh(true);
         setIsEditing("");
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Mudanças efectuadas com sucesso!",
+          })
+        );
       },
       (error) => {
-        if (error && error.status !== 401) {
-          setIsLoading(false);
-          console.log(error);
+        setIsLoading(false);
+        if (error && error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Utilizador não encontrado",
+            })
+          );
+        } else if (error && error.status !== 401) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
         }
       }
     );
@@ -337,10 +370,43 @@ const BackOfficeUsers = () => {
           (response) => {
             setIsLoading(false);
             setRefresh(true);
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "success",
+                snackBarMessage: "Utilizador apagado com sucesso",
+              })
+            );
           },
           (error) => {
             setIsLoading(false);
-            console.log(error);
+            if (error && error.status === 400) {
+              dispatch(
+                snackActions.setSnackbar({
+                  snackBarOpen: true,
+                  snackBarType: "warning",
+                  snackBarMessage:
+                    "Não tens permissão para apagar este utilizador",
+                })
+              );
+            } else if (error && error.status === 404) {
+              dispatch(
+                snackActions.setSnackbar({
+                  snackBarOpen: true,
+                  snackBarType: "warning",
+                  snackBarMessage: "Utilizador não encontrado",
+                })
+              );
+            } else if (error && error.status !== 401) {
+              dispatch(
+                snackActions.setSnackbar({
+                  snackBarOpen: true,
+                  snackBarType: "error",
+                  snackBarMessage:
+                    "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+                })
+              );
+            }
           }
         );
       }

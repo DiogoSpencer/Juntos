@@ -13,9 +13,10 @@ import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import InputPassword from "./InputPassword";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Map from "../Map/Map";
 import MapHelpDetails from "./MapHelpDetails";
+import { snackActions } from "../../store/snackBar/snack";
 
 let text = "";
 
@@ -29,6 +30,7 @@ const HelpDetails = () => {
   const [hasChanges, setHasChanges] = useState(true);
 
   const [distance, setDistance] = useState(0);
+  const dispatch = useDispatch();
 
   const [move, setMove] = useState("WALKING");
   const handleMove = (event) => {
@@ -73,11 +75,10 @@ const HelpDetails = () => {
       setIsLoading(true);
       markerDetails(helpId).then(
         (response) => {
-          console.log(response.data);
+          console.log(response);
           setIsLoading(false);
           setHasChanges(false);
           setResponseData(response.data);
-          console.log(responseData);
           let responsePoints = response.data.points;
           for (const point of responsePoints) {
             point.lat = parseFloat(point.lat);
@@ -107,7 +108,25 @@ const HelpDetails = () => {
         },
         (error) => {
           setIsLoading(false);
-          console.log(error);
+          setHasChanges(false);
+          if (error && error.status === 404) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage: "Evento não encontrado.",
+              })
+            );
+          } else if (error && error.status !== 401) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
+          }
         }
       );
     }
@@ -121,7 +140,7 @@ const HelpDetails = () => {
         !isHelper
       ) {
         history.replace(
-          `/ajudas/${
+          `/juntos/ajudas/${
             responseData.generalType === "REQUEST" ? "pedidos" : "ofertas"
           }/${helpId}`
         );
@@ -161,11 +180,59 @@ const HelpDetails = () => {
         setHasChanges(true);
         setIsLoading(false);
         setIsHelper(true);
-        console.log(response);
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "juntos com Sucesso!",
+          })
+        );
       },
       (error) => {
         setIsLoading(false);
-        console.log(error);
+        if (error && error.status === 403) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Não te podes juntar a um evento inactivo.",
+            })
+          );
+        } else if (error && error.status === 401) {
+        } else if (error && error.status === 400) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "O evento já está cheio!",
+            })
+          );
+        } else if (error && error.status === 404) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage: "Pedido não encontrado.",
+            })
+          );
+        } else if (error && error.status === 409) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "info",
+              snackBarMessage: "Já estás inscrito neste evento.",
+            })
+          );
+        } else {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
+        }
       }
     );
   };
@@ -177,10 +244,35 @@ const HelpDetails = () => {
         setHasChanges(true);
         setIsLoading(false);
         setIsHelper(false);
-        console.log(response);
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Já não estás a participar neste evento",
+          })
+        );
       },
       (error) => {
         setIsLoading(false);
+        if (error && error.status === 400) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Não estás a participar neste evento.",
+            })
+          );
+        } else if (error && error.status === 401) {
+        } else {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+            })
+          );
+        }
       }
     );
   };
@@ -211,7 +303,7 @@ const HelpDetails = () => {
             interestPoints={interestPoint}
             callback={pointsCallback}
             center={center}
-            moveTypeSelected = {move}
+            moveTypeSelected={move}
             zoom={16}
             callbackD={distanceCallback}
           />
@@ -223,6 +315,7 @@ const HelpDetails = () => {
               helpType={responseData.type}
               creationDate={responseData.creationDate}
               isActive={responseData.activeMarker}
+              rating={responseData.rating}
             />
           </div>
           <div className={classes.userDisplay}>
@@ -268,7 +361,11 @@ const HelpDetails = () => {
                 </p>
               )}
               {responseData.isAHelper && (
-                <InputPassword isOwner={isOwner} markerId={helpId} />
+                <InputPassword
+                  isOwner={isOwner}
+                  markerId={helpId}
+                  refreshHandler={setHasChanges}
+                />
               )}
             </div>
           )}

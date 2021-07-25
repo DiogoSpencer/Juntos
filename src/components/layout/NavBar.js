@@ -9,6 +9,7 @@ import { authActions } from "../../store/session/auth";
 import gS from "../../services/generalServices.json";
 import { logout } from "../../services/http";
 import userIcon from "../../img/userblue.png";
+import { snackActions } from "../../store/snackBar/snack";
 
 const NavBar = () => {
   const [disabledButton, setDisabledButton] = useState(false);
@@ -66,13 +67,29 @@ const NavBar = () => {
         (response) => {
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
-          history.go(0);
+
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "success",
+              snackBarMessage: "Logout efectuado com sucesso!",
+            })
+          );
+          history.replace("/home");
         },
         (error) => {
           //logout anyways
           dispatch(authActions.logout());
           localStorage.removeItem(gS.storage.token);
-          history.go(0);
+
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "success",
+              snackBarMessage: "Logout efectuado com sucesso!",
+            })
+          );
+          history.replace("/home");
         }
       );
     }

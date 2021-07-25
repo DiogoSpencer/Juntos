@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import { deleteTicket, listTickets } from "../../services/http";
 import leftArrowIcon from "../../img/leftArrow.png";
 import rightArrowIcon from "../../img/rightArrow.png";
+import { snackActions } from "../../store/snackBar/snack";
+import { useDispatch } from "react-redux";
 
 const ASC = "ASC";
 const DESC = "DESC";
@@ -26,6 +28,7 @@ const BackOfficeTickets = () => {
   const [responseData, setResponseData] = useState([]);
   const [pageSize, setPageSize] = useState(5);
   const [pageNumber, setPageNumber] = useState(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setDisableSelect(false);
@@ -43,7 +46,18 @@ const BackOfficeTickets = () => {
         (error) => {
           setRefresh(false);
           setIsLoading(false);
-          console.log(error);
+          setRefresh(false);
+
+          if (error && error.status !== 401) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
+          }
         }
       );
     }
@@ -98,10 +112,26 @@ const BackOfficeTickets = () => {
       deleteTicket(ticketId).then(
         (response) => {
           setRefresh(true);
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "success",
+              snackBarMessage: "Mensagem apagada com sucesso!",
+            })
+          );
         },
         (error) => {
           setIsLoading(false);
-          console.log(error);
+          if (error && error.status !== 401) {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "error",
+                snackBarMessage:
+                  "Algo inesperado aconteceu, por favor tenta novamente. Se o error persistir contacta-nos",
+              })
+            );
+          }
         }
       );
     } else {

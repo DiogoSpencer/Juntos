@@ -3,6 +3,8 @@ import useInput from "../hooks/use-input";
 import classes from "./Contacts.module.css";
 import Button from "../UI/Button";
 import { createTicket } from "../../services/http";
+import { snackActions } from "../../store/snackBar/snack";
+import { useDispatch } from "react-redux";
 
 const PARTNERSHIP = "PARTNERSHIP";
 const SUGGESTIONS = "SUGGESTIONS";
@@ -15,6 +17,7 @@ const isDescription = (value) =>
 
 const Contacts = () => {
   const [subject, setSubject] = useState(SUGGESTIONS);
+  const dispatch = useDispatch();
 
   const {
     value: enteredName,
@@ -69,13 +72,29 @@ const Contacts = () => {
 
     createTicket(ticketBody).then(
       (response) => {
+        dispatch(
+          snackActions.setSnackbar({
+            snackBarOpen: true,
+            snackBarType: "success",
+            snackBarMessage: "Contacto submetido com sucesso!",
+          })
+        );
         resetNameInput();
         resetEmailInput();
         resetDescriptionInput();
         setSubject(SUGGESTIONS);
       },
       (error) => {
-        console.log(error);
+        if (error && error.status !== 401) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, tente novamente. Se o erro persistir contacte-nos!",
+            })
+          );
+        }
       }
     );
   };
