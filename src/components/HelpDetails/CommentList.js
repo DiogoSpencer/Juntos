@@ -122,6 +122,11 @@ const CommentList = (props) => {
               //editar, comentar, reportar, apagar
               if (response.data.content && response.data.content.length > 0) {
                 setResponseData(reverseItems(response.data.content));
+              } else if (
+                response.data.content &&
+                response.data.content.length === 0
+              ) {
+                setResponseData(response.data.content);
               }
               scrollToBottom();
             }
