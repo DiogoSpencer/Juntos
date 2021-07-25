@@ -76,6 +76,12 @@ const EditComment = (props) => {
       selectedFiles.length > 0
     ) {
       toRemove = props.images.filter((photo) => !selectedFiles.includes(photo));
+    } else if (
+      props.images &&
+      props.images.length > 0 &&
+      (!selectedFiles || (selectedFiles && selectedFiles.length === 0))
+    ) {
+      toRemove = props.images;
     }
 
     const formInfo = {
@@ -83,6 +89,8 @@ const EditComment = (props) => {
       commentId: props.commentId,
       imgsToDelete: toRemove,
     };
+
+    console.log(formInfo);
 
     formData.append(
       "comment",

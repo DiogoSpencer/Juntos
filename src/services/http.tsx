@@ -376,8 +376,12 @@ export async function deleteComment(commentId: string) {
 }
 
 export async function deleteCommentMod(commentId: string, toRemove: boolean) {
+  console.log({
+    commentId: commentId,
+    toRemove: toRemove,
+  });
   try {
-    return await axios.put(`${url}/rest/comments`, {
+    return await axios.put(`${url}/rest/comments/mod`, {
       commentId: commentId,
       toRemove: toRemove,
     });

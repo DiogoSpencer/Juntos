@@ -367,6 +367,13 @@ const EditRequest = () => {
         toRemove = responseData.photoGalery.filter(
           (photo) => !selectedFiles.includes(photo)
         );
+      } else if (
+        responseData.photoGalery &&
+        responseData.photoGalery.length > 0 &&
+        (!selectedFiles || (selectedFiles && selectedFiles.length === 0))
+      ) {
+        console.log("here");
+        toRemove = responseData.photoGalery;
       }
 
       let numberVolunteers = enteredNumberVolunteers;

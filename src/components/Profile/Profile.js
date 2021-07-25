@@ -94,7 +94,7 @@ const Profile = () => {
             if (response.data.profileImg) {
               setSelectedFile(response.data.profileImg);
             } else {
-              setSelectedFile(null);
+              setSelectedFile(response.data.profileImg);
             }
             initialTopics = new Array(interests.length).fill(false);
             response.data.favTopics &&

@@ -332,7 +332,7 @@ const BackOfficeReports = () => {
                       src={checkIcon}
                       alt="aceitar"
                       className={classes.iconRow}
-                      onClick={() => deleteReportsHandler(comment.id, true)}
+                      onClick={() => deleteReportsHandler(comment.id, false)}
                     />
                     <Link
                       to={`/juntos/${getLinkByType(comment.generalType)}/${
@@ -349,7 +349,7 @@ const BackOfficeReports = () => {
                       src={binIcon}
                       alt="apagar"
                       className={classes.iconRow}
-                      onClick={() => deleteReportsHandler(comment.id, false)}
+                      onClick={() => deleteReportsHandler(comment.id, true)}
                     />
                   </td>
                 </tr>
