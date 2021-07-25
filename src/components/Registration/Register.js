@@ -6,12 +6,15 @@ import { register as registar } from "../../services/http";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import classes from "./Register.module.css";
 import juntosIcon from "../../img/logo.png";
+import { useDispatch } from "react-redux";
+import { snackActions } from "../../store/snackBar/snack";
 
 const PUBLIC = "PUBLIC";
 const PRIVATE = "PRIVATE";
 const isProfile = false;
 
 const isName = (value) => value.trim().length >= 2 && value.trim().length <= 13;
+const isUsername = (value) => value.trim().length <= 250;
 const isEmail = (value) => value.trim().match("^(.+)@(.+)$");
 const isPassword = (value) =>
   value.trim().match("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$");
@@ -33,6 +36,7 @@ const Register = (props) => {
   const [isCheckedInterest, setIsCheckedInterest] = useState(
     new Array(interests.length).fill(false)
   );
+  const dispatch = useDispatch();
 
   const {
     value: enteredEmail,
@@ -73,6 +77,12 @@ const Register = (props) => {
     valueChangeHandler: lastNameChangeHandler,
     inputBlurHandler: lastNameBlurHandler,
   } = useInput(isName);
+
+  const {
+    value: enteredUsername,
+    valueChangeHandler: usernameChangeHandler,
+    inputBlurHandler: usernameBlurHandler,
+  } = useInput(isUsername);
 
   const privacyChangeHandler = () => {
     if (privacy === PUBLIC) {
@@ -130,6 +140,9 @@ const Register = (props) => {
     if (!formIsValid) {
       return;
     }
+    if (enteredUsername) {
+      return;
+    }
 
     props.setIsLoading(true);
 
@@ -167,9 +180,32 @@ const Register = (props) => {
         props.setIsLoading(false);
         if (error.status === 400) {
           setInvalidInput(true);
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "warning",
+              snackBarMessage: "Informação inválida!",
+            })
+          );
         } else if (error.status === 409) {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Este e-mail já se encontra associado a uma conta!",
+            })
+          );
           setEmailHasAccount(true);
         } else {
+          dispatch(
+            snackActions.setSnackbar({
+              snackBarOpen: true,
+              snackBarType: "error",
+              snackBarMessage:
+                "Algo inesperado aconteceu, se o erro persistir contacte-nos",
+            })
+          );
           setError(true);
         }
       }
@@ -300,6 +336,20 @@ const Register = (props) => {
         {emailHasError && (
           <p className={classes.registError}>Por favor insira um e-mail.</p>
         )}
+      </div>
+      <div className={classes.ohnohoney}>
+        <label htmlFor="username" className={classes.labelForm}>
+          Username
+        </label>
+        <input
+          type="text"
+          id="username"
+          value={enteredUsername}
+          onChange={usernameChangeHandler}
+          onBlur={usernameBlurHandler}
+          className={classes.ohnohoney}
+          maxLength={250}
+        />
       </div>
       <div className={classes.companyDiv}>
         <input

@@ -7,10 +7,22 @@ const text = "Não encontras o que procuras?";
 
 //esta data vai vir do servidor?
 const data = [
-  { text: "Como instalar?", info: "Para instalar a app basta descarregar" },
-  { text: "Como instalar?", info: "Para instalar a app basta descarregar" },
-  { text: "Como instalar?", info: "Para instalar a app basta descarregar" },
-  { text: "Como instalar?", info: "Para instalar a app basta descarregar" },
+  {
+    text: "Como Instalar?",
+    info: "Para instalar a app basta descarregar para o seu telemóvel",
+  },
+  {
+    text: "Quem Somos?",
+    info: "Somos um grupo de estudantes da Faculdade de Ciências e Tecnologias da Universidade Nova de Lisboa, que se juntaram para desenvolver este projeto no âmbito da cadeira de APDC.",
+  },
+  {
+    text: "Como posso obter uma conta verificada?",
+    info: "Utilizadores verificados destinam-se apenas a entidades fidedignas. Para se tornar uma conta verificada, basta criar uma conta no site como organização e os nossos moderadores tratarão da sua verificação. Com o processo concluído irá receber um e-mail de confirmação.",
+  },
+  {
+    text: "Como vos posso contactar?",
+    info: "Atualmente, para nos contactar basta enviar uma mensagem através do formulário de dúvidas.",
+  },
 ];
 
 const FAQ = () => {
