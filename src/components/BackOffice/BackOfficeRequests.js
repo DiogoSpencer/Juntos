@@ -318,7 +318,6 @@ const BackOfficeRequests = () => {
       type: enteredType,
       activeMarker: isActive,
     };
-    console.log(formInfo);
 
     formData.append(
       "info",

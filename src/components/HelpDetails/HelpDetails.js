@@ -75,7 +75,6 @@ const HelpDetails = () => {
       setIsLoading(true);
       markerDetails(helpId).then(
         (response) => {
-          console.log(response);
           setIsLoading(false);
           setHasChanges(false);
           setResponseData(response.data);

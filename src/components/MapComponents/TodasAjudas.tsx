@@ -75,9 +75,7 @@ function TodasAjudas() {
         }
         setPoint(newVec);
       },
-      (error) => {
-        console.log(error);
-      }
+      (error) => {}
     );
   }, [bounds]);
 

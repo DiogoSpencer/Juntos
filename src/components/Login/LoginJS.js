@@ -118,7 +118,6 @@ const Login = (props) => {
             );
           } else {
             setError("Algo Inesperado aconteceu, tente novamente");
-            console.log(error);
             dispatch(
               snackActions.setSnackbar({
                 snackBarOpen: true,
@@ -139,7 +138,7 @@ const Login = (props) => {
         responseG.profileObj.email,
         responseG.profileObj.givenName,
         responseG.profileObj.googleId,
-        responseG.profileObj.imgUrl,
+        responseG.profileObj.imageUrl,
         responseG.profileObj.familyName,
         "GOOGLE"
       ).then(
@@ -213,7 +212,6 @@ const Login = (props) => {
             );
           } else {
             setError("Algo Inesperado aconteceu, tente novamente");
-            console.log(error);
             dispatch(
               snackActions.setSnackbar({
                 snackBarOpen: true,
@@ -317,7 +315,6 @@ const Login = (props) => {
                 "Algo inesperado aconteceu, teste novamente se o erro persistir contacte-nos",
             })
           );
-          console.log(error);
         }
       }
     );
@@ -355,7 +352,6 @@ const Login = (props) => {
       },
       (error) => {
         props.setIsLoading(false);
-        console.log(error);
       }
     );
   };
@@ -453,7 +449,7 @@ const Login = (props) => {
                   borderRadius: "50%",
                   marginLeft: "3em",
                 }}
-                appId="360511435646701"
+                appId="219276720077809"
                 size="small"
                 cssClass={classes.facebook}
                 fields="first_name, last_name, email, picture"

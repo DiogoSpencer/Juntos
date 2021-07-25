@@ -181,8 +181,6 @@ function Map(props: MapProps) {
   }, [mapRef]);
   useEffect(() => {
     if (mapRef.current !== null && props.callbackBounds && previous > zoom) {
-      console.log(previous);
-      console.log(mapRef.current.getZoom());
       let bounds: google.maps.LatLngBounds = mapRef.current.getBounds();
       props.callbackBounds({
         latLower: bounds.getSouthWest().lat(),

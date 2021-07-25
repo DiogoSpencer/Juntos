@@ -91,7 +91,6 @@ const BackOfficeUsers = () => {
       ).then(
         (response) => {
           setRefresh(false);
-          console.log(response.data);
           setResponseData(response.data.content);
         },
         (error) => {
@@ -138,7 +137,6 @@ const BackOfficeUsers = () => {
     setDisableSelect(true);
     setRefresh(true);
   };
-  //console.log(responseData.length)
 
   const nextPageHandler = () => {
     setPageNumber((prevState) => {

@@ -290,7 +290,6 @@ const HelpDetailsOwner = () => {
     setIsLoading(true);
     restartMarker(helpId, enteredPass).then(
       (response) => {
-        console.log(response);
         setIsLoading(false);
         dispatch(
           snackActions.setSnackbar({

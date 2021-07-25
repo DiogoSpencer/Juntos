@@ -83,7 +83,6 @@ const BackOfficeCompany = () => {
     setDisableSelect(true);
     setRefresh(true);
   };
-  //console.log(responseData.length)
 
   const nextPageHandler = () => {
     setPageNumber((prevState) => {

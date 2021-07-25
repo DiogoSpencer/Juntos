@@ -38,7 +38,6 @@ function BackOfficeStats() {
         setTableContent(array);
       },
       (error) => {
-        console.log(error);
       }
     );
     officeDetail().then(
@@ -57,7 +56,6 @@ function BackOfficeStats() {
         ]);
       },
       (error) => {
-        console.log(error);
       }
     );
   }, []);

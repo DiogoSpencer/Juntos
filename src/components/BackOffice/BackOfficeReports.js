@@ -105,7 +105,6 @@ const BackOfficeReports = () => {
     setDisableSelect(true);
     setRefresh(true);
   };
-  //console.log(responseData.length)
 
   const changeReportNumberHandler = (event) => {
     setReportLimit(parseInt(event.target.value));

@@ -20,7 +20,6 @@ export default function BackOfficeAppEngine() {
         setData(response.data);
       },
       (error) => {
-        console.log(error);
       }
     );
   }, [filter, start]);

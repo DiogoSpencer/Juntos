@@ -12,7 +12,6 @@ const Home = () => {
   useEffect(() => {
     homeData().then(
       (response) => {
-        console.log(response.data);
         setResponseData(response.data);
       },
       (error) => {}
