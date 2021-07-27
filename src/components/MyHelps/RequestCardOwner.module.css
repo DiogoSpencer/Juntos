@@ -1,5 +1,5 @@
 .container {
-  height: 4em;
+  min-height: 6em;
   display: grid;
   grid-template-columns: 0.8fr 0.8fr 2fr 0.8fr 0.2fr 0.8fr;
   grid-template-areas: "pi ui tt mi ai ri";

@@ -20,7 +20,7 @@ const SideBar = () => {
   };
 
   const checkRole = (role) => {
-    if (role === "ADMIN" || role === "MOD") {
+    if (role !== "USER") {
       return true;
     }
     return false;

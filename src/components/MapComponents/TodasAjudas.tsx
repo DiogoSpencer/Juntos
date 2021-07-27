@@ -89,7 +89,7 @@ function TodasAjudas() {
 
   return (
     <div className={classes.mainContainer}>
-      <h1 className={classes.title}>Ajudas DisponÃ­veis</h1>
+      <h1 className={classes.title}>Ajudas Disponíveis</h1>
       <div className={classes.subContainer}>
         <div className={classes.sideButtons}>
           <SideBySideButtons
