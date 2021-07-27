@@ -333,7 +333,6 @@ const HelpDetailsOwner = () => {
     );
   };
 
-  console.log(responseData)
   const showBeginAction = (
     <div className={classes.completeDiv}>
       <h1 className={classes.completeTitle}>Ação Iniciada!</h1>

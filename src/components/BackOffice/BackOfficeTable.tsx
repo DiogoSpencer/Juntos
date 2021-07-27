@@ -32,7 +32,6 @@ export default function BackOfficeTable() {
                     setTableContent(array);
                 },
                 (error) => {
-                    console.log(error);
                 }
             );
     }, [])

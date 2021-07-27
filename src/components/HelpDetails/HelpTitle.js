@@ -3,7 +3,7 @@ import offerHelpIcon from "../../img/helpIcon.png";
 import requestHelpIcon from "../../img/hand.png";
 import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import greenCircle from "../../img/green-circle.png";
 import redCircle from "../../img/red-circle.png";
 
@@ -76,6 +76,7 @@ const typeIconHandler = (type) => {
 };
 
 const HelpTitle = (props) => {
+
   return (
     <div className={classes.container}>
       <div className={classes.titleContainer}>
@@ -109,7 +110,24 @@ const HelpTitle = (props) => {
       {props.rating !== 0 && (
         <div className={classes.difficultyContainer}>
           <p className={classes.type}>Pontuação</p>
-          <p className={classes.creationDate}>{props.rating}</p>
+          <div className={`${classes.creationDate} ${classes.starRating}`}>
+            {[...Array(3)].map((star, index) => {
+              index += 1;
+              return (
+                <button
+                  type="button"
+                  key={index}
+                  className={
+                    index <= Math.round(props.rating)
+                      ? `${classes.on}`
+                      : `${classes.off}`
+                  }
+                >
+                  <span className="star">&#9733;</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       )}
       <img

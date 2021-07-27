@@ -90,8 +90,6 @@ const EditComment = (props) => {
       imgsToDelete: toRemove,
     };
 
-    console.log(formInfo);
-
     formData.append(
       "comment",
       new Blob([JSON.stringify(formInfo)], { type: "application/json" })
