@@ -38,6 +38,7 @@
 .subContainerConversation {
   grid-area: sc;
   justify-self: center;
+  margin-top: 5em;
   width: 50em;
   display: grid;
   grid-template-rows: auto 0.25fr;
@@ -76,4 +77,16 @@
   grid-area: bc;
   align-self: center;
   justify-self: center;
+}
+
+@media all and (max-width: 60em) {
+  .subContainerConversation {
+    width: 65em;
+  }
+}
+
+@media all and (max-width: 40em) {
+  .subContainerConversation {
+    width: 45em;
+  }
 }

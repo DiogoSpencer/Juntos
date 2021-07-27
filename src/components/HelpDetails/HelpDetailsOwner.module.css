@@ -288,8 +288,8 @@
 }
 
 @media all and (max-width: 60em) {
-  .mapContent {
-    width: 60em;
+  .mapContainer {
+    width: 65em;
     justify-self: center;
   }
 
@@ -299,9 +299,10 @@
 }
 
 @media all and (max-width: 40em) {
-  .mapContent {
-    width: 40em;
+  .mapContainer {
+    width: 45em;
     justify-self: center;
+    margin-left: 0;
   }
 
   .infoContent {

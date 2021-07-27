@@ -41,6 +41,7 @@
 }
 
 .title {
+  padding-top: 2em;
   color: #e6513e;
   font-weight: 600;
   font-size: 2em;
@@ -113,8 +114,13 @@
 }
 
 @media all and (max-width: 60em) {
-  .map {
-    width: 60em;
+  .mapContainer {
+    width: 65em;
+    margin-left: 0;
+  }
+
+  .mainContainer {
+    font-size: 0.8em;
   }
 
   .firstNext {
@@ -123,7 +129,12 @@
 }
 
 @media all and (max-width: 40em) {
-  .map {
-    width: 40em;
+  .mapContainer {
+    width: 45em;
+    margin-left: 0;
+  }
+
+  .mainContainer {
+    font-size: 0.8em;
   }
 }

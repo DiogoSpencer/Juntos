@@ -17,6 +17,7 @@ import helpIcon from "../../img/helpIcon.png";
 import requestIcon from "../../img/hand.png";
 import donateIcon from "../../img/box.png";
 import actionIcon from "../../img/walk.png";
+import classesMap from "./Map.module.css";
 
 const containerStyle = {
   width: "100%",
@@ -344,7 +345,7 @@ function Map(props: MapProps) {
   };
 
   return (
-    <div>
+    <div className={classesMap.mapContainer}>
       {!props.noPlaces && (
         <Autocomplete
           apiKey="AIzaSyA_e5nkxWCBpZ3xHTuUIpjGzksaqLKSGrU"
@@ -378,7 +379,7 @@ function Map(props: MapProps) {
             options={{ suppressMarkers: true }}
           />
         )}
-        /* Child components, such as markers, info windows, etc. */
+        {/* Child components, such as markers, info windows, etc. */}
         {props.cluster ? (
           <MarkerClusterer options={options} averageCenter ignoreHidden>
             {(clusterer) =>

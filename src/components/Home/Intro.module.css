@@ -101,6 +101,7 @@
   }
 
   .navLinkHidden {
+    padding-top: 2em;
     padding-left: 15em;
     font-weight: 600;
     position: fixed;

@@ -103,21 +103,7 @@
 @media all and (max-width: 60em) {
   .map {
     grid-area: mp;
-    display: flex;
     width: 60em;
-    flex-direction: column;
-    justify-content: center;
-    align-content: flex-start;
-  }
-}
-
-@media all and (max-width: 40em) {
-  .map {
-    grid-area: mp;
-    display: flex;
-    width: 40em;
-    flex-direction: column;
-    justify-content: center;
-    align-content: flex-start;
+    padding: 0;
   }
 }

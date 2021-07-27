@@ -9,6 +9,7 @@
 }
 
 .title {
+  padding-top: 2em;
   grid-area: tt;
   align-self: center;
   justify-self: center;
@@ -180,4 +181,26 @@
   background-color: #e6513e;
   color: white;
   border: 1px solid #e6513e;
+}
+
+@media all and (max-width: 60em) {
+  .mapContent {
+    width: 60em;
+    justify-self: center;
+  }
+
+  .infoContent {
+    font-size: 0.8em;
+  }
+}
+
+@media all and (max-width: 40em) {
+  .mapContent {
+    width: 45em;
+    justify-self: center;
+  }
+
+  .infoContent {
+    font-size: 0.8em;
+  }
 }

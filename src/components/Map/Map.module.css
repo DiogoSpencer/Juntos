@@ -1,0 +1,13 @@
+@media all and (max-width: 60em) {
+  .mapContainer {
+    width: 60em;
+    margin-left: 4em;
+  }
+}
+
+@media all and (max-width: 40em) {
+  .mapContainer {
+    width: 45em;
+    margin-left: 13em;
+  }
+}

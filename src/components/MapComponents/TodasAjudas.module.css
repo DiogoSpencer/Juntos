@@ -8,6 +8,7 @@
 }
 
 .title {
+  padding-top: 2em;
   grid-area: tt;
   align-self: start;
   justify-self: center;
