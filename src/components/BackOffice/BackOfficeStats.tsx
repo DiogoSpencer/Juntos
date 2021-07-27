@@ -37,8 +37,7 @@ function BackOfficeStats() {
         });
         setTableContent(array);
       },
-      (error) => {
-      }
+      (error) => {}
     );
     officeDetail().then(
       (response) => {
@@ -55,8 +54,7 @@ function BackOfficeStats() {
           { key: "Pedidos", value: response.data.request },
         ]);
       },
-      (error) => {
-      }
+      (error) => {}
     );
   }, []);
 
@@ -109,16 +107,18 @@ function BackOfficeStats() {
         {dataUsers.length > 0 && (
           <p className="script">
             No 1º gráfico circular podemos ver a distribuição de roles dos
-            utilizadores. Temos {dataUsers[3].value} utilizadores,{" "}
-            {dataUsers[1].value} moderadores, {dataUsers[2].value} parceiros e{" "}
-            {dataUsers[0].value} administradores.
+            utilizadores.
+            <br /> Temos {dataUsers[3].value} utilizadores, {dataUsers[1].value}{" "}
+            moderadores, {dataUsers[2].value} parceiros e {dataUsers[0].value}{" "}
+            administradores.
           </p>
         )}
         {dataMarkers.length > 0 && (
           <p className="script">
-            No 2º gráfico circular podemos ver a distribuição de eventos. Há{" "}
-            {dataMarkers[3].value} pedidos, {dataMarkers[1].value} ofertas,{" "}
-            {dataMarkers[2].value} doações e {dataMarkers[0].value} ações.
+            No 2º gráfico circular podemos ver a distribuição de eventos.
+            <br /> Há {dataMarkers[3].value} pedidos, {dataMarkers[1].value}{" "}
+            ofertas, {dataMarkers[2].value} doações e {dataMarkers[0].value}{" "}
+            ações.
           </p>
         )}
       </div>

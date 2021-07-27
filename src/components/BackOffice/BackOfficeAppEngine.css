@@ -1,6 +1,7 @@
 .back-office-app-wrapper{
     width: 70% ;
     margin: 10vh auto;
+    margin-top: 20vh;
 }
 
 .back-office-app-wrapper >*{
