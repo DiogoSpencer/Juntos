@@ -22,10 +22,16 @@ const InputPassword = (props) => {
     inputBlurHandler: passBlurHandler,
   } = useInput(isMarkerPassword); //pass func to validate
 
+  let formIsValid = false;
+
+  if (enteredPassIsValid && rating > 0) {
+    formIsValid = true;
+  }
+
   const passwordSubmitHandler = (event) => {
     event.preventDefault();
 
-    if (!enteredPassIsValid || rating <= 0) {
+    if (!formIsValid) {
       return;
     }
 
@@ -126,7 +132,7 @@ const InputPassword = (props) => {
           type="button"
           onClick={passwordSubmitHandler}
           className={classes.buttonPass}
-          disabled={props.isOwner}
+          disabled={props.isOwner || !formIsValid}
         >
           Enviar
         </button>

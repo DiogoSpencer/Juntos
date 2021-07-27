@@ -54,7 +54,7 @@ const HelpDetailsOwner = () => {
   const [beginAction, setBeginAction] = useState(false);
   const [distance, setDistance] = useState(0);
   const [move, setMove] = useState("WALKING");
-  const [showHelpers, setShowHelpers] = useState(false);
+  const [showHelpers, setShowHelpers] = useState(true);
 
   const handleMove = (event) => {
     setMove(event.target.value);
@@ -333,6 +333,7 @@ const HelpDetailsOwner = () => {
     );
   };
 
+  console.log(responseData)
   const showBeginAction = (
     <div className={classes.completeDiv}>
       <h1 className={classes.completeTitle}>Ação Iniciada!</h1>

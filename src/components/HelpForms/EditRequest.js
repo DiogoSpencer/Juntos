@@ -173,6 +173,20 @@ const EditRequest = () => {
         initialInterests = responseInterest;
         setVolunteersValueHandler(response.data.helpersCapacity);
         setDifficultyValueHandler(response.data.difficulty);
+
+        if (authUsername !== response.data.owner) {
+          if (authRole === "USER" || authRole === "PARTNER") {
+            dispatch(
+              snackActions.setSnackbar({
+                snackBarOpen: true,
+                snackBarType: "info",
+                snackBarMessage: "Só podes editar os teus próprios pedidos",
+              })
+            );
+            history.goBack();
+          }
+        }
+
         setIsLoading(false);
       },
       (error) => {
@@ -191,22 +205,6 @@ const EditRequest = () => {
     );
     // eslint-disable-next-line
   }, [helpId, dispatch]);
-
-  useEffect(() => {
-    if (authUsername !== responseData.owner) {
-      if (authRole === "USER" || authRole === "PARTNER") {
-        dispatch(
-          snackActions.setSnackbar({
-            snackBarOpen: true,
-            snackBarType: "info",
-            snackBarMessage: "Só podes editar os teus próprios pedidos",
-          })
-        );
-        history.goBack();
-      }
-    }
-    // eslint-disable-next-line
-  }, [responseData, authRole, authUsername]);
 
   const {
     value: enteredTitle,
@@ -372,7 +370,6 @@ const EditRequest = () => {
         responseData.photoGalery.length > 0 &&
         (!selectedFiles || (selectedFiles && selectedFiles.length === 0))
       ) {
-        console.log("here");
         toRemove = responseData.photoGalery;
       }
 
