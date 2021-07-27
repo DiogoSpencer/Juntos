@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 
 const SideBar = () => {
   const userRole = useSelector((state) => state.auth.role);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
 
   const hideSideBarHandler = () => {
     setShow((prevState) => !prevState);

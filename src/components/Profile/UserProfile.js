@@ -96,7 +96,7 @@ const UserProfile = () => {
           </p>
           <p>
             <span className={classes.juntos}>juntos</span> desde:
-            {formatDate(responseData.creationDate)}
+            {" " + formatDate(responseData.creationDate)}
           </p>
           {responseData.company && (
             <p>

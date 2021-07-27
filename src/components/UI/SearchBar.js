@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 const SearchBar = (props) => {
   const [inputSearch, setInputSearch] = useState("");
-  
+
   useEffect(() => {
     if (props.input !== inputSearch) {
       setInputSearch(props.input);
@@ -17,7 +17,7 @@ const SearchBar = (props) => {
 
   const searchHandler = (event) => {
     event.preventDefault();
-    props.setInput(inputSearch);
+    inputSearch.trim().length >= 2 && props.setInput(inputSearch);
   };
 
   return (
