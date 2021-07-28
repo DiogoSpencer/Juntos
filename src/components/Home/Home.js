@@ -8,7 +8,7 @@ import Stats from "./Stats";
 
 const Home = () => {
   const [responseData, setResponseData] = useState([]);
-
+  
   useEffect(() => {
     homeData().then(
       (response) => {

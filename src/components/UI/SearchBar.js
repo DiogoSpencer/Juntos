@@ -20,7 +20,7 @@ const SearchBar = (props) => {
 
   const searchHandler = (event) => {
     event.preventDefault();
-    inputSearch.trim().length >= 3
+    inputSearch.trim().match("^[A-Za-z0-9 _]{3,}$")
       ? props.setInput(inputSearch)
       : dispatch(
           snackActions.setSnackbar({
