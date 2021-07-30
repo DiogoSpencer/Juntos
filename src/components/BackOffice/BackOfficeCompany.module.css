@@ -219,20 +219,20 @@
   box-shadow: 0 0 8px #719ece;
 }
 
-
-@media all and (max-width: 60em) {
-
-}
-
-@media all and (max-width: 60em) {
-}
-
 @media all and (max-width: 40em) {
   .container {
-    font-size: .65em;
-    margin-left: 10em;
+    margin-left: 12.5em;
+    width: 100%;
   }
-}
 
-@media all and (max-width: 40em) and (orientation: landscape) {
+  .mainSubContainer {
+    width: 100%;
+    justify-self: center;
+    margin-left: 0;
+  }
+
+  .subContainer {
+    width: 100%;
+    font-size: 0.8em;
+  }
 }

@@ -23,6 +23,7 @@ export default function BackOfficeAppEngine() {
       }
     );
   }, [filter, start]);
+  
   const handleFilterChange = (event: any) => {
     setFilter(event.target.value);
     switch (event.target.value) {
@@ -138,7 +139,7 @@ export default function BackOfficeAppEngine() {
         </label>
       )}
       {filter === "GAE_INST" ? (
-        <LineChart width={800} height={400} data={data}>
+        <LineChart id="linechart" width={0.5 * window.innerWidth} height={0.25 * window.innerWidth} data={data}>
           <XAxis
             scale={"time"}
             tickCount={10}

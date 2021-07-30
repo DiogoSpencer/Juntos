@@ -285,3 +285,21 @@
   max-width: 3em;
   object-fit: contain;
 }
+
+@media all and (max-width: 40em) {
+  .container {
+    margin-left: 12.5em;
+    width: 100%;
+  }
+
+  .mainSubContainer {
+    width: 100%;
+    justify-self: center;
+    margin-left: 0;
+  }
+
+  .subContainer {
+    width: 100%;
+    font-size: 0.8em;
+  }
+}
