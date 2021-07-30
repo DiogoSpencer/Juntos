@@ -151,6 +151,7 @@ const HelpDetailsOwner = () => {
               snackBarMessage: "Evento não encontrado.",
             })
           );
+          history.replace("/juntos/minhasajudas");
         } else if (error && error.status !== 401) {
           dispatch(
             snackActions.setSnackbar({
